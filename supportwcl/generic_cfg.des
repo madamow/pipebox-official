@@ -1,0 +1,50 @@
+operator      = {USER}
+email         = {EMAIL}
+project       = {PROJECT} #  ie. ACT/FM/MCK/ZR
+when_to_email       = Block # Never, Run, Block
+create_junk_tarball = true
+
+submit_des_services   = {DES_SERVICES_PATH} # i.e ~/.desservices.ini 
+submit_des_db_section = {DES_DB_SECTION}    # submit section: db-desoper or db-destest
+target_des_db_section = {DES_DB_SECTION}    # target section: db-desoper or db-destest
+submit_files_mvmt     = filemgmt.job_mvmt_http.JobArchiveHttp
+
+des_http_section = {HTTP_SECTION}   # need to define in .desservices file (i.e file-http-prodbeta)
+home_archive     = {HOME_ARCHIVE}   # i.e. prodbeta or desar2home 
+
+transfer_stats   = filemgmt.transfer_stats_db.TransferStatsDB
+transfer_semname = filetrans
+#transfer_semname= midfiletrans
+
+use_target_archive_input  = never
+use_target_archive_output = never
+use_home_archive_input    = wrapper
+use_home_archive_output   = job #wrapper, job, block, run, never
+master_savefiles = file #never,file,always,failure,rand_XX
+
+use_qcf    = True
+use_db_out = True
+use_db_in  = True
+
+# DES SERVICES definitions for know comppute sites
+<site>
+
+    # Optional
+    <fermigrid-sl6>
+       # ie: /des/des20.b/data/des039/.desservices.ini
+       target_des_services = /des/des20.b/data/{FERMI_ID}/.desservices.ini
+    </fermigrid-sl6>
+
+    <iforge>
+	target_des_services = /ui/ncsa/{USER}/.desservices.ini
+    </iforge>
+
+    <descmp2>
+        target_des_services = /home/{USER}/.desservices.ini
+    </descmp2>
+
+    <descmp4>
+        target_des_services = /home/{USER}/.desservices.ini
+    </descmp4>
+
+</site>

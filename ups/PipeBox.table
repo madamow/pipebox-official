@@ -1,0 +1,5 @@
+SetupRequired(despydb 2.0.0+2)
+setupRequired(despyastro 0.3.0+3)
+
+envAppend(PYTHONPATH, ${PRODUCT_DIR}/python)
+envAppend(PATH, ${PRODUCT_DIR}/bin)
