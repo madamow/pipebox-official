@@ -1,8 +1,12 @@
+#!/usr/bin/env python
+
 import os, sys
 from tempfile import mkstemp
 from shutil import move
 import shutil
 from os import remove, close
+from PipeBox import replace_fh
+
 
 def replace(file_path, pattern, subst='', prompt=''):
     if prompt != '':
