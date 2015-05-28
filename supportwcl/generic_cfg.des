@@ -1,6 +1,6 @@
 operator      = {USER}
 email         = {EMAIL}
-project       = {PROJECT} #  ie. ACT/FM/MCK/ZR
+#project       = {PROJECT} #  Should be part of submit file
 when_to_email       = Block # Never, Run, Block
 create_junk_tarball = true
 
