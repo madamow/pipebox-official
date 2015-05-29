@@ -20,6 +20,12 @@
 <<include {MYWCLDIR}/modulewcl/firstcut/12-ingest-se-objects.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/13-mkpng.wcl>>
 
+# Database dependant definitions
+submit_des_db_section = {DB_SECTION}    # submit section: db-desoper or db-destest
+target_des_db_section = {DB_SECTION}    # target section: db-desoper or db-destest
+home_archive          = {ARCHIVE_NAME}  # i.e. prodbeta or desar2home for destest/desoper
+des_http_section      = {HTTP_SECTION}   # need to define in .desservices file (i.e file-http-prodbeta)
+
 target_site = {TARGET_SITE} # ie. descmp4, iforge, fermigrid-sl6, etc.
 reqnum      = {REQNUM}         # jira id - used as part of a unique identifier
 jira_id     = DESOPS-{REQNUM}  # the parent id of the reqnum
@@ -37,7 +43,7 @@ ops_run_dir    = ${project}/${pipeline}/${nite}-r${reqnum}/${unitname}/p${attnum
 submit_run_dir = /cluster_scratch/refact/submit/${home_archive}/${ops_run_dir}/
 
 # Change this to PRODBETA.SE_OBJECT or PROD.SE_OBJECT depending on destest or desoper respectively
-se_object_table = PRODBETA.SE_OBJECT 
+se_object_table = {SCHEMA}.SE_OBJECT 
 save_run_vals   = nite, camera, band, expnum, jira_id 
 
 camera = D         # Camera + expnum create unique criteria to find/name exposure file

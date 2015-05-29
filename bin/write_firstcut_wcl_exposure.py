@@ -25,10 +25,15 @@ def cmdline():
                         help="Exposure number")
     parser.add_argument("reqnum", action="store",default=None,
                         help="Request number")
-    parser.add_argument("--db_section", action="store", default='db-destest',choices=['db-desoper','db-destest'],
+    parser.add_argument("--db_section", action="store", default='db-destest',
+                        choices=['db-desoper','db-destest'],
                         help="DB Section to query")
-    parser.add_argument("--archive_name", default="prodbeta",   
+    parser.add_argument("--archive_name", default=None,   
                         help="Archive name (i.e. prodbeta or desar2home)")
+    parser.add_argument("--schema", default=None,   
+                        help="Schema name (i.e. prodbeta or prod)")
+    parser.add_argument("--http_section", default=None,   
+                        help="DES Services http-section  (i.e. file-http-prodbeta)")
     parser.add_argument("--target_site", action="store", default='fermigrid-sl6',
                         help="Compute Target Site")
     parser.add_argument("--user", action="store", default=os.environ['USER'],
@@ -48,6 +53,20 @@ def cmdline():
     parser.add_argument("--verb", action="store_true", default=False,
                         help="Turn on verbose")
     args = parser.parse_args()
+
+    # Update depending on the db_section
+    if not args.archive_name:
+        if args.db_section == 'db-desoper': args.archive_name='desar2home'
+        if args.db_section == 'db-destest': args.archive_name='prodbeta'
+
+    if not args.schema:
+        if args.db_section == 'db-desoper': args.schema='PROD'
+        if args.db_section == 'db-destest': args.schema='PRODBETA'
+
+    if not args.http_section:
+        if args.db_section == 'db-desoper': args.http_section='file-http-desar2home' # CHECK!!!
+        if args.db_section == 'db-destest': args.http_section='file-http-prodbeta'
+
     return args
 
 
@@ -56,17 +75,32 @@ def write_wcl(EXPNUM,args):
     # Get NITE and BAND for expnum
     NITE, BAND   = get_expnum_info(EXPNUM,args.db_section)
     LIBNAME = args.libname
-
     template = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s/submitwcl/firstcut_template.des" % LIBNAME)
+
+    # Fring Case
     if BAND in ['z','Y']:
         FRINGE_CASE = 'fringe'
     else:
         FRINGE_CASE = 'nofringe'
 
+    # Get the right names depending on the db_section
+    #if args.db_section == 'db-destest':
+    #    SCHEMA       = 'PRODBETA'
+    #    HTTP_SECTION = 'file-http-prodbeta'
+    #elif args.db_section == 'db-desoper':
+    #    SCHEMA       = 'PROD'
+    #    HTTP_SECTION = 'file-http-desar2home' # CHECK!!!
+    #else:
+    #    exit("ERROR: No schema defined for section: %s" % args.db_section)
+
+    # Open template file and replace file-handle
     f = open(template,'r')
     fh = f.read()
     fh = replace_fh(fh,'{MYWCLDIR}',subst=os.environ['PIPEBOX_DIR'])
     fh = replace_fh(fh,'{USER}',   subst=args.user)
+    fh = replace_fh(fh,'{DB_SECTION}',   subst=args.db_section)
+    fh = replace_fh(fh,'{ARCHIVE_NAME}',   subst=args.archive_name)
+    fh = replace_fh(fh,'{HTTP_SECTION}',   subst=args.http_section)
     fh = replace_fh(fh,'{REQNUM}',        subst=args.reqnum)
     fh = replace_fh(fh,'{TARGET_SITE}',   subst=args.target_site)
     fh = replace_fh(fh,'{LABELS}',        subst=args.labels)
@@ -74,6 +108,7 @@ def write_wcl(EXPNUM,args):
     fh = replace_fh(fh,'{EUPS_VERSION}', subst=args.eups_version)
     fh = replace_fh(fh,'{CAMPAIGN}',  subst=args.campaign)
     fh = replace_fh(fh,'{PROJECT}',  subst=args.project)
+    fh = replace_fh(fh,'{SCHEMA}',  subst=args.schema)
     fh = replace_fh(fh,'{EXPNUM}',  subst=EXPNUM)
     fh = replace_fh(fh,'{NITE}',    subst=NITE)
     fh = replace_fh(fh,'{BAND}',    subst=BAND)
@@ -84,12 +119,13 @@ def write_wcl(EXPNUM,args):
     calib_section = cals.construct_wcl_block(info,NITE,verb=args.verb)
     fh = replace_fh(fh,'{CALIB_SECTION}', subst=calib_section)
     
-    # Wite out the new file
+    # Create Directory
     dirname = 'files_submit_r{REQNUM}'.format(REQNUM=args.reqnum)
     if not os.path.isdir(dirname):
         print "# Creating directory %s" % dirname
         os.mkdir(dirname)
-    
+
+    # Write out the new file
     wclname = os.path.join(dirname,'firstcut_{EXPNUM}_{BAND}_{REQNUM}.des'.format(EXPNUM=EXPNUM,BAND=BAND,REQNUM=args.reqnum))
     print "# Creating: %s" % wclname
     newfile = open(wclname,'w')
@@ -97,14 +133,13 @@ def write_wcl(EXPNUM,args):
     newfile.close()
     return wclname
 
-
 if __name__ == "__main__":
 
     # Get the options
     args  = cmdline()
 
     wclnames = []
-    # Case 1, multiple expnum
+    # Case 1, multiple expnum in filelist
     if os.path.exists(args.expnum):
         print "# Will read file: %s" % args.expnum
         for line in open(args.expnum).readlines():
@@ -120,8 +155,7 @@ if __name__ == "__main__":
         wclname = write_wcl(args.expnum,args)
         wclnames.append(wclname)
 
-
-    # Now we write the submit file
+    # Now we write the submit bash file
     submit_name = 'submitme_{EXPNUM}_{REQNUM}.sh'.format(EXPNUM=args.expnum,REQNUM=args.reqnum)
     subm = open(submit_name,'w')
     subm.write("#!/usr/bin/env bash\n\n")

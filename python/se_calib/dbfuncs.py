@@ -1,14 +1,14 @@
 
 ''' DB function helpers'''
 
-def get_dbh(db_section='desoper',verb=False):
+def get_dbh(db_section,verb=False):
     """ Get a DB handle"""
     from despydb import desdbi
     if verb: print "# Creating db-handle to section: %s" % db_section
     dbh = desdbi.DesDbi(section=db_section)
     return dbh
 
-def get_root_archive(dbh, archive_name='prodbeta',verb=False):
+def get_root_archive(dbh, archive_name,verb=False):
     """ Get the root-archive fron the database"""
     cur = dbh.cursor()
     # Get root_archive

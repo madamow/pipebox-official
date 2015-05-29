@@ -1,16 +1,10 @@
 operator      = {USER}
 email         = {EMAIL}
-#project       = {PROJECT} #  Should be part of submit file
 when_to_email       = Block # Never, Run, Block
 create_junk_tarball = true
 
 submit_des_services   = {DES_SERVICES_PATH} # i.e ~/.desservices.ini 
-submit_des_db_section = {DES_DB_SECTION}    # submit section: db-desoper or db-destest
-target_des_db_section = {DES_DB_SECTION}    # target section: db-desoper or db-destest
 submit_files_mvmt     = filemgmt.job_mvmt_http.JobArchiveHttp
-
-des_http_section = {HTTP_SECTION}   # need to define in .desservices file (i.e file-http-prodbeta)
-home_archive     = {HOME_ARCHIVE}   # i.e. prodbeta or desar2home 
 
 transfer_stats   = filemgmt.transfer_stats_db.TransferStatsDB
 transfer_semname = filetrans

@@ -5,36 +5,52 @@ from tempfile import mkstemp
 from shutil import move
 import shutil
 from os import remove, close
-from PipeBox import replace_fh
+from PipeBox import replace_fh,ask_string,check_file
 
 
-def replace(file_path, pattern, subst='', prompt=''):
-    if prompt != '':
-        subst = raw_input(prompt+' ')
-    fh, abs_path = mkstemp()
-    with open(abs_path,'w') as new_file:
-        with open(file_path) as old_file:
-            for line in old_file:
-                new_file.write(line.replace(pattern, subst))
-    close(fh)
-    remove(file_path)
-    move(abs_path, file_path)
+# user configuration template
+template = os.path.join(os.environ['PIPEBOX_DIR'],"supportwcl/generic_cfg.des")
 
-#os.chdir('supportwcl')
+f = open(template,'r')
+fh = f.read()
 
-template=os.path.join(os.path.join(os.getcwd(),'supportwcl'),'generic_cfg.des')
-
-user=raw_input('Enter username : ')
-file_user=os.path.join(os.path.join(os.getcwd(),'supportwcl'),user+'_cfg.des')
-os.system('cp '+template+' '+file_user)
-
-replace(file_user,'{USER}',subst=user)
-replace(file_user,'{EMAIL}', prompt='Enter email :')
-replace(file_user,'{PROJECT}', prompt='Enter project :')
-replace(file_user,'{DES_SERVICES_PATH}', prompt='Enter desservices path :')
-replace(file_user,'{DES_DB_SECTION}', prompt='Enter DB section :')
-replace(file_user,'{HTTP_SECTION}', prompt='Enter HTTP section :')
-replace(file_user,'{HOME_ARCHIVE}', prompt='Enter Home archive :')
+# User name
+user = ask_string('Enter Username: ', default=os.environ['USER'], check=None)
+fh = replace_fh(fh,'{USER}',subst=user)
+# Email
+email = ask_string('Enter email: ', default='%s@illinois.edu' % user, check=None)
+fh = replace_fh(fh,'{EMAIL}', subst=email)
+# DES Services file
+des_services_path = ask_string('Enter DESservices path: ',
+                               default=os.path.join(os.environ['HOME'],".desservices.ini"),
+                               check=check_file)
+fh = replace_fh(fh,'{DES_SERVICES_PATH}', subst=des_services_path)
+# Fermi ID (optional)
+fermi_id = ask_string('Fermi ID: ', default='FERMI_ID', check=None)
+fh = replace_fh(fh,'{FERMI_ID}', subst=fermi_id)
 
 
+# Define PIPEBOX_WORK
+try:
+    pipebox_work = os.environ['PIPEBOX_WORK']
+except:
+    pipebox_work = os.path.join(os.environ['HOME'],'PIPEBOX_WORK')
+pipebox_work_path = ask_string('Enter PIPEBOX_WORK location: ', default=pipebox_work)
 
+# Define the output name
+user_config_file = "%s/config/%s_cfg.des" % (pipebox_work_path,user)
+
+# Make sure directory exists
+dirname = os.path.dirname(user_config_file)
+if not os.path.exists(dirname):
+    os.makedirs(dirname)
+
+conf = open(user_config_file,'w')
+conf.write(fh)
+conf.close()
+
+print "\nConfiguration file written to:\n\t%s" % user_config_file
+print "\nMake sure you setup PIPEBOX_WORK environmental variable:"
+print "\texport PIPEBOX_WORK=%s" % pipebox_work_path
+print "\tor"
+print "\tsetenv PIPEBOX_WORK %s" % pipebox_work_path

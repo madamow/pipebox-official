@@ -80,7 +80,7 @@ def get_cals_info(**kwargs):
     
     # Get the location in the new database section (root_archive)
     dbh          = dbf.get_dbh(db_section=db_section,verb=verb)
-    root_archive = dbf.get_root_archive(dbh, archive_name=archive_name,verb=verb)
+    #root_archive = dbf.get_root_archive(dbh, archive_name=archive_name,verb=verb)
 
     # Get all calibrations
     # NOTE: for cal_photflatcor we always use 'null' which is a bunch of one
