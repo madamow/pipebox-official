@@ -74,8 +74,7 @@ def write_wcl(EXPNUM,args):
 
     # Get NITE and BAND for expnum
     NITE, BAND   = get_expnum_info(EXPNUM,args.db_section)
-    LIBNAME = args.libname
-    template = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s/submitwcl/firstcut_template.des" % LIBNAME)
+    template = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s/submitwcl/firstcut_template.des" % args.libname)
 
     # Fring Case
     if BAND in ['z','Y']:
@@ -83,22 +82,12 @@ def write_wcl(EXPNUM,args):
     else:
         FRINGE_CASE = 'nofringe'
 
-    # Get the right names depending on the db_section
-    #if args.db_section == 'db-destest':
-    #    SCHEMA       = 'PRODBETA'
-    #    HTTP_SECTION = 'file-http-prodbeta'
-    #elif args.db_section == 'db-desoper':
-    #    SCHEMA       = 'PROD'
-    #    HTTP_SECTION = 'file-http-desar2home' # CHECK!!!
-    #else:
-    #    exit("ERROR: No schema defined for section: %s" % args.db_section)
-
     # Open template file and replace file-handle
-    newlib = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s" % LIBNAME)
-    newlib = newlib[newlib.find('/home'):]
+    MYWCLDIR = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s" % args.libname)
+    MYWCLDIR = MYWCLDIR[MYWCLDIR.find('/home'):]
     f = open(template,'r')
     fh = f.read()
-    fh = replace_fh(fh,'{MYWCLDIR}',subst=newlib)
+    fh = replace_fh(fh,'{MYWCLDIR}',subst=MYWCLDIR)
     fh = replace_fh(fh,'{USER}',   subst=args.user)
     fh = replace_fh(fh,'{DB_SECTION}',   subst=args.db_section)
     fh = replace_fh(fh,'{ARCHIVE_NAME}',   subst=args.archive_name)
