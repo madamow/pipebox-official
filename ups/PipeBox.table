@@ -1,4 +1,3 @@
-SetupRequired(ProcessingFW 1.1.1+0)
 SetupRequired(despydb 2.0.0+2)
 setupRequired(despyastro 0.3.0+3)
 
