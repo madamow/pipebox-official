@@ -94,9 +94,11 @@ def write_wcl(EXPNUM,args):
     #    exit("ERROR: No schema defined for section: %s" % args.db_section)
 
     # Open template file and replace file-handle
+    newlib = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s" % LIBNAME)
+    newlib = newlib[newlib.find('/home'):]
     f = open(template,'r')
     fh = f.read()
-    fh = replace_fh(fh,'{MYWCLDIR}',subst=os.environ['PIPEBOX_DIR'])
+    fh = replace_fh(fh,'{MYWCLDIR}',subst=newlib)
     fh = replace_fh(fh,'{USER}',   subst=args.user)
     fh = replace_fh(fh,'{DB_SECTION}',   subst=args.db_section)
     fh = replace_fh(fh,'{ARCHIVE_NAME}',   subst=args.archive_name)
