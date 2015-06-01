@@ -122,7 +122,13 @@ def write_wcl(EXPNUM,args):
     fh = replace_fh(fh,'{CALIB_SECTION}', subst=calib_section)
     
     # Create Directory
-    dirname = 'files_submit_r{REQNUM}'.format(REQNUM=args.reqnum)
+    
+    try:
+        pipebox_work = os.environ['PIPEBOX_WORK']
+    except:
+        print "must declare $PIPEBOX_WORK"
+        sys.exit(1)
+    dirname = os.path.join(pipebox_work,'files_submit_r{REQNUM}'.format(REQNUM=args.reqnum))
     if not os.path.isdir(dirname):
         print "# Creating directory %s" % dirname
         os.mkdir(dirname)
@@ -158,7 +164,7 @@ if __name__ == "__main__":
         wclnames.append(wclname)
 
     # Now we write the submit bash file
-    submit_name = 'submitme_{EXPNUM}_{REQNUM}.sh'.format(EXPNUM=args.expnum,REQNUM=args.reqnum)
+    submit_name = os.path.join(pipebox_work,'submitme_{EXPNUM}_{REQNUM}.sh'.format(EXPNUM=args.expnum,REQNUM=args.reqnum))
     subm = open(submit_name,'w')
     subm.write("#!/usr/bin/env bash\n\n")
     for wclname in wclnames:
