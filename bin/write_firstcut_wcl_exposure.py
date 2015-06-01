@@ -123,11 +123,6 @@ def write_wcl(EXPNUM,args):
     
     # Create Directory
     
-    try:
-        pipebox_work = os.environ['PIPEBOX_WORK']
-    except:
-        print "must declare $PIPEBOX_WORK"
-        sys.exit(1)
     dirname = os.path.join(pipebox_work,'files_submit_r{REQNUM}'.format(REQNUM=args.reqnum))
     if not os.path.isdir(dirname):
         print "# Creating directory %s" % dirname
@@ -146,6 +141,11 @@ if __name__ == "__main__":
     # Get the options
     args  = cmdline()
 
+    try:
+        pipebox_work = os.environ['PIPEBOX_WORK']
+    except:
+        print "must declare $PIPEBOX_WORK"
+        sys.exit(1)
     wclnames = []
     # Case 1, multiple expnum in filelist
     if os.path.exists(args.expnum):
