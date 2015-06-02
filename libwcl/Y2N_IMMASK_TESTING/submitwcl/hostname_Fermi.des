@@ -1,0 +1,30 @@
+<<include ../supportwcl/felipe_cfg.des>>
+
+<<include ../modulewcl/modnamepat.wcl>>
+<<include ../modulewcl/hostname.wcl>>
+
+target_site = fermigrid-sl6 
+
+reqnum = 1333
+jira_id = DESOPS-873
+label = hostname
+basket = ${reqnum}
+GROUP_SUBMIT_ID = 1
+
+pipeline = hostname    # used in desstat output 
+pipeprod = Y2Nstack
+pipever = 1.0.6+1
+campaign = Y2T
+project = FM
+
+unitname = hostname
+ops_run_dir = ${project}/${pipeline}/r${reqnum}/p${attnum:2}
+submit_run_dir = /cluster_scratch/refact/submit/${home_archive}/${ops_run_dir}
+
+blocklist = hostname
+
+<block>
+    <hostname>
+	    modulelist = hostname
+    </hostname>
+</block>
