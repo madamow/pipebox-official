@@ -20,7 +20,7 @@
                 flabel = satstars
                 fsuffix = fits
                 dirpat = se
-		        optional = true
+		optional = true
                 ops_enddir = aux
                 rundir = aux
             </cat_satstars>
@@ -30,7 +30,7 @@
                 flabel = trailbox
                 fsuffix = fits
                 dirpat = se
-        		optional = true
+        	optional = true
                 ops_enddir = aux
                 rundir = aux
             </cat_trailbox>
