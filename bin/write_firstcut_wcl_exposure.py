@@ -84,7 +84,9 @@ def write_wcl(EXPNUM,args):
 
     # Open template file and replace file-handle
     MYWCLDIR = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s" % args.libname)
-    MYWCLDIR = MYWCLDIR[MYWCLDIR.find('/home'):]
+    if MYWCLDIR.find('/home') > 0:
+        MYWCLDIR = MYWCLDIR[MYWCLDIR.index('/home'):]
+        
     f = open(template,'r')
     fh = f.read()
     fh = replace_fh(fh,'{MYWCLDIR}',subst=MYWCLDIR)
