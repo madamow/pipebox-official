@@ -163,5 +163,4 @@ if __name__ == "__main__":
 
     os.chmod(submit_name, 0755)
     print "# To submit files:\n"
-    print "\t ./%s\n " % submit_name
-    
+    print "\t %s\n " % submit_name

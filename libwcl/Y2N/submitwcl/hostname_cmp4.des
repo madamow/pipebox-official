@@ -1,4 +1,4 @@
-<<include ../supportwcl/felipe_cfg.des>>
+<<include ../../../supportwcl/felipe_cfg.des>>
 
 <<include ../modulewcl/modnamepat.wcl>>
 <<include ../modulewcl/hostname.wcl>>
@@ -13,7 +13,7 @@ GROUP_SUBMIT_ID = 1
 
 pipeline = hostname    # used in desstat output 
 pipeprod = Y2Nstack
-pipever = 1.0.5+0
+pipever = 1.0.6+1
 campaign = Y2T
 project = ACT
 
