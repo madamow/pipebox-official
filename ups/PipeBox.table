@@ -1,5 +1,10 @@
 SetupRequired(despydb 2.0.0+2)
-setupRequired(despyastro 0.3.0+3)
+SetupRequired(despyastro 0.3.0+3)
+
+# To run dessubmnit and desstat
+SetupRequired(ProcessingFW 1.1.2+1)
+SetupRequired(IntegrationUtils 1.1.1+1)
+SetupRequired(FileMgmt 1.1.1+1)
 
 envAppend(PYTHONPATH, ${PRODUCT_DIR}/python)
 envAppend(PATH, ${PRODUCT_DIR}/bin)
