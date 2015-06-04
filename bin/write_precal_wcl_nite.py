@@ -133,18 +133,8 @@ if __name__ == "__main__":
         print "must declare $PIPEBOX_WORK"
         sys.exit(1)
     wclnames = []
-    # Case 1, multiple expnum in filelist
-    if os.path.exists(args.expnum):
-        print "# Will read file: %s" % NITE
-        for line in open(NITE).readlines():
-            if line[0] == "#":
-                continue
-            NITE = line.split()[0]
-            wclname = write_wcl(NITE,args)
-            wclnames.append(wclname)
             
-            
-    # Case 2: single expnum
+    # Case 1: single NITE
     else:
         wclname = write_wcl(NITE,args)
         wclnames.append(wclname)
