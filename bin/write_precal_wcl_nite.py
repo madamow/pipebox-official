@@ -115,7 +115,7 @@ def write_wcl(NITE,args):
         os.mkdir(dirname)
 
     # Write out the new file
-    wclname = os.path.join(dirname,'firstcut_{EXPNUM}_{BAND}_{REQNUM}.des'.format(EXPNUM=EXPNUM,BAND=BAND,REQNUM=args.reqnum))
+    wclname = os.path.join(dirname,'precal_{NITE}_{REQNUM}.des'.format(NITE=NITE,REQNUM=args.reqnum))
     print "# Creating: %s" % wclname
     newfile = open(wclname,'w')
     newfile.write(fh)
