@@ -50,6 +50,14 @@ def cmdline():
                         help="Name of the project ie. ACT/FM/etc")
     parser.add_argument("--libname", action="store", default='Y2N',
                         help="Name of the wcl library to use")
+    parser.add_argument("--template", action="store", default='firstcut_template',
+                        help="Name of template to use (without the .des)")
+    # For re-runs
+    parser.add_argument("--reqnum_input", action="store",default='',
+                        help="Input reqnum number for rerun image")
+    parser.add_argument("--attnum_input", action="store",default='',
+                        help="Input attempt number for rerun image")
+
     parser.add_argument("--verb", action="store_true", default=False,
                         help="Turn on verbose")
     args = parser.parse_args()
@@ -74,7 +82,7 @@ def write_wcl(EXPNUM,args):
 
     # Get NITE and BAND for expnum
     NITE, BAND   = get_expnum_info(EXPNUM,args.db_section)
-    template = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s/submitwcl/firstcut_template.des" % args.libname)
+    template_path = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s/submitwcl/%s.des" % (args.libname,args.template))
 
     # Fring Case
     if BAND in ['z','Y']:
@@ -87,7 +95,7 @@ def write_wcl(EXPNUM,args):
     if MYWCLDIR.find('/home') > 0:
         MYWCLDIR = MYWCLDIR[MYWCLDIR.index('/home'):]
         
-    f = open(template,'r')
+    f = open(template_path,'r')
     fh = f.read()
     fh = replace_fh(fh,'{MYWCLDIR}',subst=MYWCLDIR)
     fh = replace_fh(fh,'{USER}',   subst=args.user)
@@ -106,6 +114,9 @@ def write_wcl(EXPNUM,args):
     fh = replace_fh(fh,'{NITE}',    subst=NITE)
     fh = replace_fh(fh,'{BAND}',    subst=BAND)
     fh = replace_fh(fh,'{FRINGE_CASE}', subst=FRINGE_CASE)
+    # For rerun's
+    fh = replace_fh(fh,'{REQNUM_INPUT}', subst=args.reqnum_input)
+    fh = replace_fh(fh,'{ATTNUM_INPUT}', subst=args.attnum_input)
 
     # The calibration block
     info = cals.get_cals_info(nite=NITE,archive_name=args.archive_name,db_section=args.db_section,verb=args.verb)

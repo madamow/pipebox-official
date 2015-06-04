@@ -7,7 +7,7 @@
             <red_bleedmasked>
                 filetype = red
 		#filename = ${input_pat}_bleedmasked.fits
-		filename = D${expnum:8}_${band}_c${ccdnum:2}_r${input_reqnum}p${input_attnum:2}_bleedmasked.fits
+		filename = D${expnum:8}_${band}_c${ccdnum:2}_r${reqnum_input}p${attnum_input:2}_bleedmasked.fits
                 #filepat = ccdnum_band
                 #flabel = bleedmasked    
                 #fsuffix = fits
@@ -16,7 +16,7 @@
                 rundir = red
             </red_bleedmasked>
    	    <red_bkg>
-		filename = D${expnum:8}_${band}_c${ccdnum:2}_r${input_reqnum}p${input_attnum:2}_bkg.fits
+		filename = D${expnum:8}_${band}_c${ccdnum:2}_r${reqnum_input}p${attnum_input:2}_bkg.fits
                 filetype = red_bkg
                 #filepat = ccdnum_band
                 #flabel = bkg
