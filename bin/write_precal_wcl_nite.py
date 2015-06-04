@@ -135,22 +135,22 @@ if __name__ == "__main__":
     wclnames = []
     # Case 1, multiple expnum in filelist
     if os.path.exists(args.expnum):
-        print "# Will read file: %s" % args.expnum
-        for line in open(args.expnum).readlines():
+        print "# Will read file: %s" % NITE
+        for line in open(NITE).readlines():
             if line[0] == "#":
                 continue
-            EXPNUM = line.split()[0]
-            wclname = write_wcl(EXPNUM,args)
+            NITE = line.split()[0]
+            wclname = write_wcl(NITE,args)
             wclnames.append(wclname)
             
             
     # Case 2: single expnum
     else:
-        wclname = write_wcl(args.expnum,args)
+        wclname = write_wcl(NITE,args)
         wclnames.append(wclname)
 
     # Now we write the submit bash file
-    submit_name = os.path.join(pipebox_work,'submitme_{EXPNUM}_{REQNUM}.sh'.format(EXPNUM=args.expnum,REQNUM=args.reqnum))
+    submit_name = os.path.join(pipebox_work,'submitme_{NITE}_{REQNUM}.sh'.format(NITE=NITE,REQNUM=args.reqnum))
     subm = open(submit_name,'w')
     subm.write("#!/usr/bin/env bash\n\n")
     for wclname in wclnames:
