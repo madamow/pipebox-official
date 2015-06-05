@@ -69,7 +69,7 @@ def write_wcl(NITE,args):
     template = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s/submitwcl/precal_template.des" % (args.campaign))
     
     # Open template file and replace file-handle
-    MYWCLDIR = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s/modulewcl/%s" % (args.campaign,args.libname))
+    MYWCLDIR = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s" % (args.campaign))
     if MYWCLDIR.find('/home') > 0:
         MYWCLDIR = MYWCLDIR[MYWCLDIR.index('/home'):]
         
