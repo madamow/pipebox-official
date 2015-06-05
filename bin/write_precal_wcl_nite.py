@@ -7,16 +7,6 @@ from calib.getexposures import get_exposures
 from datetime import datetime
 from PipeBox import replace_fh
 
-def get_expnum_info(expnum,db_section='db-destest'):
-
-    dbh = desdbi.DesDbi(section=db_section)
-    cur = dbh.cursor()
-    QUERY = '''SELECT nite,band from exposure where expnum={expnum}'''
-    cur.execute(QUERY.format(expnum=expnum))
-    nite, band = cur.fetchone()
-    return nite, band
-
-
 def cmdline():
 
     import argparse
@@ -76,10 +66,10 @@ def write_wcl(NITE,args):
     # Get input bias and flat exposures
     bias_expnums,dflat_expnums = get_exposures(args.db_section,NITE)
     # Get template
-    template = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s/submitwcl/precal_template.des" % args.libname)
+    template = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s/submitwcl/precal_template.des" % (args.campaign))
     
     # Open template file and replace file-handle
-    MYWCLDIR = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s" % args.libname)
+    MYWCLDIR = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s/modulewcl/%s" % (args.campaign,args.libname))
     if MYWCLDIR.find('/home') > 0:
         MYWCLDIR = MYWCLDIR[MYWCLDIR.index('/home'):]
         
@@ -135,11 +125,11 @@ if __name__ == "__main__":
     wclnames = []
             
     # Case 1: single NITE
-    wclname = write_wcl(NITE,args)
+    wclname = write_wcl(args.nite,args)
     wclnames.append(wclname)
 
     # Now we write the submit bash file
-    submit_name = os.path.join(pipebox_work,'submitme_{NITE}_{REQNUM}.sh'.format(NITE=NITE,REQNUM=args.reqnum))
+    submit_name = os.path.join(pipebox_work,'submitme_{NITE}_{REQNUM}.sh'.format(NITE=args.nite,REQNUM=args.reqnum))
     subm = open(submit_name,'w')
     subm.write("#!/usr/bin/env bash\n\n")
     for wclname in wclnames:
