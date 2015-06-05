@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 
 import os,sys
-from se_calib import calib_info as cals
-from datetime import datetime
-from PipeBox import replace_fh, get_expnum_info
+from PipeBox import replace_fh, get_expnum_info, write_wcl
 
 def cmdline():
 
@@ -67,65 +65,6 @@ def cmdline():
     return args
 
 
-def write_wcl(EXPNUM,args):
-
-    # Get NITE and BAND for expnum
-    NITE, BAND   = get_expnum_info(EXPNUM,args.db_section)
-    template_path = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s/submitwcl/%s_template.des" % (args.libname,args.template))
-
-    # Fring Case
-    if BAND in ['z','Y']:
-        FRINGE_CASE = 'fringe'
-    else:
-        FRINGE_CASE = 'nofringe'
-
-    # Open template file and replace file-handle
-    MYWCLDIR = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s" % args.libname)
-    if MYWCLDIR.find('/home') > 0:
-        MYWCLDIR = MYWCLDIR[MYWCLDIR.index('/home'):]
-        
-    f = open(template_path,'r')
-    fh = f.read()
-    fh = replace_fh(fh,'{MYWCLDIR}',subst=MYWCLDIR)
-    fh = replace_fh(fh,'{USER}',   subst=args.user)
-    fh = replace_fh(fh,'{DB_SECTION}',   subst=args.db_section)
-    fh = replace_fh(fh,'{ARCHIVE_NAME}',   subst=args.archive_name)
-    fh = replace_fh(fh,'{HTTP_SECTION}',   subst=args.http_section)
-    fh = replace_fh(fh,'{REQNUM}',        subst=args.reqnum)
-    fh = replace_fh(fh,'{TARGET_SITE}',   subst=args.target_site)
-    fh = replace_fh(fh,'{LABELS}',        subst=args.labels)
-    fh = replace_fh(fh,'{EUPS_PRODUCT}', subst=args.eups_product)
-    fh = replace_fh(fh,'{EUPS_VERSION}', subst=args.eups_version)
-    fh = replace_fh(fh,'{CAMPAIGN}',  subst=args.campaign)
-    fh = replace_fh(fh,'{PROJECT}',  subst=args.project)
-    fh = replace_fh(fh,'{SCHEMA}',  subst=args.schema)
-    fh = replace_fh(fh,'{EXPNUM}',  subst=EXPNUM)
-    fh = replace_fh(fh,'{NITE}',    subst=NITE)
-    fh = replace_fh(fh,'{BAND}',    subst=BAND)
-    fh = replace_fh(fh,'{FRINGE_CASE}', subst=FRINGE_CASE)
-    # For rerun's
-    fh = replace_fh(fh,'{REQNUM_INPUT}', subst=args.reqnum_input)
-    fh = replace_fh(fh,'{ATTNUM_INPUT}', subst=args.attnum_input)
-
-    # The calibration block
-    info = cals.get_cals_info(nite=NITE,archive_name=args.archive_name,db_section=args.db_section,verb=args.verb)
-    calib_section = cals.construct_wcl_block(info,NITE,verb=args.verb)
-    fh = replace_fh(fh,'{CALIB_SECTION}', subst=calib_section)
-    
-    # Create Directory
-    
-    dirname = os.path.join(pipebox_work,'files_submit_r{REQNUM}'.format(REQNUM=args.reqnum))
-    if not os.path.isdir(dirname):
-        print "# Creating directory %s" % dirname
-        os.mkdir(dirname)
-
-    # Write out the new file
-    wclname = os.path.join(dirname,'{TEMPLATE}_{EXPNUM}_{BAND}_{REQNUM}.des'.format(TEMPLATE=args.template,EXPNUM=EXPNUM,BAND=BAND,REQNUM=args.reqnum))
-    print "# Creating: %s" % wclname
-    newfile = open(wclname,'w')
-    newfile.write(fh)
-    newfile.close()
-    return wclname
 
 if __name__ == "__main__":
 
