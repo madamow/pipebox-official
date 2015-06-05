@@ -80,12 +80,12 @@ def write_wcl(EXPNUM,args):
     fh = replace_fh(fh,'{ATTNUM_INPUT}', subst=args.attnum_input)
 
     # The calibration block
-    info = cals.get_cals_info(nite=NITE,archive_name=args.archive_name,db_section=args.db_section,verb=args.verb)
-    calib_section = cals.construct_wcl_block(info,NITE,verb=args.verb)
-    fh = replace_fh(fh,'{CALIB_SECTION}', subst=calib_section)
+    if fh.find('{CALIB_SECTION}')>=0:
+        info = cals.get_cals_info(nite=NITE,archive_name=args.archive_name,db_section=args.db_section,verb=args.verb)
+        calib_section = cals.construct_wcl_block(info,NITE,verb=args.verb)
+        fh = replace_fh(fh,'{CALIB_SECTION}', subst=calib_section)
     
     # Create Directory
-    
     dirname = os.path.join(pipebox_work,'files_submit_r{REQNUM}'.format(REQNUM=args.reqnum))
     if not os.path.isdir(dirname):
         print "# Creating directory %s" % dirname
