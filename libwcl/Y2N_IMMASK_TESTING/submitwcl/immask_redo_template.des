@@ -6,6 +6,14 @@
 <<include {MYWCLDIR}/modulewcl/firstcut/08-immask-redo-0.4.wcl>>
 #<<include {MYWCLDIR}/modulewcl/firstcut/08-immask-redo-0.3.wcl>>
 
+# Modift fermigrid-sl6 site definition to run custom meta-packages in EUPS_PERSONAL on fermi-grid
+<site>
+  <fermigrid-sl6>
+     setupeups = /des/des20.b/data/felipe/EUPS_PERSONAL/gridstart.sh
+  </fermigrid-sl6>
+</site>
+
+
 # Database dependant definitions
 submit_des_db_section = {DB_SECTION}    # submit section: db-desoper or db-destest
 target_des_db_section = {DB_SECTION}    # target section: db-desoper or db-destest
