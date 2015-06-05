@@ -175,3 +175,10 @@ if __name__ == "__main__":
     os.chmod(submit_name, 0755)
     print "# To submit files:\n"
     print "\t %s\n " % submit_name
+
+    # Print warning of Fermigrid credentials
+    if args.target_site == 'fermigrid-sl6':
+        print "# For FermiGrid please make sure your credentials are valid"
+        print "\t setenv X509_USER_PROXY $HOME/.globus/osg/user.proxy"
+        print "\t voms-proxy-info --all"
+
