@@ -135,9 +135,8 @@ if __name__ == "__main__":
     wclnames = []
             
     # Case 1: single NITE
-    else:
-        wclname = write_wcl(NITE,args)
-        wclnames.append(wclname)
+    wclname = write_wcl(NITE,args)
+    wclnames.append(wclname)
 
     # Now we write the submit bash file
     submit_name = os.path.join(pipebox_work,'submitme_{NITE}_{REQNUM}.sh'.format(NITE=NITE,REQNUM=args.reqnum))
