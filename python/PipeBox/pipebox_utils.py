@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+from despydb import desdbi
 
 def replace_file(file_path, pattern, subst='', prompt=''):
     """ Replace in place for file"""
@@ -22,6 +23,16 @@ def replace_fh(fh,pattern,subst='',prompt=''):
         subst = raw_input(prompt+' ')
     fh = fh.replace(pattern,subst)
     return fh
+
+
+def get_expnum_info(expnum,db_section='db-destest'):
+
+    dbh = desdbi.DesDbi(section=db_section)
+    cur = dbh.cursor()
+    QUERY = '''SELECT nite,band from exposure where expnum={expnum}'''
+    cur.execute(QUERY.format(expnum=expnum))
+    nite, band = cur.fetchone()
+    return nite, band
 
 
 # --------------------------------------------------------------

@@ -1,20 +1,9 @@
 #!/usr/bin/env python
 
 import os,sys
-from despydb import desdbi
 from se_calib import calib_info as cals
 from datetime import datetime
-from PipeBox import replace_fh
-
-def get_expnum_info(expnum,db_section='db-destest'):
-
-    dbh = desdbi.DesDbi(section=db_section)
-    cur = dbh.cursor()
-    QUERY = '''SELECT nite,band from exposure where expnum={expnum}'''
-    cur.execute(QUERY.format(expnum=expnum))
-    nite, band = cur.fetchone()
-    return nite, band
-
+from PipeBox import replace_fh, get_expnum_info
 
 def cmdline():
 
@@ -50,7 +39,7 @@ def cmdline():
                         help="Name of the project ie. ACT/FM/etc")
     parser.add_argument("--libname", action="store", default='Y2N',
                         help="Name of the wcl library to use")
-    parser.add_argument("--template", action="store", default='firstcut_template',
+    parser.add_argument("--template", action="store", default='firstcut',
                         help="Name of template to use (without the .des)")
     # For re-runs
     parser.add_argument("--reqnum_input", action="store",default='',
@@ -82,7 +71,7 @@ def write_wcl(EXPNUM,args):
 
     # Get NITE and BAND for expnum
     NITE, BAND   = get_expnum_info(EXPNUM,args.db_section)
-    template_path = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s/submitwcl/%s.des" % (args.libname,args.template))
+    template_path = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s/submitwcl/%s_template.des" % (args.libname,args.template))
 
     # Fring Case
     if BAND in ['z','Y']:
@@ -131,7 +120,7 @@ def write_wcl(EXPNUM,args):
         os.mkdir(dirname)
 
     # Write out the new file
-    wclname = os.path.join(dirname,'firstcut_{EXPNUM}_{BAND}_{REQNUM}.des'.format(EXPNUM=EXPNUM,BAND=BAND,REQNUM=args.reqnum))
+    wclname = os.path.join(dirname,'{TEMPLATE}_{EXPNUM}_{BAND}_{REQNUM}.des'.format(TEMPLATE=args.template,EXPNUM=EXPNUM,BAND=BAND,REQNUM=args.reqnum))
     print "# Creating: %s" % wclname
     newfile = open(wclname,'w')
     newfile.write(fh)
@@ -156,6 +145,12 @@ if __name__ == "__main__":
             if line[0] == "#":
                 continue
             EXPNUM = line.split()[0]
+            try:
+                args.reqnum_input = line.split()[1]
+                args.attnum_input = line.split()[2]
+            except:
+                pass
+                
             wclname = write_wcl(EXPNUM,args)
             wclnames.append(wclname)
             
