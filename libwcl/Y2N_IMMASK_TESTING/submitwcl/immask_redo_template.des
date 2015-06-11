@@ -13,6 +13,14 @@
   </fermigrid-sl6>
 </site>
 
+# Modify httpserver
+<archive>
+    <prodbeta>
+        host = desftp.cosmology.illinois.edu
+        root_http = http://desftp.cosmology.illinois.edu/Prodbeta/archive
+    </prodbeta>
+</archive>
+transfer_semname = desftp20
 
 # Database dependant definitions
 submit_des_db_section = {DB_SECTION}    # submit section: db-desoper or db-destest
