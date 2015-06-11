@@ -1,0 +1,65 @@
+<module>
+    <fakeMatch>
+        wrappername = generic.py
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+        <file>
+            <objlist_fake>
+                filetype = snlist_fakeobj
+                filepat = sn_ccdnum_band
+                flabel = fakeSN_doFake
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+            </objlist_fake>
+            <objlist_out>
+                filetype = snlist_filterobj
+                filepat = sn_ccdnum_band
+                flabel = filterObj
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+            </objlist_out>
+            <forcephoto_out>
+                filetype = snlist_fakeobj
+                filepat = sn_ccdnum_band
+                flabel = fakeforcePhoto
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+            </forcephoto_out>
+            <autoscan_out>
+                filetype = snlist_filterobj
+                filepat = sn_ccdnum_band
+                flabel = autoScan
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+            </autoscan_out>
+            <fakematch_out>
+                filetype = snlist_filterobj
+                filepat = sn_ccdnum_band
+                flabel = fakeMatch
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+                ops_enddir = red
+                savefiles = true
+            </fakematch_out>
+        </file>
+        <exec_1>
+            execname = fakeMatch
+            used = file.objlist_fake,file.objlist_out,file.forcephoto_out,file.autoscan_out
+            was_generated_by = file.fakematch_out
+            ancestry = file.objlist_fake:file.fakematch_out,file.objlist_out:file.fakematch_out,file.forcephoto_out:file.fakematch_out,file.autoscan_out:file.fakematch_out
+            <cmdline>
+                inFile_fakeList =  ${file.objlist_fake.fullname}
+                inFile_objList = ${file.objlist_out.fullname}
+                inFile_forceList = ${file.forcephoto_out.fullname}   
+                inFile_autoList = ${file.autoscan_out.fullname}
+                outFile_fakeList = ${file.fakematch_out.fullname}
+                writeDB = _flag
+            </cmdline>
+        </exec_1>
+    </fakeMatch>
+</module>

@@ -1,0 +1,106 @@
+<module>
+    <detrend-fringe>
+        wrappername = generic.py
+        wrapperloop = expnum,ccdnum,band
+        modnamepat=${modnamepat_field_ccdnumband}
+        #loopobj = file.red_xtalked
+
+        <file>
+            <biascor>
+                filetype = cal_biascor
+                filename = ${camera}_n${precalnite}_c${ccdnum:2}_${precalrun}_biascor.fits
+                dirpat = se
+                rundir = biascor
+            </biascor>
+            <flatcor>
+                filetype = cal_dflatcor
+                filename = ${camera}_n${precalnite}_${band}_c${ccdnum:2}_${precalrun}_dflatcor.fits
+                dirpat = se
+                rundir = dflatcor
+            </flatcor>
+            <bpm>
+                filetype = cal_bpm
+                dirpat = se
+                rundir = bpm
+                #filename = ${bpmnite}_bpm_${ccdnum:2}.fits #old format for bpms
+                #new format for bpms
+                filename = ${camera}_n${bpmnite}_c${ccdnum:2}_${bpmrun}_bpm.fits
+            </bpm>
+            <photflatcor>
+                filetype = cal_photflatcor
+                dirpat = se
+                rundir = photflatcor
+                filename = ${photflatcornite}_photflatcor_${ccdnum:2}.fits
+            </photflatcor>
+            <pupil>
+                filetype = cal_pupil
+                dirpat = se
+                rundir = pupil
+                filename = ${pupilnite}_pupil_${band}_${ccdnum:2}.fits
+            </pupil>
+            <red_xtalked>
+                match = ccdnum,band
+                filetype = snxtalked_sci 
+                filepat = sn_ccdnum_band
+                flabel = scix
+                fsuffix = fits
+                dirpat = sne
+                rundir = xtalked
+            </red_xtalked>
+            <red_detrend>
+                filetype = snred
+                filepat = sn_ccdnum_band
+                flabel = detrend    
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+                savefiles = true
+            </red_detrend>
+            <lintable>
+                filetype = cal_lintable
+                dirpat = se
+                rundir = lintable
+                filename = ${lintablefile}.fits
+            </lintable>
+            <illumcor>
+                filetype = cal_illumcor
+                dirpat = se
+                rundir = illumcor
+                filename = ${illumcornite}_illumcor_${band}_${ccdnum:2}.fits
+            </illumcor>
+            <fringecor>
+                filetype = cal_fringecor
+                dirpat = se
+                rundir = fringecor
+                filename = ${fringecornite}_fringecor_${band}_${ccdnum:2}.fits
+            </fringecor>
+        </file>
+
+        <exec_1>
+            execname = imcorrect
+            used = file.red_xtalked, file.biascor, file.flatcor, file.bpm, file.photflatcor, file.pupil,file.lintable,file.fringecor, file.illumcor
+            was_generated_by = file.red_detrend
+            ancestry = file.red_xtalked:file.red_detrend, file.biascor:file.red_detrend, file.flatcor:file.red_detrend, file.photflatcor:file.red_detrend, file.pupil:file.red_detrend, file.lintable:file.red_detrend,file.fringecor:file.red_detrend,file.illumcor:file.red_detrend
+            <cmdline>
+                _01_red_xtalked = ${file.red_xtalked.fullname}
+                output = ${file.red_detrend.fullname}
+                bias = ${file.biascor.fullname}
+                flatten = ${file.flatcor.fullname}
+                bpm = ${file.bpm.fullname}
+                photflatten = ${file.photflatcor.fullname}
+                pupil = ${file.pupil.fullname}
+                illumination = ${file.illumcor.fullname}
+                fringe = ${file.fringecor.fullname}
+                linear = ${file.lintable.fullname}
+                verbose = 3
+                variancetype = WEIGHT
+                updatesky = _flag
+                MEF = _flag
+                fast = _flag
+                noisemodel = FULL
+                fixcol = _flag
+            </cmdline>
+        </exec_1>
+    </detrend-fringe>
+</module>

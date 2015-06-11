@@ -1,0 +1,35 @@
+<module>
+    <insert-forceImageTable>
+        wrappername = generic.py
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+        <file>
+            <mef_fakediff>
+                filetype = snred
+                filepat = sn_ccdnum_band
+                flabel = fakeSN_diff_mh
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = fakediff
+                rundir = fakediff
+            </mef_fakediff>
+            <psfex_model>
+                filetype = snpsfex_model
+                filepat = sn_ccdnum_band
+                flabel = fakeSN_psfexcat
+                fsuffix = psf
+                dirpat = sne_ccd
+                rundir = psf
+            </psfex_model>
+        </file>
+        <exec_1>
+            execname = insert_forceImageTable
+            used = file.mef_fakediff,file.psfex_model
+            <cmdline>
+                inFile_diffCoadd =  ${file.mef_fakediff.fullname}
+                inFile_psf = ${file.psfex_model.fullname}
+                writeDB = _flag
+            </cmdline>
+        </exec_1>
+    </insert-forceImageTable>
+</module>
