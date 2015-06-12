@@ -9,7 +9,7 @@
 - create_user_config.py 
 - write_firstcut_wcl_exposure.py <exp>  <req> --target_site <target> --user <user>
 eg. write_firstcut_wcl_exposure.py 229686 1434 --target_site descmp4 --user mcarras2 
-- source scripts/example_env_setup.sh (or .csh)
+- source $PIPEBOX_DIR/scripts/example_env_setup.sh (or .csh)
 
 
 Below is copy from Michael's Readme and added more
