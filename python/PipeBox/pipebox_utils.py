@@ -75,11 +75,12 @@ def write_wcl(EXPNUM,args):
     fh = replace_fh(fh,'{NITE}',    subst=NITE)
     fh = replace_fh(fh,'{BAND}',    subst=BAND)
     fh = replace_fh(fh,'{FRINGE_CASE}', subst=FRINGE_CASE)
+    fh = replace_fh(fh,'{CCD_LIST}', subst=args.ccd_list)
     # For rerun's
     fh = replace_fh(fh,'{REQNUM_INPUT}', subst=args.reqnum_input)
     fh = replace_fh(fh,'{ATTNUM_INPUT}', subst=args.attnum_input)
 
-    # The calibration block
+   # The calibration block
     if fh.find('{CALIB_SECTION}')>=0:
         info = cals.get_cals_info(nite=NITE,archive_name=args.archive_name,db_section=args.db_section,verb=args.verb)
         calib_section = cals.construct_wcl_block(info,NITE,verb=args.verb)

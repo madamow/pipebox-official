@@ -2,6 +2,9 @@
 
 import os,sys
 from PipeBox import replace_fh, get_expnum_info, write_wcl
+import pandas as pd
+all_ccds='1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,62'
+
 
 def cmdline():
 
@@ -10,7 +13,7 @@ def cmdline():
     # The positional arguments
     parser.add_argument("expnum", action="store",default=None,
                         help="Exposure number")
-    parser.add_argument("reqnum", action="store",default=None,
+    parser.add_argument("--reqnum", action="store",default=None,
                         help="Request number")
     parser.add_argument("--db_section", action="store", default='db-destest',
                         choices=['db-desoper','db-destest'],
@@ -39,6 +42,9 @@ def cmdline():
                         help="Name of the wcl library to use")
     parser.add_argument("--template", action="store", default='firstcut',
                         help="Name of template to use (without the .des)")
+    parser.add_argument("--ccd_list", action="store", default=all_ccds,
+                        help="ccd list enclosed in quotation")
+
     # For re-runs
     parser.add_argument("--reqnum_input", action="store",default='',
                         help="Input reqnum number for rerun image")
@@ -77,22 +83,42 @@ if __name__ == "__main__":
         print "must declare $PIPEBOX_WORK"
         sys.exit(1)
     wclnames = []
+    single_exposure = True
     # Case 1, multiple expnum in filelist
     if os.path.exists(args.expnum):
         print "# Will read file: %s" % args.expnum
-        for line in open(args.expnum).readlines():
-            if line[0] == "#":
-                continue
-            EXPNUM = line.split()[0]
-            try:
-                args.reqnum_input = line.split()[1]
-                args.attnum_input = line.split()[2]
-            except:
-                pass
-                
+        single_exposure = False
+        #for line in open(args.expnum).readlines():
+        #    if line[0] == "#":
+        #        continue
+        #    EXPNUM = line.split()[0]
+        #    try:
+        #        args.reqnum_input = line.split()[1]
+        #        args.attnum_input = line.split()[2]
+        #    except:
+        #        pass
+        #        
+        #   y2y wclname = write_wcl(EXPNUM,args)
+        #    wclnames.append(wclname)
+        explist = pd.read_csv(args.expnum)
+        explist = explist.fillna('')
+        for i in range(len(explist)):
+            EXPNUM = str(explist.EXPNUM[i])
+            if 'REQNUM' in explist.columns:
+                if explist.REQNUM[i] != '': args.reqnum = str(explist.REQNUM[i])
+            if  'CCD_LIST' in explist.columns:
+                if explist.CCD_LIST[i] == '':
+                    args.ccd_list   = all_ccds
+                else:
+                    args.ccd_list   = explist.CCD_LIST[i]
+                    
+            if 'REQNUM_INPUT' in explist.columns and 'ATTNUM_INPUT' in explist.columns:
+                args.reqnum_input = str(explist.REQNUM_INPUT[i])
+                args.attnum_input = str(explist.ATTNUM_INPUT[i]) 
+           
             wclname = write_wcl(EXPNUM,args)
             wclnames.append(wclname)
-            
+ 
             
     # Case 2: single expnum
     else:
@@ -100,7 +126,10 @@ if __name__ == "__main__":
         wclnames.append(wclname)
 
     # Now we write the submit bash file
-    submit_name = os.path.join(pipebox_work,'submitme_{EXPNUM}_{REQNUM}.sh'.format(EXPNUM=args.expnum,REQNUM=args.reqnum))
+    if single_exposure :
+        submit_name = os.path.join(pipebox_work,'submitme_{EXPNUM}_{REQNUM}.sh'.format(EXPNUM=args.expnum,REQNUM=args.reqnum))
+    else :
+        submit_name = os.path.join(pipebox_work,'submitme_{EXPNUM}_{REQNUM}.sh'.format(EXPNUM=os.path.split(args.expnum)[-1],REQNUM=args.reqnum))
     subm = open(submit_name,'w')
     subm.write("#!/usr/bin/env bash\n\n")
     for wclname in wclnames:
