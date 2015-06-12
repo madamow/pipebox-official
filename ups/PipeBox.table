@@ -1,5 +1,6 @@
 SetupRequired(despydb 2.0.0+2)
 SetupRequired(despyastro 0.3.0+3)
+SetupRequired(pandas 0.15.2+0)
 
 # To run dessubmnit and desstat
 #SetupRequired(ProcessingFW 1.1.2+1)
