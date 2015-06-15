@@ -50,12 +50,12 @@ def construct_wcl_block(cal,nite,verb=False):
     blck = blck +  "illumcornite    = %s\n" % getNITE(cal,'cal_illumcor')
     blck = blck +  "pupilnite       = %s\n" % getNITE(cal,'cal_pupil')
     blck = blck +  "photflatcornite = null\n"     # This iblckrmation is not in the DB
-    #blck = blck +  "precalnite      = %s\n" % getNITE(cal,'cal_biascor')
-    #blck = blck +  "precalrun       = r%04dp%02d\n"  % (cal['cal_biascor']['REQNUM'][0],cal['cal_biascor']['ATTNUM'][0])
+    blck = blck +  "precalnite      = %s\n" % getNITE(cal,'cal_biascor')
+    blck = blck +  "precalrun       = r%04dp%02d\n"  % (cal['cal_biascor']['REQNUM'][0],cal['cal_biascor']['ATTNUM'][0])
     # -------------------------------------------
     # Hard-coding this ones for now
-    blck = blck +  "precalnite      = 20121207\n" 
-    blck = blck +  "precalrun       = r1415p02\n" 
+    #blck = blck +  "precalnite      = 20121207\n" 
+    #blck = blck +  "precalrun       = r1415p02\n" 
     # --------------------------------------------
     blck = blck +  "scampupdatenite = %s\n" % getLAST(cal,'\S+_decam_pvmodel_\d+.ahead').split('.ahead')[0][-8:]
     blck = blck +  "scampconfigfile = %s\n" % getLAST(cal,'%_default.scamp.%')
@@ -88,9 +88,9 @@ def get_cals_info(**kwargs):
     cal_run    = ['cal_biascor','cal_dflatcor']
 
     cal_info = {}
-    #for cal_type in cal_run:
-    #    if verb: print "# Geting: %s" % cal_type
-    #    cal_info[cal_type] = ql.get_cal_run(dbh,caltype=cal_type,nite=nite,verb=verb)
+    for cal_type in cal_run:
+        if verb: print "# Geting: %s" % cal_type
+        cal_info[cal_type] = ql.get_cal_run(dbh,caltype=cal_type,nite=nite,verb=verb)
 
     for cal_type in cal_copied:
         if verb: print "# Geting: %s" % cal_type

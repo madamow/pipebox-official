@@ -14,16 +14,29 @@ QUERY_CAL_RUN_OLD = """
          and pfw.DATA_STATE='ACTIVE'
    """
 
+# Using supercal/precal tags for safety
 QUERY_CAL_RUN = """
-   select distinct c.minnite, c.maxnite, c.nite, wgb.reqnum, wgb.unitname, wgb.attnum, c.filename, c.filetype, pfw.DATA_STATE
-   from wgb, calibration c, PFW_ATTEMPT pfw, task t
-   where c.filetype='cal_dflatcor'
-         and wgb.filename=c.filename
-         and wgb.reqnum=pfw.reqnum
-         and wgb.unitname=pfw.unitname
-         and wgb.attnum=pfw.attnum
-         and t.id = pfw.task_id
-         and t.status=0"""
+  select distinct c.minnite, c.maxnite, c.nite, wgb.reqnum, wgb.attnum, c.filename, c.filetype, pfw.DATA_STATE, o.TAG
+  from wgb, calibration c, PFW_ATTEMPT pfw, OPS_PROCTAG o
+  where c.filetype='{caltype}'
+        and wgb.filename=c.filename
+        and pfw.DATA_STATE='ACTIVE'
+        and o.TAG='Y2T_PRECAL'
+        and wgb.attnum=o.attnum
+        and wgb.reqnum=o.reqnum
+   """
+
+#QUERY_CAL_RUN = """
+#   select distinct c.minnite, c.maxnite, c.nite, wgb.reqnum, wgb.unitname, wgb.attnum, c.filename, c.filetype, pfw.DATA_STATE
+#   from wgb, calibration c, PFW_ATTEMPT pfw, task t, and OPS_PROCTAG o
+#   where c.filetype='cal_dflatcor'
+#         and wgb.filename=c.filename
+#         and wgb.reqnum=pfw.reqnum
+#         and wgb.unitname=pfw.unitname
+#         and wgb.attnum=pfw.attnum
+#         and t.id = pfw.task_id
+#         and t.status=0
+#         """
 
 QUERY_FILE = """
     select distinct filename  from genfile
