@@ -6,6 +6,8 @@ from despydb import desdbi
 from se_calib import calib_info as cals
 from datetime import datetime
 
+ALL_CCDS='1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,62'
+
 def replace_file(file_path, pattern, subst='', prompt=''):
     """ Replace in place for file"""
     if prompt != '':
@@ -75,7 +77,7 @@ def write_wcl(EXPNUM,args):
     fh = replace_fh(fh,'{NITE}',    subst=NITE)
     fh = replace_fh(fh,'{BAND}',    subst=BAND)
     fh = replace_fh(fh,'{FRINGE_CASE}', subst=FRINGE_CASE)
-    fh = replace_fh(fh,'{CCD_LIST}', subst=args.ccd_list)
+    fh = replace_fh(fh,'{CCDNUMS}', subst=args.ccdnums)
     # For rerun's
     fh = replace_fh(fh,'{REQNUM_INPUT}', subst=args.reqnum_input)
     fh = replace_fh(fh,'{ATTNUM_INPUT}', subst=args.attnum_input)

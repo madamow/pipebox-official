@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 
 import os,sys
-from PipeBox import replace_fh, get_expnum_info, write_wcl
+from PipeBox import replace_fh, get_expnum_info, write_wcl, ALL_CCDS
 import pandas as pd
-all_ccds='1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,62'
-
 
 def cmdline():
 
@@ -13,7 +11,7 @@ def cmdline():
     # The positional arguments
     parser.add_argument("expnum", action="store",default=None,
                         help="Exposure number")
-    parser.add_argument("--reqnum", action="store",default=None,
+    parser.add_argument("reqnum", action="store",default=None,
                         help="Request number")
     parser.add_argument("--db_section", action="store", default='db-destest',
                         choices=['db-desoper','db-destest'],
@@ -42,9 +40,8 @@ def cmdline():
                         help="Name of the wcl library to use")
     parser.add_argument("--template", action="store", default='firstcut',
                         help="Name of template to use (without the .des)")
-    parser.add_argument("--ccd_list", action="store", default=all_ccds,
-                        help="ccd list enclosed in quotation")
-
+    parser.add_argument("--ccdnums", action="store", default=ALL_CCDS,
+                        help="coma-separated list of CCDNUM to use")
     # For re-runs
     parser.add_argument("--reqnum_input", action="store",default='',
                         help="Input reqnum number for rerun image")
@@ -104,9 +101,9 @@ if __name__ == "__main__":
         explist = explist.fillna('')
         for i in range(len(explist)):
             EXPNUM = str(explist.EXPNUM[i])
-            if 'REQNUM' in explist.columns:
-                if explist.REQNUM[i] != '': args.reqnum = str(explist.REQNUM[i])
-            if  'CCD_LIST' in explist.columns:
+            #if 'REQNUM' in explist.columns:
+            #    if explist.REQNUM[i] != '': args.reqnum = str(explist.REQNUM[i])
+            if  'CCDNUMS' in explist.columns:
                 if explist.CCD_LIST[i] == '':
                     args.ccd_list   = all_ccds
                 else:
