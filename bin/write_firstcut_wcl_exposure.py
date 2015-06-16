@@ -90,7 +90,7 @@ if __name__ == "__main__":
             EXPNUM = str(explist.EXPNUM[i])
             if  'CCDNUMS' in explist.columns:
                 if explist.CCDNUMS[i] == '':
-                    args.ccdnums   = all_ccds
+                    args.ccdnums   = ALL_CCDS
                 else:
                     args.ccdnums   = explist.CCDNUMS[i]
                     
