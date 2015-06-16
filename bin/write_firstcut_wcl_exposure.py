@@ -68,7 +68,6 @@ def cmdline():
     return args
 
 
-
 if __name__ == "__main__":
 
     # Get the options
@@ -85,29 +84,15 @@ if __name__ == "__main__":
     if os.path.exists(args.expnum):
         print "# Will read file: %s" % args.expnum
         single_exposure = False
-        #for line in open(args.expnum).readlines():
-        #    if line[0] == "#":
-        #        continue
-        #    EXPNUM = line.split()[0]
-        #    try:
-        #        args.reqnum_input = line.split()[1]
-        #        args.attnum_input = line.split()[2]
-        #    except:
-        #        pass
-        #        
-        #   y2y wclname = write_wcl(EXPNUM,args)
-        #    wclnames.append(wclname)
         explist = pd.read_csv(args.expnum)
         explist = explist.fillna('')
         for i in range(len(explist)):
             EXPNUM = str(explist.EXPNUM[i])
-            #if 'REQNUM' in explist.columns:
-            #    if explist.REQNUM[i] != '': args.reqnum = str(explist.REQNUM[i])
             if  'CCDNUMS' in explist.columns:
-                if explist.CCD_LIST[i] == '':
-                    args.ccd_list   = all_ccds
+                if explist.CCDNUMS[i] == '':
+                    args.ccdnums   = all_ccds
                 else:
-                    args.ccd_list   = explist.CCD_LIST[i]
+                    args.ccdnums   = explist.CCDNUMS[i]
                     
             if 'REQNUM_INPUT' in explist.columns and 'ATTNUM_INPUT' in explist.columns:
                 args.reqnum_input = str(explist.REQNUM_INPUT[i])
@@ -115,7 +100,6 @@ if __name__ == "__main__":
            
             wclname = write_wcl(EXPNUM,args)
             wclnames.append(wclname)
- 
             
     # Case 2: single expnum
     else:
