@@ -2,7 +2,7 @@ import shlex
 from subprocess import Popen
 from os import remove
 
-def get_exposures(db_section,nite):
+def get_cal_exposures(db_section,nite):
     check_precal_string = "/work/users/mjohns44/desdm/devel/opstoolkit/trunk/bin/check_for_precal_inputs.py --section %s --band u,g,r,i,z,Y,VR --CalReq 20,10,10,10,10,10,10,10 --night %s " % (db_section,nite)
     print check_precal_string
     log = "input_exposures.list" 
