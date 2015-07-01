@@ -3,7 +3,7 @@
 import os,sys
 from despydb import desdbi
 from se_calib import calib_info as cals
-from calib.getexposures import get_exposures
+from calib.get_cal_exposures import get_cal_exposures
 from datetime import datetime
 from PipeBox import replace_fh
 
@@ -64,7 +64,7 @@ def cmdline():
 def write_wcl(NITE,args):
 
     # Get input bias and flat exposures
-    bias_expnums,dflat_expnums = get_exposures(args.db_section,NITE)
+    bias_expnums,dflat_expnums = get_cal_exposures(args.db_section,NITE)
     # Get template
     template = os.path.join(os.environ['PIPEBOX_DIR'],"libwcl/%s/submitwcl/precal_template.des" % (args.campaign))
     
