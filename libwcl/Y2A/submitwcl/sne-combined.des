@@ -1,7 +1,7 @@
 # include can expand ~ as well as env variables
 # ${DESDMFW_MYWCL} should be set as an environment variable
 # e.g., export DESDMFW_MYWCL=/home/mgower/mywcl
-<<include ${DESDMFW_MYWCL}/test-mypfwcfg.des>>   
+<<include ${DESDMFW_MYWCL}/sne_test_mypfwcfg.des>>   
 <<include ${MODULEWCL}/modnamepat.wcl>>
 
 <<include sne-exp.des>>  

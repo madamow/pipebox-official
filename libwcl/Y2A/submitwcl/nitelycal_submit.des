@@ -21,26 +21,25 @@ nite = 20141021
 <<include ../../lists/Y1A1-precal4bpms/20141021/20141021_dflat_exposures.list>>
 <<include ../../lists/Y1A1-precal4bpms/20141021/20141021_bias_exposures.list>>
 
+pipeline = precal
 reqnum = 1455
+jira_id = DESOPS-874
+
 target_site = fermigrid-sl6
 project = ACT
 <site>
     <descmp2>
-        #setupeups = /work/users/mjohns44/Processing/Production/Y2A/testeups/myeups_setup.sh
         setupeups = /work/apps/RHEL6/dist/eups/desdm_eups_setup.sh
     </descmp2>
     <fermigrid-sl6>
-        #setupeups=/des/des20.b/data/mjohns44/myeups_setup.sh
         setupeups= /cvmfs/des.opensciencegrid.org/2015_Q2/eeups/SL6/eups/gridstart.sh
     </fermigrid-sl6>
     <fermigrid-sl6-himem>
-        #setupeups=/des/des20.b/data/mjohns44/myeups_setup.sh
         setupeups = /cvmfs/des.opensciencegrid.org/2015_Q2/eeups/SL6/eups/gridstart.sh
     </fermigrid-sl6-himem>
 </site>
 submit_run_dir = /cluster_scratch/refact/submit/${home_archive}/${ops_run_dir}
 
-jira_id = DESOPS-874
 label = ${pipeline}_Y2T
 basket = ${nite}_${pipeline}
 GROUP_SUBMIT_ID = 1
@@ -49,10 +48,6 @@ pipeprod = Y2Nstack
 pipever = 1.0.6+17
 
 camera = D
-#nite = 20141204t1209
-#bias_expnum = 383337,383338,383339,383340,383341
-#dflat_expnum = 383348,383349,383350,383351,383352,383353,383354,383355,383356,383357
-
 ccdnum = 1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,62
 
 xtalkcoefffile = DECam_20130606.xtalk
@@ -63,7 +58,6 @@ hupdatefile = 20140709_DES_header_update.20140303
 
 ##################################################
 photflagvar = 1
-pipeline = precal
 unitname = ${nite}
 refcampaign = Y2T1
 ops_run_dir = ${project}/${pipeline}/${unitname}-r${reqnum}/p${attnum:2}
