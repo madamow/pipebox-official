@@ -1,44 +1,48 @@
 # include can expand ~ as well as env variables
-# ${DESDMFW_MYWCL} should be set as an environment variable
-# e.g., export DESDMFW_MYWCL=/home/mgower/mywcl
 <<include $PIPEBOX_WORK/config/{USER}_cfg.des>>   
-<<include {MYWCLDIR}/modnamepat.wcl>>    # filename patterns for logs, input & output wcl, lists
+<<include {MYWCLDIR}/modulewcl/sne/modnamepat.wcl>>    # filename patterns for logs, input & output wcl, lists
 
-<<include sne-exp.des>>  
-
-<<include {MYWCLDIR}/update-scamp-headers.wcl>>
-<<include {MYWCLDIR}/mkbleedmask.wcl>>
-<<include {MYWCLDIR}/create-bkg-img.wcl>>
-<<include {MYWCLDIR}/immask.wcl>>
-<<include {MYWCLDIR}/makeStarCat.wcl>>
-<<include {MYWCLDIR}/strip-pv.wcl>>
-<<include {MYWCLDIR}/makeweight.wcl>>
-<<include {MYWCLDIR}/create-astrom-sex-scamp.wcl>>
-<<include {MYWCLDIR}/astrom-scamp.wcl>>
-<<include {MYWCLDIR}/update-astrom-scamp-header.wcl>>
-<<include {MYWCLDIR}/create-psfex-cat.wcl>>
-<<include {MYWCLDIR}/run-psfex.wcl>>
-<<include {MYWCLDIR}/ingest-psfex-xml.wcl>>
-<<include {MYWCLDIR}/dofake.wcl>>
-<<include {MYWCLDIR}/create-psfex-cat-dofake.wcl>>
-<<include {MYWCLDIR}/run-psfex-dofake.wcl>>
-<<include {MYWCLDIR}/immerge-fake-single.wcl>>
-<<include {MYWCLDIR}/create-head-distmpl-single.wcl>>
-<<include {MYWCLDIR}/distort-template-single.wcl>>
-<<include {MYWCLDIR}/create-psfex-cat-distmpl.wcl>>
-<<include {MYWCLDIR}/hotpants-single.wcl>>
-<<include {MYWCLDIR}/create-diff-cat-single.wcl>>
-<<include {MYWCLDIR}/immerge-distmpl-single.wcl>>
-<<include {MYWCLDIR}/immerge-diff-single.wcl>>
-<<include {MYWCLDIR}/filterobj-single.wcl>>
-<<include {MYWCLDIR}/makestamps-single.wcl>>
-<<include {MYWCLDIR}/autoscan-single.wcl>>
-<<include {MYWCLDIR}/makecand.wcl>>
-<<include {MYWCLDIR}/monzptemplate.wcl>>
-<<include {MYWCLDIR}/makeForceList_fakesOnly.wcl>>
-<<include {MYWCLDIR}/forcePhoto.wcl>>
-<<include {MYWCLDIR}/fakeMatch.wcl>>
-<<include {MYWCLDIR}/insert_forceImageTable.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/crosstalk-sci.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/detrend-fringe.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/detrend-nofringe.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/create-scamp-catalog.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/split-scamp-ahead.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/run-scamp.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/ingest-scamp-xml.wcl>>
+#####
+<<include {MYWCLDIR}/modulewcl/sne/update-scamp-headers.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/mkbleedmask.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/create-bkg-img.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/immask.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/makeStarCat.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/strip-pv.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/makeweight.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/create-astrom-sex-scamp.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/astrom-scamp.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/update-astrom-scamp-header.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/create-psfex-cat.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/run-psfex.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/ingest-psfex-xml.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/dofake.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/create-psfex-cat-dofake.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/run-psfex-dofake.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/immerge-fake-single.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/create-head-distmpl-single.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/distort-template-single.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/create-psfex-cat-distmpl.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/hotpants-single.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/create-diff-cat-single.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/immerge-distmpl-single.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/immerge-diff-single.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/filterobj-single.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/makestamps-single.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/autoscan-single.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/makecand.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/monzptemplate.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/makeForceList_fakesOnly.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/forcePhoto.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/fakeMatch.wcl>>
+<<include {MYWCLDIR}/modulewcl/sne/insert_forceImageTable.wcl>>
 
 
 # Database dependant definitions
@@ -120,9 +124,29 @@ save_run_vals = nite, camera, field, band, first_expnum, seqnum
 ops_run_dir = ${project}/${pipeline}/${nite}-r${reqnum}/${unitname}/p${attnum:2}   # pipeline specific
 
 <block>
+    <sne-exp-fringe>
+        divide_jobs_by = expnum
+        modulelist = crosstalk-sci,detrend-fringe,create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml
+   </sne-exp-fringe>
+   <sne-exp-nofringe>
+        divide_jobs_by = expnum
+        modulelist = crosstalk-sci,detrend-nofringe,create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml
+   </sne-exp-nofringe>
    <sne-ccd>
         divide_jobs_by = ccdnum
         #modulelist = update-scamp-headers,mkbleedmask,create-bkg-img,immask,makeStarCat,strip-pv,makeweight,create-astrom-sex-scamp,astrom-scamp,update-astrom-scamp-header,create-psfex-cat,run-psfex,ingest-psfex-xml,dofake,create-psfex-cat-dofake,run-psfex-dofake,create-head-distmpl-single,distort-template-single,create-psfex-cat-distmpl,hotpants-single,create-diff-cat-single,immerge-fake-single,immerge-distmpl-single,immerge-diff-single,filterobj-single,makestamps-single,autoscan-single,makecand,monzptemplate,makeForceList_fakesOnly,forcePhoto,fakeMatch,insert-forceImageTable
         modulelist = update-scamp-headers,mkbleedmask,create-bkg-img,immask
    </sne-ccd>
 </block>
+
+#sne-exp-* input calibration files
+config = 20140709
+xtalkcoefffile = DECam_20130606.xtalk
+hupdatefile = 20140709_DES_header_update.20140303
+lintablefile = lin_tbl_v0.4
+fringecornite = 20131115v1
+illumcornite = 20140807
+pupilnite = 20140807
+photflatcornite = null
+scamp_config_file = 20140709_default.scamp.20140423
+scamp_ahead_file = ${config}_decam_pvmodel_20131115_${band}.ahead
