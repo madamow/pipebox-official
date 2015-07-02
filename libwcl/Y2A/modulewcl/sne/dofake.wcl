@@ -21,14 +21,14 @@
                 dirpat = sne_ccd
                 rundir = red
             </sci_red>
-            <mask_red>
-                filetype = snmask_red
-                filepat = sn_ccdnum_band
-                flabel = mask
-                fsuffix = fits
-                dirpat = sne_ccd
-                rundir = red
-            </mask_red>
+            #<mask_red>
+            #    filetype = snmask_red
+            #    filepat = sn_ccdnum_band
+            #    flabel = mask
+            #    fsuffix = fits
+            #    dirpat = sne_ccd
+            #    rundir = red
+            #</mask_red>
             <wgt_red>
                 filetype = snwgt_red
                 filepat = sn_ccdnum_band
@@ -70,16 +70,16 @@
                 rundir = red
                 savefile = true
             </sci_fake>
-            <mask_fake>
-                filetype = snmask_red
-                filepat = sn_ccdnum_band
-                flabel = fakeSN.mask
-                fsuffix = fits
-                dirpat = sne_ccd
-                ops_enddir = red
-                rundir = red
-                savefiles = false
-            </mask_fake>
+            #<mask_fake>
+            #    filetype = snmask_red
+            #    filepat = sn_ccdnum_band
+            #    flabel = fakeSN.mask
+            #    fsuffix = fits
+            #    dirpat = sne_ccd
+            #    ops_enddir = red
+            #    rundir = red
+            #    savefiles = false
+            #</mask_fake>
             <wgt_fake>
                 filetype = snwgt_red
                 filepat = sn_ccdnum_band
@@ -104,20 +104,23 @@
     
         <exec_1>
             execname = doFake
-            used = file.sci_red,file.mask_red,file.wgt_red,file.psfex_model,file.cat_psfex,file.wgt_tmpl,file.starcat
-            was_generated_by = file.sci_fake,file.mask_fake,file.wgt_fake,file.objlist_fake
-            ancestry = file.sci_red:file.sci_fake,file.mask_red:file.mask_fake,file.wgt_red:file.wgt_fake 
+            #used = file.sci_red,file.mask_red,file.wgt_red,file.psfex_model,file.cat_psfex,file.wgt_tmpl,file.starcat
+            #was_generated_by = file.sci_fake,file.mask_fake,file.wgt_fake,file.objlist_fake
+            #ancestry = file.sci_red:file.sci_fake,file.mask_red:file.mask_fake,file.wgt_red:file.wgt_fake 
+            used = file.sci_red,file.wgt_red,file.psfex_model,file.cat_psfex,file.wgt_tmpl,file.starcat
+            was_generated_by = file.sci_fake,file.wgt_fake,file.objlist_fake
+            ancestry = file.sci_red:file.sci_fake,file.wgt_red:file.wgt_fake 
             <cmdline>
                 dbVersion_SNFake = ${snfake_version}
                 inFile_CALIB_STARS = ${file.starcat.fullname}
                 inFile_sci =  ${file.sci_red.fullname}
-                inFile_mask = ${file.mask_red.fullname}
+                #inFile_mask = ${file.mask_red.fullname}
                 inFile_wgt = ${file.wgt_red.fullname}   
                 inFile_psf = ${file.psfex_model.fullname}
                 inFile_sexCat = ${file.cat_psfex.fullname}
                 inFile_tWgt = ${file.wgt_tmpl.fullname}
                 outFile_sci = ${file.sci_fake.fullname}
-                outFile_mask = ${file.mask_fake.fullname} 
+                #outFile_mask = ${file.mask_fake.fullname} 
                 outFile_wgt = ${file.wgt_fake.fullname} 
                 outFile_fakeList = ${file.objlist_fake.fullname} 
                 writeDB = _flag

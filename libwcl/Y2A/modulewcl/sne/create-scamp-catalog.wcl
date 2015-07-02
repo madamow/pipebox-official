@@ -30,7 +30,7 @@
                 rundir = config
             </sex_nnw>
             <red_detrend>
-                filetype = snred
+                filetype = snred_detrend
                 filepat = sn_ccdnum_band
                 flabel = detrend
                 fsuffix = fits

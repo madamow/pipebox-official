@@ -17,7 +17,7 @@
             rundir = config
         </sex_param>
         <red_bleedmasked>
-            filetype = snred
+            filetype = snred_mkbleedmask
             filepat = sn_ccdnum_band
             flabel = bleedmasked
             fsuffix = fits

@@ -1,7 +1,8 @@
 <module>
     <makeStarCat-combined>
         wrappername = generic.py
-        wrapperloop = expnum,ccdnum
+        #wrapperloop = expnum,ccdnum
+        wrapperloop = ccdnum, band
         modnamepat=${modnamepat_combine_ccdnumband}
         <file>
             <red_immasked>

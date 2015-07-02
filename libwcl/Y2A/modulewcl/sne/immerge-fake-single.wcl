@@ -12,14 +12,14 @@
                 dirpat = sne_ccd
                 rundir = red
             </sci_fake>
-            <mask_fake>
-                filetype = snmask_red
-                filepat = sn_ccdnum_band
-                flabel = fakeSN.mask
-                fsuffix = fits
-                dirpat = sne_ccd
-                rundir = red
-            </mask_fake>
+            #<mask_fake>
+            #    filetype = snmask_red
+            #    filepat = sn_ccdnum_band
+            #    flabel = fakeSN.mask
+            #    fsuffix = fits
+            #    dirpat = sne_ccd
+            #    rundir = red
+            #</mask_fake>
             <wgt_fake>
                 filetype = snwgt_red
                 filepat = sn_ccdnum_band
@@ -42,12 +42,15 @@
 
         <exec_1>
             execname = immerge
-            used = file.sci_fake, file.mask_fake, file.wgt_fake
+            #used = file.sci_fake, file.mask_fake, file.wgt_fake
+            used = file.sci_fake, file.wgt_fake
             was_generated_by =  file.mef_fake
-            ancestry = file.sci_fake:file.mef_fake,file.mask_fake:file.mef_fake,file.wgt_fake:file.mef_fake
+            #ancestry = file.sci_fake:file.mef_fake,file.mask_fake:file.mef_fake,file.wgt_fake:file.mef_fake
+            ancestry = file.sci_fake:file.mef_fake,file.wgt_fake:file.mef_fake
             <cmdline>
                 outFile_img =  ${file.mef_fake.fullname}
-                inList_merge = ${file.sci_fake.fullname} ${file.mask_fake.fullname} ${file.wgt_fake.fullname}
+                #inList_merge = ${file.sci_fake.fullname} ${file.mask_fake.fullname} ${file.wgt_fake.fullname}
+                inList_merge = ${file.sci_fake.fullname} ${file.wgt_fake.fullname}
             </cmdline>
         </exec_1>
     </immerge-fake-single>

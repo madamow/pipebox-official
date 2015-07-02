@@ -6,7 +6,7 @@
 
         <file>
             <red_wcs>
-                filetype = snred
+                filetype = snred_wcs
                 filepat = sn_ccdnum_band
                 flabel = wcs
                 fsuffix = fits
@@ -36,22 +36,24 @@
                 savefiles = false
             </cat_trailbox>
             <red_bleedmasked>
-                filetype = snred
+                filetype = snred_mkbleedmask
                 filepat = sn_ccdnum_band
                 flabel = bleedmasked    
                 fsuffix = fits
                 dirpat = sne_ccd
                 ops_enddir = red
                 rundir = red
-                savefiles = false
+                savefiles = False
             </red_bleedmasked>
         </file>
 
         <exec_1>
             execname = mkbleedmask
             used = file.red_wcs
-            was_generated_by = file.cat_satstars,file.cat_trailbox,file.red_bleedmasked
-            ancestry = file.red_wcs:file.red_bleedmasked,file.red_wcs:file.cat_satstars,file.red_wcs:file.cat_trailbox
+            #was_generated_by = file.cat_satstars,file.cat_trailbox,file.red_bleedmasked
+            #ancestry = file.red_wcs:file.red_bleedmasked,file.red_wcs:file.cat_satstars,file.red_wcs:file.cat_trailbox
+            was_generated_by = file.red_bleedmasked
+            ancestry = file.red_wcs:file.red_bleedmasked
             <cmdline>
                 _01_red_wcs = ${file.red_wcs.fullname}
                 _02_red_bleedmasked = ${file.red_bleedmasked.fullname}
@@ -67,8 +69,8 @@
                 y = 1.0
                 v = 3
                 E = 6
-                o = ${file.cat_satstars.fullname}
-                x = ${file.cat_trailbox.fullname}
+                #o = ${file.cat_satstars.fullname}
+                #x = ${file.cat_trailbox.fullname}
             </cmdline>
         </exec_1>
     </mkbleedmask>

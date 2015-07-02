@@ -24,16 +24,16 @@
                 rundir = red
                 savefiles = false
             </sci_red>
-            <mask_red>
-                filetype = snmask_red
-                filepat = sn_ccdnum_band
-                flabel = mask
-                fsuffix = fits
-                dirpat = sne_ccd
-                ops_enddir = red
-                rundir = red
-                savefiles = false
-            </mask_red>
+            #<mask_red>
+            #    filetype = snmask_red
+            #    filepat = sn_ccdnum_band
+            #    flabel = mask
+            #    fsuffix = fits
+            #    dirpat = sne_ccd
+            #    ops_enddir = red
+            #    rundir = red
+            #    savefiles = false
+            #</mask_red>
             <wgt_red>
                 filetype = snwgt_red
                 filepat = sn_ccdnum_band
@@ -49,12 +49,14 @@
         <exec_1>
             execname = makeWeight
             used = file.strip_pv
-            was_generated_by = file.sci_red,file.wgt_red,file.mask_red
-            ancestry = file.strip_pv:file.sci_red,file.strip_pv:file.mask_red,file.strip_pv:file.wgt_red
+            #was_generated_by = file.sci_red,file.wgt_red,file.mask_red
+            #ancestry = file.strip_pv:file.sci_red,file.strip_pv:file.mask_red,file.strip_pv:file.wgt_red
+            was_generated_by = file.sci_red,file.wgt_red
+            ancestry = file.strip_pv:file.sci_red,file.strip_pv:file.wgt_red
             <cmdline>
                 inFile_img = ${file.strip_pv.fullname}
                 outFile_sci =  ${file.sci_red.fullname}
-                outFile_mask = ${file.mask_red.fullname}
+                #outFile_mask = ${file.mask_red.fullname}
                 outFile_wgt = ${file.wgt_red.fullname}
                 border = 15
                 w5 = 0.5

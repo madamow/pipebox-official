@@ -115,31 +115,34 @@
                 rundir =  red
                 savefile = false
             </wgt_combined_out>
-            <xml_combined_out>
-                filetype = snxml_swarp
-                filepat = sn_ccdnum_band_combined
-                flabel = fakeSN
-                fsuffix = xml
-                dirpat = sne_ccd
-                ops_enddir = qa
-                rundir = qa
-                savefile = false
-            </xml_combined_out>
+            #<xml_combined_out>
+            #    filetype = snxml_swarp
+            #    filepat = sn_ccdnum_band_combined
+            #    flabel = fakeSN
+            #    fsuffix = xml
+            #    dirpat = sne_ccd
+            #    ops_enddir = qa
+            #    rundir = qa
+            #    savefile = false
+            #</xml_combined_out>
         </file>
     
         <exec_1>
             execname = swarp
             used = file.config_combined,list.in_sci_list.sci_fake,list.in_wgt_list.wgt_fake,file.head_swarp
-            was_generated_by = file.sci_combined_out,file.wgt_combined_out,file.xml_combined_out
-            ancestry = file.config_combined:file.sci_combined_out,list.in_sci_list.sci_fake:file.sci_combined_out,list.in_wgt_list.wgt_fake:file.sci_combined_out,file.head_swarp:file.sci_combined_out,list.in_sci_list.sci_fake:file.sci_combined_out,list.in_sci_list.sci_fake:file.wgt_combined_out,list.in_sci_list.sci_fake:file.xml_combined_out,list.in_wgt_list.wgt_fake:file.sci_combined_out,list.in_wgt_list.wgt_fake:file.wgt_combined_out,list.in_wgt_list.wgt_fake:file.xml_combined_out,file.head_swarp:file.sci_combined_out,file.head_swarp:file.wgt_combined_out,file.head_swarp:file.xml_combined_out
+            #was_generated_by = file.sci_combined_out,file.wgt_combined_out,file.xml_combined_out
+            was_generated_by = file.sci_combined_out,file.wgt_combined_out
+            #ancestry = file.config_combined:file.sci_combined_out,list.in_sci_list.sci_fake:file.sci_combined_out,list.in_wgt_list.wgt_fake:file.sci_combined_out,file.head_swarp:file.sci_combined_out,list.in_sci_list.sci_fake:file.sci_combined_out,list.in_sci_list.sci_fake:file.wgt_combined_out,list.in_sci_list.sci_fake:file.xml_combined_out,list.in_wgt_list.wgt_fake:file.sci_combined_out,list.in_wgt_list.wgt_fake:file.wgt_combined_out,list.in_wgt_list.wgt_fake:file.xml_combined_out,file.head_swarp:file.sci_combined_out,file.head_swarp:file.wgt_combined_out,file.head_swarp:file.xml_combined_out
+            ancestry = file.config_combined:file.sci_combined_out,list.in_sci_list.sci_fake:file.sci_combined_out,list.in_wgt_list.wgt_fake:file.sci_combined_out,file.head_swarp:file.sci_combined_out,list.in_sci_list.sci_fake:file.sci_combined_out,list.in_sci_list.sci_fake:file.wgt_combined_out,list.in_wgt_list.wgt_fake:file.sci_combined_out,list.in_wgt_list.wgt_fake:file.wgt_combined_out,file.head_swarp:file.sci_combined_out,file.head_swarp:file.wgt_combined_out
             #ancestry = list.in_sci_list.sci_fake:file.sci_combined_out,list.in_sci_list.sci_fake:file.wgt_combined_out,file.head_swarp:file.sci_combined_out
             <cmdline>
+                c = ${file.config_combined.fullname}
                 _01_listcmb = @${list.in_sci_list.fullname}                
                 WEIGHT_IMAGE = @${list.in_wgt_list.fullname}                
-                XML_NAME = ${file.xml_combined_out.fullname} 
+                WRITE_XML = N
+                #XML_NAME = ${file.xml_combined_out.fullname} 
                 IMAGEOUT_NAME = ${file.sci_combined_out.fullname}
                 WEIGHTOUT_NAME = ${file.wgt_combined_out.fullname}
-                c = ${file.config_combined.fullname}
                 NTHREADS = 1
                 #ASTREF_CATALOG = FILE
                 #ASTREFCAT_NAME = ${file.sn_usnob_cat.fullname}

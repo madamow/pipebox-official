@@ -46,7 +46,6 @@
                 crosstalk = ${file.xtalkcoeff.fullname}
                 postsatmask = _flag
                 overscansample = 1
-                overscanorder = 1
                 overscanfunction = 0
                 overscantrim = 5
                 replace = ${file.hupdate.fullname}

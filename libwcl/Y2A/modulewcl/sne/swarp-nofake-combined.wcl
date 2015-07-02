@@ -125,6 +125,7 @@
             <cmdline>
                 _01_listcmb = @${list.in_sci_list.fullname}                
                 WEIGHT_IMAGE = @${list.in_wgt_list.fullname}                
+                WRITE_XML = N
                 #XML_NAME = ${file.xml_combined_out.fullname} 
                 IMAGEOUT_NAME = ${file.sci_combined_out.fullname}
                 WEIGHTOUT_NAME = ${file.wgt_combined_out.fullname}

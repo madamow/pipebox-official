@@ -5,7 +5,7 @@
         modnamepat=${modnamepat_field_ccdnumband}
         <file>
             <red_bleedmasked>
-                filetype = snred
+                filetype = snred_mkbleedmask
                 filepat = sn_ccdnum_band
                 flabel = bleedmasked    
                 fsuffix = fits
@@ -21,7 +21,7 @@
                 rundir = bkg
             </red_bkg>
             <red_immasked>
-                filetype = snred
+                filetype = snred_immask
                 filepat = sn_ccdnum_band
                 flabel = immasked
                 fsuffix = fits
@@ -30,31 +30,34 @@
                 rundir = red
                 savefiles = true                
             </red_immasked>
-            <red_streaks>
-                optional = true
-                filetype = snstreaks_red
-                filepat = sn_ccdnum_band
-                flabel = streaks
-                fsuffix = fits
-                dirpat = sne_ccd
-                ops_enddir = aux
-                rundir = aux
-                savefiles = false                
-            </red_streaks>
+            #<red_streaks>
+            #    optional = true
+            #    filetype = snstreaks_red
+            #    filepat = sn_ccdnum_band
+            #    flabel = streaks
+            #    fsuffix = fits
+            #    dirpat = sne_ccd
+            #    ops_enddir = aux
+            #    rundir = aux
+            #    savefiles = false                
+            #</red_streaks>
         </file>
 
         <exec_1>
             execname = immask
             cmd_hyphen = alldouble
             used = file.red_bleedmasked,file.red_bkg
-            was_generated_by = file.red_immasked,file.red_streaks
-            ancestry = file.red_bleedmasked:file.red_immasked, file.red_bkg:file.red_immasked, file.red_bleedmasked:file.red_streaks
+            #was_generated_by = file.red_immasked,file.red_streaks
+            was_generated_by = file.red_immasked
+            #ancestry = file.red_bleedmasked:file.red_immasked, file.red_bkg:file.red_immasked, file.red_bleedmasked:file.red_streaks
+            was_generated_by = file.red_immasked
+            ancestry = file.red_bleedmasked:file.red_immasked, file.red_bkg:file.red_immasked
             <cmdline>
                 _01_immask_type = all
                 _02_red_bleedmasked = ${file.red_bleedmasked.fullname}
                 _03_red_immasked = ${file.red_immasked.fullname}
-                streaksfile = ${file.red_streaks.fullname}
-                write_streaks = _flag
+                #streaksfile = ${file.red_streaks.fullname}
+                #write_streaks = _flag
                 nsig_mask = 10
                 nsig_merge = 10
                 max_angle = 25

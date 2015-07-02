@@ -12,24 +12,12 @@
                 dirpat = sne_ccd
                 rundir = red
             </objlist_out>
-            <config_imputer>
-               filetype = snautoscan
-               filename = imputernosexpsf.obj
-               dirpat = se
-               rundir = config
-            </config_imputer>
-            <config_model>
-               filetype = snautoscan
-               filename = modelnosexpsf.obj
-               dirpat = se
-               rundir = config
-            </config_model>
-            <config_scaler>
-               filetype = snautoscan
-               filename = scalernosexpsf.obj
-               dirpat = se
-               rundir = config
-            </config_scaler>
+            <mltrain>
+                filetype = snmltrain
+                filename = ${autoscan_mltrain_date}_autoscan_mltrain_${autoscan_mltrain_version}.tar
+                dirpat = sne_ccd
+                rundir = mltrain
+            </mltrain>
             <tarfile_stamps>
                 filetype = sntar_stamps
                 filepat = sn_ccdnum_band
@@ -50,6 +38,8 @@
             </autoscan_results>
         </file>
         <wrapper>
+            wrapper_mltrain_tarfile = ${file.mltrain.fullname}
+            wrapper_mltrain_indir = ${autoscan_mltrain_indir}
             wrapper_untar_stamps = False
             wrapper_stamps_tarfile = ${file.tarfile_stamps.fullname}
             wrapper_stamps_indir = ${stamps_dir}
@@ -57,19 +47,19 @@
         </wrapper>
         <exec_1>
             execname = autoScan.py
-            used = file.objlist_out, file.config_imputer, file.config_model, file.config_scaler, file.tarfile_stamps
+            used = file.objlist_out, file.mltrain, file.tarfile_stamps
             was_generated_by = file.autoscan_results
             ancestry = file.objlist_out:file.autoscan_results, file.tarfile_stamps:file.autoscan_results
             <cmdline>
+                inFile_objList = ${file.objlist_out.fullname}
                 inDir_stamps = ${wrapper.wrapper_stamps_indir}
                 inFile_stampList = STAMPS.LIST
-                inFile_imputer = ${file.config_imputer.fullname}
-                inFile_model = ${file.config_model.fullname}
-                inFile_scaler = ${file.config_scaler.fullname}
-                inFile_objList = ${file.objlist_out.fullname}
+                inFile_imputer = ${wrapper.wrapper_mltrain_indir}/imputer${autoscan_mltrain_version}.obj
+                inFile_model = ${wrapper.wrapper_mltrain_indir}/${autoscan_mltrain_version}.classifier/${autoscan_mltrain_version}.comp
+                inFile_scaler = ${wrapper.wrapper_mltrain_indir}/scaler${autoscan_mltrain_version}.obj
                 outFile_results = ${file.autoscan_results.fullname}
                 #outFile_stdout = ${file.autoscan_stdout.fullname}
-                writeDB = _flag
+                #writeDB = _flag
             </cmdline>
         </exec_1>
     </autoscan-single>

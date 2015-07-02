@@ -59,7 +59,7 @@
                 dirpat = sne_ccd
                 ops_enddir = cat
                 rundir = cat
-                savefiles = true
+                savefiles = False
             </psfex_distmpl_cat>
         </file>
 

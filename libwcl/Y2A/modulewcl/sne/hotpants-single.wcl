@@ -63,17 +63,17 @@
                 rundir = fakediff
                 savefile = false
             </wgt_fakediff>
-            <mask_fakediff>
-                #omi =  SN_253351_SN-E2_tile20_r_02_fakeSN_diff.mask.fits  
-                filetype = snmask_fakediff
-                filepat = sn_ccdnum_band
-                flabel = fakeSN_diff.mask
-                fsuffix = fits
-                dirpat = sne_ccd
-                ops_enddir = fakediff 
-                rundir = fakediff
-                savefile = false
-            </mask_fakediff>
+            #<mask_fakediff>
+            #    #omi =  SN_253351_SN-E2_tile20_r_02_fakeSN_diff.mask.fits  
+            #    filetype = snmask_fakediff
+            #    filepat = sn_ccdnum_band
+            #    flabel = fakeSN_diff.mask
+            #    fsuffix = fits
+            #    dirpat = sne_ccd
+            #    ops_enddir = fakediff 
+            #    rundir = fakediff
+            #    savefile = false
+            #</mask_fakediff>
             <kern_fakediff>
                 #okf =   SN_253351_SN-E2_tile20_r_02_fakeSN_diff.kern.fits
                 filetype = snkern_fakediff
@@ -101,8 +101,10 @@
         <exec_1>
             execname = hotpants
             used = file.sci_fake, file.wgt_fake, file.sci_distmpl, file.wgt_distmpl
-            was_generated_by = file.sci_fakediff, file.wgt_fakediff, file.mask_fakediff, file.kern_fakediff
-            ancestry = file.sci_fake:file.sci_fakediff, file.sci_fake:file.wgt_fakediff, file.sci_fake:file.mask_fakediff, file.wgt_fake:file.sci_fakediff, file.wgt_fake:file.wgt_fakediff, file.wgt_fake:file.mask_fakediff, file.wgt_distmpl:file.sci_fakediff, file.wgt_distmpl:file.wgt_fakediff, file.wgt_distmpl:file.mask_fakediff,file.sci_fake:file.kern_fakediff,file.wgt_fake:file.kern_fakediff,file.sci_distmpl:file.kern_fakediff
+            #was_generated_by = file.sci_fakediff, file.wgt_fakediff, file.mask_fakediff, file.kern_fakediff
+            #ancestry = file.sci_fake:file.sci_fakediff, file.sci_fake:file.wgt_fakediff, file.sci_fake:file.mask_fakediff, file.wgt_fake:file.sci_fakediff, file.wgt_fake:file.wgt_fakediff, file.wgt_fake:file.mask_fakediff, file.wgt_distmpl:file.sci_fakediff, file.wgt_distmpl:file.wgt_fakediff, file.wgt_distmpl:file.mask_fakediff,file.sci_fake:file.kern_fakediff,file.wgt_fake:file.kern_fakediff,file.sci_distmpl:file.kern_fakediff
+            was_generated_by = file.sci_fakediff, file.wgt_fakediff, file.kern_fakediff
+            ancestry = file.sci_fake:file.sci_fakediff, file.sci_fake:file.wgt_fakediff, file.wgt_fake:file.sci_fakediff, file.wgt_fake:file.wgt_fakediff, file.wgt_distmpl:file.sci_fakediff, file.wgt_distmpl:file.wgt_fakediff, file.sci_fake:file.kern_fakediff,file.wgt_fake:file.kern_fakediff,file.sci_distmpl:file.kern_fakediff
             <cmdline>
                 inim = ${file.sci_fake.fullname} 
                 ini = ${file.wgt_fake.fullname}
@@ -112,7 +114,7 @@
 
                 outim = ${file.sci_fakediff.fullname}
                 oni = ${file.wgt_fakediff.fullname}
-                omi = ${file.mask_fakediff.fullname}
+                #omi = ${file.mask_fakediff.fullname}
                 okf = ${file.kern_fakediff.fullname}
 
                 useWeight = _flag

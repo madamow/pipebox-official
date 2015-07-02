@@ -14,7 +14,7 @@
                 rundir = astrom-scamp/cat
              </scamp_cat>
             <red_detrend>
-                filetype = snred
+                filetype = snred_detrend
                 filepat = sn_ccdnum_band
                 flabel = detrend
                 fsuffix = fits
@@ -31,7 +31,7 @@
                 rundir = astrom-scamp/aux
             </scamp_head>
             <red_wcs>
-                filetype = snred
+                filetype = snred_wcs
                 filepat = sn_ccdnum_band
                 flabel = wcs
                 fsuffix = fits
