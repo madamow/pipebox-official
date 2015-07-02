@@ -111,7 +111,6 @@ if __name__ == "__main__":
     # If --local is specified add necessary orchestration lines to submitwcl
     if args.local:
         run_local(wclname,args.target_site,args.archive_name,args.user)
-        print "\n# Please comment out transfer_semname and transfer_stats in {USER}_cfg.des if running locally!\n"
 
     # Now we write the submit bash file
     if single_exposure :
