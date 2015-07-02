@@ -56,7 +56,6 @@ reqnum      = {REQNUM}         # jira id - used as part of a unique identifier
 jira_id     = DESOPS-{REQNUM}  # the parent id of the reqnum
 label       = {LABELS}         # me-tests,,for-user-tests #strings to help identify runs
 
-pipeline = firstcut        # used in desstat output 
 pipeprod = {EUPS_PRODUCT}  # i.e. Y2Nstack       #eups stack name
 pipever  = {EUPS_VERSION}  # 1.0.6+1, the eups stack version
 campaign = {CAMPAIGN}      # Y2T for example
