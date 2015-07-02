@@ -8,6 +8,25 @@ from datetime import datetime
 
 ALL_CCDS='1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,62'
 
+def run_local(submit_file):
+    """ If --local specified, add files_mvmt lines to submit file to override user_cfg. When --local is specified, job will run locally on submit machine and not use http"""
+    lines_to_add = ["\n",
+        "#Lines to run locally without http\n",
+        "submit_files_mvmt = filemgmt.job_mvmt_local.JobArchiveLocal\n",
+        "<job_file_mvmt>\n",
+        "    <descmp2>\n",
+        "        <prodbeta>\n",
+        "            <no_archive>\n",
+        "                mvmtclass = filemgmt.job_mvmt_local.JobArchiveLocal\n",
+        "            </no_archive>\n",
+        "        </prodbeta>\n",
+        "    </descmp2>\n",
+        "</job_file_mvmt>"]
+    with open(submit_file,"a") as filetoappend:
+        for lines in lines_to_add:
+            filetoappend.write(lines)
+    filetoappend.close()
+ 
 def replace_file(file_path, pattern, subst='', prompt=''):
     """ Replace in place for file"""
     if prompt != '':
