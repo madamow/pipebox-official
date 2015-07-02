@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os,sys
-from PipeBox import replace_fh, get_expnum_info, write_wcl, ALL_CCDS
+from PipeBox import replace_fh, get_expnum_info, write_wcl, ALL_CCDS,run_local
 
 def cmdline():
 
@@ -43,6 +43,8 @@ def cmdline():
                         help="Name of template to use (without the .des)")
     parser.add_argument("--ccdnums", action="store", default=ALL_CCDS,
                         help="coma-separated list of CCDNUM to use")
+    parser.add_argument("--local", action="store_true",default=False,
+                        help="run on submit machine without http")
     # For re-runs
     parser.add_argument("--reqnum_input", action="store",default='',
                         help="Input reqnum number for rerun image")
@@ -106,6 +108,10 @@ if __name__ == "__main__":
     else:
         wclname = write_wcl(args.expnum,args)
         wclnames.append(wclname)
+    # If --local is specified add necessary orchestration lines to submitwcl
+    if args.local:
+        run_local(wclname)
+        print "\n# Please comment out transfer_semname and transfer_stats in {USER}_cfg.des if running locally!\n"
 
     # Now we write the submit bash file
     if single_exposure :
@@ -118,6 +124,7 @@ if __name__ == "__main__":
         subm.write("dessubmit %s\nsleep 30\n" % wclname)
 
     os.chmod(submit_name, 0755)
+ 
     print "# To submit files:\n"
     print "\t %s\n " % submit_name
 
