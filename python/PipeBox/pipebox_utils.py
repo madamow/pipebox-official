@@ -23,22 +23,18 @@ def run_local(submit_file,site,archive,user):
         "    </{SITE}>\n".format(SITE=site),
         "</job_file_mvmt>"]
     with open(submit_file,"a") as filetoappend:
-        for lines in lines_to_add:
-            filetoappend.write(lines)
-    filetoappend.close()
+        [filetoappend.write(lines) for lines in lines_to_add]
     
     """Copy user_cfg and comment out lines relating to transfer_semname,transfer_stats)"""
-    user_cfg = "{PIPEBOX_DIR}/config/{USER}_cfg.des".format(USER=user,PIPEBOX_DIR=os.getenv('PIPEBOX_WORK'))
+    user_cfg = "{PIPEBOX_DIR}/config/{USER}_cfg.des".format(USER=user,PIPEBOX_DIR=os.getenv('PIPEBOX_WORK')) 
     user_cfg_local = user_cfg.replace('.des','_local.des')
-    old_cfg = open(user_cfg,"r").read().split('\n')
-    for i,line in enumerate(old_cfg):
-        if '#' in line:
-            continue
-        elif "transfer_semname" in line or "transfer_stats" in line:
-            old_cfg[i]= "#"+line 
-    new_cfg = open(user_cfg_local,"w")
-    [new_cfg.write(line+"\n") for line in old_cfg]
-    new_cfg.close()
+	with open(user_cfg,"r") as old_cfg:
+		old_cfg_lines = old_cfg.read().split('\n')
+		new_cfg_lines = map(lambda x: "#"+x if "transfer_semname" in x or
+			"transfer_stats" in x else x,old_cfg_lines)
+		
+	with open(user_cfg_local,"w") as new_cfg
+    	[new_cfg.write(line+"\n") for line in new_cfg_lines]
    
     """Replace USER_cfg.des with USER_cfg_local.des """ 
     old_submitwcl = open(submit_file,"r").read()
