@@ -121,7 +121,7 @@ def write_wcl(EXPNUM,args):
    # The calibration block
     if fh.find('{CALIB_SECTION}')>=0:
         info = cals.get_cals_info(nite=NITE,archive_name=args.archive_name,db_section=args.db_section,verb=args.verb)
-        calib_section = cals.construct_wcl_block(info,NITE,verb=args.verb)
+        calib_section = cals.construct_wcl_block(info,NITE,verb=args.verb,safeBPM=args.safeBPM)
         fh = replace_fh(fh,'{CALIB_SECTION}', subst=calib_section)
     
     # Create Directory

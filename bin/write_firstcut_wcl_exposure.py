@@ -42,6 +42,9 @@ def cmdline():
                         help="Name of template to use (without the .des)")
     parser.add_argument("--ccdnums", action="store", default=ALL_CCDS,
                         help="coma-separated list of CCDNUM to use")
+
+    parser.add_argument("--safeBPM", action="store_true", default=False,
+                        help="Will use safe (default) BPM file")
     # For re-runs
     parser.add_argument("--reqnum_input", action="store",default='',
                         help="Input reqnum number for rerun image")

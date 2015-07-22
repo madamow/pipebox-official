@@ -30,11 +30,11 @@ def getBPM_info(cal,caltype='cal_bpm'):
         attnum = cal[caltype]['FILENAME'][k][27:29]
         nite   = cal[caltype]['NITE'][k]
         reqnum = min(reqnum, int(tmp_reqnum))
+    print cal[caltype]['FILENAME']
     return nite,reqnum,attnum
 
-def construct_wcl_block(cal,nite,verb=False):
+def construct_wcl_block(cal,nite,verb=False,safeBPM=False):
 
-    bpmnite,bpmreq,bpmatt = getBPM_info(cal)
     
     if verb: print "# Formatting wcl-block"
     blck = ''
@@ -43,9 +43,16 @@ def construct_wcl_block(cal,nite,verb=False):
     blck = blck +  "hupdatefile     = %s\n" % getLAST(cal,'%_update.%') # to get the latest
     blck = blck +  "lintablenite    = 20130624\n" # This iblckrmation is not in the DB
     blck = blck +  "lintablefile    = %s\n" % os.path.splitext(getFNAME(cal,'cal_lintable'))[0]
-    blck = blck +  "bpmnite         = %s\n" % bpmnite
-    blck = blck +  "bpmreq          = %s\n" % bpmreq
-    blck = blck +  "bpmatt          = %s\n" % int(bpmatt)
+    if safeBPM:
+        if verb: print "# Using safe BPM files"
+        blck = blck +  "bpmnite         = 20140901t0928\n"
+        blck = blck +  "bpmreq          = 1190\n"
+        blck = blck +  "bpmatt          = 1\n"
+    else:
+        bpmnite,bpmreq,bpmatt = getBPM_info(cal)
+        blck = blck +  "bpmnite         = %s\n" % bpmnite
+        blck = blck +  "bpmreq          = %s\n" % bpmreq
+        blck = blck +  "bpmatt          = %s\n" % int(bpmatt)
     blck = blck +  "fringecornite   = %s\n" % getNITE(cal,'cal_fringecor')
     blck = blck +  "illumcornite    = %s\n" % getNITE(cal,'cal_illumcor')
     blck = blck +  "pupilnite       = %s\n" % getNITE(cal,'cal_pupil')
