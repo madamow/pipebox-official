@@ -29,17 +29,17 @@ def run_local(submit_file,site,archive,user):
     """Copy user_cfg and comment out lines relating to transfer_semname,transfer_stats"""
     user_cfg = "{PIPEBOX_DIR}/config/{USER}_cfg.des".format(USER=user,PIPEBOX_DIR=os.getenv('PIPEBOX_WORK')) 
     user_cfg_local = user_cfg.replace('.des','_local.des')
-	with open(user_cfg,"r") as old_cfg:
-		old_cfg_lines = old_cfg.read()
-		new_cfg_lines = map(lambda x: "#"+x if "transfer_semname" in x or
+    with open(user_cfg,"r") as old_cfg:
+        old_cfg_lines = old_cfg.read()
+        new_cfg_lines = map(lambda x: "#"+x if "transfer_semname" in x or
 			"transfer_stats" in x else x,old_cfg_lines)
-		
-	with open(user_cfg_local,"w") as new_cfg:
+
+    with open(user_cfg_local,"w") as new_cfg:
     	[new_cfg.write(line) for line in new_cfg_lines]
    
     """Replace USER_cfg.des with USER_cfg_local.des in submitwcl""" 
     with open(submit_file,"r") as old_submitwcl:
-		old_submitwcl_lines.read()
+        old_submitwcl_lines.read()
     	revised_submitwcl = old_submitwcl_lines.replace('_cfg.des', '_cfg_local.des')
     with open(submit_file,"w") as new_submitwcl:
     	new_submitwcl.write(revised_submitwcl)
