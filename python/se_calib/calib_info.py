@@ -34,7 +34,6 @@ def getBPM_info(cal,caltype='cal_bpm'):
     return nite,reqnum,attnum
 
 def construct_wcl_block(cal,nite,verb=False,safeBPM=False):
-
     
     if verb: print "# Formatting wcl-block"
     blck = ''
