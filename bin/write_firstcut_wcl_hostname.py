@@ -7,7 +7,7 @@ import pandas as pd
 def cmdline():
 
     import argparse
-    parser = argparse.ArgumentParser(description="Creates the submit wcl for a EXPNUM\nwrite_firstcut_wcl_exposure.py 229686 1124")
+    parser = argparse.ArgumentParser(description="Creates the submit for hostname testing\nwrite_firstcut_wcl_hostname.py  1124")
     # The positional arguments
     parser.add_argument("reqnum", action="store",default=None,
                         help="Request number")
@@ -26,17 +26,17 @@ def cmdline():
                         help="username that will submit")
     parser.add_argument("--labels", action="store", default='me-tests',
                         help="Coma-separated labels")
-    parser.add_argument("--eups_product", action="store", default='Y2Nstack',
+    parser.add_argument("--eups_product", action="store", default='firstcut',
                         help="Name of the EUPS stack to use")
-    parser.add_argument("--eups_version", action="store", default='1.0.6+1',
+    parser.add_argument("--eups_version", action="store", default='Y3Ndev+1',
                         help="Name of the EUPS stack to use")
-    parser.add_argument("--campaign", action="store", default='Y2T',
+    parser.add_argument("--campaign", action="store", default='Y3T',
                         help="Name of the campaign")
     parser.add_argument("--project", action="store", default='ACT',
                         help="Name of the project ie. ACT/FM/etc")
-    parser.add_argument("--libname", action="store", default='Y2N',
+    parser.add_argument("--libname", action="store", default='Y3Ndev',
                         help="Name of the wcl library to use")
-    parser.add_argument("--template", action="store", default='firstcut',
+    parser.add_argument("--template", action="store", default='hostname',
                         help="Name of template to use (without the .des)")
     parser.add_argument("--verb", action="store_true", default=False,
                         help="Turn on verbose")
