@@ -12,8 +12,7 @@
 <<include {MYWCLDIR}/modulewcl/firstcut/05-update-scamp-headers.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/06-mkbleedmask.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/07-create-bkg-img.wcl>>
-# <<include {MYWCLDIR}/modulewcl/firstcut/08-immask.wcl>>
-<<include {MYWCLDIR}/modulewcl/firstcut-08-immask-indirect_write.wcl >>
+<<include {MYWCLDIR}/modulewcl/firstcut/08-immask-indirect_write.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/09-create-psfex-cat.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/10-run-psfex.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/10b-ingest-psfex-xml.wcl>>

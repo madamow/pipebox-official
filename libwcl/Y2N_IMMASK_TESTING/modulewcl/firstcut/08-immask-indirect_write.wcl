@@ -42,7 +42,7 @@
             </red_streaks>
         </file>
 
-       <exec_1>
+        <exec_1>
             execname = immask
             cmd_hyphen = alldouble
             used = file.red_bleedmasked,file.red_bkg
@@ -62,6 +62,7 @@
                 nsig_detect = 18
                 bkgfile = ${file.red_bkg.fullname}
             </cmdline>
-        </exec_1>
+      </exec_1>
     </immask>
 </module>
+
