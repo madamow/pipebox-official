@@ -8,14 +8,16 @@
 <<include {MYWCLDIR}/modulewcl/firstcut/03-create-scamp-cat.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/03b-split-scamp-ahead.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/04-run-scamp.wcl>>
-<<include {MYWCLDIR}/modulewcl/firstcut/04b-ingest-scamp-xml.wcl>>
+#<<include {MYWCLDIR}/modulewcl/firstcut/04b-ingest-scamp-xml.wcl>>
+<<include {MYWCLDIR}/modulewcl/firstcut/04c-ingest-scamp-xml.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/05-update-scamp-headers.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/06-mkbleedmask.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/07-create-bkg-img.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/08-immask-indirect_write.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/09-create-psfex-cat.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/10-run-psfex.wcl>>
-<<include {MYWCLDIR}/modulewcl/firstcut/10b-ingest-psfex-xml.wcl>>
+#<<include {MYWCLDIR}/modulewcl/firstcut/10b-ingest-psfex-xml.wcl>>
+<<include {MYWCLDIR}/modulewcl/firstcut/10c-ingest-psfex-xml.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/11-create-finalcut-catalog.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/12-ingest-se-objects.wcl>>
 <<include {MYWCLDIR}/modulewcl/firstcut/13-mkpng.wcl>>
@@ -63,6 +65,6 @@ blocklist = se_{FRINGE_CASE}
             # Case WITH catalog ingest
 	    #modulelist = crosstalk-sci,detrend-{FRINGE_CASE},create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml,update-scamp-headers,mkbleedmask,create-bkg-img,immask,create-psfex-catalog,run-psfex,ingest-psfex-xml,create-finalcut-catalog,ingest-se-objects,mkpng
             # Case WITHOUT catalog ingest
-            modulelist = crosstalk-sci,detrend-{FRINGE_CASE},create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml,update-scamp-headers,mkbleedmask,create-bkg-img,immask
+            modulelist = crosstalk-sci,detrend-{FRINGE_CASE},create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml,update-scamp-headers,mkbleedmask,create-bkg-img,immask,create-psfex-catalog,run-psfex,ingest-psfex-xml,create-finalcut-catalog,mkpng
     </se_{FRINGE_CASE}>
 </block>
