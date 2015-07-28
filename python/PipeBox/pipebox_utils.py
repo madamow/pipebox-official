@@ -108,7 +108,10 @@ def write_wcl_hostname(args):
         os.mkdir(dirname)
 
     # Write out the new file
-    wclname = os.path.join(dirname,'{TEMPLATE}_{REQNUM}.des'.format(TEMPLATE=args.template,REQNUM=args.reqnum))
+    wclname = os.path.join(dirname,
+                           '{TEMPLATE}_{REQNUM}_{TARGET_SITE}.des'.format(TEMPLATE=args.template,
+                                                                          REQNUM=args.reqnum,
+                                                                          TARGET_SITE=args.target_site))
     print "# Creating: %s" % wclname
     newfile = open(wclname,'w')
     newfile.write(fh)
@@ -167,13 +170,18 @@ def write_wcl(EXPNUM,args):
         fh = replace_fh(fh,'{CALIB_SECTION}', subst=calib_section)
     
     # Create Directory
+    #dirname = os.path.join(pipebox_work,'files_submit_r{REQNUM}_{TARGET_SITE}'.format(REQNUM=args.reqnum,TARGET_SITE=args.target_site))
     dirname = os.path.join(pipebox_work,'files_submit_r{REQNUM}'.format(REQNUM=args.reqnum))
     if not os.path.isdir(dirname):
         print "# Creating directory %s" % dirname
         os.mkdir(dirname)
 
     # Write out the new file
-    wclname = os.path.join(dirname,'{TEMPLATE}_{EXPNUM}_{BAND}_{REQNUM}.des'.format(TEMPLATE=args.template,EXPNUM=EXPNUM,BAND=BAND,REQNUM=args.reqnum))
+    wclname = os.path.join(dirname,
+                           '{TEMPLATE}_{EXPNUM}_{BAND}_{REQNUM}_{TARGET_SITE}.des'.format(TEMPLATE=args.template,
+                                                                                          EXPNUM=EXPNUM,
+                                                                                          BAND=BAND,REQNUM=args.reqnum,
+                                                                                          TARGET_SITE=args.target_site))
     print "# Creating: %s" % wclname
     newfile = open(wclname,'w')
     newfile.write(fh)

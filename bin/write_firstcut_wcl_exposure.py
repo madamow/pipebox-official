@@ -111,9 +111,9 @@ if __name__ == "__main__":
 
     # Now we write the submit bash file
     if single_exposure :
-        submit_name = os.path.join(pipebox_work,'submitme_{EXPNUM}_{REQNUM}.sh'.format(EXPNUM=args.expnum,REQNUM=args.reqnum))
+        submit_name = os.path.join(pipebox_work,'submitme_{EXPNUM}_{REQNUM}_{TARGET_SITE}.sh'.format(EXPNUM=args.expnum,REQNUM=args.reqnum,TARGET_SITE=args.target_site))
     else :
-        submit_name = os.path.join(pipebox_work,'submitme_{EXPNUM}_{REQNUM}.sh'.format(EXPNUM=os.path.split(args.expnum)[-1],REQNUM=args.reqnum))
+        submit_name = os.path.join(pipebox_work,'submitme_{EXPNUM}_{REQNUM}_{TARGET_SITE}.sh'.format(EXPNUM=os.path.split(args.expnum)[-1],REQNUM=args.reqnum,TARGET_SITE=args.target_site))
     subm = open(submit_name,'w')
     subm.write("#!/usr/bin/env bash\n\n")
     for wclname in wclnames:
