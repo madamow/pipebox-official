@@ -65,6 +65,10 @@ blocklist = se_{FRINGE_CASE}
             # Case WITH catalog ingest
 	    #modulelist = crosstalk-sci,detrend-{FRINGE_CASE},create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml,update-scamp-headers,mkbleedmask,create-bkg-img,immask,create-psfex-catalog,run-psfex,ingest-psfex-xml,create-finalcut-catalog,ingest-se-objects,mkpng
             # Case WITHOUT catalog ingest
-            modulelist = crosstalk-sci,detrend-{FRINGE_CASE},create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml,update-scamp-headers,mkbleedmask,create-bkg-img,immask,create-psfex-catalog,run-psfex,ingest-psfex-xml,create-finalcut-catalog,mkpng
+            #modulelist = crosstalk-sci,detrend-{FRINGE_CASE},create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml,update-scamp-headers,mkbleedmask,create-bkg-img,immask,create-psfex-catalog,run-psfex,ingest-psfex-xml,create-finalcut-catalog,mkpng
+
+            # Case WITHOUT catalog ingest or mkpng
+            modulelist = crosstalk-sci,detrend-{FRINGE_CASE},create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml,update-scamp-headers,mkbleedmask,create-bkg-img,immask,create-psfex-catalog,run-psfex,ingest-psfex-xml,create-finalcut-catalog
+
     </se_{FRINGE_CASE}>
 </block>
