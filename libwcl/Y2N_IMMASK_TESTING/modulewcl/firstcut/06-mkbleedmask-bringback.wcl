@@ -42,7 +42,7 @@
                 dirpat = se
                 ops_enddir = red
                 rundir = red
-                savefiles = false
+                savefiles = true
             </red_bleedmasked>
         </file>
 
