@@ -42,7 +42,6 @@ def cmdline():
                         help="Name of template to use (without the .des)")
     parser.add_argument("--ccdnums", action="store", default=ALL_CCDS,
                         help="coma-separated list of CCDNUM to use")
-
     parser.add_argument("--safeBPM", action="store_true", default=False,
                         help="Will use safe (default) BPM file")
     # For re-runs
@@ -120,8 +119,11 @@ if __name__ == "__main__":
         subm.write("dessubmit %s\nsleep 30\n" % wclname)
 
     os.chmod(submit_name, 0755)
-    print "# To submit files:\n"
-    print "\t %s\n " % submit_name
+    print "\n"
+    print "# To submit files (from dessub/descmp1):\n"
+    print "\t ssh dessub/descmp1"
+    print "\t setup -v %s %s" % (args.eups_product,args.eups_version)
+    print "\t %s\n" % submit_name
 
     # Print warning of Fermigrid credentials
     if args.target_site == 'fermigrid-sl6':

@@ -79,6 +79,8 @@ blocklist = se_{FRINGE_CASE}
 
 <block>
    <se_{FRINGE_CASE}>
-        modulelist = crosstalk-sci,detrend-{FRINGE_CASE},create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml,update-scamp-headers,mkbleedmask,create-bkg-img,immask,create-psfex-catalog,run-psfex,ingest-psfex-xml,create-finalcut-catalog,ingest-se-objects,mkpng,firstcut-assess
+       #modulelist = crosstalk-sci,detrend-{FRINGE_CASE},create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml,update-scamp-headers,mkbleedmask,create-bkg-img,immask,create-psfex-catalog,run-psfex,ingest-psfex-xml,create-finalcut-catalog,ingest-se-objects,mkpng,firstcut-assess
+       # Without catalog ingest
+       modulelist = crosstalk-sci,detrend-{FRINGE_CASE},create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml,update-scamp-headers,mkbleedmask,create-bkg-img,immask,create-psfex-catalog,run-psfex,ingest-psfex-xml,create-finalcut-catalog,mkpng
    </se_{FRINGE_CASE}>
 </block>
