@@ -10,11 +10,11 @@ submit_files_mvmt     = filemgmt.job_mvmt_http.JobArchiveHttp
 #transfer_semname = filetrans
 #transfer_semname= midfiletrans
 
-use_target_archive_input  = never
-use_target_archive_output = never
-use_home_archive_input    = wrapper
-use_home_archive_output   = job #wrapper, job, block, run, never
-master_savefiles = file #never,file,always,failure,rand_XX
+#use_target_archive_input  = never
+#use_target_archive_output = never
+#use_home_archive_input    = wrapper
+#use_home_archive_output   = job #wrapper, job, block, run, never
+#master_savefiles = file #never,file,always,failure,rand_XX
 
 #use_qcf    = True
 #use_db_out = True
