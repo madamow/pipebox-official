@@ -22,14 +22,15 @@
 #<<include {MYWCLDIR}/modulewcl/firstcut/12-ingest-se-objects.wcl>>
 #<<include {MYWCLDIR}/modulewcl/firstcut/13-mkpng.wcl>>
 
-# Using desftp
+# Using desftp and desftp10/desftp20
 <archive>
-<prodbeta>
+    <prodbeta>
         host = desftp.cosmology.illinois.edu
         root_http = http://desftp.cosmology.illinois.edu/Prodbeta/archive
+        input_transfer_semname_home  = desftp10
+        output_transfer_semname_home = desftp20
     </prodbeta>
 </archive>
-transfer_semname = desftp20
 
 # Database dependant definitions
 submit_des_db_section = {DB_SECTION}    # submit section: db-desoper or db-destest
