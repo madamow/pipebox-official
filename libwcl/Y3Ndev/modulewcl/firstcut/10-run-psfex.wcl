@@ -16,7 +16,7 @@
         </psfex_cat>
         <psfex_config>
             filetype = config
-            filename = ${etcnite}_default.psfex
+            filename = ${confignite}_default.psfex
             dirpat = se
             ops_enddir = config
             rundir = config

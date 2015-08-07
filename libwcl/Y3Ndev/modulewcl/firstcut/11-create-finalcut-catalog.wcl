@@ -7,25 +7,25 @@
         <file>
             <sex_config>
                 filetype = config
-                filename = ${etcnite}_sex.config
+                filename = ${confignite}_sex.config
                 dirpat = se
                 rundir = config 
             </sex_config>
             <sex_param>
                 filetype = config 
-                filename = ${etcnite}_sex.param.finalcut.20130702
+                filename = ${confignite}_sex.param.finalcut.20130702
                 dirpat = se
                 rundir = config
             </sex_param>
             <sex_filter>
                 filetype = config
-                filename = ${etcnite}_sex.conv
+                filename = ${confignite}_sex.conv
                 dirpat = se
                 rundir = config
             </sex_filter>
             <sex_nnw>
                 filetype = config
-                filename = ${etcnite}_sex.nnw
+                filename = ${confignite}_sex.nnw
                 dirpat = se
                 rundir = config
             </sex_nnw>
