@@ -58,8 +58,10 @@ photflagvar = 1    # needed for crosstalk code
 ccdnum = {CCDNUMS}
 
 # Here goes the calibration section, for now we are using these fixed values
+confignite = 20150806
+scampconfigfile = ${confignite}_default.scamp.20140423
+hupdatefile = ${confignite}_DES_header_update.20140303
 xtalkcoefffile = DECam_20130606.xtalk 
-hupdatefile = 20140709_DES_header_update.20140303
 lintablefile = lin_tbl_v0.4
 lintablenite = 20130624
 bpmnite = 20140901t0928
@@ -72,8 +74,6 @@ photflatcornite = null
 precalnite = 20150209
 precalrun = r1395p01
 scampupdatenite = 20131115
-scampconfigfile = 20140709_default.scamp.20140423
-etcnite = 20140709
 
 blocklist = se_{FRINGE_CASE}
 
