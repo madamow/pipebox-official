@@ -1,0 +1,36 @@
+# user specified parameters
+<<include $PIPEBOX_WORK/config/felipe_cfg.des>> 
+
+
+<<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y3MEdev/modulewcl/modnamepat.wcl>>
+#<<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y3MEdev/modulewcl/firstcut/01-crosstalk-sci.wcl>>
+
+# Database dependant definitions
+submit_des_db_section = db-destest     # submit section: db-desoper or db-destest
+target_des_db_section = db-destest     # target section: db-desoper or db-destest
+home_archive          = prodbeta  # i.e. prodbeta or desar2home for destest/desoper
+des_http_section      = file-http-prodbeta   # need to define in .desservices file (i.e file-http-prodbeta)
+
+target_site = descmp4-dev # ie. descmp4, iforge, fermigrid-sl6, bluewaters-dev
+reqnum      = 1069         # jira id - used as part of a unique identifier
+jira_id     = DESOPS-1069  # the parent id of the reqnum
+label       = me         # me-tests,,for-user-tests #strings to help identify runs
+
+GROUP_SUBMIT_ID = 1
+
+pipeline = multiepoch        # used in desstat output 
+pipeprod = Y2ME  # i.e. Y2Nstack       #eups stack name
+pipever  = dev+0  # 1.0.6+1, the eups stack version
+campaign = METEST      # Y2T for example
+project  = FM       # i.e ACT/FM/MCK as user tests can be done under your own project
+
+basket         = ${tilename} 
+unitname       = ${tilename}
+
+<block>
+   <me>
+       modulelist = step1
+       # Without catalog ingest or assesment
+       #modulelist = crosstalk-sci,detrend-{FRINGE_CASE},create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml,update-scamp-headers,mkbleedmask,create-bkg-img,immask,create-psfex-catalog,run-psfex,ingest-psfex-xml,create-finalcut-catalog,mkpng
+   </me>
+</block>
