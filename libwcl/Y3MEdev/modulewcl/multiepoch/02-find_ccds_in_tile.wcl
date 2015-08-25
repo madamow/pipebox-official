@@ -1,0 +1,59 @@
+<module>
+    <find_ccds_in_tile>
+        wrappername = generic.py
+        modnamepat=${modnamepat_tile_generic}
+        <file>
+            <json_geom>
+                filetype = config 
+                filepat = tile_generic
+		        flabel = geom
+                fsuffix = json
+                dirpat = me 
+                ops_enddir = aux
+                rundir = aux
+                # bring file back home?
+		        savefiles = true
+            </json_geom>
+            <json_assoc>
+                filetype = config 
+                filepat = tile_generic
+		        flabel = assoc 
+                fsuffix = json
+                dirpat = me 
+                ops_enddir = aux
+                rundir = aux
+                # bring file back home?
+		        savefiles = true
+            </json_assoc>
+            <file_assoc>
+                filetype = config 
+                filepat = tile_generic
+		        flabel = assoc 
+                fsuffix = dat 
+                dirpat = me 
+                ops_enddir = aux
+                rundir = aux
+                # bring file back home?
+		        savefies = true
+            </file_assoc>
+        </file>
+        <exec_1>
+            execname = find_ccds_in_tile.py 
+	    cmd_hyphen = alldouble
+            used = file.json_geom 
+            was_generated_by = file.json_assoc,file.file_assoc
+            ancestry = file.json_geom:file.json_assoc,file.json_geom:file.file_assoc
+            <cmdline>
+                # positional arguments with _num_blabla
+                _01_json_geom = ${file.json_geom.fullname}
+                # optional arguments
+                assoc_json = ${file.json_assoc.fullname}
+                assoc_file = ${file.file_assoc.fullname}
+                db_section = ${database_section}
+                filepath_local = ${local_filepath}
+		tagname        = ${firstcut_tag}
+		archive_name   = ${home_archive}
+            </cmdline>
+        </exec_1>
+    </find_ccds_in_tile>
+</module>
