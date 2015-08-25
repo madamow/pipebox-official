@@ -1,9 +1,8 @@
 # user specified parameters
 <<include $PIPEBOX_WORK/config/felipe_cfg.des>> 
 
-
 <<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y3MEdev/modulewcl/modnamepat.wcl>>
-#<<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y3MEdev/modulewcl/firstcut/01-crosstalk-sci.wcl>>
+<<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y3MEdev/modulewcl/multiepoch/01-query_tileinfo.wcl>>
 
 # Database dependant definitions
 submit_des_db_section = db-destest     # submit section: db-desoper or db-destest
@@ -19,18 +18,18 @@ label       = me         # me-tests,,for-user-tests #strings to help identify ru
 GROUP_SUBMIT_ID = 1
 
 pipeline = multiepoch        # used in desstat output 
-pipeprod = Y2ME  # i.e. Y2Nstack       #eups stack name
-pipever  = dev+0  # 1.0.6+1, the eups stack version
-campaign = METEST      # Y2T for example
+pipeprod = Y2ME     # i.e. Y2Nstack       #eups stack name
+pipever  = dev+0    # 1.0.6+1, the eups stack version
+campaign = METEST   # Y2T for example
 project  = FM       # i.e ACT/FM/MCK as user tests can be done under your own project
 
-basket         = ${tilename} 
-unitname       = ${tilename}
+tilename = DES2246-4457
+
+basket   = ${tilename} 
+unitname = ${tilename}
 
 <block>
    <me>
-       modulelist = step1
-       # Without catalog ingest or assesment
-       #modulelist = crosstalk-sci,detrend-{FRINGE_CASE},create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml,update-scamp-headers,mkbleedmask,create-bkg-img,immask,create-psfex-catalog,run-psfex,ingest-psfex-xml,create-finalcut-catalog,mkpng
+       modulelist = query_tileinfo
    </me>
 </block>
