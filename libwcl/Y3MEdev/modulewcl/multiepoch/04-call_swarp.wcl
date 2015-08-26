@@ -1,0 +1,51 @@
+<module>
+    <call_swarp>
+        wrappername = generic.py
+        modnamepat=${modnamepat_tile_generic}
+        <file>
+            <file_assoc>
+                filetype   = config 
+                filepat    = tile_generic
+                flabel     = ccdinfo 
+                fsuffix    = assoc
+                dirpat     = me 
+                ops_enddir = aux
+                rundir     = aux
+                savefies   = true
+            </file_assoc>
+            <json_geom>
+                filetype   = config 
+                filepat    = tile_generic
+                flabel     = geom
+                fsuffix    = json
+                dirpat     = me 
+                ops_enddir = aux
+                rundir     = aux
+                savefiles  = true
+            </json_geom>
+        </file>
+        <exec_1>
+            execname   = call_SWarp.py 
+            cmd_hyphen = alldouble
+            used       = file.file_assoc, file.json_geom
+            # was_generated_by = file.json_assoc,file.json_geom
+            # ancestry = file.json_geom:file.json_assoc
+
+            <cmdline>
+                # positional arguments with _num_blabla
+                _01_assoc_file = ${file.file_assoc.fullname}
+                _02_json_geom  = ${file.json_geom.fullname}
+
+                # optional arguments
+                weight_extension       = ${weight_extension_var}
+                local_archive          = ${local_archive_var}
+                local_weight_archive   = ${local_weight_archive_var}
+		swarp_execution_mode   = ${execution_mode_var}
+		magbase                = ${magbase_var}
+		swarp_parameters       = ${swarp_parameters_var}
+                tiledir                = ${tiledir_var}
+
+            </cmdline>
+        </exec_1>
+    </call_swarp>
+</module> 

@@ -4,14 +4,14 @@
         modnamepat=${modnamepat_tile_generic}
         <file>
             <json_geom>
-                filetype = config 
-                filepat = tile_generic
-                flabel  = geom
-                fsuffix = json
-                dirpat  = me 
+                filetype   = config 
+                filepat    = tile_generic
+                flabel     = geom
+                fsuffix    = json
+                dirpat     = me 
                 ops_enddir = aux
-                rundir = aux
-                savefiles = true
+                rundir     = aux
+                savefiles  = true
             </json_geom>
         </file>
 
@@ -21,13 +21,15 @@
             was_generated_by = file.json_geom
 
             <cmdline>
+
                 # positional arguments with _num_blabla
                 _01_tilename = ${tilename}
+
                 # optional arguments
                 json_tileinfo_file = ${file.json_geom.fullname}
+                db_section         = ${db_section_var}
                 # do not interface the following optional inputs now ..
-                #db_section = ${database_section}
-                #coaddtile_table = ${coaddtile_table}
+                #coaddtile_table = ${coaddtile_table_var}
             </cmdline>
 
         </exec_1>
