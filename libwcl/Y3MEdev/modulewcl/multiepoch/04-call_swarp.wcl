@@ -1,35 +1,16 @@
+<<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y3MEdev/modulewcl/multiepoch/filedefs_call_swarp.wcl>>
+
 <module>
     <call_swarp>
         wrappername = generic.py
         modnamepat=${modnamepat_tile_generic}
-        <file>
-            <file_assoc>
-                filetype   = config 
-                filepat    = tile_generic
-                flabel     = ccdinfo 
-                fsuffix    = assoc
-                dirpat     = me 
-                ops_enddir = aux
-                rundir     = aux
-                savefies   = true
-            </file_assoc>
-            <json_geom>
-                filetype   = config 
-                filepat    = tile_generic
-                flabel     = geom
-                fsuffix    = json
-                dirpat     = me 
-                ops_enddir = aux
-                rundir     = aux
-                savefiles  = true
-            </json_geom>
-        </file>
+
         <exec_1>
             execname   = call_SWarp.py 
             cmd_hyphen = alldouble
             used       = file.file_assoc, file.json_geom
-            # was_generated_by = file.json_assoc,file.json_geom
-            # ancestry = file.json_geom:file.json_assoc
+            was_generated_by = file.sci_coadd_g,file.sci_coadd_r,file.sci_coadd_i,file.sci_coadd_z,file.sci_coadd_y, file.wgt_coadd_g,file.wgt_coadd_r,file.wgt_coadd_i,file.wgt_coadd_z,file.wgt_coadd_y, file.sci_list_g, file.sci_list_r, file.sci_list_i, file.sci_list_z, file.sci_list_y, file.wgt_list_g, file.wgt_list_r, file.wgt_list_i, file.wgt_list_z, file.wgt_list_y
+            ancestry = file.file_assoc:file.sci_coadd_r, file.file_assoc:file.sci_list_r
 
             <cmdline>
                 # positional arguments with _num_blabla
@@ -44,6 +25,7 @@
 		magbase                = ${magbase_var}
 		swarp_parameters       = ${swarp_parameters_var}
                 tiledir                = ${tiledir_var}
+                tilename_fh            = ${tilename_fh_var}
 
             </cmdline>
         </exec_1>

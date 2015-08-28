@@ -1,8 +1,11 @@
 # user specified parameters
-<<include $PIPEBOX_WORK/config/felipe_cfg.des>> 
+<<include /home/felipe/PIPEBOX_WORK/config/felipe_cfg.des>> 
 
 <<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y3MEdev/modulewcl/modnamepat.wcl>>
 <<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y3MEdev/modulewcl/multiepoch/01-query_tileinfo.wcl>>
+<<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y3MEdev/modulewcl/multiepoch/02-find_ccds_in_tile.wcl>>
+<<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y3MEdev/modulewcl/multiepoch/03-make_swarp_weights.wcl>>
+<<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y3MEdev/modulewcl/multiepoch/04-call_swarp.wcl>>
 
 # Database dependant definitions
 submit_des_db_section = db-destest     # submit section: db-desoper or db-destest
@@ -10,31 +13,51 @@ target_des_db_section = db-destest     # target section: db-desoper or db-destes
 home_archive          = prodbeta  # i.e. prodbeta or desar2home for destest/desoper
 des_http_section      = file-http-prodbeta   # need to define in .desservices file (i.e file-http-prodbeta)
 
-target_site = descmp4-dev # ie. descmp4, iforge, fermigrid-sl6, bluewaters-dev
+target_site = descmp4-dev  # ie. descmp4, iforge, fermigrid-sl6, bluewaters-dev
 reqnum      = 1042         # jira id - used as part of a unique identifier
 jira_id     = DESOPS-1042  # the parent id of the reqnum
-label       = me         # me-tests,,for-user-tests #strings to help identify runs
-
-GROUP_SUBMIT_ID = 1
+label       = me           # me-tests,,for-user-tests #strings to help identify runs
 
 pipeline = multiepoch        # used in desstat output 
 pipeprod = Y2ME     # i.e. Y2Nstack       #eups stack name
-pipever  = dev+0    # 1.0.6+1, the eups stack version
+pipever  = dev+1    # 1.0.6+1, the eups stack version
 campaign = METEST   # Y2T for example
 project  = FM       # i.e ACT/FM/MCK as user tests can be done under your own project
-ops_run_dir = ${project}/${pipeline}/${tilename}-r${reqnum}/p${attnum:2}
+ops_run_dir    = ${project}/${pipeline}/${tilename}-r${reqnum}/p${attnum:2}
+submit_run_dir = /cluster_scratch/refact/submit/${home_archive}/${ops_run_dir}/
 
+# multi-epoch options
 
-tilename = DES2246-4457
+# General
+tilename                 = DES2246-4457
+archive_name_var         = prodbeta  # i.e. prodbeta or desar2home for destest/desoper
+execution_mode_var       = execute
+#execution_mode_var       = tofile
+local_archive_var        = /work/prodbeta/archive
+local_weight_archive_var = /work/devel/felipe/LOCAL_WEIGHTS 
+
+# Geom and CCD Queries
+db_section_var    = ${target_des_db_section}
+tagname_var       = Y2T_FIRSTCUT
+tiledir_var       = ./
+
+# Custom Weights
+mp_weight_var        = 6
+weight_extension_var = _wgt
+
+# SWarp
+tilename_fh_var      = ${tilename}_r${reqnum}p${attnum:2}
+magbase_var          = 30
+swarp_parameters_var = NTHREADS=8 COMBINE_TYPE=AVERAGE COPY_KEYWORDS=OBJECT,EXPTIME
+
 
 basket   = ${tilename} 
 unitname = ${tilename}
-
 
 blocklist = multiepoch
 
 <block>
   <multiepoch>
-       modulelist = query_tileinfo
+    modulelist = query_tileinfo,find_ccds_in_tile,make_swarp_weights,call_swarp
  </multiepoch>
 </block>
