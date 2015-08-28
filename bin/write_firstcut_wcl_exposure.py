@@ -44,6 +44,9 @@ def cmdline():
                         help="coma-separated list of CCDNUM to use")
     parser.add_argument("--safeBPM", action="store_true", default=False,
                         help="Will use safe (default) BPM file")
+    parser.add_argument("--sleeptime", action="store", default=30,
+                        help="Sleep time between jobs during submit time")
+
     # For re-runs
     parser.add_argument("--reqnum_input", action="store",default='',
                         help="Input reqnum number for rerun image")
@@ -116,7 +119,7 @@ if __name__ == "__main__":
     subm = open(submit_name,'w')
     subm.write("#!/usr/bin/env bash\n\n")
     for wclname in wclnames:
-        subm.write("dessubmit %s\nsleep 30\n" % wclname)
+        subm.write("dessubmit %s\nsleep %s\n" % (wclname,args.sleeptime))
 
     os.chmod(submit_name, 0755)
     print "\n"
