@@ -1,32 +1,134 @@
-<<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y3MEdev/modulewcl/multiepoch/filedefs_call_swarp.wcl>>
-
 <module>
     <call_swarp>
+
         wrappername = generic.py
-        modnamepat=${modnamepat_tile_generic}
+        wrapperloop = band
+        modnamepat  = ${modnamepat_tile_band}
+
+        <file>
+	    # Assoc and Geom
+            <file_assoc>
+               filetype   = config 
+               filepat    = tile_generic
+               flabel     = ccdinfo 
+               fsuffix    = assoc
+               dirpat     = me 
+               ops_enddir = aux
+               rundir     = aux
+               savefies   = true
+            </file_assoc>
+            <json_geom>
+               filetype   = config 
+               filepat    = tile_generic
+               flabel     = geom
+               fsuffix    = json
+               dirpat     = me 
+               ops_enddir = aux
+               rundir     = aux
+               savefiles  = true
+            </json_geom>
+	    # sci/wgt/swg/flx lists
+            <sci_list>
+               filetype   = config
+               filename   = ${tilename_fh_var}_${band}_sci.list
+               dirpat     = me 
+               ops_enddir = aux
+               rundir     = aux
+               savefiles  = true
+               optional   = true
+            </sci_list>
+            <wgt_list>
+               filetype   = config
+               filename   = ${tilename_fh_var}_${band}_wgt.list
+               dirpat     = me 
+               ops_enddir = aux
+               rundir     = aux
+               savefiles  = true
+               optional   = true
+            </wgt_list>
+            <swg_list>
+               filetype   = config
+               filename   = ${tilename_fh_var}_${band}_swg.list
+               dirpat     = me 
+               ops_enddir = aux
+               rundir     = aux
+               savefiles  = true
+               optional   = true
+            </swg_list>
+            <flx_list>
+               filetype   = config
+               filename   = ${tilename_fh_var}_${band}_flx.list
+               dirpat     = me 
+               ops_enddir = aux
+               rundir     = aux
+               savefiles  = true
+               optional   = true
+            </flx_list>
+
+            # Coadds files
+            <sci_coadd>
+               filetype   = coadd
+               filename   = ${tilename_fh_var}_${band}_sci.fits
+               dirpat     = me 
+               ops_enddir = products
+               rundir     = products
+               savefiles  = true
+               optional   = true
+            </sci_coadd>
+            <wgt_coadd>
+               filetype   = coadd
+               filename   = ${tilename_fh_var}_${band}_wgt.fits
+               dirpat     = me 
+               ops_enddir = products
+               rundir     = products
+               savefiles  = true
+               optional   = true
+            </wgt_coadd>
+            # We won't bring these back
+            <tmp_sci_coadd>
+               filetype   = coadd
+               filename   = ${tilename_fh_var}_${band}_tmp_sci.fits
+               dirpat     = me 
+               ops_enddir = products
+               rundir     = products
+               savefiles  = false
+               optional   = true
+            </tmp_sci_coadd>
+            <tmp_wgt_coadd>
+               filetype   = coadd
+               filename   = ${tilename_fh_var}_${band}_tmp_wgt.fits
+               dirpat     = me 
+               ops_enddir = products
+               rundir     = products
+               savefiles  = false
+               optional   = true
+            </tmp_wgt_coadd>
+        </file>
 
         <exec_1>
             execname   = call_SWarp.py 
             cmd_hyphen = alldouble
             used       = file.file_assoc, file.json_geom
-            was_generated_by = file.sci_coadd_g,file.sci_coadd_r,file.sci_coadd_i,file.sci_coadd_z,file.sci_coadd_y, file.wgt_coadd_g,file.wgt_coadd_r,file.wgt_coadd_i,file.wgt_coadd_z,file.wgt_coadd_y, file.sci_list_g, file.sci_list_r, file.sci_list_i, file.sci_list_z, file.sci_list_y, file.wgt_list_g, file.wgt_list_r, file.wgt_list_i, file.wgt_list_z, file.wgt_list_y
-            ancestry = file.file_assoc:file.sci_coadd_r, file.file_assoc:file.sci_list_r
-
+            was_generated_by = file.sci_coadd,file.wgt_coadd,file.tmp_sci_coadd,file.tmp_wgt_coadd,file.sci_list,file.wgt_list,file.swg_list,file.flx_list
+            ancestry         = file.file_assoc:file.sci_coadd, file.file_assoc:file.wgt_coadd, file.file_assoc:file.sci_list, file.file_assoc:file.wgt_list, file.file_assoc:file.flx_list
             <cmdline>
                 # positional arguments with _num_blabla
                 _01_assoc_file = ${file.file_assoc.fullname}
                 _02_json_geom  = ${file.json_geom.fullname}
 
                 # optional arguments
-                weight_extension       = ${weight_extension_var}
                 local_archive          = ${local_archive_var}
                 local_weight_archive   = ${local_weight_archive_var}
-		swarp_execution_mode   = ${execution_mode_var}
+                weight_extension       = ${weight_extension_var}
+		swarp_execution_mode   = ${swarp_execution_mode_var}
 		magbase                = ${magbase_var}
 		swarp_parameters       = ${swarp_parameters_var}
                 tiledir                = ${tiledir_var}
                 tilename_fh            = ${tilename_fh_var}
-
+		doBANDS                = ${band}
+                detecBANDS             = ${detecbands_var}
+                detname                = ${detname_var}
+                #custom_weights         = _flag
             </cmdline>
         </exec_1>
     </call_swarp>

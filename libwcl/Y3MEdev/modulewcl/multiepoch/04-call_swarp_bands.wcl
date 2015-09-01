@@ -1,5 +1,5 @@
 <module>
-    <call_swarp_bands>
+    <call_swarp>
 
         wrappername = generic.py
         wrapperloop = band
@@ -91,5 +91,5 @@
 
             </cmdline>
         </exec_1>
-    </call_swarp_bands>
+    </call_swarp>
 </module> 

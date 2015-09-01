@@ -6,6 +6,7 @@
 <<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y3MEdev/modulewcl/multiepoch/02-find_ccds_in_tile.wcl>>
 <<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y3MEdev/modulewcl/multiepoch/03-make_swarp_weights.wcl>>
 <<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y3MEdev/modulewcl/multiepoch/04-call_swarp.wcl>>
+<<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y3MEdev/modulewcl/multiepoch/05-call_stiff.wcl>>
 
 # Database dependant definitions
 submit_des_db_section = db-destest     # submit section: db-desoper or db-destest
@@ -30,6 +31,7 @@ submit_run_dir = /cluster_scratch/refact/submit/${home_archive}/${ops_run_dir}/
 
 # General
 tilename                 = DES2246-4457
+tilename_fh_var          = ${tilename}_r${reqnum}p${attnum:2}
 archive_name_var         = prodbeta  # i.e. prodbeta or desar2home for destest/desoper
 execution_mode_var       = execute
 #execution_mode_var       = tofile
@@ -46,10 +48,19 @@ mp_weight_var        = 6
 weight_extension_var = _wgt
 
 # SWarp
-tilename_fh_var      = ${tilename}_r${reqnum}p${attnum:2}
 magbase_var          = 30
 swarp_parameters_var = NTHREADS=8 COMBINE_TYPE=AVERAGE COPY_KEYWORDS=OBJECT,EXPTIME
+#band                 = g,r,i,z,Y,det # Order is important, det needs to be the last one
+band                 = r,i,z,det # Order is important, det needs to be the last one
+dobands_var          = r i z det
+detecbands_var       = r i z  # Bands used for detection      
+detname_var          = det    # Detection image label
+swarp_execution_mode_var = ${execution_mode_var}
 
+
+# Stiff
+stiff_execution_mode_var = ${execution_mode_var}
+stiff_parameters_var     = NTHREADS=8
 
 basket   = ${tilename} 
 unitname = ${tilename}
@@ -58,6 +69,6 @@ blocklist = multiepoch
 
 <block>
   <multiepoch>
-    modulelist = query_tileinfo,find_ccds_in_tile,make_swarp_weights,call_swarp
+    modulelist = query_tileinfo,find_ccds_in_tile,make_swarp_weights,call_swarp,call_stiff
  </multiepoch>
 </block>
