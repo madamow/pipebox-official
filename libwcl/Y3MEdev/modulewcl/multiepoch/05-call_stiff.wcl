@@ -39,12 +39,14 @@
                 # positional arguments with _num_blabla
                 _01_assoc_file = ${file.file_assoc.fullname}
                 _02_tilename   = ${tilename}
+
                 # optional arguments
-		stiff_execution_mode   = ${stiff_execution_mode_var}
-                tiledir                = ${tiledir_var}
-                tilename_fh            = ${tilename_fh_var}
-		doBANDS                = ${dobands_var}
-                detname                = ${detname_var}
+		stiff_execution_mode = ${stiff_execution_mode_var}
+                stiff_parameters     = ${stiff_parameters_var}
+                tiledir              = ${tiledir_var}
+                tilename_fh          = ${tilename_fh_var}
+		doBANDS              = ${dobands_var}
+                detname              = ${detname_var}
 
             </cmdline>
         </exec_1>

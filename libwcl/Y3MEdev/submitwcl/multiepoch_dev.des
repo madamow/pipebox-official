@@ -52,7 +52,7 @@ magbase_var          = 30
 swarp_parameters_var = NTHREADS=8 COMBINE_TYPE=AVERAGE COPY_KEYWORDS=OBJECT,EXPTIME
 #band                 = g,r,i,z,Y,det # Order is important, det needs to be the last one
 band                 = r,i,z,det # Order is important, det needs to be the last one
-dobands_var          = r i z det
+dobands_var          = ${band} 
 detecbands_var       = r i z  # Bands used for detection      
 detname_var          = det    # Detection image label
 swarp_execution_mode_var = ${execution_mode_var}
