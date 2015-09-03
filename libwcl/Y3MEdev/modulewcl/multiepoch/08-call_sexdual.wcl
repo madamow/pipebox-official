@@ -1,12 +1,14 @@
 <module>
-    <call_psfex>
+    <call_sexdual>
 
         wrappername = generic.py
         wrapperloop = band
         modnamepat  = ${modnamepat_tile_band}
 
         <file>
-	    # Assoc and Geom
+
+            # INPUTS
+	    # Assoc and Geom (needed as input)
             <file_assoc>
                filetype   = config 
                filepat    = tile_generic
@@ -18,19 +20,7 @@
                savefies   = true
             </file_assoc>
 
-
-            # psfcat fits files
-            <psfcat_coadd>
-               filetype   = coadd_psfcat
-               filename   = ${tilename_fh_var}_${band}_psfcat.fits
-               dirpat     = me 
-               ops_enddir = products
-               rundir     = products
-               savefiles  = false
-               optional   = true
-            </psfcat_coadd>
-
-            # psfcat psf files
+            # psfcat psf files (for provenance)
             <psfex_model>
                filetype   = psfex_model
                filename   = ${tilename_fh_var}_${band}_psfcat.psf
@@ -39,42 +29,94 @@
                rundir     = products
                savefiles  = true
                optional   = true
-           </psfex_model>
+            </psfex_model>
 
-            # psfex xml files
-            <psfex_xml>
-               filetype   = xml_psfex
-               filename   = ${tilename_fh_var}_${band}_psfex.xml
+            # Coadd sci and weights (for provenance)
+            <sci_coadd>
+               filetype   = coadd
+               filename   = ${tilename_fh_var}_${band}_sci.fits
                dirpat     = me 
                ops_enddir = products
                rundir     = products
                savefiles  = true
                optional   = true
-            </psfex_xml>
+           </sci_coadd>
+           <wgt_coadd>
+               filetype   = coadd
+               filename   = ${tilename_fh_var}_${band}_wgt.fits
+               dirpat     = me 
+               ops_enddir = products
+               rundir     = products
+               savefiles  = true
+               optional   = true
+            </wgt_coadd>
+
+            # Coadd DET sci and weights (for provenance)
+            <sci_coadd_det>
+               filetype   = coadd
+               filename   = ${tilename_fh_var}_${detname_var}_sci.fits
+               dirpat     = me 
+               ops_enddir = products
+               rundir     = products
+               savefiles  = true
+               optional   = true
+           </sci_coadd_det>
+           <wgt_coadd_det>
+               filetype   = coadd
+               filename   = ${tilename_fh_var}_${detname_var}_wgt.fits
+               dirpat     = me 
+               ops_enddir = products
+               rundir     = products
+               savefiles  = true
+               optional   = true
+            </wgt_coadd_det>
+
+            # Output Files
+            <cat_coadd>
+               filetype   = coadd_cat
+               filename   = ${tilename_fh_var}_${band}_cat.fits
+               dirpat     = me 
+               ops_enddir = products
+               rundir     = products
+               savefiles  = true
+               optional   = true
+            </cat_coadd>
+            <seg_coadd>
+               filetype   = coadd_segmap
+               filename   = ${tilename_fh_var}_${band}_seg.fits
+               dirpat     = me 
+               ops_enddir = products
+               rundir     = products
+               savefiles  = true
+               optional   = true
+            </seg_coadd>
+
 
         </file>
 
         <exec_1>
-            execname   = call_psfex.py 
+            execname   = call_SExDual.py 
             cmd_hyphen = alldouble
             # Inputs
-            used       = file.file_assoc#,file.psfcat_coadd
-            was_generated_by = file.psfex_model,file.psfex_xml
-            #ancestry         = file.psfcat_coadd:file.psfex_model,file.psfcat_coadd:file.psfex_xml
+            #used       = file.file_assoc
+            used       = file.file_assoc ,file.psfex_model,file.sci_coadd,file.wgt_coadd,file.sci_coadd_det,file.wgt_coadd_det
+            was_generated_by = file.cat_coadd,file.seg_coadd
+            ancestry         = file.sci_coadd:file.cat_coadd,file.wgt_coadd:file.cat_coadd,file.sci_coadd:file.seg_coadd,file.wgt_coadd:file.seg_coadd
             <cmdline>
                 # positional arguments with _num_blabla
                 _01_assoc_file = ${file.file_assoc.fullname}
                 _02_tilename   = ${tilename}
 
                 # optional arguments
-                psfex_execution_mode = ${psfex_execution_mode_var}
-                psfex_parameters     = ${psfex_parameters_var}
-                tiledir              = ${tiledir_var}
-                tilename_fh          = ${tilename_fh_var}
-		doBANDS              = ${band}
-                detname              = ${detname_var}
+                SExDual_execution_mode = ${psfex_execution_mode_var}
+                SExDual_parameters     = ${psfex_parameters_var}
+                tiledir                = ${tiledir_var}
+                tilename_fh            = ${tilename_fh_var}
+                MP_SEx                 = ${mp_sex_var}
+		doBANDS                = ${band}
+                detname                = ${detname_var}
 
             </cmdline>
         </exec_1>
-    </call_psfex>
+    </call_sexdual>
 </module> 

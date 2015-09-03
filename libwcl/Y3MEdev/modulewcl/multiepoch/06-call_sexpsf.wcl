@@ -55,8 +55,8 @@
             execname   = call_SExpsf.py 
             cmd_hyphen = alldouble
             # Inputs
-            #used       = file.file_assoc,file.sci_coadd, file.wgt_coadd
-            used       = file.file_assoc
+            used       = file.file_assoc,file.sci_coadd, file.wgt_coadd
+            #used       = file.file_assoc
             was_generated_by = file.psfcat_coadd 
             ancestry         = file.file_assoc:file.psfcat_coadd#, file.sci_coadd:file.psfcat_coadd, file.wgt_coadd:file.psfcat_coadd
             <cmdline>

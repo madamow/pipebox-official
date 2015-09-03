@@ -6,6 +6,8 @@
         modnamepat  = ${modnamepat_tile_band}
 
         <file>
+
+            # Inputs
 	    # Assoc and Geom
             <file_assoc>
                filetype   = config 
@@ -18,7 +20,6 @@
                savefies   = true
             </file_assoc>
 
-
             # psfcat fits files
             <psfcat_coadd>
                filetype   = coadd_psfcat
@@ -30,6 +31,7 @@
                optional   = true
             </psfcat_coadd>
 
+            # Outputs
             # psfcat psf files
             <psfex_model>
                filetype   = psfex_model
@@ -58,9 +60,10 @@
             execname   = call_psfex.py 
             cmd_hyphen = alldouble
             # Inputs
-            used       = file.file_assoc#,file.psfcat_coadd
+            #used       = file.file_assoc
+            used       = file.file_assoc,file.psfcat_coadd
             was_generated_by = file.psfex_model,file.psfex_xml
-            #ancestry         = file.psfcat_coadd:file.psfex_model,file.psfcat_coadd:file.psfex_xml
+            ancestry         = file.psfcat_coadd:file.psfex_model,file.psfcat_coadd:file.psfex_xml
             <cmdline>
                 # positional arguments with _num_blabla
                 _01_assoc_file = ${file.file_assoc.fullname}

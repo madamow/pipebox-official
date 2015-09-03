@@ -6,7 +6,7 @@
         modnamepat  = ${modnamepat_tile_band}
 
         <file>
-	    # Assoc and Geom
+            # INPUTS: Assoc and Geom
             <file_assoc>
                filetype   = config 
                filepat    = tile_generic
@@ -65,7 +65,7 @@
                optional   = true
             </flx_list>
 
-            # Coadds files
+            # OUTPUTS:Coadds files
             <sci_coadd>
                filetype   = coadd
                filename   = ${tilename_fh_var}_${band}_sci.fits
