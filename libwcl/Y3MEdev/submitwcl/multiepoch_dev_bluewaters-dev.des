@@ -44,14 +44,14 @@ tiledir_var       = ./
 ncpu = 8
 
 # Path Cosmology settings
-target_site              = descmp4-dev  # ie. descmp4, iforge, fermigrid-sl6, bluewaters-dev
-local_archive_var        = /work/prodbeta/archive
-local_weight_archive_var = /work/devel/felipe/LOCAL_WEIGHTS 
+#target_site              = descmp4-dev  # ie. descmp4, iforge, fermigrid-sl6, bluewaters-dev
+#local_archive_var        = /work/prodbeta/archive
+#local_weight_archive_var = /work/devel/felipe/LOCAL_WEIGHTS 
 
 # Path BW settings
-#target_site              = bluewaters-dev  # ie. descmp4, iforge, fermigrid-sl6, bluewaters-dev
-#local_archive_var        = /projects/sciteam/jrr/project/des/LOCAL_ARCHIVE
-#local_weight_archive_var = /projects/sciteam/jrr/project/des/LOCAL_WEIGHTS 
+target_site              = bluewaters-dev  # ie. descmp4, iforge, fermigrid-sl6, bluewaters-dev
+local_archive_var        = /projects/sciteam/jrr/project/des/LOCAL_ARCHIVE
+local_weight_archive_var = /projects/sciteam/jrr/project/des/LOCAL_WEIGHTS 
 
 # Geom and CCD Queries
 db_section_var      = ${target_des_db_section}

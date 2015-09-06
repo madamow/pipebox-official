@@ -19,8 +19,8 @@ home_archive          = prodbeta  # i.e. prodbeta or desar2home for destest/deso
 des_http_section      = file-http-prodbeta   # need to define in .desservices file (i.e file-http-prodbeta)
 
 
-reqnum      = 1042         # jira id - used as part of a unique identifier
-jira_id     = DESOPS-1042  # the parent id of the reqnum
+reqnum      = 1043         # jira id - used as part of a unique identifier
+jira_id     = DESOPS-1043  # the parent id of the reqnum
 label       = me           # me-tests,,for-user-tests #strings to help identify runs
 
 pipeline = multiepoch        # used in desstat output 
