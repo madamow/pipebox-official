@@ -46,7 +46,7 @@ ncpu = 8
 # Path Cosmology settings
 target_site              = descmp4-dev  # ie. descmp4, iforge, fermigrid-sl6, bluewaters-dev
 local_archive_var        = /work/prodbeta/archive
-local_weight_archive_var = /work/devel/felipe/LOCAL_WEIGHTS 
+local_weight_archive_var = /work/devel/felipe/MULTIEPOCH_ROOT/LOCAL_WEIGHTS 
 
 # Path BW settings
 #target_site              = bluewaters-dev  # ie. descmp4, iforge, fermigrid-sl6, bluewaters-dev
