@@ -27,7 +27,7 @@
                dirpat     = me 
                ops_enddir = products
                rundir     = products
-               savefiles  = true
+               savefiles  = false
                optional   = true
            </sci_coadd>
            <wgt_coadd>
@@ -36,7 +36,7 @@
                dirpat     = me 
                ops_enddir = products
                rundir     = products
-               savefiles  = true
+               savefiles  = false
                optional   = true
             </wgt_coadd>
 
@@ -57,7 +57,7 @@
             cmd_hyphen = alldouble
             # Inputs
             used       = file.file_assoc ,file.sci_coadd,file.wgt_coadd
-            was_generated_by = file.cat_coadd,file.seg_coadd
+            was_generated_by = file.mef_coadd
             ancestry         = file.sci_coadd:file.mef_coadd,file.wgt_coadd:file.mef_coadd
             <cmdline>
                 # positional arguments with _num_blabla (switch from others!?)

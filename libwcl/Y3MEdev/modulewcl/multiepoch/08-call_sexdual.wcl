@@ -78,7 +78,7 @@
                dirpat     = me 
                ops_enddir = products
                rundir     = products
-               savefiles  = true
+               savefiles  = false
                optional   = true
             </cat_coadd>
             <seg_coadd>
@@ -87,7 +87,7 @@
                dirpat     = me 
                ops_enddir = products
                rundir     = products
-               savefiles  = true
+               savefiles  = false
                optional   = true
             </seg_coadd>
 
@@ -98,7 +98,6 @@
             execname   = call_SExDual.py 
             cmd_hyphen = alldouble
             # Inputs
-            #used       = file.file_assoc
             used       = file.file_assoc ,file.psfex_model,file.sci_coadd,file.wgt_coadd,file.sci_coadd_det,file.wgt_coadd_det
             was_generated_by = file.cat_coadd,file.seg_coadd
             ancestry         = file.sci_coadd:file.cat_coadd,file.wgt_coadd:file.cat_coadd,file.sci_coadd:file.seg_coadd,file.wgt_coadd:file.seg_coadd
@@ -108,8 +107,8 @@
                 _02_tilename   = ${tilename}
 
                 # optional arguments
-                SExDual_execution_mode = ${psfex_execution_mode_var}
-                SExDual_parameters     = ${psfex_parameters_var}
+                SExDual_execution_mode = ${sexdual_execution_mode_var}
+                SExDual_parameters     = ${sexdual_parameters_var}
                 tiledir                = ${tiledir_var}
                 tilename_fh            = ${tilename_fh_var}
                 MP_SEx                 = ${mp_sex_var}

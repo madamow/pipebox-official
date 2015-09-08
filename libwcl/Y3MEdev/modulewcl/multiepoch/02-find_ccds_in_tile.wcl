@@ -3,6 +3,8 @@
         wrappername = generic.py
         modnamepat=${modnamepat_tile_generic}
         <file>
+
+            # Input files
             <json_geom>
                 filetype   = config 
                 filepat    = tile_generic
@@ -13,6 +15,8 @@
                 rundir     = aux
                 savefiles  = true
             </json_geom>
+
+            # Output files
             <json_assoc>
                 filetype   = config 
                 filepat    = tile_generic
@@ -33,12 +37,24 @@
                 rundir     = aux
                 savefies   = true
             </file_assoc>
+
+            <overlap_pdf>
+                filetype   = config 
+                filepat    = tile_generic
+                flabel     = overlap 
+                fsuffix    = pdf
+                dirpat     = me 
+                ops_enddir = products
+                rundir     = products
+                savefies   = true
+            </overlap_pdf>
+
         </file>
         <exec_1>
             execname         = find_ccds_in_tile.py 
 	    cmd_hyphen       = alldouble
             used             = file.json_geom 
-            was_generated_by = file.json_assoc,file.file_assoc
+            was_generated_by = file.json_assoc,file.file_assoc,file.overlap_pdf
             ancestry = file.json_geom:file.json_assoc,file.json_geom:file.file_assoc
             <cmdline>
                 # positional arguments with _num_blabla
@@ -50,7 +66,11 @@
                 db_section     = ${db_section_var}
 		archive_name   = ${archive_name_var}
                 local_archive  = ${local_archive_var}
-		#tagname        = ${tagname_var}
+		tagname        = ${tagname_var}
+                select_extras  = ${select_extras_var}
+                from_extras    = ${from_extras_var}
+                and_extras     = ${and_extras_var}
+                plot_outname   = ${file.overlap_pdf.fullname}
 
             </cmdline>
         </exec_1>

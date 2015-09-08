@@ -25,7 +25,7 @@
                dirpat     = me 
                ops_enddir = products
                rundir     = products
-               savefiles  = true
+               savefiles  = false
                optional   = true
             </sci_coadd>
             <wgt_coadd>
@@ -34,7 +34,7 @@
                dirpat     = me 
                ops_enddir = products
                rundir     = products
-               savefiles  = true
+               savefiles  = false
                optional   = true
             </wgt_coadd>
 

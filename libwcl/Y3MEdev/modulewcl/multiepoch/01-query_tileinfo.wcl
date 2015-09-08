@@ -28,8 +28,7 @@
                 # optional arguments
                 json_tileinfo_file = ${file.json_geom.fullname}
                 db_section         = ${db_section_var}
-                # do not interface the following optional inputs now ..
-                #coaddtile_table = ${coaddtile_table_var}
+                coaddtile_table    = ${coaddtile_table_var}
             </cmdline>
 
         </exec_1>
