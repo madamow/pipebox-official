@@ -19,8 +19,8 @@ home_archive          = prodbeta  # i.e. prodbeta or desar2home for destest/deso
 des_http_section      = file-http-prodbeta   # need to define in .desservices file (i.e file-http-prodbeta)
 
 
-reqnum      = 1042         # jira id - used as part of a unique identifier
-jira_id     = DESOPS-1042  # the parent id of the reqnum
+reqnum      = 1043         # jira id - used as part of a unique identifier
+jira_id     = DESOPS-1043  # the parent id of the reqnum
 label       = me           # me-tests,,for-user-tests #strings to help identify runs
 
 pipeline = multiepoch        # used in desstat output 
@@ -67,7 +67,7 @@ weight_extension_var = _wgt
 
 # SWarp options
 magbase_var          = 30
-swarp_parameters_var = NTHREADS=8 COMBINE_TYPE=AVERAGE COPY_KEYWORDS=OBJECT,EXPTIME
+swarp_parameters_var = NTHREADS=8 COMBINE_TYPE=AVERAGE COPY_KEYWORDS=OBJECT,EXPTIME RESAMPLE_DIR=/tmp
 
 # TODO:
 # We might want to do $optical_bands = $band,$detname ?
@@ -107,5 +107,6 @@ blocklist = multiepoch
 <block>
   <multiepoch>
     modulelist = query_tileinfo,find_ccds_in_tile,make_swarp_weights,call_swarp,call_stiff,call_sexpsf,call_psfex,call_sexdual,make_mef
+    #modulelist = query_tileinfo,find_ccds_in_tile,make_swarp_weights,call_swarp
  </multiepoch>
 </block>

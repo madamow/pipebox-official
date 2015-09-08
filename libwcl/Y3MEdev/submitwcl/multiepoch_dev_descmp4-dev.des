@@ -107,5 +107,6 @@ blocklist = multiepoch
 <block>
   <multiepoch>
     modulelist = query_tileinfo,find_ccds_in_tile,make_swarp_weights,call_swarp,call_stiff,call_sexpsf,call_psfex,call_sexdual,make_mef
+    #modulelist = query_tileinfo,find_ccds_in_tile,make_swarp_weights,call_swarp
  </multiepoch>
 </block>
