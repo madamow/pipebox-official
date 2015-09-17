@@ -1,0 +1,53 @@
+<module>
+    <starflat>
+        wrappername = generic.py
+        wrapperloop = ccdnum,band
+        modnamepat = ${modnamepat_ccdnumband}
+
+        <file>
+            <red_skysub>
+                filetype = red_skysub
+                filepat = ccdnum_band
+                flabel = skysub
+                fsuffix = fits
+                dirpat = se
+                ops_enddir = red
+                rundir = red
+            </red_skysub>
+            <red_starflat>
+                filetype = red_starflat
+                filepat = ccdnum_band
+                flabel = starflat
+                fsuffix = fits
+                dirpat = se
+                ops_enddir = red
+                rundir = red
+                savefiles = false
+            </red_starflat>
+            <cal_starflat>
+                # metadata info
+                filetype = cal_starflat
+
+                # how to name file
+                filename = ${skycampaign}_${epochrange}_${band}_c${ccdnum:2}_${starflatrun}_starflat.fits
+
+                # where to store file
+                dirpat = se
+                ops_enddir = starflat
+                rundir = starflat
+            </cal_starflat>
+        </file>
+        <exec_1>
+            execname = pixcorrect_im
+            cmd_hyphen = alldouble
+            used = file.red_skysub,file.cal_starflat
+            was_generated_by = file.red_starflat
+            ancestry = file.red_skysub:file.red_starflat,file.cal_starflat:file.red_starflat
+            <cmdline>
+                in = ${file.red_skysub.fullname}
+                out = ${file.red_starflat.fullname}
+                starflat = ${file.cal_starflat.fullname}
+            </cmdline>
+        </exec_1>
+    </starflat>
+</module>
