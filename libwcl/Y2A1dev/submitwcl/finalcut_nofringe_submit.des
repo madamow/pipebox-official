@@ -85,10 +85,10 @@ scampconfigfile = ${confignite}_default.scamp.20140423
 scampupdateheadfile = ${confignite}_scamp_update_head.config.20140340
 hupdatefile = ${confignite}_DES_header_update.20140303
 
-blocklist = se_nofringe
+blocklist = se
 
 <block>
-   <se_nofringe>
+   <se>
         modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit,ingest-skyfit,skysub,starflat,null-weight-bkg,create-bkg-img,immask,row-interp-immask,null-weight-immask,create-psfex-catalog,run-psfex,ingest-psfex-xml,create-finalcut-catalog,ingest-se-objects,finalcut-assess,mkpng
-    </se_nofringe>    
+    </se>    
 </block>
