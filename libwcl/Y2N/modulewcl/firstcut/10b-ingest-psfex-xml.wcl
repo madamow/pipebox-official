@@ -1,0 +1,28 @@
+<module> 
+    <ingest-psfex-xml>
+        wrappername = generic.py  
+        wrapperloop = ccdnum
+        modnamepat = ${modnamepat_ccdnumband}
+
+        <file>
+            <psfex_xml>
+                filetype = xml_psfex
+                filepat = ccdnum_band
+                flabel = psfex
+                fsuffix = xml
+                dirpat = se
+                ops_enddir = qa
+                rundir = qa
+            </psfex_xml>
+        </file>
+
+        <exec_1>
+            execname = datafile_ingest.py
+            used = file.psfex_xml
+            <cmdline>
+                filename = ${file.psfex_xml.fullname}
+                filetype = ${file.psfex_xml.filetype}
+            </cmdline>
+        </exec_1>
+    </ingest-psfex-xml>
+</module>

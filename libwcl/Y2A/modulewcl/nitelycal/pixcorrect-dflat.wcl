@@ -1,0 +1,89 @@
+<module>
+    <pixcorrect-dflat>
+        wrappername = generic.py
+        wrapperloop = expnum,ccdnum
+        modnamepat = ${modnamepat_ccdnumband}
+        loopobj = file.xtalked_dflat
+
+        <file>
+            <xtalked_dflat>   
+                depends crosstalk-dflat.file.xtalked
+
+                dirpat = precal
+                rundir = xtalked-dflat
+                match = expnum,ccdnum
+            </xtalked_dflat>
+            <biascor>
+                # metadata info
+                filetype = cal_biascor
+                
+                # how to name file
+                filepat = nite_ccdnum_noband
+                flabel = biascor
+                fsuffix = fits
+
+                # where to store file
+                dirpat = precal
+                ops_enddir = biascor
+                rundir = biascor
+            </biascor>
+            <lintable>
+                filetype = cal_lintable
+                dirpat = se
+                rundir = lintable/${lintablenite}
+                filename = ${lintablefile}.fits
+            </lintable>
+            <pixcor_dflat>
+                # what metadata to get
+                filetype = pixcor_dflat
+
+                # how to name the file
+                filepat = ccdnum_band
+                flabel = pixcor-dflat
+                fsuffix = fits
+
+                # where to put the file
+                dirpat = precal
+                ops_enddir = pixcor-dflat/${camera}${expnum:8}
+                rundir = pixcor-dflat
+
+                # whether to bring file home
+                savefiles = True
+            </pixcor_dflat>
+            <pixcor_mini_dflat>
+                # what metadata to get
+                filetype = pixcor_mini_dflat
+
+                # how to name the file
+                filepat = ccdnum_band
+                flabel = pixcor-mini-dflat
+                fsuffix = fits
+
+                # where to put the file
+                dirpat = precal
+                ops_enddir = pixcor-mini-dflat/${camera}${expnum:8}
+                rundir = pixcor-mini-dflat
+
+                # whether to bring file home
+                savefiles = True
+            </pixcor_mini_dflat>
+        </file>
+        <exec_1>
+            execname = pixcorrect_im
+            used = file.xtalked_dflat, file.biascor, file.lintable
+            was_generated_by = file.pixcor_dflat, file.pixcor_mini_dflat
+            ancestry = file.xtalked_dflat:file.pixcor_dflat, file.biascor:file.pixcor_dflat, file.lintable:file.pixcor_dflat, file.pixcor_dflat:file.pixcor_mini_dflat
+            cmd_hyphen = mixed_gnu
+            <cmdline>
+                in = ${file.xtalked_dflat.fullname}
+                bias = ${file.biascor.fullname}
+                lincor = ${file.lintable.fullname}
+                blocksize = 64
+                gain = _flag
+                v = _flag
+                out = ${file.pixcor_dflat.fullname} 
+                mini = ${file.pixcor_mini_dflat.fullname} 
+            </cmdline>
+        </exec_1>
+    </pixcorrect-dflat>
+</module>

@@ -1,0 +1,42 @@
+operator = felipe
+email = felipe@illinois.edu
+
+submit_des_services = /home/felipe/.desservices.ini
+submit_des_db_section = db-destest
+submit_files_mvmt = filemgmt.job_mvmt_http.JobArchiveHttp
+submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
+
+home_archive = prodbeta
+des_http_section = file-http-prodbeta
+
+<site>
+    <fermigrid-sl6>
+        #setupeups = /des/des20.b/data/felipe/test_eups_env.sourceme
+        target_des_services = /des/des20.b/data/des009/.desservices.ini
+        target_des_db_section = db-destest
+    </fermigrid-sl6>
+    <fermigrid-sl6-himem>
+        target_des_services = /des/des20.b/data/des009/.desservices.ini
+        target_des_db_section = db-destest
+    </fermigrid-sl6-himem>
+    <descmp1>
+        submit_files_mvmt = filemgmt.job_mvmt_local.JobArchiveLocal
+        target_des_services = /home/felipe/.desservices.ini
+        target_des_db_section = db-destest
+    </descmp1>
+    <descmp2>
+        submit_files_mvmt = filemgmt.job_mvmt_local.JobArchiveLocal
+        target_des_services = /home/felipe/.desservices.ini
+        target_des_db_section = db-destest
+    </descmp2>
+    <descmp4>
+        target_des_services = /home/felipe/.desservices.ini
+        target_des_db_section = db-destest
+    </descmp4>
+</site>
+
+<job_environment>
+    #PFWRUNJOB_DEBUG = 4
+    home = $_CONDOR_SCRATCH_DIR
+    python_egg_cache = $_CONDOR_SCRATCH_DIR
+</job_environment>

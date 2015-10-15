@@ -1,0 +1,38 @@
+<module>
+    <make_swarp_weights>
+        wrappername = generic.py
+        modnamepat=${modnamepat_tile_generic}
+        <file>
+            <file_assoc>
+                filetype   = config 
+                filepat    = tile_generic
+                flabel     = ccdinfo 
+                fsuffix    = assoc
+                dirpat     = me 
+                ops_enddir = aux
+                rundir     = aux
+                savefies   = true
+            </file_assoc>
+        </file>
+        <exec_1>
+            execname = make_SWarp_weights.py 
+            cmd_hyphen = alldouble
+            used = file.file_assoc
+
+            <cmdline>
+                # positional arguments with _num_blabla
+                _01_assoc_file = ${file.file_assoc.fullname}
+
+                # optional arguments
+                MP_weight              = ${mp_weight_var}
+                weight_extension       = ${weight_extension_var}
+                weights_execution_mode = ${execution_mode_var}
+                local_archive          = ${local_archive_var}
+                local_weight_archive   = ${local_weight_archive_var}
+                #clobber_weights??
+
+            </cmdline> 
+
+        </exec_1>
+    </make_swarp_weights>
+</module>

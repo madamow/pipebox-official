@@ -1,0 +1,47 @@
+<module>
+    <update-astrom-scamp-header>
+        wrappername = generic.py
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+    
+        <file>
+            <sci_red>
+                filetype = snsci_red
+                filepat = sn_ccdnum_band
+                flabel = sci
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = red
+            </sci_red>
+            <scamp_head>
+                filetype = snhead_scamp
+                filepat = sn_ccdnum_band
+                flabel = sci
+                fsuffix = head
+                dirpat = sne_ccd
+                rundir = cat
+            </scamp_head>
+            <sci_red_hupdate>
+                filetype = snsci_red
+                filepat = sn_ccdnum_band
+                flabel = hupdate_sci
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+                savefiles = true
+            </sci_red_hupdate>
+        </file>
+        <exec_1>
+            execname = hupdate
+            used = file.sci_red,file.scamp_head
+            was_generated_by = file.sci_red_hupdate
+            ancestry = file.sci_red:file.sci_red_hupdate,file.scamp_head:file.sci_red_hupdate
+            <cmdline>
+                _01_sci_red = ${file.sci_red.fullname}
+                _02_scamp_head = ${file.scamp_head.fullname}
+                _03_sci_red_hupdate = ${file.sci_red_hupdate.fullname}
+            </cmdline>
+        </exec_1>
+     </update-astrom-scamp-header>
+</module>

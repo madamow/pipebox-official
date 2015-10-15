@@ -1,0 +1,4 @@
+modnamepat_tile_generic=${tilename}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_tile_band=${tilename}_r${reqnum}p${attnum:2}_${band}_${modulename}
+
+modnamepat_hostname=r${reqnum}p${attnum:2}_${modulename}

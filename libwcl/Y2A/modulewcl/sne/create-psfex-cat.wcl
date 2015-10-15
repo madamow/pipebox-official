@@ -1,0 +1,83 @@
+<module> 
+    <create-psfex-cat>
+        wrappername = generic.py 
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+
+        <file>
+            <starcat>
+                filetype = snlist_starcat
+                filepat = sn_ccdnum_band
+                flabel = StarCat
+                fsuffix = list
+                dirpat = sne_ccd
+                ops_enddir = list
+                rundir = list
+            </starcat>
+            <sex_assoc_config>
+                filetype = config
+                filename = ${config_version}_SN_redim_ASSOC.sex
+                dirpat = se
+                ops_enddir = config/sex
+                rundir = config 
+            </sex_assoc_config>
+            <sex_param>
+                filetype = config
+                filename = ${config_version}_SN_redim_ALL.sex.param
+                dirpat = se
+                ops_enddir = config/sex
+                rundir = config
+            </sex_param>
+            <sex_filter>
+                filetype = config
+                filename = ${config_version}_SN_redim_ALL.sex.conv
+                dirpat = se
+                ops_enddir = config/sex
+                rundir = config
+            </sex_filter>
+            <red_sci>
+                filetype = snsci_red
+                filepat = sn_ccdnum_band
+                flabel = hupdate_sci
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+            </red_sci>
+            <red_wgt>
+                filetype = snwgt_red
+                filepat = sn_ccdnum_band
+                flabel = weight
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = red
+            </red_wgt>
+            <psfex_cat>
+                filetype = sncat_psfex
+                filepat = sn_ccdnum_band
+                flabel = psfexcat
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = cat
+                rundir = cat
+                savefiles = false
+            </psfex_cat>
+        </file>
+
+        <exec_1>
+            execname = sex
+            used = file.red_sci,file.red_wgt,file.sex_assoc_config,file.sex_param,file.sex_filter,file.starcat
+            was_generated_by = file.psfex_cat
+            ancestry = file.red_sci:file.psfex_cat,file.red_wgt:file.psfex_cat,file.sex_assoc_config:file.psfex_cat,file.sex_param:file.psfex_cat,file.sex_filter:file.psfex_cat,file.starcat:file.psfex_cat
+            <cmdline>
+                _01_red_sci = ${file.red_sci.fullname}
+                WEIGHT_IMAGE = ${file.red_wgt.fullname}
+                c = ${file.sex_assoc_config.fullname}
+                PARAMETERS_NAME = ${file.sex_param.fullname}
+                FILTER_NAME = ${file.sex_filter.fullname}
+                CATALOG_NAME = ${file.psfex_cat.fullname}
+                ASSOC_NAME = ${file.starcat.fullname}
+            </cmdline>
+        </exec_1>
+    </create-psfex-cat>
+</module>

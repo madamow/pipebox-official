@@ -1,0 +1,109 @@
+<module>
+    <mkdflatcor>
+        wrappername = generic.py
+        wrapperloop = ccdnum,band
+        modnamepat = ${modnamepat_unitname_ccdnum_band}
+        loopobj = list.inlist
+
+        <list>
+            <inlist>   # could be any name like dflatx
+                # how to name list
+                filepat = unitname_ccdnum_band
+                flabel = dflatx
+                fsuffix = list
+
+                # where to store list
+                dirpat = precal
+                ops_enddir = dflatcor
+                rundir = dflatcor
+        
+                # what goes into list
+                query_table = calibration
+                filetype = xtalked_dflat
+                query_fields = filetype,ops_proctag.tag,calibration.nite,ccdnum,calibration.expnum
+                expnum = ${dflat_expnum}
+                join calibration.filename=wgb.filename,wgb.reqnum=ops_proctag.reqnum,wgb.attnum=ops_proctag.attnum,wgb.unitname=ops_proctag.unitname
+                output_fields = filename, ccdnum, band
+                divide_by = ccdnum,band   # perhaps can default to wrapperloop 
+                depends crosstalk-dflat.file.xtalked
+
+                # description of list for wrapper
+                columns = xtalked.fullname
+            </inlist>
+        </list>
+        <file>
+            <dflatcor>
+                # metadata info
+                filetype = cal_dflatcor
+
+                # how to name file
+                filepat = unitname_ccdnum_band
+                flabel = dflatcor
+                fsuffix = fits
+
+                # where to store file
+                dirpat = precal
+                ops_enddir = dflatcor
+                rundir = dflatcor
+
+                # copy to cache after wrapper
+                savefiles = True
+            </dflatcor> 
+            <xtalked>
+                listonly = True
+                dirpat = se
+                ops_enddir = xtalked-dflat
+                rundir = xtalk-dflat
+            </xtalked>
+            <bpm>
+                filetype = cal_bpm
+                dirpat = se
+                rundir = bpm/${bpmnite}-r${bpmreq}/p${bpmatt:2}
+                filename = D_n${bpmnite}_c${ccdnum:2}_r${bpmreq}p${bpmatt:2}_bpm.fits
+            </bpm>
+            <pupil>
+                filetype = cal_pupil
+                dirpat = se
+                rundir = pupil/${pupilnite}
+                filename = ${pupilnite}_pupil_${ccdnum:2}.fits
+            </pupil>
+            <biascor>
+                # metadata info
+                filetype = cal_biascor
+
+                # how to name file
+                filepat = unitname_ccdnum_noband
+                flabel = biascor
+                fsuffix = fits
+
+                # where to store file
+                dirpat = precal
+                ops_enddir = biascor
+                rundir = biascor
+            </biascor>
+	    <lintable>
+    		filetype = cal_lintable
+            dirpat = se
+            rundir = lintable/${lintablenite}
+            filename = ${lintablefile}.fits
+	    </lintable>
+        </file>
+        <exec_1>
+            execname = mkflatcor
+            used = list.inlist.xtalked, file.bpm, file.pupil, file.biascor,file.lintable
+            was_generated_by = file.dflatcor
+            ancestry = list.inlist.xtalked:file.dflatcor, file.bpm:file.dflatcor, file.pupil:file.dflatcor, file.biascor:file.dflatcor,file.lintable:file.dflatcor
+            <cmdline>
+                _01_listdflatx = ${list.inlist.fullname}
+                _02_dflatcor = ${file.dflatcor.fullname} 
+                bias = ${file.biascor.fullname}
+                bpm = ${file.bpm.fullname}
+                pupil = ${file.pupil.fullname}
+                variancetype = WEIGHT 
+                avsigclip = 5.0 
+                verbose = 3
+        		linear = ${file.lintable.fullname}
+            </cmdline>
+        </exec_1>
+    </mkdflatcor>
+</module>

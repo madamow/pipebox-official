@@ -1,0 +1,64 @@
+<module>
+    <crosstalk-dflat>
+        wrappername = generic.py
+        wrapperloop = expnum
+        modnamepat=${modnamepat_exp_band}
+        loopobj = file.raw
+
+        <file>
+            <raw>
+                filetype = raw
+                dirpat = raw
+                rundir = raw
+                query_table = exposure
+                query_fields = expnum
+                expnum = ${dflat_expnum}
+                obstype = dome flat
+                output_fields = filename, expnum, band
+                match = expnum
+            </raw>
+            <xtalkcoeff>
+                filetype = config
+                filename = ${xtalkcoefffile}
+                dirpat = se
+                rundir = config
+            </xtalkcoeff>
+    	    <hupdate>
+                filetype = config
+                filename = ${hupdatefile}
+                dirpat = se
+                rundir = config
+            </hupdate>
+            <xtalked>
+                filetype = xtalked_dflat
+                filepat = ccdnum_band
+                flabel = dflat   
+                fsuffix = fits
+                dirpat = precal
+                ops_enddir = xtalked-dflat
+                rundir = xtalked-dflat
+                savefiles = True
+            </xtalked>
+	</file>
+        <exec_1>
+            execname = DECam_crosstalk
+            used = file.raw, file.xtalkcoeff, file.hupdate
+            was_generated_by = file.xtalked
+            ancestry = file.raw:file.xtalked, file.xtalkcoeff:file.xtalked, file.hupdate:file.xtalked
+            <cmdline>
+                _01_raw = ${file.raw.fullname}
+                _02_xtalked = xtalked-dflat/${camera}${expnum:8}_${band}_c%02d_r${reqnum}p${attnum:2}_dflat.fits 
+                crosstalk = ${file.xtalkcoeff.fullname}
+                postsatmask = _flag
+        		overscanorder = 1
+        		replace = ${file.hupdate.fullname}
+                overscansample = 1
+                overscanfunction = 0
+                overscantrim = 5
+                verbose = 3
+                photflag = ${photflagvar}
+                ccdlist = ${ccdnum}
+            </cmdline>
+        </exec_1>
+    </crosstalk-dflat>
+</module>

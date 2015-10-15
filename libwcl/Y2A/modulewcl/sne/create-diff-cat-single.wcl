@@ -1,0 +1,81 @@
+#sex SN_253351_SN-E2_tile20_r_02_fakeSN_diff.fits  -WEIGHT_IMAGE SN_253351_SN-E2_tile20_r_02_fakeSN_diff.weight.fits  -CATALOG_NAME SN_253351_SN-E2_tile20_r_02_fakeSN_diff.cat   -PSF_NAME SN_253351_SN-E2_tile20_r_02.psf  -c SN_diffim.sex -MAG_ZEROPOINT 31.1928
+<module>
+    <create-diff-cat-single>
+        wrappername = generic.py  
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+    
+        <file>
+            <config_sex_diffim>
+                filetype = config
+                filename = ${config_version}_SN_diffim.sex
+                dirpat = se
+                rundir = config
+            </config_sex_diffim>
+            <param_sex_diffim>
+                filetype = config
+                filename = ${config_version}_SN_diffim.sex.param
+                dirpat = se
+                rundir = config
+            </param_sex_diffim>
+            <conv_sex_diffim>
+                filetype = config
+                filename = ${config_version}_SN_diffim.sex.conv
+                dirpat = se
+                rundir = config
+            </conv_sex_diffim>
+            <sci_fakediff>
+                filetype = snsci_fakediff
+                filepat = sn_ccdnum_band
+                flabel = fakeSN_diff.sci
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = fakediff
+            </sci_fakediff>
+            <wgt_fakediff>
+                filetype = snwgt_fakediff
+                filepat = sn_ccdnum_band
+                flabel = fakeSN_diff.weight
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = fakediff
+            </wgt_fakediff>
+            <psfex_model>
+                filetype = snpsfex_model
+                filepat = sn_ccdnum_band
+                flabel = psfexcat
+                fsuffix = psf
+                dirpat = sne_ccd
+                rundir = psf
+            </psfex_model>
+            <fake_diff_cat>
+                filetype = sncat_fakediff
+                filepat = sn_ccdnum_band
+                flabel = fakeSN_diff
+                fsuffix = cat
+                dirpat = sne_ccd
+                ops_enddir = cat
+                rundir = cat
+                savefiles = true
+            </fake_diff_cat>
+        </file>
+    
+        <exec_1>
+            execname = sex
+            used = file.config_sex_diffim,file.param_sex_diffim,file.conv_sex_diffim,file.sci_fakediff,file.wgt_fakediff, file.psfex_model
+            was_generated_by = file.fake_diff_cat
+            ancestry = file.sci_fakediff:file.fake_diff_cat, file.wgt_fakediff:file.fake_diff_cat, file.psfex_model:file.fake_diff_cat
+            <cmdline>
+                _01 = ${file.sci_fakediff.fullname}
+                WEIGHT_IMAGE = ${file.wgt_fakediff.fullname}
+                CATALOG_NAME = ${file.fake_diff_cat.fullname}
+                PSF_NAME = ${file.psfex_model.fullname}
+
+                c = ${file.config_sex_diffim.fullname}
+                PARAMETERS_NAME = ${file.param_sex_diffim.fullname}
+                FILTER_NAME = ${file.conv_sex_diffim.fullname}
+                MAG_ZEROPOINT = 31.1928
+            </cmdline>
+        </exec_1>
+    </create-diff-cat-single>
+</module>

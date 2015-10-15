@@ -1,0 +1,30 @@
+<<include ../supportwcl/test_mypfwcfg.des>>
+
+<<include ../modulewcl/modnamepat.wcl>>
+<<include ../modulewcl/hostname.wcl>>
+
+target_site = descmp4
+
+reqnum = 1333
+jira_id = DESOPS-871
+label = hostname
+basket = ${reqnum}
+GROUP_SUBMIT_ID = 1
+
+pipeline = hostname    # used in desstat output 
+pipeprod = firstcut
+pipever = Y3Ndev+1
+campaign = Y3T
+project = ACT
+
+unitname = hostname
+ops_run_dir = ${project}/${pipeline}/r${reqnum}/p${attnum:2}
+submit_run_dir = /cluster_scratch/desdm_ops/prod/submit/${ops_run_dir}
+
+blocklist = hostname
+
+<block>
+    <hostname>
+	    modulelist = hostname
+    </hostname>
+</block>

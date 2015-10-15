@@ -1,0 +1,111 @@
+<module>
+    <monzptemplate>
+        wrappername = generic.py
+        wrapperloop = ccdnum
+        modnamepat=${modnamepat_field_nite_ccdnum_band}
+
+        loopobj = list.in_cat_distmpl_list
+        <list>
+            <in_cat_distmpl_list>   # could be any name like biasx
+                # how to name list
+                filepat = sn_field_ccdnum_band
+                flabel = distmpl_psfex_cat
+                fsuffix = list
+
+                # where to store list
+                dirpat = sne_ccd
+                ops_enddir = list
+                rundir = list
+
+                # what goes into list (normally is a query code)
+                #
+                output_fields = filename
+                divide_by = ccdnum   # perhaps can default to wrapperloop
+
+                # description of list for wrapper
+                # mef_fakediff is a reference to a section of this file section of this wcl.
+                # columns is defining what files will go into the list
+                columns = psfex_distmpl_cat.fullname
+                sortkey = expnum
+            </in_cat_distmpl_list>
+
+            <in_fake_diff_cat_list>   # could be any name like biasx
+                # how to name list
+                filepat = sn_field_ccdnum_band
+                flabel = fake_diff
+                fsuffix = list
+
+                # where to store list
+                dirpat = sne_ccd
+                ops_enddir = list
+                rundir = list
+
+                # what goes into list (normally is a query code)
+                #
+                output_fields = filename
+                divide_by = ccdnum   # perhaps can default to wrapperloop
+
+                # description of list for wrapper
+                # mef_fakediff is a reference to a section of this file section of this wcl.
+                # columns is defining what files will go into the list
+                #columns = fake_diff_cat.fullname
+                columns = sci_fakediff.fullname
+                sortkey = expnum
+            </in_fake_diff_cat_list>
+        </list>
+
+        <file>
+            <psfex_distmpl_cat>
+                filetype = sncat_psfex
+                filepat = sn_ccdnum_band
+                flabel = distmpl_psfexcat
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = cat
+                listonly = true
+            </psfex_distmpl_cat>
+            <sci_fakediff>
+                #outim = SN_253351_SN-E2_tile20_r_02_fakeSN_diff.fits
+                filetype = snsci_fakediff
+                filepat = sn_ccdnum_band
+                flabel = fakeSN_diff.sci
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = fakediff
+                listonly = true
+            </sci_fakediff>
+            #<fake_diff_cat>
+            #    filetype = sncat_fakediff
+            #    filepat = sn_ccdnum_band
+            #    flabel = fakeSN_diff
+            #    fsuffix = cat
+            #    dirpat = sne_ccd
+            #    rundir = cat
+            #   listonly = true
+            #</fake_diff_cat>
+            <monzptemplate_out>
+                filetype = snlist_filterobj
+                filepat = sn_field_ccdnum_band
+                flabel = monZPtemplate
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+                ops_enddir = red
+                savefiles = true
+            </monzptemplate_out>
+        </file>
+        <exec_1>
+            execname = monZPtemplate.pl
+            used = list.in_cat_distmpl_list.psfex_distmpl_cat, list.in_fake_diff_cat_list.sci_fakediff
+            was_generated_by = file.monzptemplate_out
+            #ancestry = file.psfex_distmpl_cat:file.monzptemplate_out,file.fake_diff_cat:file.monzptemplate_out
+            <cmdline>
+                inFile_catList = ${list.in_cat_distmpl_list.fullname}
+                inFile_diffList = ${list.in_fake_diff_cat_list.fullname}
+                outFile_ZP = ${file.monzptemplate_out.fullname}
+                ZP_WARN = 0.02
+                KSUM_WARN = 0.02
+            </cmdline>
+        </exec_1>
+    </monzptemplate>
+</module>

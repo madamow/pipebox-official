@@ -1,0 +1,120 @@
+<module>
+    <dofake>
+        wrappername = generic.py
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+        <file>
+            <sci_red>
+                filetype = snsci_red
+                filepat = sn_ccdnum_band
+                flabel = sci
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = red
+            </sci_red>
+            #<mask_red>
+            #    filetype = snmask_red
+            #    filepat = sn_ccdnum_band
+            #    flabel = mask
+            #    fsuffix = fits
+            #    dirpat = sne_ccd
+            #    rundir = red
+            #</mask_red>
+            <wgt_red>
+                filetype = snwgt_red
+                filepat = sn_ccdnum_band
+                flabel = wgt
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = red
+            </wgt_red>
+            <cat_psfex>
+                filetype = sncat_psfex
+                filepat = sn_ccdnum_band
+                flabel = psfexcat
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = cat
+            </cat_psfex>
+            <psfex_model>
+                filetype = snpsfex_model
+                filepat = sn_ccdnum_band
+                flabel = psfexcat
+                fsuffix = psf
+                dirpat = sne_ccd
+                rundir = psf
+            </psfex_model>
+            <wgt_tmpl>
+                filetype = snwgt_tmpl
+                filepat = sntmpl
+                fsuffix = weight.fits
+                dirpat = sne
+                rundir = sntemplate
+            </wgt_tmpl>
+            <sci_fake>
+                filetype = snsci_red
+                filepat = sn_ccdnum_band
+                flabel = fakeSN.sci
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+                savefile = true
+            </sci_fake>
+            #<mask_fake>
+            #    filetype = snmask_red
+            #    filepat = sn_ccdnum_band
+            #    flabel = fakeSN.mask
+            #    fsuffix = fits
+            #    dirpat = sne_ccd
+            #    ops_enddir = red
+            #    rundir = red
+            #    savefile = true
+            #</mask_fake>
+            <wgt_fake>
+                filetype = snwgt_red
+                filepat = sn_ccdnum_band
+                flabel = fakeSN.wgt
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+                savefile = true
+            </wgt_fake>
+            <objlist_fake>
+                filetype = snlist_fakeobj
+                filepat = sn_ccdnum_band
+                flabel = fakeobj 
+                fsuffix = list
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+                savefile = true
+            </objlist_fake>
+        </file>
+    
+        <exec_1>
+            execname = doFake
+            #used = file.sci_red,file.mask_red,file.wgt_red,file.psfex_model,file.cat_psfex,file.wgt_tmpl
+            #was_generated_by = file.sci_fake,file.mask_fake,file.wgt_fake,file.objlist_fake
+            #ancestry = file.sci_red:file.sci_fake,file.mask_red:file.mask_fake,file.wgt_red:file.wgt_fake 
+            used = file.sci_red,file.wgt_red,file.psfex_model,file.cat_psfex,file.wgt_tmpl
+            was_generated_by = file.sci_fake,file.wgt_fake,file.objlist_fake
+            ancestry = file.sci_red:file.sci_fake,file.wgt_red:file.wgt_fake 
+            <cmdline>
+                #RUN = 19790102030405_19790101  
+                inFile_sci =  ${file.sci_red.fullname}
+                #inFile_mask = ${file.mask_red.fullname}
+                inFile_wgt = ${file.wgt_red.fullname}   
+                inFile_psf = ${file.psfex_model.fullname}
+                inFile_sexCat = ${file.cat_psfex.fullname}
+                inFile_tWgt = ${file.wgt_tmpl.fullname}
+                outFile_sci = ${file.sci_fake.fullname}
+                #outFile_mask = ${file.mask_fake.fullname} 
+                outFile_wgt = ${file.wgt_fake.fullname} 
+                outFile_fakeList = ${file.objlist_fake.fullname} 
+                writeDB = _flag
+            </cmdline>
+        </exec_1>
+    </dofake>
+</module>

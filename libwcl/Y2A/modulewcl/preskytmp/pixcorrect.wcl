@@ -1,0 +1,87 @@
+<module>
+    <pixcorrect>
+        wrappername = generic.py
+        wrapperloop = ccdnum,band
+        modnamepat = ${modnamepat_ccdnumband}
+        loopobj = file.xtalked_sci
+
+        <file>
+            <xtalked_sci>   
+                depends crosstalk-sci.file.red_xtalked
+                dirpat = pst
+                rundir = red
+                match = ccdnum,band
+            </xtalked_sci>
+            <biascor>
+                filetype = cal_biascor
+                filename = ${camera}_n${supercalnite}_c${ccdnum:2}_${supercalrun}_biascor.fits
+                dirpat = pst
+                rundir = biascor
+            </biascor>
+            <dflatcor>
+                band = ${band}
+                filetype = cal_dflatcor
+                filename = ${camera}_n${supercalnite}_${band}_c${ccdnum:2}_${supercalrun}_norm-dflatcor.fits
+                dirpat = pst
+                rundir = norm-dflatcor
+            </dflatcor>
+            <bpm>
+                filetype = cal_bpm
+                dirpat = pst
+                rundir = bpm/${bpmnite}-r${bpmreq}/p${bpmatt:2}
+                filename = D_n${bpmnite}_c${ccdnum:2}_r${bpmreq}p${bpmatt:2}_bpm.fits
+            </bpm>
+            <bf>
+                filetype = cal_bf
+                dirpat = pst
+                rundir = bf/${bfnite}-${bfreq}/${bfatt:2}
+                filename = D_n${bfnite}_r${bfreq}p${bfatt:2}_bf.fits
+            </bf>
+            <lintable>
+                filetype = cal_lintable
+                dirpat = pst
+                rundir = lintable/${lintablenite}
+                filename = ${lintablefile}.fits
+            </lintable>
+            <pixcor_red>
+                # what metadata to get
+                filetype = red
+
+                # how to name the file
+                filepat = ccdnum_band
+                flabel = pixcor
+                fsuffix = fits
+
+                # where to put the file
+                dirpat = pst
+                ops_enddir = red
+                rundir = red
+
+                # whether to bring file home
+                savefiles = False
+            </pixcor_red>
+        </file>
+        <exec_1>
+            execname = pixcorrect_im
+            used = file.xtalked_sci, file.biascor, file.lintable, file.dflatcor,file.bpm,file.bf
+            was_generated_by = file.pixcor_red
+            ancestry = file.xtalked_sci:file.pixcor_red, file.biascor:file.pixcor_red, file.lintable:file.pixcor_red,file.dflatcor:file.pixcor_red,file.bpm:file.pixcor_red
+            cmd_hyphen = mixed_gnu
+            <cmdline>
+                in = ${file.xtalked_sci.fullname}
+                bias = ${file.biascor.fullname}
+                flat = ${file.dflatcor.fullname}
+                lincor = ${file.lintable.fullname}
+                bpm = ${file.bpm.fullname}
+                bf = ${file.bf.fullname}
+                blocksize = 128
+                resaturate = _flag
+                addweight = _flag
+                gain = _flag
+                fixcols = _flag
+                v = _flag
+                out = ${file.pixcor_red.fullname} 
+            </cmdline>
+        </exec_1>
+    </pixcorrect>
+</module>

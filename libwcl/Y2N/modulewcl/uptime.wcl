@@ -1,0 +1,9 @@
+<module>
+    <uptime>
+        wrappername = generic.py
+        modnamepat=${modnamepat_expband}
+        <exec_1>
+            execname = uptime
+        </exec_1>
+    </uptime>
+</module>

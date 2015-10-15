@@ -1,0 +1,55 @@
+<module create-bkg-img>
+    wrappername = generic.py
+    wrapperloop = expnum,ccdnum
+    modnamepat=${modnamepat_field_ccdnumband}
+
+    <file>
+        <sex_config>
+            filetype = config
+            filename = ${config}_default.sex
+            dirpat = se
+            rundir = config
+        </sex_config>
+        <sex_param>
+            filetype = config
+            filename = ${config}_sex.param_bkg
+            dirpat = se
+            rundir = config
+        </sex_param>
+        <red_bleedmasked>
+            filetype = snred_mkbleedmask
+            filepat = sn_ccdnum_band
+            flabel = bleedmasked
+            fsuffix = fits
+            dirpat = sne_ccd
+            rundir = red
+        </red_bleedmasked>
+        <red_bkg>
+            filetype = snbkg_red
+            filepat = sn_ccdnum_band
+            flabel = bkg
+            fsuffix = fits
+            dirpat = sne_ccd
+            ops_enddir = bkg
+            rundir = bkg
+            savefiles = false
+        </red_bkg>
+    </file>
+
+    <exec_1>
+        execname = sex
+        used = file.red_bleedmasked,file.sex_config,file.sex_param
+        was_generated_by = file.red_bkg
+        ancestry = file.red_bleedmasked:file.red_bkg
+        <cmdline>
+            _01_red_bleedmasked = ${file.red_bleedmasked.fullname}[0]
+            c = ${file.sex_config.fullname}
+            PARAMETERS_NAME = ${file.sex_param.fullname}
+            CATALOG_TYPE=NONE
+            FILTER = N
+            DETECT_THRESH = 1000
+            CHECKIMAGE_TYPE = BACKGROUND
+            CHECKIMAGE_NAME = ${file.red_bkg.fullname}
+        </cmdline>
+    </exec_1>
+</module>

@@ -1,0 +1,61 @@
+# user specified parameters
+<<include $PIPEBOX_WORK/config/felipe_cfg.des>> 
+
+# science module definitions
+<<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y2N_IMMASK_TESTING/modulewcl/modnamepat.wcl>>
+#<<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y2N_IMMASK_TESTING/modulewcl/firstcut/08-immask-redo.wcl>>
+<<include /home/felipe/DESDM-Code/devel/PipeBox/trunk/libwcl/Y2N_IMMASK_TESTING/modulewcl/firstcut/08-immask-redo-0.4.wcl>>
+
+<site>
+  <descmp4>
+     setupeups = /home/felipe/EUPS_PERSONAL/setup.sh
+  </descmp4>
+</site>
+
+# Database dependant definitions
+submit_des_db_section = db-destest    # submit section: db-desoper or db-destest
+target_des_db_section = db-destest    # target section: db-desoper or db-destest
+home_archive          = prodbeta  # i.e. prodbeta or desar2home for destest/desoper
+des_http_section      = file-http-prodbeta   # need to define in .desservices file (i.e file-http-prodbeta)
+
+target_site = descmp4-dev # ie. descmp4, iforge, fermigrid-sl6, etc.
+#target_site = descmp4 # ie. descmp4, iforge, fermigrid-sl6, etc.
+reqnum      = 1434         # jira id - used as part of a unique identifier
+jira_id     = DESOPS-1434  # the parent id of the reqnum
+label       = me-tests         # me-tests,,for-user-tests #strings to help identify runs
+
+pipeline = firstcut        # used in desstat output 
+pipeprod = immaskStack
+pipever  = 0.4.0+0
+max_eups_tries = 1
+#pipeprod = Y2Nstack  # i.e. Y2Nstack       #eups stack name
+#pipever  = 1.0.6+1  # 1.0.6+1, the eups stack version
+campaign = Y2T      # Y2T for example
+project  = ACT       # i.e ACT/FM/MCK as user tests can be done under your own project
+
+basket         = ${nite} 
+unitname       = ${camera}${expnum:8}
+ops_run_dir    = ${project}/${pipeline}/${nite}-r${reqnum}/${unitname}/p${attnum:2}
+submit_run_dir = /cluster_scratch/refact/submit/${home_archive}/${ops_run_dir}/
+
+# Change this to PRODBETA.SE_OBJECT or PROD.SE_OBJECT depending on destest or desoper respectively
+se_object_table = PRODBETA.SE_OBJECT 
+save_run_vals   = nite, camera, band, expnum, jira_id 
+
+camera = D         # Camera + expnum create unique criteria to find/name exposure file
+band   = g    # We get this form EXPNUM
+expnum = 229683  # this is an input
+nite   = 20130901    # Get this from EXPNUM
+photflagvar = 1    # needed for crosstalk code
+ccdnum = 1,3
+
+reqnum_input = 1442
+attnum_input = 1
+blocklist = immask
+
+<block>
+    <immask>
+            modulelist = immask
+    </immask>
+</block>
+
