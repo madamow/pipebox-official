@@ -1,0 +1,29 @@
+<module> 
+    <ingest-scamp-xml>
+        wrappername = generic.py  
+        wrapperloop = expnum
+        modnamepat = ${modnamepat_field_expband}
+
+        <file>
+            <scamp_xml>
+                filetype = snxml_scamp
+                filepat = sn_exposure
+                flabel = scamp
+                fsuffix = xml
+                dirpat = sne
+                ops_enddir = astrom-scamp/qa
+                rundir = astrom-scamp/qa
+            </scamp_xml>
+        </file>
+
+        <exec_1>
+            execname = datafile_ingest.py
+            cmd_hyphen = alldouble
+            used = file.scamp_xml
+            <cmdline>
+                filename = ${file.scamp_xml.fullname}
+                filetype = ${file.scamp_xml.filetype}
+            </cmdline>
+        </exec_1>
+    </ingest-scamp-xml>
+</module>

@@ -1,34 +1,23 @@
 #!/usr/bin/env python
 
 import os, sys
-from tempfile import mkstemp
-from shutil import move
-import shutil
-from os import remove, close
-from PipeBox import replace_fh,ask_string,check_file
+from PipeBox import ask_string,check_file,write_template
 
-
-# user configuration template
-template = os.path.join(os.environ['PIPEBOX_DIR'],"supportwcl/generic_cfg.des")
-
-f = open(template,'r')
-fh = f.read()
-
+args = {}
 # User name
 user = ask_string('Enter Username: ', default=os.environ['USER'], check=None)
-fh = replace_fh(fh,'{USER}',subst=user)
+args['USER'] = user
 # Email
 email = ask_string('Enter email: ', default='%s@illinois.edu' % user, check=None)
-fh = replace_fh(fh,'{EMAIL}', subst=email)
+args['EMAIL'] = email
 # DES Services file
 des_services_path = ask_string('Enter DESservices path: ',
                                default=os.path.join(os.environ['HOME'],".desservices.ini"),
                                check=check_file)
-fh = replace_fh(fh,'{DES_SERVICES_PATH}', subst=des_services_path)
+args['DES_SERVICES_PATH'] = des_services_path
 # Fermi ID (optional)
 fermi_id = ask_string('Fermi ID: ', default='FERMI_ID', check=None)
-fh = replace_fh(fh,'{FERMI_ID}', subst=fermi_id)
-
+args['FERMI_ID'] = fermi_id
 
 # Define PIPEBOX_WORK
 try:
@@ -36,6 +25,10 @@ try:
 except:
     pipebox_work = os.path.join(os.environ['HOME'],'PIPEBOX_WORK')
 pipebox_work_path = ask_string('Enter PIPEBOX_WORK location: ', default=pipebox_work)
+
+# user configuration template
+template = "supportwcl/generic_cfg.des"
+#template = os.path.join(os.environ['PIPEBOX_DIR'],"supportwcl/generic_cfg.des")
 
 # Define the output name
 user_config_file = "%s/config/%s_cfg.des" % (pipebox_work_path,user)
@@ -45,9 +38,7 @@ dirname = os.path.dirname(user_config_file)
 if not os.path.exists(dirname):
     os.makedirs(dirname)
 
-conf = open(user_config_file,'w')
-conf.write(fh)
-conf.close()
+write_template(template,user_config_file,args)
 
 print "\nConfiguration file written to:\n\t%s" % user_config_file
 print "\nMake sure you setup PIPEBOX_WORK environmental variable:"

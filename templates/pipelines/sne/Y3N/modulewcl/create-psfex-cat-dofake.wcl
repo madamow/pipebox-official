@@ -1,0 +1,83 @@
+#DIFFIMG-13
+<module> 
+    <create-psfex-cat-dofake>
+        wrappername = generic.py 
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+
+        <file>
+            <starcat>
+                filetype = snlist_starcat
+                filepat = sn_ccdnum_band
+                flabel = StarCat
+                fsuffix = list
+                dirpat = sne_ccd
+                ops_enddir = list
+                rundir = list
+            </starcat>
+            <sex_assoc_config>
+                filetype = config
+                filename = ${config_version}_SN_redim_ASSOC.sex
+                dirpat = se
+                ops_enddir = config/sex
+                rundir = config
+            </sex_assoc_config>
+            <sex_param>
+                filetype = config
+                filename = ${config_version}_SN_redim_ASSOC.sex.param
+                dirpat = se
+                ops_enddir = config/sex
+                rundir = config
+            </sex_param>
+            <sex_filter>
+                filetype = config
+                filename = ${config_version}_SN_redim_ASSOC.sex.conv
+                dirpat = se
+                ops_enddir = config/sex
+                rundir = config
+            </sex_filter>
+            <sci_fake>
+                filetype = snsci_red
+                filepat = sn_ccdnum_band
+                flabel = fakeSN.sci
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = red
+            </sci_fake>
+            <wgt_fake>
+                filetype = snwgt_red
+                filepat = sn_ccdnum_band
+                flabel = fakeSN.weight
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = red
+            </wgt_fake>
+            <psfex_cat>
+                filetype = sncat_psfex
+                filepat = sn_ccdnum_band
+                flabel = fakeSN_psfexcat
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = cat
+                rundir = cat
+                savefiles = false
+            </psfex_cat>
+        </file>
+
+        <exec_1>
+            execname = sex
+            used = file.sci_fake,file.wgt_fake,file.sex_assoc_config,file.sex_param,file.sex_filter,file.starcat
+            was_generated_by = file.psfex_cat
+            ancestry = file.sci_fake:file.psfex_cat,file.wgt_fake:file.psfex_cat
+            <cmdline>
+                _01_red_sci = ${file.sci_fake.fullname}
+                WEIGHT_IMAGE = ${file.wgt_fake.fullname}
+                c = ${file.sex_assoc_config.fullname}
+                PARAMETERS_NAME = ${file.sex_param.fullname}
+                FILTER_NAME = ${file.sex_filter.fullname}
+                CATALOG_NAME = ${file.psfex_cat.fullname}
+                ASSOC_NAME = ${file.starcat.fullname}
+            </cmdline>
+        </exec_1>
+    </create-psfex-cat-dofake>
+</module>

@@ -1,0 +1,58 @@
+#DIFFIMG-21
+<module>
+    <immerge-diff-single>
+        wrappername = generic.py
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+        <file>
+            <sci_fakediff>
+                filetype = snsci_fakediff
+                filepat = sn_ccdnum_band
+                flabel = fakeSN_diff.sci
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = fakediff
+            </sci_fakediff>
+            <wgt_fakediff>
+                filetype = snwgt_fakediff
+                filepat = sn_ccdnum_band
+                flabel = fakeSN_diff.weight
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = fakediff
+            </wgt_fakediff>
+           #<mask_fakediff>
+           #     filetype = snmask_fakediff
+           #     filepat = sn_ccdnum_band
+           #     flabel = fakeSN_diff.mask
+           #     fsuffix = fits
+           #     dirpat = sne_ccd
+           #     rundir = fakediff
+           #</mask_fakediff>
+            <mef_fakediff>
+                filetype = snred
+                filepat = sn_ccdnum_band
+                flabel = fakeSN_diff_mh
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = fakediff
+                rundir = fakediff
+                savefiles = true
+            </mef_fakediff>
+        </file>
+
+        <exec_1>
+            execname = immerge
+            #used = file.sci_fakediff, file.mask_fakediff, file.wgt_fakediff
+            used = file.sci_fakediff, file.wgt_fakediff
+            was_generated_by =  file.mef_fakediff
+            #ancestry = file.sci_fakediff:file.mef_fakediff,file.mask_fakediff:file.mef_fakediff,file.wgt_fakediff:file.mef_fakediff
+            ancestry = file.sci_fakediff:file.mef_fakediff,file.wgt_fakediff:file.mef_fakediff
+            <cmdline>
+                outFile_img =  ${file.mef_fakediff.fullname}
+                #inList_merge = ${file.sci_fakediff.fullname} ${file.mask_fakediff.fullname} ${file.wgt_fakediff.fullname}
+                inList_merge = ${file.sci_fakediff.fullname} ${file.wgt_fakediff.fullname}
+            </cmdline>
+        </exec_1>
+    </immerge-diff-single>
+</module>

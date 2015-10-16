@@ -1,0 +1,17 @@
+confignite = 20150806
+xtalkcoefffile = DECam_20130606.xtalk 
+hupdatefile = ${confignite}_DES_header_update.20140303
+lintablefile = lin_tbl_v0.4
+bpmnite = 20140901t0928
+bpmreq = 1190
+bpmatt = 1
+fringecornite = 20131115v1
+illumcornite = 20140807
+lintablenite = 20130624
+pupilnite = 20140807
+photflatcornite = null
+scampupdatenite = 20131115
+scampconfigfile = ${confignite}_default.scamp.20140423
+camera = D   
+photflagvar = 1
+

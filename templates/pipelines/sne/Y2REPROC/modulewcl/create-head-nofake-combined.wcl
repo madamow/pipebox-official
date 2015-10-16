@@ -1,0 +1,40 @@
+#DIFFIMG-12
+<module>
+    <create-head-nofake-combined>
+        wrappername = generic.py
+        wrapperloop = ccdnum,expnum
+        modnamepat=${modnamepat_combine_ccdnumband}
+        expnum = ${first_expnum}
+        <file>
+            <sci_red>
+                filetype = snsci_red
+                filepat = sn_ccdnum_band
+                flabel = hupdate_sci
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = red
+            </sci_red>
+            <head_swarp>
+                filetype = snhead_swarp
+                filepat = sn_ccdnum_band_combined
+                flabel = hupdate_sci
+                fsuffix = head
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+                savefiles = true
+            </head_swarp>
+        </file>
+        <exec_1>
+            execname = printHeader.py
+            cmd_hyphen = alldouble
+            used = file.sci_red
+            was_generated_by =  file.head_swarp
+            ancestry = file.sci_red:file.head_swarp
+            <cmdline>
+                _01_fits =  ${file.sci_red.fullname}
+                outfile = ${file.head_swarp.fullname}
+            </cmdline>
+        </exec_1>
+    </create-head-nofake-combined>
+</module>
