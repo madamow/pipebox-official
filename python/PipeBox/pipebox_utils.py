@@ -64,6 +64,34 @@ def replace_none_str(args):
         elif not val:
             args_dict[key] = None
     return args
+
+def print_cron_info(pipeline,site=None,pipebox_work=None,cron_path='.'):
+    print "\n"
+    print "# To submit files (from dessub/descmp1):\n"
+    print "\t ssh dessub/descmp1"
+    print "\t crontab -e"
+    print "\t add the following to your crontab:"
+    print"\t 0,30 * * * * %s >> %s/%s_autosubmit.log 2>&1 \n" % (cron_path,pipebox_work,pipeline)
+
+    # Print warning of Fermigrid credentials
+    if 'fermi' in site:
+        print "# For FermiGrid please make sure your credentials are valid"
+        print "\t setenv X509_USER_PROXY $HOME/.globus/osg/user.proxy"
+        print "\t voms-proxy-info --all"
+
+def print_submit_info(pipeline,site=None,eups_product=None,eups_version=None,submit_file=None):
+    print "\n"
+    print "# To submit files (from dessub/descmp1):\n"
+    print "\t ssh dessub/descmp1"
+    print "\t setup -v %s %s" % (eups_product,eups_version)
+    print "\t %s\n" % submit_file 
+
+    # Print warning of Fermigrid credentials
+    if 'fermi' in site:
+        print "# For FermiGrid please make sure your credentials are valid"
+        print "\t setenv X509_USER_PROXY $HOME/.globus/osg/user.proxy"
+        print "\t voms-proxy-info --all"
+
 # --------------------------------------------------------------
 # These functions were copied/adapted from desdm_eupsinstal.py
 

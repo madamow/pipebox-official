@@ -67,17 +67,9 @@ if __name__ == "__main__":
             # Writing template
             pipebox_utils.write_template(cron_template_path,cron_submit_path,args)
             os.chmod(cron_submit_path, 0755)
-            print "\n"
-            print "# To submit files (from dessub/descmp1):\n"
-            print "\t ssh dessub/descmp1"
-            print "\t crontab -e"
-            print "\t add the following to your crontab:"
-            print"\t 0,30 * * * * %s >> %s/firstcut_autosubmit.log 2>&1 \n" % (cron_submit_path,args.pipebox_work)
-            # Print warning of Fermigrid credentials
-            if args.target_site == 'fermigrid-sl6':
-                print "# For FermiGrid please make sure your credentials are valid"
-                print "\t setenv X509_USER_PROXY $HOME/.globus/osg/user.proxy"
-                print "\t voms-proxy-info --all"
+            pipebox_utils.print_cron_info('firstcut',site=args.target_site,
+                                                       pipebox_work=args.pipebox_work,
+                                                       cron_path=cron_submit_path)
         else:
             # Run autosubmit code directly
             # Will run once, but if put in crontab will run however you specify in cron
@@ -162,14 +154,7 @@ if __name__ == "__main__":
             # Writing bash submit scripts
             pipebox_utils.write_template(bash_template_path,bash_script_path,args)
             os.chmod(bash_script_path, 0755)
-            print "\n"
-            print "# To submit files (from dessub/descmp1):\n"
-            print "\t ssh dessub/descmp1"
-            print "\t setup -v %s %s" % (args.eups_product,args.eups_version)
-            print "\t %s\n" % bash_script_name
-
-            # Print warning of Fermigrid credentials
-            if args.target_site == 'fermigrid-sl6':
-                print "# For FermiGrid please make sure your credentials are valid"
-                print "\t setenv X509_USER_PROXY $HOME/.globus/osg/user.proxy"
-                print "\t voms-proxy-info --all"
+            pipebox_utils.print_submit_info('firstcut',site=args.target_site,
+                                                       eups_product=args.eups_product,
+                                                       eups_version=args.eups_version,
+                                                       submit_file=bash_script_path)
