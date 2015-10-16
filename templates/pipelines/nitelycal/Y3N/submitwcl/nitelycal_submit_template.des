@@ -3,6 +3,10 @@
 <<include ../modulewcl/modnamepat.wcl>>
 <<include ../modulewcl/nitelycal/01-crosstalk-bias.wcl>>
 <<include ../modulewcl/nitelycal/02-crosstalk-dflat.wcl>>
+{% if args.combine %}
+<<include ../modulewcl/nitelycal/03-mkbiascor_combined.wcl>>
+<<include ../modulewcl/nitelycal/04-mkdflatcor_combined.wcl>>
+{% else %}
 <<include ../modulewcl/nitelycal/03-mkbiascor.wcl>>
 <<include ../modulewcl/nitelycal/04-mkdflatcor.wcl>>
 

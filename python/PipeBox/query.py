@@ -120,7 +120,7 @@ class Firstcut(Cursor):
 class NitelyCal(Cursor):
 
     def check_submitted(self,date):
-        """Check to see if a precal has been submitted with given date"""
+        """Check to see if a nitelycal has been submitted with given date"""
         was_submitted = "select count(*) from pfw_attempt where unitname= '%s'" % (date)
         self.cur.execute(was_submitted)
         count = self.cur.fetchone()[0]

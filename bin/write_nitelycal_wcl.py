@@ -38,7 +38,10 @@ def cmdline():
     parser.add_argument('--ccdnum',default=pipebox_utils.ALL_CCDS,help='')
     parser.add_argument('--reqnum',help='')
     parser.add_argument('--nite',help='')
+    parser.add_argument('--maxnite')
+    parser.add_argument('--minnite')
     parser.add_argument('--paramfile',help='')
+    parser.add_argument('--combine',help='')
 
     args = parser.parse_args()
     return args
@@ -66,17 +69,9 @@ if __name__ == "__main__":
             # Writing template
             pipebox_utils.write_template(cron_template_path,cron_submit_path,args)
             os.chmod(cron_submit_path, 0755)
-            print "\n"
-            print "# To submit files (from dessub/descmp1):\n"
-            print "\t ssh dessub/descmp1"
-            print "\t crontab -e"
-            print "\t add the following to your crontab:"
-            print"\t 0,30 * * * * %s >> %s/nitelycal_autosubmit.log 2>&1 \n" % (cron_submit_path,args.pipebox_work)
-            # Print warning of Fermigrid credentials
-            if args.target_site == 'fermigrid-sl6':
-                print "# For FermiGrid please make sure your credentials are valid"
-                print "\t setenv X509_USER_PROXY $HOME/.globus/osg/user.proxy"
-                print "\t voms-proxy-info --all"
+            pipebox_utils.print_cron_info('nitelycal',site=args.target_site,
+                                                      pipebox_work=args.pipebox_work,
+                                                      cron_path=cron_submit_path)
         else:
             # Run autosubmit code directly
             # Will run once, but if put in crontab will run however you specify in cron
@@ -84,7 +79,7 @@ if __name__ == "__main__":
             pass
     
     if args.mode=='manual': 
-        # For each use-case create exposures list and exposure dataframe
+        # For each use-case create bias/flat list and dataframe
         if args.bias: 
             args.bias_list = args.bias.split(',')
         if args.flat:
@@ -93,51 +88,59 @@ if __name__ == "__main__":
             with open(args.biaslist) as listfile:
                 args.bias_list = listfile.read().splitlines()
             args.bias_df = pd.DataFrame(args.exposure_list,columns=['expnum'])
-        elif args.flatlist: 
+        if args.flatlist: 
             with open(args.flatlist) as listfile:
                 args.flat_list = listfile.read().splitlines()
             args.flat_df = pd.DataFrame(args.exposure_list,columns=['expnum'])
-        elif args.csv: 
-            args.cal_df = pd.read_csv(args.csv,sep=args.delimiter)
-            args.cal_df.columns = [col.lower() for col in args.exposure_df.columns]
-            args.exposure_list = list(args.exposure_df['expnum'].values)
-        
+       
+        args.dataframe = pd.concat([args.flat_df,args.bias_df],ignore_index=True)
         # Update dataframe for each exposure and add band,nite if not exists
         cur = query.NitelyCal(args.db_section)
-        cur.update_df(args.exposure_df) 
-
-        nite_group = args.exposure_df.groupby(by=['nite'])
-        for nite,group in nite_group:
-            # create JIRA ticket per nite and add jira_id,reqnum to dataframe
-            index = args.exposure_df[args.exposure_df['nite'] == nite].index
-            if not args.jira_summary: 
-                args.jira_summary = str(nite)
-            if not args.reqnum:
-                try:
-                    args.reqnum = str(int(args.exposure_df.loc[index,('reqnum')].unique()[1]))
-                except: 
-                    args.reqnum = None
-            if not args.jira_parent:
-                try:
-                    args.jira_parent = args.exposure_df.loc[index,('jira_parent')].unique()[1]
-                except: 
-                    args.jira_parent = None
+        #cur.update_df(args.exposure_df) 
+        if args.combine:
+            # create one ticket
+            args.niterange = "writerangehere"
             # Create JIRA ticket
             new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
+                                                  description=args.jira_description,
+                                                  summary=args.niterange,
+                                                  ticket=args.reqnum,parent=args.jira_parent,
+                                                  use_existing=True)
+
+        if not args.combine:
+            # create  JIRA ticket for each nite found (precal-like)
+            nite_group = args.exposure_df.groupby(by=['nite'])
+            for nite,group in nite_group:
+                # create JIRA ticket per nite and add jira_id,reqnum to dataframe
+                index = args.exposure_df[args.exposure_df['nite'] == nite].index
+                if not args.jira_summary: 
+                    args.jira_summary = str(nite)
+                if not args.reqnum:
+                    try:
+                        args.reqnum = str(int(args.exposure_df.loc[index,('reqnum')].unique()[1]))
+                    except: 
+                        args.reqnum = None
+                if not args.jira_parent:
+                    try:
+                        args.jira_parent = args.exposure_df.loc[index,('jira_parent')].unique()[1]
+                    except: 
+                        args.jira_parent = None
+                # Create JIRA ticket
+                new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
                                                   description=args.jira_description,
                                                   summary=args.jira_summary,
                                                   ticket=args.reqnum,parent=args.jira_parent,
                                                   use_existing=True)
-            # Update dataframe with reqnum, jira_id
-            # If row exists replace value, if not insert new column/value
-            try:
-                args.exposure_df.loc[index,('reqnum')] = new_reqnum
-            except: 
-                args.exposure_df.insert(index[0],'reqnum',new_reqnum)
-            try:
-                args.exposure_df.loc[index,('jira_parent')] = new_jira_parent
-            except: 
-                args.exposure_df.insert(index[0],'jira_parent',new_jira_parent)
+                # Update dataframe with reqnum, jira_id
+                # If row exists replace value, if not insert new column/value
+                try:
+                    args.exposure_df.loc[index,('reqnum')] = new_reqnum
+                except: 
+                    args.exposure_df.insert(index[0],'reqnum',new_reqnum)
+                try:
+                    args.exposure_df.loc[index,('jira_parent')] = new_jira_parent
+                except: 
+                    args.exposure_df.insert(index[0],'jira_parent',new_jira_parent)
     
         # Render and write templates
         campaign_path = "pipelines/nitelycal/%s/submitwcl" % args.campaign
@@ -166,14 +169,7 @@ if __name__ == "__main__":
             # Writing bash submit scripts
             pipebox_utils.write_template(bash_template_path,bash_script_path,args)
             os.chmod(bash_script_path, 0755)
-            print "\n"
-            print "# To submit files (from dessub/descmp1):\n"
-            print "\t ssh dessub/descmp1"
-            print "\t setup -v %s %s" % (args.eups_product,args.eups_version)
-            print "\t %s\n" % bash_script_name
-
-            # Print warning of Fermigrid credentials
-            if args.target_site == 'fermigrid-sl6':
-                print "# For FermiGrid please make sure your credentials are valid"
-                print "\t setenv X509_USER_PROXY $HOME/.globus/osg/user.proxy"
-                print "\t voms-proxy-info --all"
+            pipebox_utils.print_submit_info('nitelycal',site=args.target_site,
+                                                        eups_product=args.eups_product,
+                                                        eups_version=args.eups_version,
+                                                        submit_file=bash_script_path)
