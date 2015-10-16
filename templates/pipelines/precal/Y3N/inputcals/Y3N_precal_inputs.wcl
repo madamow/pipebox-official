@@ -1,0 +1,10 @@
+photflag = 1
+photflagvar = 1
+xtalkcoefffile = DECam_20130606.xtalk
+pupilnite = null
+bpmnite = 20140901t0928
+bpmreq = 1190
+bpmatt = 1
+lintablenite = 20130624
+lintablefile = lin_tbl_v0.4
+hupdatefile = 20140709_DES_header_update.20140303

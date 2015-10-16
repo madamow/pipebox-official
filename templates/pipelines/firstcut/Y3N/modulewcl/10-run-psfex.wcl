@@ -1,0 +1,59 @@
+<module run-psfex>
+    wrappername = generic.py  
+    wrapperloop = ccdnum
+    modnamepat=${modnamepat_ccdnumband}
+
+    <file>
+        <psfex_cat>
+            filetype = cat_psfex
+            filepat = ccdnum_band
+            flabel = psfexcat
+            fsuffix = fits
+            dirpat = se
+            ops_enddir = cat
+            rundir = cat
+            savefiles = true
+        </psfex_cat>
+        <psfex_config>
+            filetype = config
+            filename = ${confignite}_default.psfex
+            dirpat = se
+            ops_enddir = config
+            rundir = config
+        </psfex_config>
+        <psfex_xml>
+            filetype = xml_psfex
+            filepat = ccdnum_band
+            flabel = psfex
+            fsuffix = xml
+            dirpat = se
+            ops_enddir = qa
+            rundir = qa
+            savefiles = false
+        </psfex_xml>
+        <psfex_model>
+            filetype = psfex_model
+            filepat = ccdnum_band
+            flabel = psfexcat
+            fsuffix = psf
+            dirpat = se
+            ops_enddir = psf
+            rundir = psf
+    	    savefiles = true
+        </psfex_model>
+    </file>
+
+    <exec_1>
+        execname = psfex
+        used = file.psfex_cat,file.psfex_config
+        was_generated_by = file.psfex_xml,file.psfex_model
+        ancestry = file.psfex_cat:file.psfex_model
+        <cmdline>
+            _01_psfex_cat = ${file.psfex_cat.fullname}
+            c = ${file.psfex_config.fullname}
+            WRITE_XML = Y
+            XML_NAME = ${file.psfex_xml.fullname}
+            PSF_DIR = psf
+        </cmdline>
+    </exec_1>
+</module>

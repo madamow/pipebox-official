@@ -1,0 +1,46 @@
+#DIFFIMG-25
+<module>
+    <makecand>
+        wrappername = generic.py
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+        <file>
+            <config_cuts>
+                filetype = config
+                filename = ${config_version}_SN_cuts.filterObj
+                dirpat = se
+                rundir = config
+            </config_cuts>
+            <objlist_out>
+                filetype = snlist_filterobj
+                filepat = sn_ccdnum_band
+                flabel = filterObj
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+            </objlist_out>
+            <makecand_out>
+                filetype = snlist_filterobj
+                filepat = sn_ccdnum_band
+                flabel = makecand
+                fsuffix = list
+                dirpat = sne_ccd
+                rundir = red
+                ops_enddir = red
+                savefiles = true
+            </makecand_out>
+        </file>
+        <exec_1>
+            execname = makeCand
+            used = file.objlist_out, file.config_cuts
+            was_generated_by = file.makecand_out
+            ancestry = file.objlist_out:file.makecand_out,file.config_cuts:file.makecand_out
+            <cmdline>
+                inFile_param = ${file.config_cuts.fullname}
+                inFile_objList = ${file.objlist_out.fullname}
+                outFile_candList = ${file.makecand_out.fullname}
+                writeDB = _flag
+            </cmdline>
+        </exec_1>
+    </makecand>
+</module>

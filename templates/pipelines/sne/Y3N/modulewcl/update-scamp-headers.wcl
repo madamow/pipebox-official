@@ -1,0 +1,73 @@
+<module>
+    <update-scamp-headers>
+        wrappername = scampHeadUpdate.py
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+    
+        <file>
+            <scamp_cat>    # needed to calculate fwhm
+                filetype = sncat_scamp
+                filepat = sn_ccdnum_band
+                flabel = scampcat
+                fsuffix = fits
+                dirpat = sne
+                rundir = astrom-scamp/cat
+             </scamp_cat>
+            <red_detrend>
+                filetype = snred_detrend
+                filepat = sn_ccdnum_band
+                flabel = detrend
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = red
+            </red_detrend>
+            <scamp_head>
+                filetype = snhead_scamp
+                filepat = sn_ccdnum_band
+                flabel = scamp
+                fsuffix = head
+                dirpat = sne
+                ops_enddir = astrom-scamp/aux
+                rundir = astrom-scamp/aux
+            </scamp_head>
+            <red_wcs>
+                filetype = snred_wcs
+                filepat = sn_ccdnum_band
+                flabel = wcs
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+                savefiles = False
+            </red_wcs>
+            <scamp_update_head>
+                filetype = config
+                filename = ${scamp_update_head_config_file}
+                dirpat = se
+                ops_enddir = config/scamp
+                rundir = config 
+            </scamp_update_head>
+        </file>
+    
+        <exec_1>
+            execname = fwhm()
+            used = file.scamp_cat
+            <cmdline>
+                _01_scamp_cat = filespecs.scamp_cat.fullname
+            </cmdline>
+        </exec_1>
+    
+        <exec_2>
+            execname = scampUpdateHead()
+            used = file.red_detrend,file.scamp_head,file.scamp_update_head
+            was_generated_by = file.red_wcs
+            ancestry = file.red_detrend:file.red_wcs,file.scamp_head:file.red_wcs
+            <cmdline>
+                _01_red_detrend = filespecs.red_detrend.fullname
+                _02_red_wcs = filespecs.red_wcs.fullname
+                _03_scamp_head = filespecs.scamp_head.fullname
+                _04_head_update = filespecs.scamp_update_head.fullname
+            </cmdline>
+        </exec_2>
+     </update-scamp-headers>
+</module>

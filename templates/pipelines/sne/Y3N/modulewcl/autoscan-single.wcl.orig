@@ -1,0 +1,76 @@
+<module>
+    <autoscan-single>
+        wrappername = runAutoScan.py
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+        <file>
+            <objlist_out>
+                filetype = snlist_filterobj
+                filepat = sn_ccdnum_band
+                flabel = filterObj
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+            </objlist_out>
+            <config_imputer>
+               filetype = snautoscan
+               filename = imputernosexpsf.obj
+               dirpat = se
+               rundir = config
+            </config_imputer>
+            <config_model>
+               filetype = snautoscan
+               filename = modelnosexpsf.obj
+               dirpat = se
+               rundir = config
+            </config_model>
+            <config_scaler>
+               filetype = snautoscan
+               filename = scalernosexpsf.obj
+               dirpat = se
+               rundir = config
+            </config_scaler>
+            <tarfile_stamps>
+                filetype = sntar_stamps
+                filepat = sn_ccdnum_band
+                flabel = stamps
+                fsuffix = tar.gz
+                dirpat = sne_ccd
+                rundir = stamps
+            </tarfile_stamps>
+            <autoscan_results>
+                filetype = snlist_filterobj
+                filepat = sn_ccdnum_band
+                flabel = autoScan
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+                ops_enddir = red
+                savefiles = true
+            </autoscan_results>
+        </file>
+        <wrapper>
+            wrapper_untar_stamps = False
+            wrapper_stamps_tarfile = ${file.tarfile_stamps.fullname}
+            wrapper_stamps_indir = ${stamps_dir}
+            wrapper_delete_stamps_indir = True
+        </wrapper>
+        <exec_1>
+            execname = autoScan.py
+            used = file.objlist_out, file.config_imputer, file.config_model, file.config_scaler, file.tarfile_stamps
+            was_generated_by = file.autoscan_results
+            ancestry = file.objlist_out:file.autoscan_results, file.tarfile_stamps:file.autoscan_results
+            <cmdline>
+                inDir_stamps = ${wrapper.wrapper_stamps_indir}
+                inFile_stampList = STAMPS.LIST
+                inFile_imputer = ${file.config_imputer.fullname}
+                inFile_model = ${file.config_model.fullname}
+                inFile_scaler = ${file.config_scaler.fullname}
+                inFile_objList = ${file.objlist_out.fullname}
+                outFile_results = ${file.autoscan_results.fullname}
+                #outFile_stdout = ${file.autoscan_stdout.fullname}
+                writeDB = _flag
+            </cmdline>
+        </exec_1>
+    </autoscan-single>
+</module>

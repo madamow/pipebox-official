@@ -1,0 +1,68 @@
+#DIFFIMG-28
+<module>
+    <fakeMatch-combined>
+        wrappername = generic.py
+        wrapperloop = ccdnum
+        modnamepat=${modnamepat_combine_ccdnumband}
+        <file>
+            <combined_fake_out>
+                filetype = snlist_fakeobj
+                filepat = sn_ccdnum_band_combined
+                flabel = fakeSN_doFake
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+                ops_enddir = red
+            </combined_fake_out>
+            <objlist_out>
+                filetype = snlist_filterobj
+                filepat = sn_ccdnum_band_combined
+                flabel = fakeSN_filterObj
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+            </objlist_out>
+            <forcephoto_out>
+                filetype = snlist_fakeobj
+                filepat = sn_ccdnum_band_combined
+                flabel = fakeforcePhoto
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+            </forcephoto_out>
+            <autoscan_results>
+                filetype = snlist_filterobj
+                filepat = sn_ccdnum_band_combined
+                flabel = fakeSN_autoScan
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+                ops_enddir = red
+            </autoscan_results>
+            <fakematch_out>
+                filetype = snlist_filterobj
+                filepat = sn_ccdnum_band_combined
+                flabel = fakeMatch
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+                ops_enddir = red
+                savefiles = true
+            </fakematch_out>
+        </file>
+        <exec_1>
+            execname = fakeMatch
+            used = file.combined_fake_out,file.objlist_out,file.forcephoto_out,file.autoscan_results
+            was_generated_by = file.fakematch_out
+            ancestry = file.combined_fake_out:file.fakematch_out,file.objlist_out:file.fakematch_out,file.forcephoto_out:file.fakematch_out,file.autoscan_results:file.fakematch_out
+            <cmdline>
+                inFile_fakeList =  ${file.combined_fake_out.fullname}
+                inFile_objList = ${file.objlist_out.fullname}
+                inFile_forceList = ${file.forcephoto_out.fullname}   
+                inFile_autoList = ${file.autoscan_results.fullname}
+                outFile_fakeList = ${file.fakematch_out.fullname}
+                writeDB = _flag
+            </cmdline>
+        </exec_1>
+    </fakeMatch-combined>
+</module>

@@ -1,0 +1,28 @@
+<<include ${DESDM_MYWCL}/prod_mypfwcfg.des>>
+<<include ${DESDM_PIPEWCL}/sne-pipeline.des>>
+<<include ${DESDM_INPUTS}/Y3N_epoch1_inputfiles.des>>
+
+reqnum = {{ args.reqnum }}
+nite = {{ args.nite }}
+field = {{ args.field }}
+band = {{ args.band }}
+seqnum = {{ args.seqnum }}
+first_expnum = {{ args.first_expnum }}
+expnum = {{ args.expnum }}
+
+jira_id = {{ args.jira_parent }}
+project = {{ args.project }}
+campaign = {{ args.campaign }}
+ccdnum = {{ args.ccdlist }}
+
+target_site = {{ args.target_site }}
+
+pipeprod = {{ args.eups_product }}
+pipever = {{ args.eups_version }}
+
+{% if statement here%}
+blocklist = sne-exp-single, sne-ccd-single 
+{% else %}
+blocklist = sne-exp-combined,sne-ccd-combined
+{% endif %}
+

@@ -1,0 +1,39 @@
+<module>
+    <makeStarCat>
+        wrappername = generic.py
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+        <file>
+            <red_immasked>
+                filetype = snred
+                filepat = sn_ccdnum_band
+                flabel = immasked
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+            </red_immasked>
+            <starcat>
+                filetype = snlist_starcat
+                filepat = sn_ccdnum_band
+                flabel = StarCat
+                fsuffix = list
+                dirpat = sne_ccd
+                ops_enddir = list
+                rundir = list
+                savefiles = true
+            </starcat>
+        </file>
+        <exec_1>
+            execname = makeStarCat
+            used = file.red_immasked
+            was_generated_by = file.starcat
+            ancestry = file.red_immasked:file.starcat
+            <cmdline>
+                inFile_img = ${file.red_immasked.fullname}
+                outFile_starCat = ${file.starcat.fullname}
+                STARSOURCE_DBCATALOG = CURRENT
+            </cmdline>
+        </exec_1>
+    </makeStarCat>
+</module>

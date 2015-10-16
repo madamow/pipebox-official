@@ -1,0 +1,78 @@
+operator      = {{ args['USER'] }}
+email         = {{ args['EMAIL'] }}
+#when_to_email       = Block # Never, Run, Block
+#create_junk_tarball = true
+
+submit_des_services   = {{ args['DES_SERVICES_PATH'] }} # i.e ~/.desservices.ini 
+submit_files_mvmt     = filemgmt.job_mvmt_http.JobArchiveHttp
+
+#transfer_stats   = filemgmt.transfer_stats_db.TransferStatsDB
+#transfer_semname = filetrans
+#transfer_semname= midfiletrans
+
+#use_target_archive_input  = never
+#use_target_archive_output = never
+#use_home_archive_input    = wrapper
+#use_home_archive_output   = job #wrapper, job, block, run, never
+#master_savefiles = file #never,file,always,failure,rand_XX
+
+#use_qcf    = True
+#use_db_out = True
+#use_db_in  = True
+
+# DES SERVICES definitions for known comppute sites. We might want to
+# make this more regimented in the DB
+<site>
+
+    # Optional
+    <fermigrid-sl6>
+       # ie: /des/des20.b/data/des039/.desservices.ini
+       target_des_services = /des/des20.b/data/{{ args['FERMI_ID'] }}/.desservices.ini
+    </fermigrid-sl6>
+
+    <fermigrid-sl6-himem>
+        target_des_services = /des/des20.b/data/{{ args['FERMI_ID'] }}/.desservices.ini
+    </fermigrid-sl6-himem>
+
+    <iforge>
+	target_des_services = /ui/ncsa/{{ args['USER'] }}/.desservices.ini
+    </iforge>
+
+    <iforge-dev>
+	target_des_services = /ui/ncsa/{{ args['USER'] }}/.desservices.ini
+    </iforge-dev>
+
+    # Blue Water services file for most NCSA BW users
+    <bluewaters>
+	target_des_services = /u/staff/{{ args['USER'] }}/.desservices.ini
+        #jobroot = /u/staff/{{ args['USER'] }}/scratch
+    </bluewaters>
+
+    <bluewaters-dev>
+	target_des_services = /u/staff/{{ args['USER'] }}/.desservices.ini
+        #jobroot = /u/staff/{{ args['USER'] }}/scratch
+    </bluewaters-dev>
+
+    <campuscluster>
+	target_des_services = /home/{{ args['USER'] }}/.desservices.ini
+        #jobroot = /home/{{ args['USER'] }}/scratch
+    </campuscluster>
+
+    <campuscluster-dev>
+	target_des_services = /home/{{ args['USER'] }}/.desservices.ini
+        #jobroot = /home/{{ args['USER'] }}/scratch
+    </campuscluster-dev>
+
+    <descmp2>
+        target_des_services = /home/{{ args['USER'] }}/.desservices.ini
+    </descmp2>
+
+    <descmp4>
+        target_des_services = /home/{{ args['USER'] }}/.desservices.ini
+    </descmp4>
+
+    <descmp4-dev>
+        target_des_services = /home/{{ args['USER'] }}/.desservices.ini
+    </descmp4-dev>
+
+</site>
