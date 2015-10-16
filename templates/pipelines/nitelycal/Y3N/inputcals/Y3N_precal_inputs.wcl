@@ -1,3 +1,4 @@
+camera = D
 photflag = 1
 photflagvar = 1
 xtalkcoefffile = DECam_20130606.xtalk

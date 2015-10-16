@@ -1,10 +1,10 @@
 <<include {{ args.pipebox_work }}/{{ args.user }}_cfg.des>>
 
 <<include ../modulewcl/modnamepat.wcl>>
-<<include ../modulewcl/precal/01-crosstalk-bias.wcl>>
-<<include ../modulewcl/precal/02-crosstalk-dflat.wcl>>
-<<include ../modulewcl/precal/03-mkbiascor.wcl>>
-<<include ../modulewcl/precal/04-mkdflatcor.wcl>>
+<<include ../modulewcl/nitelycal/01-crosstalk-bias.wcl>>
+<<include ../modulewcl/nitelycal/02-crosstalk-dflat.wcl>>
+<<include ../modulewcl/nitelycal/03-mkbiascor.wcl>>
+<<include ../modulewcl/nitelycal/04-mkdflatcor.wcl>>
 
 <<include {{ args.bias_list }}>>
 <<include {{ args.dflat_list }}>>
@@ -15,21 +15,20 @@ reqnum = {{ args.reqnum }}
 jira_id = {{ args.jira_parent }}
 label = {{ args.labels }}
 
-pipeline = precal
+pipeline = nitelycal
 pipeprod = {{ args.eups_product }}
 pipever = {{ args.eups_version }}
 campaign = {{ args.campaign }}
+
+nite = {{ args.nite }}
+project = {{ args.project }}
+ccdnum = {{ args.ccdnum }}
 
 unitname = ${nite}
 ops_run_dir = ${project}/${pipeline}/${nite}-r${reqnum}/p${attnum:2}
 submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
 
 save_run_vals = nite, camera, jira_id
-
-camera = D
-nite = {{ args.nite }}
-project = {{ args.project }}
-ccdnum = {{ args.ccdnum }}
 
 blocklist = xtalk-bias, xtalk-dflat, mkcor
 
