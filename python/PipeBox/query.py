@@ -117,7 +117,7 @@ class Firstcut(Cursor):
         precal_run = 'r%sp0%s' % (precal_reqnum,precal_attnum)
         return precal_nite, precal_run
 
-class Precal(Cursor):
+class NitelyCal(Cursor):
 
     def check_submitted(self,date):
         """Check to see if a precal has been submitted with given date"""
