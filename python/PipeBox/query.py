@@ -136,10 +136,10 @@ class NitelyCal(Cursor):
         dflat_nite = self.cur.fetchone()[0]
         return max_expnum,dflat_nite   
 
-    def get_cals(nites):
+    def get_cals(self,nites):
         """Return calibration information found in nite(s)"""
-        cal_query = "select nite,expnum,band,exptime,obstype,program,propid,object 
-                     from exposure where obstype in ('zero','dome flat') 
+        cal_query = "select nite,expnum,band,exptime,obstype,program,propid,object \
+                     from exposure where obstype in ('zero','dome flat') \
                      and nite in (%s) order by expnum" % nites
         self.cur.execute(cal_query)
         cal_info = cur.fetchall()
