@@ -1,9 +1,10 @@
 SetupRequired(despydb 2.0.0+4)
-SetupRequired(despyastro 0.3.0+3)
+SetupRequired(despyastro 0.3.0+4)
 #SetupRequired(pandas 0.15.2+0)
-SetupRequired(pandas 0.12.0+0)
-SetupRequired(jinja2 2.6+7)
-SetupRequired(jirapython)
+#SetupRequired(pandas 0.12.0+0)
+SetupRequired(pandas)
+#SetupRequired(jinja2,2.6+7)
+#SetupRequired(jirapython)
 
 # To run dessubmnit and desstat
 #SetupRequired(ProcessingFW 1.1.2+1)
