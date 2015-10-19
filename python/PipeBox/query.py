@@ -142,5 +142,5 @@ class NitelyCal(Cursor):
                      from exposure where obstype in ('zero','dome flat') \
                      and nite in (%s) order by expnum" % nites
         self.cur.execute(cal_query)
-        cal_info = cur.fetchall()
+        cal_info = self.cur.fetchall()
         return cal_info
