@@ -138,7 +138,7 @@ class NitelyCal(Cursor):
 
     def get_cals(self,nites_list):
         """Return calibration information for each nite found in nites_list"""
-        cal_query = "select nite,time_obs,expnum,band,exptime,obstype,program,propid,object \
+        cal_query = "select nite,date_obs,expnum,band,exptime,obstype,program,propid,object \
                      from exposure where obstype in ('zero','dome flat') \
                      and nite in (%s) order by expnum" % ','.join(nites_list)
         self.cur.execute(cal_query)

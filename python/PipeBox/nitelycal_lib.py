@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 
 import sys
-import datetime
+from datetime import datetime
 import pandas as pd
 
 from PipeBox import query
 
 def create_dataframe(query_object):
-    df = pd.DataFrame(query_object,columns=['nite','time_obs','expnum','band','exptime','obstype',
-                                            'program','propid','object'])
+    df = pd.DataFrame(query_object,columns=['nite','date_obs','expnum','band',
+                                            'exptime','obstype','program','propid','object'])
     return df
 
 def remove_junk(dataframe):
@@ -18,13 +18,24 @@ def remove_junk(dataframe):
     return df
 
 def remove_gap_expnums(dataframe,tdelta=60):
-    for key,row in dataframe.iterrows():
-        h,mins,secs = row['time_obs'].split(':')
-        hours,minutes,seconds = int(h),int(mins),int(float(secs))
-        time = datetime.time(hours,minutes,seconds)
-        timediff = time - 
-        if timediff > tdelta:
-            print "remove from dataframe" 
+    index_list = []
+    for i,row in dataframe[1:].iterrows():
+        j = i - 1
+        # Current exposure's obs time
+        obs1 = datetime.strptime(row['date_obs'],'%Y-%m-%dT%H:%M:%S.%f')
+        date1 = obs1.date()
+        # Prior exposure's obs time
+        obs2 = datetime.strptime(dataframe.loc[j,'date_obs'],'%Y-%m-%dT%H:%M:%S.%f')
+        date2 = obs2.date()
+        # Create datetime objects to compute difference in time
+        if date1 == date2:
+            timediff = date1 - date2
+            diffstr = str(timediff).split(':')[2]
+            print obs1,obs2,timediff,diffstr
+            if int(str(timediff).split(':')[2]) > tdelta:
+                index_list.append(i)
+    new_df = dataframe.drop(dataframe.index([index_list]))
+    return new_df
 
 def remove_first(dataframe):
     dataframe = dataframe.fillna('NA')
@@ -50,12 +61,12 @@ if __name__ == "__main__":
     cur = query.NitelyCal('db-desoper')
     query = cur.get_cals(['20151007','20151008'])
     df = create_dataframe(query)
-    remove_gap_expnums(df)
-    #print df
+    print df
     # Munge the dataframe
-    junkless_df = remove_junk(df)
+    new_df = remove_gap_expnums(df)
+    junkless_df = remove_junk(new_df)
     trimmed_df = remove_first(junkless_df)   
     final_df = remove_satrband(trimmed_df)
     bias_list,dflat_list = create_lists(final_df)
-    #print final_df
-    #print bias_list,dflat_list
+    print final_df
+    print bias_list,dflat_list
