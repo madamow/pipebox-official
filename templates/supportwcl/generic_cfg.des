@@ -76,3 +76,8 @@ submit_files_mvmt     = filemgmt.job_mvmt_http.JobArchiveHttp
     </descmp4-dev>
 
 </site>
+
+<job_environment>
+    home = $_CONDOR_SCRATCH_DIR
+    python_egg_cache = $_CONDOR_SCRATCH_DIR
+</job_environment>
