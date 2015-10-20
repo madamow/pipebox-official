@@ -64,6 +64,15 @@ def final_count_by_band(dataframe):
     grouped = df.groupby(by=['obstype','band']).agg(['count'])['expnum']
     print grouped
 
+def create_clean_df(query_object,nitelist):
+    df = create_dataframe(query_object)
+    gapless_df = remove_gap_expnums(df)
+    junkless_df = remove_junk(gapless_df)
+    trimmed_df = remove_first_in_sequence(junkless_df)
+    final_df = remove_sat_rband(trimmed_df)
+    
+    return final_df
+
 if __name__ == "__main__":
     cur = query.NitelyCal('db-desoper')
     query = cur.get_cals(['20151007','20151008'])

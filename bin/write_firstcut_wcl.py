@@ -47,9 +47,6 @@ def cmdline():
 
 if __name__ == "__main__":
   
-    # Kill current process if cron is running from last execution
-    common.stop_if_already_running()
- 
     args = cmdline()
     
     if args.paramfile:
@@ -77,8 +74,10 @@ if __name__ == "__main__":
         else:
             # Run autosubmit code directly
             # Will run once, but if put in crontab will run however you specify in cron
+        
+            # Kill current process if cron is running from last execution
+            common.stop_if_already_running()
             firstcut.run(args)
-            pass
     
     if args.mode=='manual': 
         # For each use-case create exposures list and exposure dataframe

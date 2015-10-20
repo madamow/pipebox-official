@@ -32,8 +32,6 @@ def cmdline():
     parser.add_argument("--user", action="store", default=os.environ['USER'],
                         help="username that will submit")
     parser.add_argument('--savefiles',action='store_true',help='Saves submit files to submit later.')
-    parser.add_argument('--bias',help='')
-    parser.add_argument('--flat',help='')
     parser.add_argument('--csv',help='')
     parser.add_argument('--delimiter',default=',',help='csv')
     parser.add_argument('--ccdnum',default=pipebox_utils.ALL_CCDS,help='')
@@ -43,15 +41,13 @@ def cmdline():
     parser.add_argument('--minnite')
     parser.add_argument('--paramfile',help='')
     parser.add_argument('--combine',help='')
+    parser.add_argument('--count',help='')
 
     args = parser.parse_args()
     return args
 
 if __name__ == "__main__":
    
-    # Kill current process if cron is running from last execution
-    common.stop_if_already_running()
-
     args = cmdline()
     
     if args.paramfile:
@@ -79,15 +75,13 @@ if __name__ == "__main__":
         else:
             # Run autosubmit code directly
             # Will run once, but if put in crontab will run however you specify in cron
+
+            # Kill current process if cron is running from last execution
+            common.stop_if_already_running()
             nitelycal.run(args)
-            pass
     
     if args.mode=='manual': 
         # For each use-case create bias/flat list and dataframe
-        if args.bias: 
-            args.bias_list = args.bias.split(',')
-        if args.flat:
-            args.flat_list =  args.flat.split(',')
         if args.biaslist:
             with open(args.biaslist) as listfile:
                 args.bias_list = listfile.read().splitlines()
@@ -96,11 +90,14 @@ if __name__ == "__main__":
             with open(args.flatlist) as listfile:
                 args.flat_list = listfile.read().splitlines()
             args.flat_df = pd.DataFrame(args.exposure_list,columns=['expnum'])
+ 
+        cur = query.NitelyCal(args.db_section)
+        cal_query = cur.get_cals(nitelist) 
        
+        args.cal_df = nitelycal_lib.create_clean_df(cal_query,nitelist)
+        args.biaslist,args.flatlist = nitelycal_lib.create_list(dataframe) 
         args.dataframe = pd.concat([args.flat_df,args.bias_df],ignore_index=True)
         # Update dataframe for each exposure and add band,nite if not exists
-        cur = query.NitelyCal(args.db_section)
-        #cur.update_df(args.exposure_df) 
         if args.combine:
             # create one ticket
             args.niterange = "writerangehere"
