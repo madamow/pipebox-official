@@ -3,7 +3,7 @@
 import os,sys
 from argparse import ArgumentParser
 import pandas as pd
-from PipeBox import pipebox_utils,jira_utils,query,templates_dir
+from PipeBox import pipebox_utils,jira_utils,query,templates_dir,nitelycal_lib
 from autosubmit import nitelycal
 from opstoolkit import common
 
@@ -28,7 +28,6 @@ def cmdline():
     parser.add_argument('--eups_version',help='')
     parser.add_argument('--campaign',help='')
     parser.add_argument('--project',default='ACT',help='')
-    parser.add_argument('--queue_size',help='')
     parser.add_argument("--user", action="store", default=os.environ['USER'],
                         help="username that will submit")
     parser.add_argument('--savefiles',action='store_true',help='Saves submit files to submit later.')
@@ -37,11 +36,11 @@ def cmdline():
     parser.add_argument('--ccdnum',default=pipebox_utils.ALL_CCDS,help='')
     parser.add_argument('--reqnum',help='')
     parser.add_argument('--nite',help='')
-    parser.add_argument('--maxnite')
-    parser.add_argument('--minnite')
+    parser.add_argument('--maxnite',type=int)
+    parser.add_argument('--minnite',type=int)
     parser.add_argument('--paramfile',help='')
     parser.add_argument('--combine',help='')
-    parser.add_argument('--count',help='')
+    parser.add_argument('--count',action='store_true',help='')
 
     args = parser.parse_args()
     return args
@@ -81,26 +80,50 @@ if __name__ == "__main__":
             nitelycal.run(args)
     
     if args.mode=='manual': 
+
+        # Create list of nites
+        if args.nite:
+            args.nitelist = args.nite.split(',')
+        elif args.maxnite and args.minnite:
+            args.nitelist = [str(x) for x in range(args.minnite,args.maxnite)]
+        else:
+            print "Please specify --nite or --maxnite and --minnite"
+            sys.exit(1)
+
+        cur = query.NitelyCal(args.db_section)
+        if args.count:
+            cur.count_by_band(args.nitelist)
+            sys.exit(0)
+        
         # For each use-case create bias/flat list and dataframe
-        if args.biaslist:
+        if args.biaslist and args.flatlist:
+            # create biaslist from file
             with open(args.biaslist) as listfile:
                 args.bias_list = listfile.read().splitlines()
-            args.bias_df = pd.DataFrame(args.exposure_list,columns=['expnum'])
-        if args.flatlist: 
+            args.bias_df = pd.DataFrame(args.bias_list,columns=['expnum'])
+            
+            # create flatlist from file
             with open(args.flatlist) as listfile:
                 args.flat_list = listfile.read().splitlines()
-            args.flat_df = pd.DataFrame(args.exposure_list,columns=['expnum'])
- 
-        cur = query.NitelyCal(args.db_section)
-        cal_query = cur.get_cals(nitelist) 
-       
-        args.cal_df = nitelycal_lib.create_clean_df(cal_query,nitelist)
-        args.biaslist,args.flatlist = nitelycal_lib.create_list(dataframe) 
-        args.dataframe = pd.concat([args.flat_df,args.bias_df],ignore_index=True)
+            args.flat_df = pd.DataFrame(args.flat_list,columns=['expnum'])
+        
+            args.dataframe = pd.concat([args.flat_df,args.bias_df],ignore_index=True)
+            cur.update_df(args.cal_df)
+
+        if args.csv: 
+            args.cal_df = pd.read_csv(args.csv,sep=args.delimiter)
+            args.cal_df.columns = [col.lower() for col in args.cal_df.columns]
+            cur.update_df(args.cal_df)
+            args.biaslist,args.flatlist = nitelycal_lib.create_lists(args.cal_df)
+        else:
+            cal_query = cur.get_cals(nitelist) 
+            args.cal_df = nitelycal_lib.create_clean_df(cal_query,args.nitelist)
+            args.biaslist,args.flatlist = nitelycal_lib.create_list(args.cal_df) 
+    
         # Update dataframe for each exposure and add band,nite if not exists
         if args.combine:
             # create one ticket
-            args.niterange = "writerangehere"
+            args.niterange = str(args.minnite) + 't' + str(args.maxnite)[4:]
             # Create JIRA ticket
             new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
                                                   description=args.jira_description,
@@ -108,22 +131,22 @@ if __name__ == "__main__":
                                                   ticket=args.reqnum,parent=args.jira_parent,
                                                   use_existing=True)
 
-        if not args.combine:
+        else:
             # create  JIRA ticket for each nite found (precal-like)
-            nite_group = args.exposure_df.groupby(by=['nite'])
+            nite_group = args.cal_df.groupby(by=['nite'])
             for nite,group in nite_group:
                 # create JIRA ticket per nite and add jira_id,reqnum to dataframe
-                index = args.exposure_df[args.exposure_df['nite'] == nite].index
+                index = args.cal_df[args.cal_df['nite'] == nite].index
                 if not args.jira_summary: 
                     args.jira_summary = str(nite)
                 if not args.reqnum:
                     try:
-                        args.reqnum = str(int(args.exposure_df.loc[index,('reqnum')].unique()[1]))
+                        args.reqnum = str(int(args.cal_df.loc[index,('reqnum')].unique()[1]))
                     except: 
                         args.reqnum = None
                 if not args.jira_parent:
                     try:
-                        args.jira_parent = args.exposure_df.loc[index,('jira_parent')].unique()[1]
+                        args.jira_parent = args.cal_df.loc[index,('jira_parent')].unique()[1]
                     except: 
                         args.jira_parent = None
                 # Create JIRA ticket
@@ -135,13 +158,13 @@ if __name__ == "__main__":
                 # Update dataframe with reqnum, jira_id
                 # If row exists replace value, if not insert new column/value
                 try:
-                    args.exposure_df.loc[index,('reqnum')] = new_reqnum
+                    args.cal_df.loc[index,('reqnum')] = new_reqnum
                 except: 
-                    args.exposure_df.insert(index[0],'reqnum',new_reqnum)
+                    args.cal_df.insert(index[0],'reqnum',new_reqnum)
                 try:
-                    args.exposure_df.loc[index,('jira_parent')] = new_jira_parent
+                    args.cal_df.loc[index,('jira_parent')] = new_jira_parent
                 except: 
-                    args.exposure_df.insert(index[0],'jira_parent',new_jira_parent)
+                    args.cal_df.insert(index[0],'jira_parent',new_jira_parent)
     
         # Render and write templates
         campaign_path = "pipelines/nitelycal/%s/submitwcl" % args.campaign
@@ -149,7 +172,7 @@ if __name__ == "__main__":
         bash_template_path = os.path.join("scripts","submitme_template.sh")
         args.rendered_template_path = []
         # Create templates for each entry in dataframe
-        for index,row in args.exposure_df.iterrows():
+        for index,row in args.cal_df.iterrows():
             args.expnum,args.band,args.nite,args.reqnum= row['expnum'],row['band'],row['nite'],int(row['reqnum'])
             output_name = "%s_%s_r%s_nitelycal_rendered_template.des" % (args.expnum,args.band,args.reqnum)
             output_path = os.path.join(args.pipebox_work,output_name)

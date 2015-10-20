@@ -155,3 +155,33 @@ class NitelyCal(Cursor):
         print " Obstype         Band      Count"
         for row in cal_info:
             print "%09s  %09s  %09s" % (row[2], row[1], row[0])
+
+    def update_df(self,df):
+        """ Takes a pandas dataframe and for each exposure add column:value
+            band, nite, obstype. Returns dataframe"""
+        info_dict = []
+        for index,row in df.iterrows():
+            expnum_info = "select distinct expnum, band, nite, obstype from exposure where expnum='%s'" % row['expnum']
+            self.cur.execute(expnum_info)
+            expnum,band,nite,obstype = self.cur.fetchall()[0]
+            try: 
+                is_band = row['band']
+                if row['band'] is None: 
+                    df['band'] = band
+            except: 
+                df['band'] = band
+            try: 
+                is_nite = row['nite']
+                if row['nite'] is None: 
+                    df['nite'] = nite
+            except: 
+                df['nite'] = nite
+            try:
+                is_obstype = row['obstype']
+                if row['obstype'] is None:
+                    df['obstype'] = obstype
+            except:
+                df['obstype'] = obstype
+
+        return df
+
