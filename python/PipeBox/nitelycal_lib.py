@@ -29,15 +29,17 @@ def remove_gap_expnums(dataframe,tdelta=60):
         date2 = obs2.date()
         # Create datetime objects to compute difference in time
         if date1 == date2:
-            timediff = date1 - date2
+            timediff = obs1 - obs2
             diffstr = str(timediff).split(':')[2]
-            print obs1,obs2,timediff,diffstr
-            if int(str(timediff).split(':')[2]) > tdelta:
+            if float(diffstr) > tdelta:
                 index_list.append(i)
-    new_df = dataframe.drop(dataframe.index([index_list]))
-    return new_df
+    if index_list:
+        new_df = dataframe.drop(dataframe.index([index_list]))
+        return new_df
+    else:
+        return dataframe
 
-def remove_first(dataframe):
+def remove_first_in_sequence(dataframe):
     dataframe = dataframe.fillna('NA')
     grouped = dataframe.groupby(by=['obstype','nite','band','object'])
     first_index_list = []
@@ -46,7 +48,7 @@ def remove_first(dataframe):
     new_df = dataframe.drop(dataframe.index[first_index_list])
     return new_df
 
-def remove_satrband(dataframe):
+def remove_sat_rband(dataframe):
     nor_df = dataframe[(dataframe.band !='r')]
     r_df = dataframe[(dataframe.band == 'r') & (dataframe.exptime >= 15)]
     df = pd.concat([nor_df,r_df]) 
@@ -57,16 +59,23 @@ def create_lists(dataframe):
     dflat_list = list(dataframe[(dataframe.obstype=='dome flat')].expnum.values)
     return bias_list,dflat_list 
 
+def final_count_by_band(dataframe):
+    df = dataframe.fillna('NA')
+    grouped = df.groupby(by=['obstype','band']).agg(['count'])['expnum']
+    print grouped
+
 if __name__ == "__main__":
     cur = query.NitelyCal('db-desoper')
     query = cur.get_cals(['20151007','20151008'])
+    count = cur.count_by_band(['20151007','20151008'])
     df = create_dataframe(query)
-    print df
+    #print df
     # Munge the dataframe
     new_df = remove_gap_expnums(df)
     junkless_df = remove_junk(new_df)
-    trimmed_df = remove_first(junkless_df)   
-    final_df = remove_satrband(trimmed_df)
+    trimmed_df = remove_first_in_sequence(junkless_df)   
+    final_df = remove_sat_rband(trimmed_df)
     bias_list,dflat_list = create_lists(final_df)
-    print final_df
-    print bias_list,dflat_list
+    #print final_df
+    #print bias_list,dflat_list
+    #final_count_by_band(final_df)

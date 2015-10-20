@@ -144,3 +144,14 @@ class NitelyCal(Cursor):
         self.cur.execute(cal_query)
         cal_info = self.cur.fetchall()
         return cal_info
+
+    def count_by_band(self,nites_list):
+        """Return count per band of each obstype/band pair for nites in nites_list"""
+        cal_query = "select count(expnum),band,obstype \
+                     from exposure where obstype in ('zero','dome flat') \
+                     and nite in (%s) group by band,obstype order by obstype" % ','.join(nites_list)
+        self.cur.execute(cal_query)
+        cal_info = self.cur.fetchall()
+        print " Obstype         Band      Count"
+        for row in cal_info:
+            print "%09s  %09s  %09s" % (row[2], row[1], row[0])
