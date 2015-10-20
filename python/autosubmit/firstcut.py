@@ -8,7 +8,7 @@ from shlex import split
 import time
 
 from PipeBox import pipebox_utils,query,jira_utils
-from opstoolkit import jiracmd,common
+from opstoolkit import jiracmd
 
 def make_comment(date,nite,reqnum,campaign):
     comment = """
@@ -30,8 +30,6 @@ def make_comment(date,nite,reqnum,campaign):
     return comment
 
 def run(args): 
-    # Stop execution if last job is currently running
-    common.stop_if_already_running()
     
     # Replace any "None" strings with Nonetype
     args = pipebox_utils.replace_none_str(args)

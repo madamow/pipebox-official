@@ -5,6 +5,7 @@ from argparse import ArgumentParser
 import pandas as pd
 from PipeBox import pipebox_utils,jira_utils,query,templates_dir
 from autosubmit import firstcut
+from opstoolkit import common
 
 def cmdline():
     # Create command line arguments
@@ -45,7 +46,10 @@ def cmdline():
     return args
 
 if __name__ == "__main__":
-   
+  
+    # Kill current process if cron is running from last execution
+    common.stop_if_already_running()
+ 
     args = cmdline()
     
     if args.paramfile:
