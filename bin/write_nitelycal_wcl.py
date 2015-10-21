@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os,sys
+from datetime import datetime
 from argparse import ArgumentParser
 import pandas as pd
 from PipeBox import pipebox_utils,jira_utils,query,nitelycal_lib
@@ -181,6 +182,7 @@ if __name__ == "__main__":
         bash_template_path = os.path.join("scripts","submitme_template.sh")
         args.rendered_template_path = []
         # Create templates for each entry in dataframe
+        reqnum_count = len(args.cal_df.groupby(by=['reqnum']))
         for reqnum,group in args.cal_df.groupby(by=['reqnum']):
             if args.combine:
                 args.nite = group['niterange'].unique()[0]
@@ -201,7 +203,10 @@ if __name__ == "__main__":
 
             if args.savefiles:
                 # Current schema of writing dessubmit bash script 
-                bash_script_name = "submitme_%s_%s.sh" % (args.reqnum,args.target_site)
+                if reqnum_count > 1:
+                    bash_script_name = "submitme_%s_%s.sh" % (datetime.now().strftime('%Y-%m-%dT%H:%M'),args.target_site)
+                else:
+                    bash_script_name = "submitme_%s_%s.sh" % (args.reqnum,args.target_site)
                 bash_script_path= os.path.join(args.pipebox_work,bash_script_name)
                 args.rendered_template_path.append(output_path)
             else:
