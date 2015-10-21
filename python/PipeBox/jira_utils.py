@@ -34,7 +34,7 @@ def create_ticket(jira_section,jira_user,ticket=None,parent=None,summary=None,de
                  'parent':parent,'ticket':ticket,'summary':summary,
                  'description':description,'use_existing':use_existing,
                  'project':project}
-    JIRA = jiracmd.Jira(jira_section)
+    con = jiracmd.Jira(jira_section)
     if not summary:
         args_dict['summary'] = "%s's Processing Test" % jira_user
     if not description:
@@ -50,7 +50,7 @@ def create_ticket(jira_section,jira_user,ticket=None,parent=None,summary=None,de
         args_dict['ticket'] = ticket
 
         # Use ticket specified and find parent key
-        jira_id = JIRA.get_issue(ticket).fields.parent.key
+        jira_id = con.get_issue(ticket).fields.parent.key
         reqnum = ticket.split('-')[1] 
         return (reqnum,jira_id)
     if parent and not ticket:
@@ -59,32 +59,32 @@ def create_ticket(jira_section,jira_user,ticket=None,parent=None,summary=None,de
 
         # Create subticket under specified parent ticket
         if use_existing:
-            reqnum,jira_id = use_existing_ticket(JIRA,args_dict)
+            reqnum,jira_id = use_existing_ticket(con,args_dict)
             return (reqnum,jira_id)
         else:
-            reqnum,jira_id = create_subticket(JIRA,args_dict)
+            reqnum,jira_id = create_subticket(con,args_dict)
             return (reqnum,jira_id)
     if not ticket and not parent:
         parent_summary = "%s's Processing Tickets" % jira_user
         parent_description = "Parent ticket for %s's processing tests." % jira_user
-        is_parent = JIRA.search_for_parent('DESOPS',parent_summary)
+        is_parent = con.search_for_parent('DESOPS',parent_summary)
         if is_parent[1] == 0:
             # If no parent ticket found create one
-            parent = str(JIRA.create_jira_ticket('DESOPS',parent_summary,parent_description,jira_user))
+            parent = str(con.create_jira_ticket('DESOPS',parent_summary,parent_description,jira_user))
             args_dict['parent'] = parent
             if use_existing:
-                reqnum,jira_id = use_existing_ticket(JIRA,args_dict)
+                reqnum,jira_id = use_existing_ticket(con,args_dict)
                 return (reqnum,jira_id)
             else:
-                reqnum,jira_id = create_subticket(JIRA,args_dict)
+                reqnum,jira_id = create_subticket(con,args_dict)
                 return (reqnum,jira_id)
         else:
             # Take found parent and create subticket
             parent = str(is_parent[0][0].key)
             args_dict['parent'] = parent
             if use_existing:
-                reqnum,jira_id = use_existing_ticket(JIRA,args_dict)
+                reqnum,jira_id = use_existing_ticket(con,args_dict)
                 return (reqnum,jira_id)
             else:
-                reqnum,jira_id = create_subticket(JIRA,args_dict)
+                reqnum,jira_id = create_subticket(con,args_dict)
                 return (reqnum,jira_id)

@@ -22,7 +22,7 @@ def cmdline():
     parser.add_argument('--jira_description',help='')
     parser.add_argument('--jira_project',default='DESOPS',help='')
     parser.add_argument('--jira_summary',help='')
-    parser.add_argument('--jira_user',help='')
+    parser.add_argument('--jira_user',default=os.environ['USER'],help='')
     parser.add_argument('--jira_section',help='')
     parser.add_argument('--eups_product',help='')
     parser.add_argument('--eups_version',help='')
@@ -85,7 +85,7 @@ if __name__ == "__main__":
         if args.nite:
             args.nitelist = args.nite.split(',')
         elif args.maxnite and args.minnite:
-            args.nitelist = [str(x) for x in range(args.minnite,args.maxnite)]
+            args.nitelist = [str(x) for x in range(args.minnite,args.maxnite +1)]
         else:
             print "Please specify --nite or --maxnite and --minnite"
             sys.exit(1)
@@ -120,14 +120,13 @@ if __name__ == "__main__":
             args.cal_df = nitelycal_lib.create_clean_df(cal_query,args.nitelist)
             args.bias_list,args.flat_list = nitelycal_lib.create_lists(args.cal_df) 
         
-        # Update dataframe for each exposure and add band,nite if not exists
         if args.combine:
             # create one ticket (with nite as range, e.g., 20151009t1019)
             args.niterange = str(args.minnite) + 't' + str(args.maxnite)[4:]
             # Create JIRA ticket
             new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
                                                   description=args.jira_description,
-                                                  summary=args.nite,
+                                                  summary=args.niterange,
                                                   ticket=args.reqnum,parent=args.jira_parent,
                                                   use_existing=True)
             args.cal_df['niterange'] = args.niterange
@@ -139,24 +138,28 @@ if __name__ == "__main__":
             for nite,group in nite_group:
                 # create JIRA ticket per nite and add jira_id,reqnum to dataframe
                 index = args.cal_df[args.cal_df['nite'] == nite].index
+                if args.jira_summary:
+                    jira_summary = args.jira_summary
                 if not args.jira_summary: 
-                    args.jira_summary = str(nite)
+                    jira_summary = str(nite)
                 if not args.reqnum:
                     try:
-                        args.reqnum = str(int(args.cal_df.loc[index,('reqnum')].unique()[1]))
+                        args.reqnum = str(int(args.cal_df.loc[index,('reqnum')]).unique()[1])
                     except: 
                         args.reqnum = None
                 if not args.jira_parent:
                     try:
-                        args.jira_parent = args.cal_df.loc[index,('jira_parent')].unique()[1]
+                        args.jira_parent = str(args.cal_df.loc[index,('jira_parent')].unique()[1])
                     except: 
                         args.jira_parent = None
+                
                 # Create JIRA ticket
                 new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
                                                   description=args.jira_description,
-                                                  summary=args.jira_summary,
+                                                  summary=jira_summary,
                                                   ticket=args.reqnum,parent=args.jira_parent,
                                                   use_existing=True)
+                
                 # Update dataframe with reqnum, jira_id
                 # If row exists replace value, if not insert new column/value
                 try:
@@ -167,7 +170,7 @@ if __name__ == "__main__":
                     args.cal_df.loc[index,('jira_parent')] = new_jira_parent
                 except: 
                     args.cal_df.insert(index[0],'jira_parent',new_jira_parent)
-       
+        
         # Render and write templates
         campaign_path = "pipelines/nitelycal/%s/submitwcl" % args.campaign
         submit_template_path = os.path.join(campaign_path,"nitelycal_submit_template.des")
@@ -180,7 +183,7 @@ if __name__ == "__main__":
                 args.bias_list = ','.join(str(i) for i in args.bias_list)
                 args.flat_list = ','.join(str(i) for i in args.flat_list)
             else:
-                args.nite = group['nite'].unique()[0]
+                args.nite = list(set(group['nite']))[0]
                 # Append bias/flat lists to dataframe
                 bias_list,flat_list = nitelycal_lib.create_lists(group)
                 args.bias_list = ','.join(str(i) for i in bias_list)

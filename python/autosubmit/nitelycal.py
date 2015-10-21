@@ -5,7 +5,6 @@ from subprocess import Popen,PIPE
 import time
 from datetime import datetime
 import shlex
-
 from opstoolkit import jiracmd
 from PipeBox import query
 
