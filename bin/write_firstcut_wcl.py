@@ -13,7 +13,7 @@ def cmdline():
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('mode',choices=['manual','auto'])
     parser.add_argument('--db_section',help = "e.g., db-desoper or db-destest")
-    parser.add_argument('--calnite',help='bias/flat calibration nite/niterange,
+    parser.add_argument('--calnite',help='bias/flat calibration nite/niterange,\
                                           i.e., 20151020 or 20151020t1030')
     parser.add_argument('--calrun',help='bias/flat calibration run, i.e., r1948p03')
     parser.add_argument('--caltag',help='Tag in OPS_PROCTAG to use if you calnite/calrun not specified')
@@ -98,11 +98,13 @@ if __name__ == "__main__":
         # Update dataframe for each exposure and add band,nite if not exists
         cur = query.Firstcut(args.db_section)
         cur.update_df(args.exposure_df) 
-
+       
+        args.exposure_df =args.exposure_df.fillna(False) 
         nite_group = args.exposure_df.groupby(by=['nite'])
         for nite,group in nite_group:
             # create JIRA ticket per nite and add jira_id,reqnum to dataframe
             index = args.exposure_df[args.exposure_df['nite'] == nite].index
+            
             if args.jira_summary:
                 jira_summary = args.jira_summary
             else: 
@@ -110,17 +112,11 @@ if __name__ == "__main__":
             if args.reqnum:
                 reqnum = args.reqnum
             else:
-                try:
-                    reqnum = str(int(args.exposure_df.loc[index,('reqnum')].unique()[1]))
-                except: 
-                    reqnum = None
+                reqnum = None
             if args.jira_parent:
                 jira_parent = args.jira_parent
             else:
-                try:
-                    jira_parent = args.exposure_df.loc[index,('jira_parent')].unique()[1]
-                except: 
-                    jira_parent = None
+                jira_parent = None
             # Create JIRA ticket
             new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
                                                   description=args.jira_description,
