@@ -101,23 +101,29 @@ if __name__ == "__main__":
         for nite,group in nite_group:
             # create JIRA ticket per nite and add jira_id,reqnum to dataframe
             index = args.exposure_df[args.exposure_df['nite'] == nite].index
-            if not args.jira_summary: 
-                args.jira_summary = str(nite)
-            if not args.reqnum:
+            if args.jira_summary:
+                jira_summary = args.jira_summary
+            else: 
+                jira_summary = str(nite)
+            if args.reqnum:
+                reqnum = args.reqnum
+            else:
                 try:
-                    args.reqnum = str(int(args.exposure_df.loc[index,('reqnum')].unique()[1]))
+                    reqnum = str(int(args.exposure_df.loc[index,('reqnum')].unique()[1]))
                 except: 
-                    args.reqnum = None
-            if not args.jira_parent:
+                    reqnum = None
+            if args.jira_parent:
+                jira_parent = args.jira_parent
+            else:
                 try:
-                    args.jira_parent = args.exposure_df.loc[index,('jira_parent')].unique()[1]
+                    jira_parent = args.exposure_df.loc[index,('jira_parent')].unique()[1]
                 except: 
-                    args.jira_parent = None
+                    jira_parent = None
             # Create JIRA ticket
             new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
                                                   description=args.jira_description,
-                                                  summary=args.jira_summary,
-                                                  ticket=args.reqnum,parent=args.jira_parent,
+                                                  summary=jira_summary,
+                                                  ticket=reqnum,parent=jira_parent,
                                                   use_existing=True)
             # Update dataframe with reqnum, jira_id
             # If row exists replace value, if not insert new column/value
