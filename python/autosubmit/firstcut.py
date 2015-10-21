@@ -36,9 +36,9 @@ def run(args):
     if not args.nite:
         nite = cur.get_max()[1]
         args.nite = nite
-    if not args.precalnite:
-        precal = cur.find_precal(args.nite,threshold=7,override=True,tag=args.precaltag)
-        args.precalnite,args.precalrun = precal[0],precal[1]
+    if not args.calnite:
+        precal = cur.find_precal(args.nite,threshold=7,override=True,tag=args.caltag)
+        args.calnite,args.calrun = precal[0],precal[1]
         
     # Create log file if exposures found.
     logname = '%s_firstcut_submit.log' % (nite)
@@ -60,7 +60,7 @@ def run(args):
         args.jira_description = """
             Precalnite: %s
             Precalrun: %s
-            """ % (args.precalnite,args.precalrun)
+            """ % (args.calnite,args.calrun)
 
     args.reqnum,args.jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
                                               description=args.jira_description,
