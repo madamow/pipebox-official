@@ -3,15 +3,11 @@
 <<include ../modulewcl/modnamepat.wcl>>
 <<include ../modulewcl/nitelycal/01-crosstalk-bias.wcl>>
 <<include ../modulewcl/nitelycal/02-crosstalk-dflat.wcl>>
-{% if args.combine %}
-<<include ../modulewcl/nitelycal/03-mkbiascor_combined.wcl>>
-<<include ../modulewcl/nitelycal/04-mkdflatcor_combined.wcl>>
-{% else %}
 <<include ../modulewcl/nitelycal/03-mkbiascor.wcl>>
 <<include ../modulewcl/nitelycal/04-mkdflatcor.wcl>>
 
-<<include {{ args.bias_list }}>>
-<<include {{ args.dflat_list }}>>
+bias_expnum = {{ args.bias_list }}
+dflat_expnum = {{ args.flat_list }}
 
 target_site = {{ args.target_site }}
 

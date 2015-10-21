@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 import argparse
 import os
 import sys
@@ -9,7 +7,7 @@ from datetime import datetime
 import shlex
 
 from opstoolkit import jiracmd
-from Pipebox import query
+from PipeBox import query
 
 def make_comment(date,nite,reqnum):
     comment = """
@@ -31,7 +29,7 @@ def make_comment(date,nite,reqnum):
 
 def run(args):    
     # Check to see if precal has been submitted with dflat_nite.
-    inputs = query.Precal(args.db_section)
+    inputs = query.NitelyCal(args.db_section)
     if args.nite:
         nite = args.nite
     else:

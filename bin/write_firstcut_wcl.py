@@ -3,7 +3,7 @@
 import os,sys
 from argparse import ArgumentParser
 import pandas as pd
-from PipeBox import pipebox_utils,jira_utils,query,templates_dir
+from PipeBox import pipebox_utils,jira_utils,query
 from autosubmit import firstcut
 from opstoolkit import common
 

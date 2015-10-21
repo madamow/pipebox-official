@@ -65,6 +65,7 @@ def final_count_by_band(dataframe):
     print grouped
 
 def create_clean_df(query_object,nitelist):
+    """ Combines all functions in nitelycal_lib """
     df = create_dataframe(query_object)
     gapless_df = remove_gap_expnums(df)
     junkless_df = remove_junk(gapless_df)

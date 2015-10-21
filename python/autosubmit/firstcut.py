@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 from os import path,environ
 from sys import exit
 from time import sleep,strftime

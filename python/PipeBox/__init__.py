@@ -9,4 +9,3 @@ env = Environment(loader=FileSystemLoader(templates_dir),trim_blocks=True)
 #env = Environment(loader=FileSystemLoader(templates_dir),trim_blocks=True,lstrip_blocks=True)
 
 from .pipebox_utils import *
-

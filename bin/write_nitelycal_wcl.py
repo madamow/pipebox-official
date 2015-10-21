@@ -3,8 +3,8 @@
 import os,sys
 from argparse import ArgumentParser
 import pandas as pd
-from PipeBox import pipebox_utils,jira_utils,query,templates_dir,nitelycal_lib
-from autosubmit import nitelycal
+from PipeBox import pipebox_utils,jira_utils,query,nitelycal_lib
+from autosubmit import nitelycal 
 from opstoolkit import common
 
 def cmdline():
@@ -39,7 +39,7 @@ def cmdline():
     parser.add_argument('--maxnite',type=int)
     parser.add_argument('--minnite',type=int)
     parser.add_argument('--paramfile',help='')
-    parser.add_argument('--combine',help='')
+    parser.add_argument('--combine',action='store_true',help='')
     parser.add_argument('--count',action='store_true',help='')
 
     args = parser.parse_args()
@@ -89,7 +89,7 @@ if __name__ == "__main__":
         else:
             print "Please specify --nite or --maxnite and --minnite"
             sys.exit(1)
-
+        
         cur = query.NitelyCal(args.db_section)
         if args.count:
             cur.count_by_band(args.nitelist)
@@ -114,23 +114,25 @@ if __name__ == "__main__":
             args.cal_df = pd.read_csv(args.csv,sep=args.delimiter)
             args.cal_df.columns = [col.lower() for col in args.cal_df.columns]
             cur.update_df(args.cal_df)
-            args.biaslist,args.flatlist = nitelycal_lib.create_lists(args.cal_df)
+            args.bias_list,args.flat_list = nitelycal_lib.create_lists(args.cal_df)
         else:
-            cal_query = cur.get_cals(nitelist) 
+            cal_query = cur.get_cals(args.nitelist) 
             args.cal_df = nitelycal_lib.create_clean_df(cal_query,args.nitelist)
-            args.biaslist,args.flatlist = nitelycal_lib.create_list(args.cal_df) 
-    
+            args.bias_list,args.flat_list = nitelycal_lib.create_lists(args.cal_df) 
+        
         # Update dataframe for each exposure and add band,nite if not exists
         if args.combine:
-            # create one ticket
+            # create one ticket (with nite as range, e.g., 20151009t1019)
             args.niterange = str(args.minnite) + 't' + str(args.maxnite)[4:]
             # Create JIRA ticket
             new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
                                                   description=args.jira_description,
-                                                  summary=args.niterange,
+                                                  summary=args.nite,
                                                   ticket=args.reqnum,parent=args.jira_parent,
                                                   use_existing=True)
-
+            args.cal_df['niterange'] = args.niterange
+            args.cal_df['reqnum'] = new_reqnum
+            args.cal_df['jira_parent'] = new_jira_parent
         else:
             # create  JIRA ticket for each nite found (precal-like)
             nite_group = args.cal_df.groupby(by=['nite'])
@@ -165,16 +167,27 @@ if __name__ == "__main__":
                     args.cal_df.loc[index,('jira_parent')] = new_jira_parent
                 except: 
                     args.cal_df.insert(index[0],'jira_parent',new_jira_parent)
-    
+       
         # Render and write templates
         campaign_path = "pipelines/nitelycal/%s/submitwcl" % args.campaign
         submit_template_path = os.path.join(campaign_path,"nitelycal_submit_template.des")
         bash_template_path = os.path.join("scripts","submitme_template.sh")
         args.rendered_template_path = []
         # Create templates for each entry in dataframe
-        for index,row in args.cal_df.iterrows():
-            args.expnum,args.band,args.nite,args.reqnum= row['expnum'],row['band'],row['nite'],int(row['reqnum'])
-            output_name = "%s_%s_r%s_nitelycal_rendered_template.des" % (args.expnum,args.band,args.reqnum)
+        for reqnum,group in args.cal_df.groupby(by=['reqnum']):
+            if args.combine:
+                args.nite = group['niterange'].unique()[0]
+                args.bias_list = ','.join(str(i) for i in args.bias_list)
+                args.flat_list = ','.join(str(i) for i in args.flat_list)
+            else:
+                args.nite = group['nite'].unique()[0]
+                # Append bias/flat lists to dataframe
+                bias_list,flat_list = nitelycal_lib.create_lists(group)
+                args.bias_list = ','.join(str(i) for i in bias_list)
+                args.flat_list = ','.join(str(i) for i in flat_list)
+
+            args.reqnum,args.jira_parent= int(reqnum),group['jira_parent'].unique()[0]
+            output_name = "%s_r%s_nitelycal_rendered_template.des" % (args.nite,args.reqnum)
             output_path = os.path.join(args.pipebox_work,output_name)
             # Writing template
             pipebox_utils.write_template(submit_template_path,output_path,args)
