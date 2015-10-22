@@ -1,0 +1,46 @@
+<module>
+    <null-weight-immask>
+        wrappername = generic.py
+        wrapperloop = ccdnum,band
+        modnamepat = ${modnamepat_ccdnumband}
+        <file>
+            <red_rowinterp_immask>
+                filetype = red_immask_rowinterp
+                filepat = ccdnum_band
+                flabel = rowinterp-immask
+                fsuffix = fits
+                dirpat = se
+                rundir = red/immask
+            </red_rowinterp_immask>
+            <red_nullweight_immask>
+                # what metadata to get
+                filetype = red_immask_nullwgt
+
+                # how to name the file
+                filepat = ccdnum_band
+                flabel = nullweight-immask
+                fsuffix = fits
+
+                # where to put the file
+                dirpat = se
+                ops_enddir = red/immask
+                rundir = red/immask
+
+                # whether to bring file home
+                savefiles = false
+            </red_nullweight_immask>
+        </file>
+        <exec_1>
+            execname = null_weights
+            used = file.red_rowinterp_immask
+            was_generated_by = file.red_nullweight_immask
+            ancestry = file.red_rowinterp_immask:file.red_nullweight_immask
+            cmd_hyphen = mixed_gnu
+            <cmdline>
+                i = ${file.red_rowinterp_immask.fullname}
+                o = ${file.red_nullweight_immask.fullname}
+                bitmask = BADAMP,EDGEBLEED,STREAK,EDGE,CRAY
+            </cmdline>
+        </exec_1>
+    </null-weight-immask>
+</module>
