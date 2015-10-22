@@ -25,7 +25,7 @@ def cmdline():
     parser.add_argument('--jira_description',help='')
     parser.add_argument('--jira_project',default='DESOPS',help='')
     parser.add_argument('--jira_summary',help='Title of JIRA ticket')
-    parser.add_argument('--jira_user',help='JIRA username')
+    parser.add_argument('--jira_user',default = os.environ['USER'],help='JIRA username')
     parser.add_argument('--jira_section',help='JIRA section in .desservices.ini file')
     parser.add_argument('--eups_product',help='')
     parser.add_argument('--eups_version',help='')
