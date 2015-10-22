@@ -8,14 +8,14 @@
         <file>
             <biascor>
                 filetype = cal_biascor
-        		filename = ${camera}_n${precalnite}_c${ccdnum:2}_${precalrun}_biascor.fits
+        		filename = ${camera}_n${calnite}_c${ccdnum:2}_${calrun}_biascor.fits
 		        dirpat = se
                 rundir = biascor
             </biascor>
             <flatcor>
          		band = ${band}
                 filetype = cal_dflatcor
-		        filename = ${camera}_n${precalnite}_${band}_c${ccdnum:2}_${precalrun}_dflatcor.fits
+		        filename = ${camera}_n${calnite}_${band}_c${ccdnum:2}_${calrun}_dflatcor.fits
                 dirpat = se
                 rundir = dflatcor
             </flatcor>

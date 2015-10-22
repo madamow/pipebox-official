@@ -40,8 +40,8 @@ project = {{ args.project }}
 expnum = {{ args.expnum }}
 band = {{ args.band }}
 nite = {{ args.nite }}
-precalnite = {{ args.precalnite }}
-precalrun = {{ args.precalrun }}
+calnite = {{ args.calnite }}
+calrun = {{ args.calrun }}
 
 ccdnum = {{ args.ccdnum }}
 

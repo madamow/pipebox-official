@@ -96,7 +96,7 @@ if __name__ == "__main__":
             args.exposure_list = list(args.exposure_df['expnum'].values)
         
         # Update dataframe for each exposure and add band,nite if not exists
-        cur = query.Firstcut(args.db_section)
+        cur = query.FirstCut(args.db_section)
         cur.update_df(args.exposure_df) 
        
         args.exposure_df =args.exposure_df.fillna(False) 

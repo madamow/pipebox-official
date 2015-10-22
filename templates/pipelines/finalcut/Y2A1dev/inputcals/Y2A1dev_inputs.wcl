@@ -18,3 +18,4 @@ scampaheadnite = 20131115
 scampconfigfile = ${confignite}_default.scamp.20140423
 scampupdateheadfile = ${confignite}_scamp_update_head.config.20140340
 hupdatefile = ${confignite}_DES_header_update.20140303
+skycampaign = Y2A1
