@@ -120,7 +120,7 @@ if __name__ == "__main__":
     # Create templates for each entry in dataframe
     reqnum_count = len(args.exposure_df.groupby(by=['reqnum']))
     for index,row in args.exposure_df.iterrows():
-        args.expnum,args.band,args.nite,args.reqnum= row['expnum'],row['band'],row['nite'],int(row['reqnum'])
+        args.expnum,args.band,args.nite,args.reqnum, args.jira_parent= row['expnum'],row['band'],row['nite'],int(row['reqnum']),row['jira_parent']
         output_name = "%s_%s_r%s_finalcut_rendered_template.des" % (args.expnum,args.band,args.reqnum)
         output_path = os.path.join(args.pipebox_work,output_name)
         # Writing template
