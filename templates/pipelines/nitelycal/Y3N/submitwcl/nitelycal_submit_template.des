@@ -1,3 +1,4 @@
+# {{ args.submittime }}
 <<include {{ args.pipebox_work }}/{{ args.user }}_cfg.des>>
 
 <<include ../modulewcl/modnamepat.wcl>>
