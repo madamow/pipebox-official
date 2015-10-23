@@ -50,6 +50,8 @@ def cmdline():
 if __name__ == "__main__":
   
     args = cmdline()
+
+    args.submittime = datetime.now()
     
     if args.paramfile:
         args = pipebox_utils.update_from_param_file(args)
