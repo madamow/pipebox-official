@@ -84,7 +84,7 @@ if __name__ == "__main__":
     for nite,group in nite_group:
         # create JIRA ticket per nite and add jira_id,reqnum to dataframe
         index = args.exposure_df[args.exposure_df['nite'] == nite].index
-            
+        
         if args.jira_summary:
             jira_summary = args.jira_summary
         else: 
@@ -97,22 +97,25 @@ if __name__ == "__main__":
             jira_parent = args.jira_parent
         else:
             jira_parent = None
+
         # Create JIRA ticket
         new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
                                               description=args.jira_description,
                                               summary=jira_summary,
                                               ticket=reqnum,parent=jira_parent,
                                               use_existing=True)
+        
         # Update dataframe with reqnum, jira_id
         # If row exists replace value, if not insert new column/value
+        
         try:
             args.exposure_df.loc[index,('reqnum')] = new_reqnum
         except: 
-            args.exposure_df.insert(index[0],'reqnum',new_reqnum)
+            [args.exposure_df.insert(i,'reqnum',new_reqnum) for i in index]
         try:
             args.exposure_df.loc[index,('jira_parent')] = new_jira_parent
         except: 
-            args.exposure_df.insert(index[0],'jira_parent',new_jira_parent)
+            [args.exposure_df.insert(i,'jira_parent',new_jira_parent) for i in index]
     
     # Render and write templates
     campaign_path = "pipelines/finalcut/%s/submitwcl" % args.campaign

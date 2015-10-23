@@ -130,11 +130,11 @@ if __name__ == "__main__":
             try:
                 args.exposure_df.loc[index,('reqnum')] = new_reqnum
             except: 
-                args.exposure_df.insert(index[0],'reqnum',new_reqnum)
+                [args.exposure_df.insert(i,'reqnum',new_reqnum) for i in index]
             try:
                 args.exposure_df.loc[index,('jira_parent')] = new_jira_parent
             except: 
-                args.exposure_df.insert(index[0],'jira_parent',new_jira_parent)
+                [args.exposure_df.insert(i,'jira_parent',new_jira_parent) for i in index]
     
         # Render and write templates
         campaign_path = "pipelines/firstcut/%s/submitwcl" % args.campaign

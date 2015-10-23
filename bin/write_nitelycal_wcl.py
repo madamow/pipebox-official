@@ -135,12 +135,14 @@ if __name__ == "__main__":
             args.cal_df['niterange'] = args.niterange
             args.cal_df['reqnum'] = new_reqnum
             args.cal_df['jira_parent'] = new_jira_parent
+        
         else:
             # create  JIRA ticket for each nite found (precal-like)
             nite_group = args.cal_df.groupby(by=['nite'])
             for nite,group in nite_group:
                 # create JIRA ticket per nite and add jira_id,reqnum to dataframe
                 index = args.cal_df[args.cal_df['nite'] == nite].index
+                
                 if args.jira_summary:
                     jira_summary = args.jira_summary
                 else: 
@@ -149,14 +151,14 @@ if __name__ == "__main__":
                     reqnum = args.reqnum
                 else:
                     try:
-                        reqnum = str(int(args.cal_df.loc[index,('reqnum')]).unique()[1])
+                        reqnum = str(int(args.cal_df.loc[index,('reqnum')]).unique()[0])
                     except: 
                         reqnum = None
                 if args.jira_parent:
                     jira_parent = args.jira_parent
                 else:
                     try:
-                        jira_parent = str(args.cal_df.loc[index,('jira_parent')].unique()[1])
+                        jira_parent = str(args.cal_df.loc[index,('jira_parent')].unique()[0])
                     except: 
                         jira_parent = None
                 
