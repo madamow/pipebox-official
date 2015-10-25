@@ -174,12 +174,14 @@ if __name__ == "__main__":
                 try:
                     args.cal_df.loc[index,('reqnum')] = new_reqnum
                 except: 
-                    args.cal_df.insert(index[0],'reqnum',new_reqnum)
+                    args.cal_df.insert(len(args.cal_df.columns),'reqnum',None)
+                    args.cal_df.loc[index,('reqnum')] = new_reqnum
                 try:
                     args.cal_df.loc[index,('jira_parent')] = new_jira_parent
                 except: 
-                    args.cal_df.insert(index[0],'jira_parent',new_jira_parent)
-        
+                    args.cal_df.insert(len(args.cal_df.columns),'jira_parent',None)
+                    args.cal_df.loc[index,('jira_parent')] = new_jira_parent
+
         # Render and write templates
         campaign_path = "pipelines/nitelycal/%s/submitwcl" % args.campaign
         submit_template_path = os.path.join(campaign_path,"nitelycal_submit_template.des")
