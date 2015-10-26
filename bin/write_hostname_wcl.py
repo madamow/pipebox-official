@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os,sys
-from PipeBox import write_template, ALL_CCDS
+from pipebox import write_template, ALL_CCDS
 
 def cmdline():
 

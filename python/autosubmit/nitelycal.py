@@ -6,7 +6,7 @@ import time
 from datetime import datetime
 import shlex
 from opstoolkit import jiracmd
-from PipeBox import query
+from pipebox import query
 
 def make_comment(date,nite,reqnum):
     comment = """

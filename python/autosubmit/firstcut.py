@@ -5,7 +5,7 @@ from datetime import datetime
 from shlex import split
 import time
 
-from PipeBox import pipebox_utils,query,jira_utils
+from pipebox import pipebox_utils,query,jira_utils
 from opstoolkit import jiracmd
 
 def make_comment(date,nite,reqnum,campaign):

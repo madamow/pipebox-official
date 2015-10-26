@@ -4,7 +4,7 @@ import os,sys
 from datetime import datetime
 from argparse import ArgumentParser
 import pandas as pd
-from PipeBox import pipebox_utils,jira_utils,query,nitelycal_lib
+from pipebox import pipebox_utils,jira_utils,query,nitelycal_lib
 from autosubmit import nitelycal 
 from opstoolkit import common
 

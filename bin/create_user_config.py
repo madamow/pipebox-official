@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os, sys
-from PipeBox import ask_string,check_file,write_template
+from pipebox import ask_string,check_file,write_template
 
 args = {}
 # User name

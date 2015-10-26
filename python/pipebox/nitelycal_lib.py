@@ -4,7 +4,7 @@ import sys
 from datetime import datetime
 import pandas as pd
 
-from PipeBox import query
+from pipebox import query
 
 def create_dataframe(query_object):
     df = pd.DataFrame(query_object,columns=['nite','date_obs','expnum','band',
