@@ -30,7 +30,7 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/modulewcl/finalcut/14-finalcut-assess.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/modulewcl/finalcut/15-mkpng.wcl>>
 
-<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/inputcals/>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/inputcals/Y2A1dev_inputs.wcl>>
 
 # Database dependent definitions
 submit_des_db_section = {{ args.db_section }}
