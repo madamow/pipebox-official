@@ -43,6 +43,7 @@ def cmdline():
     parser.add_argument('--reqnum',help='')
     parser.add_argument('--nite',help='')
     parser.add_argument('--paramfile',help='')
+    parser.add_argument('--exptag',help='Grab all exposures with a given tag in exposuretag table')
 
     args = parser.parse_args()
     return args
@@ -84,8 +85,13 @@ if __name__ == "__main__":
             firstcut.run(args)
     
     if args.mode=='manual': 
+        cur = query.FirstCut(args.db_section)
+
         # For each use-case create exposures list and exposure dataframe
-        if args.expnum: 
+        if args.exptag:
+            args.exposure_list = query.get_expnums_from_tag(args.exptag)
+            args.exposure_df = pd.DataFrame(args.exposure_list,columns=['expnum'])
+        elif args.expnum: 
             args.exposure_list = args.expnum.split(',')
             args.exposure_df = pd.DataFrame(args.exposure_list,columns=['expnum'])
         elif args.list: 
@@ -98,7 +104,6 @@ if __name__ == "__main__":
             args.exposure_list = list(args.exposure_df['expnum'].values)
         
         # Update dataframe for each exposure and add band,nite if not exists
-        cur = query.FirstCut(args.db_section)
         cur.update_df(args.exposure_df) 
        
         args.exposure_df =args.exposure_df.fillna(False) 

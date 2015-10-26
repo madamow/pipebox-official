@@ -32,7 +32,7 @@ def run(args):
     # Replace any "None" strings with Nonetype
     args = pipebox_utils.replace_none_str(args)
     
-    cur = query.Firstcut(args.db_section)
+    cur = query.FirstCut(args.db_section)
     if not args.nite:
         nite = cur.get_max()[1]
         args.nite = nite

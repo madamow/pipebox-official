@@ -45,6 +45,17 @@ class FinalCut(Cursor):
                 df['nite'] = nite
 
         return df
+
+        def get_expnums_from_tag(tag):
+            """ Query database for each exposure with a given exposure tag.
+            Returns a list of expnums."""
+        for exp in exposure_list:
+            expnum_info = "select distinct expnum from exposuretag where tag='%s'" % tag
+            self.cur.execute(expnum_list)
+            results = self.cur.fetchall()[0]
+            info_list = [exp for exp in results]
+
+        return info_list
         
 class FirstCut(Cursor):
 
@@ -60,6 +71,17 @@ class FirstCut(Cursor):
 
         return info_dict
     
+    def get_expnums_from_tag(tag):
+            """ Query database for each exposure with a given exposure tag.
+            Returns a list of expnums."""
+        for exp in exposure_list:
+            expnum_info = "select distinct expnum from exposuretag where tag='%s'" % tag
+            self.cur.execute(expnum_list)
+            results = self.cur.fetchall()[0]
+            info_list = [exp for exp in results]
+
+        return info_list
+
     def update_df(self,df):
         """ Takes a pandas dataframe and for each exposure add column:value
             band and nite. Returns dataframe"""
