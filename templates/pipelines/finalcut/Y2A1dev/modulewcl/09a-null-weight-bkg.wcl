@@ -10,7 +10,7 @@
                 flabel = starflat
                 fsuffix = fits
                 dirpat = se
-                rundir = red
+                rundir = red/starflat
             </red_starflat>
             <red_nullweight_bkg>
                 # what metadata to get

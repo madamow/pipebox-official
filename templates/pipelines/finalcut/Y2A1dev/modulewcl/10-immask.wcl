@@ -10,8 +10,8 @@
                 flabel = starflat    
                 fsuffix = fits
                 dirpat = se
-                ops_enddir = red
-                rundir = red
+                ops_enddir = red/starflat
+                rundir = red/starflat
             </red_starflat>
      	    <red_bkg>
                 filetype = red_bkg

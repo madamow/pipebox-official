@@ -20,8 +20,8 @@
                 flabel = starflat
                 fsuffix = fits
                 dirpat = se
-                ops_enddir = red
-                rundir = red
+                ops_enddir = red/starflat
+                rundir = red/starflat
                 savefiles = true
             </red_starflat>
             <cal_starflat>
