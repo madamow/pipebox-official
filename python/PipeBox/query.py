@@ -51,8 +51,8 @@ class FinalCut(Cursor):
             Returns a list of expnums."""
             expnum_query = "select distinct expnum from exposuretag where tag='%s'" % tag
             self.cur.execute(expnum_query)
-            results = self.cur.fetchall()[0]
-            expnum_list = [exp for exp in results]
+            results = self.cur.fetchall()
+            expnum_list = [exp[0] for exp in results]
 
         return expnum_list
         
@@ -75,8 +75,8 @@ class FirstCut(Cursor):
         Returns a list of expnums."""
         expnum_query = "select distinct expnum from exposuretag where tag='%s'" % tag
         self.cur.execute(expnum_query)
-        results = self.cur.fetchall()[0]
-        expnum_list = [exp for exp in results]
+        results = self.cur.fetchall()
+        expnum_list = [exp[0] for exp in results]
 
         return expnum_list
 
