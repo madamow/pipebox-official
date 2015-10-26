@@ -56,7 +56,7 @@
 	    	    streaksfile = ${file.red_streaks.fullname}
 		        write_streaks = _flag
     		    bkgfile = ${file.red_bkg.fullname}
-    	    	minSigma = 7.0
+    	    	minSigma = 6.0
     		    nsig_mask = 12
 	    	    nsig_merge = 12
                 nsig_sky = 1.5
@@ -64,6 +64,8 @@
                 max_width = 300
 	        	nsig_detect = 18
                 min_fill = 0.33
+                min_ND = 600
+                nGrowCR = 1
             </cmdline>
         </exec_1>
     </immask>

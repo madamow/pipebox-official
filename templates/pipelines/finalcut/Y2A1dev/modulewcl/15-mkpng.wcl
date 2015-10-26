@@ -128,6 +128,7 @@
                 NTHREADS_swarp = 1
                 NTHREADS_stiff = 1
                 noEll = _flag
+                weight_thresh = 0.0
             </cmdline>
         </exec_1>
     </mkpng>

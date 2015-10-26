@@ -76,6 +76,7 @@
                 updateDB = _flag
                 list = ${list.cat_list.fullname}
                 Schema = PRODBETA
+                over_table = FINALCUT_EVAL
             </cmdline>
         </exec_1>
     </finalcut-assess>

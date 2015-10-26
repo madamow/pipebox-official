@@ -27,7 +27,7 @@
                 rundir = red/immask
 
                 # whether to bring file home
-                savefiles = false
+                savefiles = true
             </red_nullweight_immask>
         </file>
         <exec_1>
@@ -39,7 +39,7 @@
             <cmdline>
                 i = ${file.red_immasked.fullname}
                 o = ${file.red_nullweight_immask.fullname}
-                interp_mask = TRAIL
+                interp_mask = TRAIL,CRAY,BPM
                 invalid_mask = EDGE
                 max_cols = 50
                 v = _flag
