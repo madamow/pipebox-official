@@ -14,14 +14,14 @@
             </xtalked_sci>
             <biascor>
                 filetype = cal_biascor
-                filename = ${camera}_n${calrange}_c${ccdnum:2}_${calrun}_biascor.fits
+                filename = ${camera}_n${calnite}_c${ccdnum:2}_${calrun}_biascor.fits
                 dirpat = se
                 rundir = biascor
             </biascor>
             <dflatcor>
                 band = ${band}
                 filetype = cal_dflatcor
-                filename = ${camera}_n${calrange}_${band}_c${ccdnum:2}_${calrun}_norm-dflatcor.fits
+                filename = ${camera}_n${calnite}_${band}_c${ccdnum:2}_${calrun}_norm-dflatcor.fits
                 dirpat = se
                 rundir = norm-dflatcor
             </dflatcor>
