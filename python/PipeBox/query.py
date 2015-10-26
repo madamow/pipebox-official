@@ -46,13 +46,13 @@ class FinalCut(Cursor):
 
         return df
 
-        def get_expnums_from_tag(self,tag):
-            """ Query database for each exposure with a given exposure tag.
-            Returns a list of expnums."""
-            expnum_query = "select distinct expnum from exposuretag where tag='%s'" % tag
-            self.cur.execute(expnum_query)
-            results = self.cur.fetchall()
-            expnum_list = [exp[0] for exp in results]
+    def get_expnums_from_tag(self,tag):
+        """ Query database for each exposure with a given exposure tag.
+        Returns a list of expnums."""
+        expnum_query = "select distinct expnum from exposuretag where tag='%s'" % tag
+        self.cur.execute(expnum_query)
+        results = self.cur.fetchall()
+        expnum_list = [exp[0] for exp in results]
 
         return expnum_list
         
