@@ -34,7 +34,7 @@
             <bf>
                 filetype = cal_bf
                 dirpat = se
-                rundir = bf/${bfnite}-${bfreq}/${bfatt:2}
+                rundir = bf/${bfnite}-r${bfreq}/p${bfatt:2}
                 filename = D_n${bfnite}_r${bfreq}p${bfatt:2}_bf.fits
             </bf>
             <lintable>
