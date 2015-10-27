@@ -37,7 +37,6 @@ class FinalCut(Cursor):
     def update_df(self,df):
         """ Takes a pandas dataframe and for each exposure add column:value
             band and nite. Returns dataframe"""
-        info_dict = []
         for index,row in df.iterrows():
             expnum_info = "select distinct expnum, band, nite from exposure where expnum='%s'" % row['expnum']
             self.cur.execute(expnum_info)
@@ -84,23 +83,12 @@ class FirstCut(Cursor):
     def update_df(self,df):
         """ Takes a pandas dataframe and for each exposure add column:value
             band and nite. Returns dataframe"""
-        info_dict = []
         for index,row in df.iterrows():
             expnum_info = "select distinct expnum, band, nite from exposure where expnum='%s'" % row['expnum']
             self.cur.execute(expnum_info)
             expnum,band,nite = self.cur.fetchall()[0]
-            try: 
-                is_band = row['band']
-                if row['band'] is None: 
-                    df['band'] = band
-            except: 
-                df['band'] = band
-            try: 
-                is_nite = row['nite']
-                if row['nite'] is None: 
-                    df['nite'] = nite
-            except: 
-                df['nite'] = nite
+            df.loc[index,'nite'] = nite
+            df.loc[index,'band'] = band
 
         return df
 

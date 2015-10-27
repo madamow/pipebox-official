@@ -105,7 +105,7 @@ if __name__ == "__main__":
         
         # Update dataframe for each exposure and add band,nite if not exists
         cur.update_df(args.exposure_df) 
-       
+        
         args.exposure_df =args.exposure_df.fillna(False) 
         nite_group = args.exposure_df.groupby(by=['nite'])
         for nite,group in nite_group:
@@ -142,7 +142,7 @@ if __name__ == "__main__":
             except: 
                 args.exposure_df.insert(len(args.exposure_df.columns),'jira_parent',None)
                 args.exposure_df.loc[index,('jira_parent')] = new_jira_parent
-    
+        
         # Render and write templates
         campaign_path = "pipelines/firstcut/%s/submitwcl" % args.campaign
         submit_template_path = os.path.join(campaign_path,"firstcut_submit_template.des")
