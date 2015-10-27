@@ -11,6 +11,17 @@ class Cursor:
         self.cur = dbh.cursor()
 
 class FinalCut(Cursor):
+
+    def find_epoch(self,exposure):
+        exposure = int(exposure)
+        """ Find correct epoch for exposure in order to find proper calibrations"""
+        epoch_query = "select name,minexpnum,maxexpnum from epoch"
+        self.cur.execute(epoch_query)
+        epochs = self.cur.fetchall()
+        for name,minexpnum,maxexpnum in epochs:
+            if exposure > int(minexpnum) and exposure < int(maxexpnum):
+                return name
+
     def get_expnum_info(self,exposure_list):
         """ Query database for band and nite for each given exposure.
             Returns a list of dictionaries."""
