@@ -85,8 +85,8 @@ if __name__ == "__main__":
         args.exposure_list = list(args.exposure_df['expnum'].values)
         
     # Update dataframe for each exposure and add band,nite if not exists
-    cur.update_df(args.exposure_df) 
-       
+    args.exposure_df = cur.update_df(args.exposure_df) 
+    
     args.exposure_df =args.exposure_df.fillna(False) 
     nite_group = args.exposure_df.groupby(by=['nite'])
     for nite,group in nite_group:

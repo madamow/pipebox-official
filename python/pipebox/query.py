@@ -42,18 +42,8 @@ class FinalCut(Cursor):
             expnum_info = "select distinct expnum, band, nite from exposure where expnum='%s'" % row['expnum']
             self.cur.execute(expnum_info)
             expnum,band,nite = self.cur.fetchall()[0]
-            try:
-                is_band = row['band']
-                if row['band'] is None:
-                    df['band'] = band
-            except:
-                df['band'] = band
-            try:
-                is_nite = row['nite']
-                if row['nite'] is None:
-                    df['nite'] = nite
-            except:
-                df['nite'] = nite
+            df.loc[index,'nite'] = nite
+            df.loc[index,'band'] = band
 
         return df
 
