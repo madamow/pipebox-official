@@ -75,7 +75,7 @@
                 froot = qa/D${expnum:8}_${band}_r${reqnum}p${attnum:2}
                 updateDB = _flag
                 list = ${list.cat_list.fullname}
-                Schema = PRODBETA
+                Schema = ${schema}
                 over_table = FINALCUT_EVAL
             </cmdline>
         </exec_1>
