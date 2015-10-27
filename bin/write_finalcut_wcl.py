@@ -27,7 +27,7 @@ def cmdline():
     parser.add_argument('--jira_section',help='JIRA section in .desservices.ini file')
     parser.add_argument('--eups_product',help='')
     parser.add_argument('--eups_version',help='')
-    parser.add_argument('--campaign',help='')
+    parser.add_argument('--campaign',help='Used in archive dir, e.g., Y2T3')
     parser.add_argument('--project',default='ACT',help='')
     parser.add_argument('--queue_size',help='')
     parser.add_argument("--user", action="store", default=os.environ['USER'],
@@ -44,6 +44,7 @@ def cmdline():
     parser.add_argument('--exptag',help='Grab all expnums with given tag in exposuretag table')
     parser.add_argument('--labels',help='')
     parser.add_argument('--epoch',help='SVE1,SVE2,Y1E1,Y1E2,Y2E1,Y2E2...')
+    parser.add_argument('--campaignlib',help='Campaign where templates are stored, e.g., Y2A1dev')
 
     args = parser.parse_args()
     return args
@@ -127,7 +128,7 @@ if __name__ == "__main__":
             args.exposure_df.loc[index,'jira_parent'] = new_jira_parent
     
     # Render and write templates
-    campaign_path = "pipelines/finalcut/%s/submitwcl" % args.campaign
+    campaign_path = "pipelines/finalcut/%s/submitwcl" % args.campaignlib
     submit_template_path = os.path.join(campaign_path,"finalcut_submit_template.des")
     bash_template_path = os.path.join("scripts","submitme_template.sh")
     args.rendered_template_path = []
