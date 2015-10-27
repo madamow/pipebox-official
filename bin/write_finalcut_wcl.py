@@ -43,7 +43,7 @@ def cmdline():
     parser.add_argument('--paramfile',help='')
     parser.add_argument('--exptag',help='Grab all expnums with given tag in exposuretag table')
     parser.add_argument('--labels',help='')
-    parser.add_argument('--epoch',help='')
+    parser.add_argument('--epoch',help='SVE1,SVE2,Y1E1,Y1E2,Y2E1,Y2E2...')
 
     args = parser.parse_args()
     return args
@@ -135,7 +135,10 @@ if __name__ == "__main__":
     reqnum_count = len(args.exposure_df.groupby(by=['reqnum']))
     for index,row in args.exposure_df.iterrows():
         args.expnum,args.band,args.nite,args.reqnum, args.jira_parent= row['expnum'],row['band'],row['nite'],int(row['reqnum']),row['jira_parent']
-        args.epoch = cur.find_epoch(row['expnum'])
+        if args.epoch:
+            args.epoch_name = args.epoch
+        else:
+            args.epoch_name = cur.find_epoch(row['expnum'])
         output_name = "%s_%s_r%s_finalcut_rendered_template.des" % (args.expnum,args.band,args.reqnum)
         output_path = os.path.join(args.pipebox_work,output_name)
         # Writing template

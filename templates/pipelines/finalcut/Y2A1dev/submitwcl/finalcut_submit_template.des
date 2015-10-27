@@ -30,8 +30,8 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/modulewcl/14-finalcut-assess.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/modulewcl/15-mkpng.wcl>>
 
-{% if args.epoch %{
-<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/inputcals/{{ args.epoch }}_Y2A1dev_inputs.wcl>>
+{% if args.epoch_name %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/inputcals/{{ args.epoch_name }}_Y2A1dev_inputs.wcl>>
 {% else %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/inputcals/Y2A1dev_inputs.wcl>>
 {% endif %}
