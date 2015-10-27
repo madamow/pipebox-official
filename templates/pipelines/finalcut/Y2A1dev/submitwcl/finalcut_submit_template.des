@@ -16,7 +16,8 @@
 {% if args.epoch_name in ['SVE1','SVE2'] %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/modulewcl/07-SV-skycombine-mkbleedmask.wcl>> 
 {% else %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/modulewcl/07-skycombine-mkbleedmask.wcl>> {% endif %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/modulewcl/07-skycombine-mkbleedmask.wcl>> 
+{% endif %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/modulewcl/08a-skyfit.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/modulewcl/08b-ingest-skyfit.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/modulewcl/08c-skysub.wcl>>
