@@ -30,7 +30,11 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/modulewcl/14-finalcut-assess.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/modulewcl/15-mkpng.wcl>>
 
+{% if args.epoch %{
+<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/inputcals/{{ args.epoch }}_Y2A1dev_inputs.wcl>>
+{% else %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/Y2A1dev/inputcals/Y2A1dev_inputs.wcl>>
+{% endif %}
 
 # Database dependent definitions
 submit_des_db_section = {{ args.db_section }}
@@ -52,8 +56,11 @@ project = {{ args.project }}
 expnum = {{ args.expnum }}
 band = {{ args.band }}
 nite = {{ args.nite }}
-calnite = {{ args.calnite }}
-calrun = {{ args.calrun }}
+
+{% if args.calnite %}
+calnite = {{ args.calnite }} {% endif %}
+{% if args.calrun %}
+calrun = {{ args.calrun }} {% endif %}
 
 ccdnum = {{ args.ccdnum }}
 
