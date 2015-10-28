@@ -122,12 +122,12 @@
             was_generated_by = file.red_proj,file.png_proj,file.png_proj_tn,file.png_ell,file.png_ell_tn
             ancestry = list.in_img_list.red_nullweight_immask:file.red_proj,list.in_img_list.red_nullweight_immask:file.png_proj,list.in_img_list.red_nullweight_immask:file.png_proj_tn,list.in_img_list.red_nullweight_immask:file.png_ell,list.in_img_list.red_nullweight_immask:file.png_ell_tn,list.in_cat_list.cat_finalcut:file.png_ell,list.in_cat_list.cat_finalcut:file.png_ell_tn,list.in_img_list.red_nullweight_immask:file.red_proj,list.in_cat_list.cat_finalcut:file.png_ell
             <cmdline>
-				_01_imglist = ${list.in_img_list.fullname}
-				_02_basename = qa/D${expnum:8}_${band}_r${reqnum}p${attnum:2}
-				catlist = ${list.in_cat_list.fullname}
+                _01_imglist = ${list.in_img_list.fullname}
+                _02_basename = qa/D${expnum:8}_${band}_r${reqnum}p${attnum:2}
+                catlist = ${list.in_cat_list.fullname}
                 NTHREADS_swarp = 1
                 NTHREADS_stiff = 1
-                weight_thresh = 0.0
+                # weight_thresh = 0.0 We don't need this anymore
             </cmdline>
         </exec_1>
     </mkpng>
