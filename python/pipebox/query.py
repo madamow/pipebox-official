@@ -15,7 +15,7 @@ class FinalCut(Cursor):
     def find_epoch(self,exposure):
         exposure = int(exposure)
         """ Find correct epoch for exposure in order to find proper calibrations"""
-        epoch_query = "select name,minexpnum,maxexpnum from epoch"
+        epoch_query = "select name,minexpnum,maxexpnum from mjohns44.epoch"
         self.cur.execute(epoch_query)
         epochs = self.cur.fetchall()
         for name,minexpnum,maxexpnum in epochs:
