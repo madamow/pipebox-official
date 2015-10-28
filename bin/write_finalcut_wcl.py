@@ -140,7 +140,7 @@ if __name__ == "__main__":
             args.epoch_name = args.epoch
         else:
             args.epoch_name = cur.find_epoch(row['expnum'])
-        output_name = "%s_%s_r%s_finalcut_rendered_template.des" % (args.expnum,args.band,args.reqnum)
+        output_name = "%s_%s_r%s_%s_finalcut_rendered_template.des" % (args.expnum,args.band,args.reqnum,args.target_site)
         output_path = os.path.join(args.pipebox_work,output_name)
         # Writing template
         pipebox_utils.write_template(submit_template_path,output_path,args)
