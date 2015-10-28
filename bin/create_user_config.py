@@ -40,6 +40,21 @@ if not os.path.exists(dirname):
 
 write_template(template,user_config_file,args)
 
+# Add jira to the .desservices.ini
+jira_user   = ask_string('DESDM Jira username: ', default=user, check=None)
+jira_passwd = ask_string('DESDM Jira password: ', default='', check=None, passwd=True)
+
+with open(des_services_path, "a") as desservices:
+    desservices.write("\n")
+    desservices.write("[jira-desdm]\n")
+    desservices.write("user = %s\n" % jira_user)
+    desservices.write("passwd = %s\n" % jira_passwd)
+    desservices.write("server = https://opensource.ncsa.illinois.edu/jira/\n")
+    desservices.write("\n")
+    desservices.close()
+
+print "\nDES services file:\n\t%s" % des_services_path
+print "\thas been updated with the JIRA information:\n" 
 print "\nConfiguration file written to:\n\t%s" % user_config_file
 print "\nMake sure you setup PIPEBOX_WORK environmental variable:"
 print "\texport PIPEBOX_WORK=%s" % pipebox_work_path

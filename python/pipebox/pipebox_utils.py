@@ -105,7 +105,9 @@ def check_file(filename):
     else:
         return " File not found "
 
-def ask_string(question, default, check=None):
+def ask_string(question, default, check=None, passwd=False):
+
+    import getpass
 
     ask_again = True
     answer = None
@@ -114,6 +116,10 @@ def ask_string(question, default, check=None):
         sys.stdout.write("\n" + question + "\n")
         sys.stdout.write("[%s] : " % default)
         flush(sys.stdout)
+        if passwd:
+            answer = getpass.getpass('')
+            return answer
+        
         line = sys.stdin.readline()
         if line:
             line = line.strip()
