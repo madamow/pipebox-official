@@ -67,7 +67,7 @@ if __name__ == "__main__":
         sys.exit(1)    
 
     # For each use-case create exposures list and exposure dataframe
-    cur = query.FinalCut(args.db_section)
+    cur = query.WideField(args.db_section)
 
     if args.exptag:
         args.exposure_list = cur.get_expnums_from_tag(args.exptag)

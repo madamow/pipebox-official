@@ -3,14 +3,13 @@ import pandas as pd
 from datetime import datetime,timedelta
 from sys import exit
 
-class Cursor:
+class PipeLine:
     def __init__(self,section):
         """ Connect to database using user's .desservices file"""
         dbh = DesDbi(None,section)
+        cur = dbh.cursor()
         self.section = section
-        self.cur = dbh.cursor()
-
-class FinalCut(Cursor):
+        self.cur = cur 
 
     def find_epoch(self,exposure):
         exposure = int(exposure)
@@ -22,6 +21,18 @@ class FinalCut(Cursor):
             if exposure > int(minexpnum) and exposure < int(maxexpnum):
                 return name
 
+    def get_expnums_from_tag(self,tag):
+        """ Query database for each exposure with a given exposure tag.
+        Returns a list of expnums."""
+        expnum_query = "select distinct expnum from exposuretag where tag='%s'" % tag
+        self.cur.execute(expnum_query)
+        results = self.cur.fetchall()
+        expnum_list = [exp[0] for exp in results]
+
+        return expnum_list
+
+class WideField(PipeLine):
+
     def get_expnum_info(self,exposure_list):
         """ Query database for band and nite for each given exposure.
             Returns a list of dictionaries."""
@@ -46,51 +57,7 @@ class FinalCut(Cursor):
 
         return df
 
-    def get_expnums_from_tag(self,tag):
-        """ Query database for each exposure with a given exposure tag.
-        Returns a list of expnums."""
-        expnum_query = "select distinct expnum from exposuretag where tag='%s'" % tag
-        self.cur.execute(expnum_query)
-        results = self.cur.fetchall()
-        expnum_list = [exp[0] for exp in results]
-
-        return expnum_list
-        
-class FirstCut(Cursor):
-
-    def get_expnum_info(self,exposure_list):
-        """ Query database for band and nite for each given exposure.
-            Returns a list of dictionaries."""
-        info_dict = []
-        for exp in exposure_list:
-            expnum_info = "select distinct expnum, band, nite from exposure where expnum='%s'" % exp
-            self.cur.execute(expnum_info)
-            results = self.cur.fetchall()[0]
-            info_dict.append(results)
-
-        return info_dict
-    
-    def get_expnums_from_tag(self,tag):
-        """ Query database for each exposure with a given exposure tag.
-        Returns a list of expnums."""
-        expnum_query = "select distinct expnum from exposuretag where tag='%s'" % tag
-        self.cur.execute(expnum_query)
-        results = self.cur.fetchall()
-        expnum_list = [exp[0] for exp in results]
-
-        return expnum_list
-
-    def update_df(self,df):
-        """ Takes a pandas dataframe and for each exposure add column:value
-            band and nite. Returns dataframe"""
-        for index,row in df.iterrows():
-            expnum_info = "select distinct expnum, band, nite from exposure where expnum='%s'" % row['expnum']
-            self.cur.execute(expnum_info)
-            expnum,band,nite = self.cur.fetchall()[0]
-            df.loc[index,'nite'] = nite
-            df.loc[index,'band'] = band
-
-        return df
+class FirstCut(WideField):
 
     def check_submitted(self,expnum,reqnum):
         """ Queries database to find number of attempts submitted for
@@ -162,7 +129,7 @@ class FirstCut(Cursor):
         precal_run = 'r%sp0%s' % (precal_reqnum,precal_attnum)
         return precal_nite, precal_run
 
-class NitelyCal(Cursor):
+class NitelyCal(PipeLine):
 
     def check_submitted(self,date):
         """Check to see if a nitelycal has been submitted with given date"""
@@ -211,22 +178,22 @@ class NitelyCal(Cursor):
             expnum,band,nite,obstype = self.cur.fetchall()[0]
             try: 
                 is_band = row['band']
-                if row['band'] is None: 
-                    df['band'] = band
+                if is_band is None: 
+                    df.loc[index,'band'] = band 
             except: 
-                df['band'] = band
+                df.loc[index,'band'] = band
             try: 
                 is_nite = row['nite']
-                if row['nite'] is None: 
-                    df['nite'] = nite
+                if is_nite is None: 
+                    df.loc[index,'nite'] = nite
             except: 
-                df['nite'] = nite
+                df.loc[index,'nite'] = nite
             try:
                 is_obstype = row['obstype']
-                if row['obstype'] is None:
-                    df['obstype'] = obstype
+                if is_obstype is None:
+                    df.loc[index,'obstype'] = obstype
             except:
-                df['obstype'] = obstype
+                df.loc[index,'obstype'] = obstype
 
         return df
 
