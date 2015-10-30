@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime,timedelta
 from sys import exit
 
-class PipeLine:
+class PipeLine(object):
     def __init__(self,section):
         """ Connect to database using user's .desservices file"""
         dbh = DesDbi(None,section)
