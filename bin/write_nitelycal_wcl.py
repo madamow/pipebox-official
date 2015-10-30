@@ -42,6 +42,7 @@ def cmdline():
     parser.add_argument('--paramfile',help='')
     parser.add_argument('--combine',action='store_true',help='')
     parser.add_argument('--count',action='store_true',help='')
+    parser.add_argument('--labels',help='')
 
     args = parser.parse_args()
     return args

@@ -44,6 +44,7 @@ def cmdline():
     parser.add_argument('--nite',help='')
     parser.add_argument('--paramfile',help='')
     parser.add_argument('--exptag',help='Grab all exposures with a given tag in exposuretag table')
+    parser.add_argument('--labels',help='')
 
     args = parser.parse_args()
     return args
