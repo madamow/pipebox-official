@@ -24,7 +24,7 @@ def cmdline():
     parser.add_argument('--jira_project',default='DESOPS',help='')
     parser.add_argument('--jira_summary',help='Title of JIRA ticket')
     parser.add_argument('--jira_user',default = jira_utils.get_jira_user(),help='JIRA username')
-    parser.add_argument('--jira_section',help='JIRA section in .desservices.ini file')
+    parser.add_argument('--jira_section',default='jira-desdm',help='JIRA section in .desservices.ini file')
     parser.add_argument('--eups_product',help='')
     parser.add_argument('--eups_version',help='')
     parser.add_argument('--campaign',help='Used in archive dir, e.g., Y2T3')
