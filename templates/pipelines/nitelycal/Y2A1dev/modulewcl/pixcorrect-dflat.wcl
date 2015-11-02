@@ -72,7 +72,7 @@
             execname = pixcorrect_im
             used = file.xtalked_dflat, file.biascor, file.lintable
             was_generated_by = file.pixcor_dflat, file.pixcor_mini_dflat
-            ancestry = file.xtalked_dflat:file.pixcor_dflat, file.biascor:file.pixcor_dflat, file.lintable:file.pixcor_dflat, file.pixcor_dflat:file.pixcor_mini_dflat
+            ancestry = file.xtalked_dflat:file.pixcor_dflat, file.biascor:file.pixcor_dflat, file.lintable:file.pixcor_dflat, file.xtalked_dflat:file.pixcor_mini_dflat
             cmd_hyphen = mixed_gnu
             <cmdline>
                 in = ${file.xtalked_dflat.fullname}

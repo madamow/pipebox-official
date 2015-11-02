@@ -7,16 +7,22 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/mkbiascor.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/crosstalk-dflat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/pixcorrect-dflat.wcl>>
+{% if args.epoch_name in ['SVE1','SVE2'] %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/SV-skycombine-01.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/SV-skycombine-02.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/SV-skycombine-03.wcl>>
+{% else %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycombine-01.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycombine-02.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycombine-03.wcl>>
+{% endif %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycompare-pixcor.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/ingest-skycompare-pixcor.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/mkdflatcor.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycompress-01.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycombine-02.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/find-flat-norm.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/scale-flat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycompress-02.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycombine-03.wcl>>
 
 bias_expnum = {{ args.bias_list }}
 dflat_expnum = {{ args.flat_list }}
