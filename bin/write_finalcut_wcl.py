@@ -20,7 +20,6 @@ def cmdline():
     parser.add_argument('--target_site',help='Computing node, i.e., fermigrid-sl6')
     parser.add_argument('--http_section',help='')
     parser.add_argument('--archive_name',help='')
-    parser.add_argument('--schema',help='')
     parser.add_argument('--jira_parent',help='')
     parser.add_argument('--jira_description',help='')
     parser.add_argument('--jira_project',default='DESOPS',help='JIRA project where

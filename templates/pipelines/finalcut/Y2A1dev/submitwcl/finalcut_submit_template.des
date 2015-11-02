@@ -77,12 +77,10 @@ ccdnum = {{ args.ccdnum }}
 {% if args.db_section == 'db-desoper' %}
 se_object_table = PROD.SE_OBJECT
 home_archive = desar2home
-schema = PROD
 des_http_section = file-http {% endif %}
 {% if args.db_section == 'db-destest' %}
 se_object_table = PRODBETA.SE_OBJECT
 home_archive = prodbeta
-schema = PRODBETA
 des_http_section = file-http-prodbeta {% endif %}
 
 pipeline = finalcut    # used in desstat output
