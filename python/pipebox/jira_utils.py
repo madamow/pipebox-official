@@ -1,5 +1,6 @@
-from opstoolkit import jiracmd
+import os
 import ConfigParser
+from opstoolkit import jiracmd
 
 def get_jira_user(section='jira-desdm'):
     Config = ConfigParser.ConfigParser()
