@@ -1,0 +1,64 @@
+<module>
+    <scale-flat>
+        wrappername = generic.py
+        wrapperloop = ccdnum, band
+        modnamepat = ${modnamepat_nite_ccdnum_band}
+        loopobj = file.dflatcor
+
+        <file>
+            <dflatcor>
+                # 
+                query_table = calibration
+                filetype = cal_dflatcor
+                query_fields = filetype,wgb.reqnum,wgb.attnum
+                join calibration.filename=wgb.filename
+                output_fields = filename, expnum, ccdnum, band
+                match = ccdnum, band
+
+                # where to store file
+                dirpat = precal
+                rundir = dflatcor
+            </dflatcor>
+            <normfile>
+                # how to name file
+                filepat = nite_band
+                flabel = flatnorm
+                fsuffix = txt
+                match = band
+
+                # where to store file
+                dirpat = precal
+                rundir = QA
+            </normfile>
+            <norm_dflatcor>
+                # metadata info
+                filetype = cal_dflatcor
+
+                # how to name file
+                filepat = nite_ccdnum_band
+                flabel = norm-dflatcor
+                fsuffix = fits
+
+                # where to store file
+                dirpat = precal
+                ops_enddir = norm-dflatcor
+                rundir = norm-dflat
+
+                savefiles = True
+            </norm_dflatcor> 
+        </file>
+        <exec_1>
+            execname = scale_flat
+            used = file.dflatcor, file.normfile
+            was_generated_by = file.norm_dflatcor
+            ancestry = file.dflatcor:file.norm_dflatcor, file.normfile:file.norm_dflatcor
+            #scale_flat --in <tmp_flatcor_filename> --out <norm_dflatcor> --normfactorfile ${normfile}
+            cmd_hyphen = mixed_gnu
+            <cmdline>
+                in = ${file.dflatcor.fullname}
+                out = ${file.norm_dflatcor.fullname} 
+                normfactorfile = ${file.normfile.fullname}
+            </cmdline>
+        </exec_1>
+    </scale-flat>
+</module>

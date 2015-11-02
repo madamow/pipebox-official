@@ -1,11 +1,11 @@
 # {{ args.submittime }}
 <<include {{ args.pipebox_work }}/{{ args.user }}_cfg.des>>
 
-<<include ../modulewcl/modnamepat.wcl>>
-<<include ../modulewcl/nitelycal/01-crosstalk-bias.wcl>>
-<<include ../modulewcl/nitelycal/02-crosstalk-dflat.wcl>>
-<<include ../modulewcl/nitelycal/03-mkbiascor.wcl>>
-<<include ../modulewcl/nitelycal/04-mkdflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/modnamepat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/nitelycal/01-crosstalk-bias.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/nitelycal/02-crosstalk-dflat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/nitelycal/03-mkbiascor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/nitelycal/04-mkdflatcor.wcl>>
 
 bias_expnum = {{ args.bias_list }}
 dflat_expnum = {{ args.flat_list }}

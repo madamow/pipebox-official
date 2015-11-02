@@ -28,6 +28,7 @@ def cmdline():
     parser.add_argument('--eups_product',help='')
     parser.add_argument('--eups_version',help='')
     parser.add_argument('--campaign',help='')
+    parser.add_argument('--campaignlib',help='')
     parser.add_argument('--project',default='ACT',help='')
     parser.add_argument("--user", action="store", default=os.environ['USER'],
                         help="username that will submit")

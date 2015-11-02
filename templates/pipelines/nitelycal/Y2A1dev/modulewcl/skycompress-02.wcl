@@ -1,0 +1,53 @@
+<module>
+    <skycompress-02>
+        wrappername = generic.py
+        wrapperloop = ccdnum, band
+        modnamepat = ${modnamepat_nite_ccdnum_band}
+        loopobj = file.norm_dflatcor
+        
+        <file>
+            <norm_dflatcor>
+                query_table = calibration
+                filetype = cal_dflatcor
+                query_fields = filetype,wgb.reqnum,wgb.attnum,wgb.exec_name
+                join calibration.filename=wgb.filename
+                exec_name = scale_flat
+                output_fields = filename, ccdnum, band
+                match = ccdnum, band
+                
+                dirpat = precal
+                rundir = norm-dflat
+                ops_enddir = norm-dflatcor
+            </norm_dflatcor>
+            <mini_norm_dflatcor>
+                # what metadata to get
+                filetype = mini_norm_dflatcor
+
+                # how to name the file
+                filepat = nite_ccdnum_band
+                flabel = mini-norm-dflat
+                fsuffix = fits
+
+                # where to put the file
+                dirpat = precal
+                ops_enddir = mini-norm-dflatcor
+                rundir = mini-norm-dflatcor
+
+                # whether to bring file home
+                savefiles = True
+            </mini_norm_dflatcor>
+        </file>
+        <exec_1>
+            execname = sky_compress
+            cmd_hyphen = mixed_gnu
+            used = file.norm_dflatcor
+            was_generated_by = file.mini_norm_dflatcor
+            ancestry = file.norm_dflatcor:file.mini_norm_dflatcor
+            <cmdline>
+                in = ${file.norm_dflatcor.fullname}
+                skyfilename = ${file.mini_norm_dflatcor.fullname}
+                blocksize = 64
+            </cmdline>
+        </exec_1>
+    </skycompress-02>
+</module>

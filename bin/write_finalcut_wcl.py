@@ -20,8 +20,10 @@ def cmdline():
     parser.add_argument('--target_site',help='Computing node, i.e., fermigrid-sl6')
     parser.add_argument('--http_section',help='')
     parser.add_argument('--archive_name',help='')
-    parser.add_argument('--jira_parent',help='')
-    parser.add_argument('--jira_description',help='')
+    parser.add_argument('--jira_parent',help='JIRA parent ticket under which
+                         new ticket will be created.')
+    parser.add_argument('--jira_description',help='Description of ticket
+                         found in JIRA')
     parser.add_argument('--jira_project',default='DESOPS',help='JIRA project where
                          ticket will be created, e.g., DESOPS')
     parser.add_argument('--jira_summary',help='Title of JIRA ticket. To submit multiple 
