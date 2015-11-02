@@ -1,4 +1,15 @@
 from opstoolkit import jiracmd
+import ConfigParser
+
+def get_jira_user(section='jira-desdm'):
+    Config = ConfigParser.ConfigParser()
+    services_file = os.path.join(os.environ['HOME'],'.desservices.ini')
+    try:
+        Config.read(services_file)
+        jirauser = Config.get(section,'user')
+        return jirauser
+    except:
+        return os.environ['USER']
 
 def use_existing_ticket(con,dict):
     """Looks to see if JIRA ticket exists. If it does it will use it instead

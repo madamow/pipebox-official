@@ -23,7 +23,7 @@ def cmdline():
     parser.add_argument('--jira_description',help='')
     parser.add_argument('--jira_project',default='DESOPS',help='')
     parser.add_argument('--jira_summary',help='')
-    parser.add_argument('--jira_user',default=os.environ['USER'],help='')
+    parser.add_argument('--jira_user',default=jira_utils.get_jira_user(),help='JIRA username')
     parser.add_argument('--jira_section',help='')
     parser.add_argument('--eups_product',help='')
     parser.add_argument('--eups_version',help='')
