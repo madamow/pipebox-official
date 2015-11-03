@@ -24,7 +24,9 @@ def remove_junk(dataframe):
     df = dataframe[(dataframe.object.str.contains('PTC') == False) &
                    (dataframe.object.str.contains('junk') == False) &
                    (dataframe.object.str.contains('focus') == False) &
-                   (dataframe.object.str.contains('test') == False)]
+                   (dataframe.object.str.contains('test') == False) &
+                   (dataframe.object.str.contains('flush') == False)]
+
     return df
 
 def remove_gap_expnums(dataframe,tdelta=60):
@@ -86,24 +88,27 @@ def create_clean_df(query_object):
     nafilled_df = fillna(df)
     biasband_df = replace_bias_band(nafilled_df)
     junkless_df = remove_junk(biasband_df)
-    gapless_df = remove_gap_expnums(junkless_df)
-    satr_df = remove_sat_rband(gapless_df)
+    satr_df = remove_sat_rband(junkless_df)
     reindexed_df = satr_df.reset_index()
-    final_df = remove_first_in_sequence(reindexed_df)
+    gapless_df = remove_gap_expnums(reindexed_df)
+    final_df = remove_first_in_sequence(gapless_df)
         
     return final_df
 
 if __name__ == "__main__":
     cur = query.NitelyCal('db-desoper')
-    query = cur.get_cals(['20130919','20131007'])
-    count = cur.count_by_band(['20130919','20131007'])
+    query = cur.get_cals(['20130919', '20131007'])
+    #query = cur.get_cals(['20130916', '20130917', '20130918', '20130919', '20130920', '20130921', '20130922','20130923', '20130924', '20130925', '20130926'])
+    count = cur.count_by_band(['20130919', '20131007'])
+    #count = cur.count_by_band(['20130916', '20130917', '20130918', '20130919', '20130920', '20130921', '20130922', '20130923', '20130924', '20130925', '20130926'])
+
     df = create_dataframe(query)
     df = fillna(df)
     df = replace_bias_band(df)
     df = remove_junk(df)
-    df = remove_gap_expnums(df)
     df = remove_sat_rband(df)
     df = df.reset_index()
+    df = remove_gap_expnums(df)
     df = remove_first_in_sequence(df)
     #print df
     #print bias_list,dflat_list
