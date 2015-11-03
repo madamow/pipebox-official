@@ -85,7 +85,7 @@ des_http_section = file-http-prodbeta {% endif %}
 
 pipeline = finalcut    # used in desstat output
 
-basket = ${nite}
+basket = ${campaign}
 unitname = ${camera}${expnum:8}
 ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/${unitname}/p${attnum:2}
 submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}

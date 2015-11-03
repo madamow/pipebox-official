@@ -152,18 +152,11 @@ if __name__ == "__main__":
                 if args.reqnum:
                     reqnum = args.reqnum
                 else:
-                    try:
-                        reqnum = str(int(args.cal_df.loc[index,('reqnum')]).unique()[0])
-                    except: 
-                        reqnum = None
+                    reqnum = None
                 if args.jira_parent:
                     jira_parent = args.jira_parent
                 else:
-                    try:
-                        jira_parent = str(args.cal_df.loc[index,('jira_parent')].unique()[0])
-                    except: 
-                        jira_parent = None
-                
+                    jira_parent = None
                 # Create JIRA ticket
                 new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
                                                   description=args.jira_description,
@@ -183,7 +176,12 @@ if __name__ == "__main__":
                 except: 
                     args.cal_df.insert(len(args.cal_df.columns),'jira_parent',None)
                     args.cal_df.loc[index,('jira_parent')] = new_jira_parent
-
+                try:
+                    args.cal_df.loc[index,('niterange')] = str(nite)
+                except:
+                    args.cal_df.insert(len(args.cal_df.columns),'niterange',None)
+                    args.cal_df.loc[index,('niterange')] = str(nite)
+        
         # Render and write templates
         campaign_path = "pipelines/nitelycal/%s/submitwcl" % args.campaignlib
         submit_template_path = os.path.join(campaign_path,"nitelycal_submit_template.des")
@@ -191,19 +189,19 @@ if __name__ == "__main__":
         args.rendered_template_path = []
         # Create templates for each entry in dataframe
         reqnum_count = len(args.cal_df.groupby(by=['reqnum']))
-        for reqnum,group in args.cal_df.groupby(by=['reqnum']):
+        for niterange,group in args.cal_df.groupby(by=['niterange']):
             if args.combine:
                 args.nite = group['niterange'].unique()[0]
                 args.bias_list = ','.join(str(i) for i in args.bias_list)
                 args.flat_list = ','.join(str(i) for i in args.flat_list)
             else:
-                args.nite = list(set(group['nite']))[0]
+                args.nite = group['nite'].unique()[0]
                 # Append bias/flat lists to dataframe
                 bias_list,flat_list = nitelycal_lib.create_lists(group)
                 args.bias_list = ','.join(str(i) for i in bias_list)
                 args.flat_list = ','.join(str(i) for i in flat_list)
 
-            args.reqnum,args.jira_parent= int(reqnum),group['jira_parent'].unique()[0]
+            args.reqnum,args.jira_parent= group['reqnum'].unique()[0],group['jira_parent'].unique()[0]
             output_name = "%s_r%s_nitelycal_rendered_template.des" % (args.nite,args.reqnum)
             output_path = os.path.join(args.pipebox_work,output_name)
             # Writing template
