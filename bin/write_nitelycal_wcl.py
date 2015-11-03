@@ -122,7 +122,7 @@ if __name__ == "__main__":
             args.bias_list,args.flat_list = nitelycal_lib.create_lists(args.cal_df)
         else:
             cal_query = cur.get_cals(args.nitelist) 
-            args.cal_df = nitelycal_lib.create_clean_df(cal_query,args.nitelist)
+            args.cal_df = nitelycal_lib.create_clean_df(cal_query)
             args.bias_list,args.flat_list = nitelycal_lib.create_lists(args.cal_df) 
         
         if args.combine:
@@ -185,7 +185,7 @@ if __name__ == "__main__":
                     args.cal_df.loc[index,('jira_parent')] = new_jira_parent
 
         # Render and write templates
-        campaign_path = "pipelines/nitelycal/%s/submitwcl" % args.campaign
+        campaign_path = "pipelines/nitelycal/%s/submitwcl" % args.campaignlib
         submit_template_path = os.path.join(campaign_path,"nitelycal_submit_template.des")
         bash_template_path = os.path.join("scripts","submitme_template.sh")
         args.rendered_template_path = []
