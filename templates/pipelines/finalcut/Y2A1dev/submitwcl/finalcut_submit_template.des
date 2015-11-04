@@ -47,9 +47,9 @@ target_des_db_section = {{ args.db_section }}
 target_site = {{ args.target_site }}
 
 {% if args.target_site in ['bluewaters-dev','bluewaters'] %}
-<job_environment>
-   DESPYFITS_USE_INDIRECT_WRITE=True
-</job_environment>
+# <job_environment>
+#    DESPYFITS_USE_INDIRECT_WRITE=True
+# </job_environment>
 {% endif %}
 
 reqnum = {{ args.reqnum }}
