@@ -20,16 +20,14 @@ def cmdline():
     parser.add_argument('--target_site',help='Computing node, i.e., fermigrid-sl6')
     parser.add_argument('--http_section',help='')
     parser.add_argument('--archive_name',help='')
-    parser.add_argument('--jira_parent',help='JIRA parent ticket under which
-                         new ticket will be created.')
-    parser.add_argument('--jira_description',help='Description of ticket
-                         found in JIRA')
-    parser.add_argument('--jira_project',default='DESOPS',help='JIRA project where
+    parser.add_argument('--jira_parent',help='JIRA parent ticket under which new ticket will be created.')
+    parser.add_argument('--jira_description',help='Description of ticket found in JIRA')
+    parser.add_argument('--jira_project',default='DESOPS',help='JIRA project where\
                          ticket will be created, e.g., DESOPS')
-    parser.add_argument('--jira_summary',help='Title of JIRA ticket. To submit multiple 
+    parser.add_argument('--jira_summary',help='Title of JIRA ticket. To submit multiple \
                          exposures under same ticket you can specify jira_summary')
     parser.add_argument('--jira_user',default = jira_utils.get_jira_user(),help='JIRA username')
-    parser.add_argument('--jira_section',default='jira-desdm',help='JIRA section 
+    parser.add_argument('--jira_section',default='jira-desdm',help='JIRA section \
                          in .desservices.ini file')
     parser.add_argument('--eups_product',help='EUPS production stack, e.g., finalcut')
     parser.add_argument('--eups_version',help='EUPS production stack version, e.g., Y2A1+1')
