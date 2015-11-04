@@ -11,11 +11,22 @@ def create_dataframe(query_object):
                                             'exptime','obstype','program','propid','object'])
     return df
 
+def fillna(dataframe):
+    df = dataframe.fillna('NA')
+    return df
+    
+def replace_bias_band(dataframe):
+    dataframe.ix[(dataframe.obstype =='zero') & (dataframe.band != 'NA'),'band'] = 'NA'
+    return dataframe
+
 def remove_junk(dataframe):
-    """ If PTC, junk, or focus show up in program, remove """
-    df = dataframe[(dataframe.object.str.contains('PTC') == False) | 
-                   (dataframe.object.str.contains('junk') == False) |
-                   (dataframe.object.str.contains('focus') == False)]
+    """ If PTC, junk, test, or focus show up in program, remove """
+    df = dataframe[(dataframe.object.str.contains('PTC') == False) &
+                   (dataframe.object.str.contains('junk') == False) &
+                   (dataframe.object.str.contains('focus') == False) &
+                   (dataframe.object.str.contains('test') == False) &
+                   (dataframe.object.str.contains('flush') == False)]
+
     return df
 
 def remove_gap_expnums(dataframe,tdelta=60):
@@ -44,7 +55,6 @@ def remove_gap_expnums(dataframe,tdelta=60):
 
 def remove_first_in_sequence(dataframe):
     """ Remove the first exposure in any given sequence """
-    dataframe = dataframe.fillna('NA')
     grouped = dataframe.groupby(by=['obstype','nite','band','object'])
     first_index_list = []
     for name,group in grouped:
@@ -56,7 +66,7 @@ def remove_sat_rband(dataframe):
     """ Remove r-band exposures with exptime greater than 15 seconds. Avoids
         saturated exposures """
     nor_df = dataframe[(dataframe.band !='r')]
-    r_df = dataframe[(dataframe.band == 'r') & (dataframe.exptime >= 15)]
+    r_df = dataframe[(dataframe.band == 'r') & (dataframe.exptime <= 15)]
     df = pd.concat([nor_df,r_df]) 
     return df
 
@@ -69,32 +79,37 @@ def create_lists(dataframe):
 
 def final_count_by_band(dataframe):
     """ Returns count per band of exposures to be included in processing """
-    df = dataframe.fillna('NA')
     grouped = df.groupby(by=['obstype','band']).agg(['count'])['expnum']
     print grouped
 
-def create_clean_df(query_object,nitelist):
+def create_clean_df(query_object):
     """ Combines all functions in nitelycal_lib """
     df = create_dataframe(query_object)
-    gapless_df = remove_gap_expnums(df)
-    junkless_df = remove_junk(gapless_df)
-    trimmed_df = remove_first_in_sequence(junkless_df)
-    final_df = remove_sat_rband(trimmed_df)
-    
+    nafilled_df = fillna(df)
+    biasband_df = replace_bias_band(nafilled_df)
+    junkless_df = remove_junk(biasband_df)
+    satr_df = remove_sat_rband(junkless_df)
+    reindexed_df = satr_df.reset_index()
+    gapless_df = remove_gap_expnums(reindexed_df)
+    final_df = remove_first_in_sequence(gapless_df)
+        
     return final_df
 
 if __name__ == "__main__":
     cur = query.NitelyCal('db-desoper')
-    query = cur.get_cals(['20151007','20151008'])
-    count = cur.count_by_band(['20151007','20151008'])
+    query = cur.get_cals(['20130919', '20131007'])
+    #query = cur.get_cals(['20130916', '20130917', '20130918', '20130919', '20130920', '20130921', '20130922','20130923', '20130924', '20130925', '20130926'])
+    count = cur.count_by_band(['20130919', '20131007'])
+    #count = cur.count_by_band(['20130916', '20130917', '20130918', '20130919', '20130920', '20130921', '20130922', '20130923', '20130924', '20130925', '20130926'])
+
     df = create_dataframe(query)
+    df = fillna(df)
+    df = replace_bias_band(df)
+    df = remove_junk(df)
+    df = remove_sat_rband(df)
+    df = df.reset_index()
+    df = remove_gap_expnums(df)
+    df = remove_first_in_sequence(df)
     #print df
-    # Munge the dataframe
-    new_df = remove_gap_expnums(df)
-    junkless_df = remove_junk(new_df)
-    trimmed_df = remove_first_in_sequence(junkless_df)   
-    final_df = remove_sat_rband(trimmed_df)
-    bias_list,dflat_list = create_lists(final_df)
-    #print final_df
     #print bias_list,dflat_list
-    #final_count_by_band(final_df)
+    final_count_by_band(df)
