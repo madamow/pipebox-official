@@ -68,7 +68,8 @@ band = {{ args.band }}
 nite = {{ args.nite }}
 
 {% if args.calnite %}
-calnite = {{ args.calnite }} {% endif %}
+calnite = {{ args.calnite }} 
+{% endif %}
 {% if args.calrun %}
 calrun = {{ args.calrun }} {% endif %}
 
