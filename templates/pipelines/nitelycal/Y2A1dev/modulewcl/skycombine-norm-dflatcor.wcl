@@ -1,5 +1,5 @@
 <module>
-    <skycombine-03>
+    <skycombine-norm-dflatcor>
         wrappername = generic.py
         wrapperloop = band
         modnamepat = ${modnamepat_nite_band}
@@ -75,5 +75,5 @@
                 ccdnums = ${ccdnum}
             </cmdline>
         </exec_1>
-    </skycombine-03>
+    </skycombine-norm-dflatcor>
 </module>

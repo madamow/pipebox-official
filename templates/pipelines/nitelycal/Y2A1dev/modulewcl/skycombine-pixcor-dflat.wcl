@@ -1,65 +1,66 @@
 <module>
-    <skycombine-02>
+    <skycombine-pixcor-dflat>
         wrappername = generic.py
-        wrapperloop = band
-        modnamepat = ${modnamepat_nite_band}
-        loopobj = list.minidflatlist
+        wrapperloop = expnum,band
+        modnamepat = ${modnamepat_expband}
+        loopobj = list.minilist
 
         <list>
-            <minidflatlist>   
+            <minilist>   
                 # how to name list
-                filepat = nite_band
-                flabel = dflatcor
+                filepat = exposure
+                flabel = pixcor_mini_dflat
                 fsuffix = list
 
                 # where to store list
                 dirpat = precal
-                ops_enddir = dflatcor
-                rundir = dflatcor
+                ops_enddir = pixcor-mini-dflat/${camera}${expnum:8}
+                rundir = pixcor-mini-dflat
 
                 # what goes into list
                 query_table = calibration
-                filetype = mini_dflatcor
+                filetype = pixcor_mini_dflat
+                #query_fields = nite,filetype,expnum,reqnum,attnum  
                 query_fields = filetype,wgb.reqnum,wgb.attnum  
                 join calibration.filename=wgb.filename
-                output_fields = filename, ccdnum, band
-                divide_by = band
-                match = band
+                output_fields = filename, expnum, ccdnum, band
+                divide_by = expnum,band
 
                 # description of list for wrapper
-                columns = mini_dflatcor.fullname
-            </minidflatlist>
+                columns = pixcor_mini_dflat.fullname
+            </minilist>
         </list>
         <file>
-            <mini_dflatcor>
+            <pixcor_mini_dflat>
                 # what metadata to get
-                filetype = mini_dflatcor
+                filetype = pixcor_mini_dflat
 
                 # how to name the file
-                filepat = nite_band
-                flabel = mini-dflat
+                filepat = ccdnum_band
+                flabel = pixcor-mini-dflat
                 fsuffix = fits
 
                 # where to put the file
                 dirpat = precal
-                ops_enddir = mini-dflatcor
-                rundir = mini-dflatcor
+                ops_enddir = pixcor-mini-dflat/${camera}${expnum:8}
+                rundir = pixcor-mini-dflat
 
                 # whether to bring file home
+                savefiles = True
                 listonly = True
-            </mini_dflatcor>
+            </pixcor_mini_dflat>
             <binned_fp>
                 # what metadata to get
-                filetype = dflatcor_binned_fp
+                filetype = pixcor_dflat_binned_fp
 
                 # how to name the file
-                filepat = nite_band
-                flabel = dflat-binned-fp
+                filepat = exposure
+                flabel = pixcor-dflat-binned-fp
                 fsuffix = fits
 
                 # where to put the file
                 dirpat = precal
-                ops_enddir = binned-fp
+                ops_enddir = binned-fp/${camera}${expnum:8}
                 rundir = binned-fp
 
                 # whether to bring file home
@@ -69,14 +70,14 @@
         <exec_1>
             execname = sky_combine
             cmd_hyphen = alldouble
-            used = list.minidflatlist.mini_dflatcor
+            used = list.minilist.pixcor_mini_dflat
             was_generated_by = file.binned_fp
-            ancestry = list.minidflatlist.mini_dflatcor:file.binned_fp
+            ancestry = list.minilist.pixcor_mini_dflat:file.binned_fp
             <cmdline>
-                miniskylist = ${list.minidflatlist.fullname}
+                miniskylist = ${list.minilist.fullname}
                 outfilename = ${file.binned_fp.fullname}
                 ccdnums = ${ccdnum}
             </cmdline>
         </exec_1>
-    </skycombine-02>
+    </skycombine-pixcor-dflat>
 </module>

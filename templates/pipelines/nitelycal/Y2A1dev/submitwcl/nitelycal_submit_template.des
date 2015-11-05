@@ -8,21 +8,21 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/crosstalk-dflat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/pixcorrect-dflat.wcl>>
 {% if args.epoch_name in ['SVE1','SVE2'] %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/SV-skycombine-01.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/SV-skycombine-02.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/SV-skycombine-03.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/SV-skycombine-pixcor-dflat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/SV-skycombine-dflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/SV-skycombine-norm-dflatcor.wcl>>
 {% else %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycombine-01.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycombine-02.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycombine-03.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycombine-pixcor-dflat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycombine-dflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycombine-norm-dflatcor.wcl>>
 {% endif %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycompare-pixcor.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/ingest-skycompare-pixcor.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/mkdflatcor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycompress-01.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycompress-dflatcor.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/find-flat-norm.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/scale-flat.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycompress-02.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycompress-norm-dflatcor.wcl>>
 
 bias_expnum = {{ args.bias_list }}
 dflat_expnum = {{ args.flat_list }}
@@ -55,7 +55,7 @@ save_run_vals = nite, camera, jira_id
     nite_band = ${camera}_n${nite}_${band}_r${reqnum}p${attnum:2}_${flabel}.${fsuffix}
 </filename_pattern>
 
-blocklist = xtalk-bias, mkbiascor, dflat-exp, skycombine-01,skycompare-pixcor,mkdflatcor,skycompress-01,skycombine-02,find-flat-norm,scale-flat,skycompress-02,skycombine-03
+blocklist = xtalk-bias, mkbiascor, dflat-exp, skycombine-pixcor-dflat,skycompare-pixcor,mkdflatcor,skycompress-dflatcor,skycombine-dflatcor,find-flat-norm,scale-flat,skycompress-norm-dflatcor,skycombine-norm-dflatcor
 
 <block>
     <xtalk-bias>
@@ -73,27 +73,27 @@ blocklist = xtalk-bias, mkbiascor, dflat-exp, skycombine-01,skycompare-pixcor,mk
         divide_jobs_by = expnum
         modulelist = pixcorrect-dflat
     </pixcor-dflat>
-    <skycombine-01>
+    <skycombine-pixcor-dflat>
         expnum = ${dflat_expnum}
         divide_jobs_by = expnum
-        modulelist = skycombine-01
-    </skycombine-01>
-    <skycompress-01>
+        modulelist = skycombine-pixcor-dflat
+    </skycombine-pixcor-dflat>
+    <skycompress-dflatcor>
         divide_jobs_by = ccdnum, band
-        modulelist = skycompress-01
-    </skycompress-01>
-    <skycombine-02>
+        modulelist = skycompress-dflatcor
+    </skycompress-dflatcor>
+    <skycombine-dflatcor>
         divide_jobs_by = band
-        modulelist = skycombine-02
-    </skycombine-02>
-    skycompress-02>
+        modulelist = skycombine-dflatcor
+    </skycombine-dflatcor>
+    skycompress-norm-dflatcor>
         divide_jobs_by = ccdnum, band
-        modulelist = skycompress-02
-    </skycompress-02>
-    <skycombine-03>
+        modulelist = skycompress-norm-dflatcor
+    </skycompress-norm-dflatcor>
+    <skycombine-norm-dflatcor>
         divide_jobs_by = band
-        modulelist = skycombine-03
-    </skycombine-03>
+        modulelist = skycombine-norm-dflatcor
+    </skycombine-norm-dflatcor>
     <mkdflatcor>
         expnum = ${dflat_expnum}
         divide_jobs_by = ccdnum, band

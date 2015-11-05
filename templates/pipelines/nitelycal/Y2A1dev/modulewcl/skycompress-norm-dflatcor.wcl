@@ -1,5 +1,5 @@
 <module>
-    <skycompress-02>
+    <skycompress-norm-dflatcor>
         wrappername = generic.py
         wrapperloop = ccdnum, band
         modnamepat = ${modnamepat_nite_ccdnum_band}
@@ -8,7 +8,7 @@
         <file>
             <norm_dflatcor>
                 query_table = calibration
-                filetype = cal_dflatcor
+                filetype = cal_norm_dflatcor
                 query_fields = filetype,wgb.reqnum,wgb.attnum,wgb.exec_name
                 join calibration.filename=wgb.filename
                 exec_name = scale_flat
@@ -49,5 +49,5 @@
                 blocksize = 64
             </cmdline>
         </exec_1>
-    </skycompress-02>
+    </skycompress-norm-dflatcor>
 </module>

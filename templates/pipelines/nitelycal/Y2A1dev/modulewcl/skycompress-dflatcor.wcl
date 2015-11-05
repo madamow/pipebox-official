@@ -1,5 +1,5 @@
 <module>
-    <skycompress-01>
+    <skycompress-dflatcor>
         wrappername = generic.py
         wrapperloop = ccdnum, band
         modnamepat = ${modnamepat_nite_ccdnum_band}
@@ -47,5 +47,5 @@
                 blocksize = 64
             </cmdline>
         </exec_1>
-    </skycompress-01>
+    </skycompress-dflatcor>
 </module>
