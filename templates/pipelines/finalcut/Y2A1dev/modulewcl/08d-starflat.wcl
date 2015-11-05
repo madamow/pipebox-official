@@ -47,6 +47,7 @@
                 in = ${file.red_skysub.fullname}
                 out = ${file.red_starflat.fullname}
                 starflat = ${file.cal_starflat.fullname}
+                null_mask = EDGE
             </cmdline>
         </exec_1>
     </starflat>
