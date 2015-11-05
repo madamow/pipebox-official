@@ -19,10 +19,13 @@ def cmdline():
                          calnite/calrun not specified')
     parser.add_argument('--target_site',help='Computing node, i.e., fermigrid-sl6')
     parser.add_argument('--http_section',help='')
-    parser.add_argument('--archive_name',default=None,help='')
-    parser.add_argument('--jira_parent',help='JIRA parent ticket under which new ticket will be created.')
-    parser.add_argument('--jira_description',help='Description of ticket found in JIRA')
-    parser.add_argument('--jira_project',default='DESOPS',help='JIRA project where\
+    parser.add_argument('--archive_name',help='Home archive to store products, e.g., \
+                         desar2home,prodbeta,...')
+    parser.add_argument('--jira_parent',help='JIRA parent ticket under which\
+                         new ticket will be created.')
+    parser.add_argument('--jira_description',help='Description of ticket\
+                         found in JIRA')
+    parser.add_argument('--jira_project',default='DESOPS',help='JIRA project where \
                          ticket will be created, e.g., DESOPS')
     parser.add_argument('--jira_summary',help='Title of JIRA ticket. To submit multiple \
                          exposures under same ticket you can specify jira_summary')
@@ -32,23 +35,33 @@ def cmdline():
     parser.add_argument('--eups_product',help='EUPS production stack, e.g., finalcut')
     parser.add_argument('--eups_version',help='EUPS production stack version, e.g., Y2A1+1')
     parser.add_argument('--campaign',help='Used in archive dir, e.g., Y2T3')
-    parser.add_argument('--project',default='ACT',help='')
-    parser.add_argument('--queue_size',help='')
+    parser.add_argument('--project',default='ACT',help='Archive directory where runs are \
+                         stored, e.g., $ARCHIVE/-->ACT<--/finalcut/')
+    parser.add_argument('--queue_size',help='If set and savefiles is not specified, code \
+                         will submit specified runs up until queue_size is reached. Code \
+                         will wait until queue drops below limit to submit next job')
     parser.add_argument("--user", action="store", default=os.environ['USER'],
                         help="username that will submit")
     parser.add_argument('--savefiles',action='store_true',help='Saves submit files to submit later.')
     parser.add_argument('--expnum',help='A single expnum or comma-separated list of expnums')
     parser.add_argument('--list',help='File of line-separated expnums')
-    parser.add_argument('--csv',help='')
-    parser.add_argument('--delimiter',default=',',help='csv')
-    parser.add_argument('--ccdnum',default=pipebox_utils.ALL_CCDS,help='')
-    parser.add_argument('--reqnum',help='')
-    parser.add_argument('--nite',help='')
-    parser.add_argument('--paramfile',help='')
+    parser.add_argument('--csv',help='CSV of exposures and information specified by user. If specified, \
+                         code will use exposures in csv to submit jobs. Must also specify --delimiter')
+    parser.add_argument('--delimiter',default=',',help='The delimiter if specifying csv and is not \
+                         comma-separated')
+    parser.add_argument('--ccdnum',default=pipebox_utils.ALL_CCDS,help='Ccds to be processed.')
+    parser.add_argument('--reqnum',help='Part of processing unique identifier. Tied to JIRA ticket \
+                         number')
+    parser.add_argument('--nite',help='For auto mode: if specified will submit all exposures found \
+                         from nite')
+    parser.add_argument('--paramfile',help='Key = Value file that can be used to replace command- \
+                         line')
     parser.add_argument('--exptag',help='Grab all expnums with given tag in exposuretag table')
-    parser.add_argument('--labels',help='')
-    parser.add_argument('--epoch',help='SVE1,SVE2,Y1E1,Y1E2,Y2E1,Y2E2...')
-    parser.add_argument('--campaignlib',help='Campaign where templates are stored, e.g., Y2A1dev')
+    parser.add_argument('--labels',help='Human-readable labels to "mark" a given processing attempt')
+    parser.add_argument('--epoch',help='Observing epoch. If not specified, will be calculated. E.g., \
+                         SVE1,SVE2,Y1E1,Y1E2,Y2E1,Y2E2...')
+    parser.add_argument('--campaignlib',help='Directory in pipebox where templates are stored, e.g., \
+                         $PIPEBOX_DIR/templates/pipelines/finalcut/-->Y2A1dev<--')
 
     args = parser.parse_args()
     return args
