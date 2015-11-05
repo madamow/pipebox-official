@@ -32,7 +32,7 @@
             </normfile>
             <norm_dflatcor>
                 # metadata info
-                filetype = cal_dflatcor
+                filetype = cal_norm_dflatcor
 
                 # how to name file
                 filepat = nite_ccdnum_band

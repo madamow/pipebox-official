@@ -38,7 +38,7 @@
                 dirpat = precal
                 ops_enddir = xtalked-bias/${camera}${expnum:8}
                 rundir = xtalked-bias 
-                savefiles = True
+                savefiles = False
             </xtalked>
         </file>
         <exec_1>

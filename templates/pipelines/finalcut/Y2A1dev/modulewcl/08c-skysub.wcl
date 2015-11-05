@@ -39,16 +39,16 @@
                 rundir = red
                 savefiles = false
             </red_skysub>
-            <cal_dflatcor>
+            <cal_norm_dflatcor>
                 # metadata info
-                filetype = cal_dflatcor
+                filetype = cal_norm_dflatcor
                 filename = ${camera}_n${calnite}_${band}_c${ccdnum:2}_${calrun}_norm-dflatcor.fits
 
                 # where to store file
                 dirpat = precal
                 ops_enddir = norm-dflatcor
                 rundir = norm-dflatcor
-            </cal_dflatcor>
+            </cal_norm_dflatcor>
             <skypca_tmpl>
                  filetype = skypca_tmpl
 
@@ -64,7 +64,7 @@
         <exec_1>
             execname = sky_subtract
             cmd_hyphen = alldouble
-            used = file.red_bleedmasked,file.skyfit_binned_fp,file.skypca_tmpl,file.cal_dflatcor
+            used = file.red_bleedmasked,file.skyfit_binned_fp,file.skypca_tmpl,file.cal_norm_dflatcor
             was_generated_by = file.red_skysub
             ancestry = file.red_bleedmasked:file.red_skysub
             <cmdline>
@@ -72,7 +72,7 @@
                 o = ${file.red_skysub.fullname}
                 fitfilename = ${file.skyfit_binned_fp.fullname}
                 pcfilename = ${file.skypca_tmpl.fullname}
-                domefilename = ${file.cal_dflatcor.fullname}
+                domefilename = ${file.cal_norm_dflatcor.fullname}
                 weight = sky
                 null_mask = EDGE
             </cmdline>
