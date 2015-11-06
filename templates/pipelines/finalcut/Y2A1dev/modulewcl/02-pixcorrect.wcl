@@ -20,7 +20,8 @@
             </biascor>
             <norm_dflatcor>
                 band = ${band}
-                filetype = cal_norm_dflatcor
+                #filetype = cal_norm_dflatcor
+                filetype = cal_dflatcor
                 filename = ${camera}_n${calnite}_${band}_c${ccdnum:2}_${calrun}_norm-dflatcor.fits
                 dirpat = se
                 rundir = norm-dflatcor
