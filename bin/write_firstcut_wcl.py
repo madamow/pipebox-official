@@ -169,7 +169,7 @@ if __name__ == "__main__":
             else:
                 # If less than queue size submit exposure
                 if pipebox_utils.less_than_queue('firstcut',args.queue_size):
-                    pipebox_utils.submit_exposure(output_name)
+                    pipebox_utils.submit_command(output_path)
 
         if args.savefiles:
             # Writing bash submit scripts
