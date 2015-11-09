@@ -71,9 +71,9 @@ class FirstCut(WideField):
         """Returns expnum,nite of max(expnum) in the exposure table"""
         base_query = "select max(expnum) from exposure where obstype='object'"
         if ignore_program:
-            max_object = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in querydict['propid'])
+            max_object = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['propid'])
         elif ignore_propid:
-            max_object = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in querydict['program'])
+            max_object = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['program'])
         elif ignore_all:
             max_object = base_query
         else:
@@ -92,9 +92,9 @@ class FirstCut(WideField):
         print "selecting exposures to submit..."
         base_query = "select distinct expnum, band from exposure where obstype='object' and object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' and object not like '%%test%%' and object not like '%%junk%%' and nite = '%s' " % nite
         if ignore_propid:
-            get_expnum_and_band = base_query + " program in (%s)" % ','.join("'{0}'".format(k) for k in querydict['program'])
+            get_expnum_and_band = base_query + " program in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['program'])
         elif ignore_program:
-            get_expnum_and_band = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in querydict['propid'])
+            get_expnum_and_band = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['propid'])
         elif ignore_all:
             get_expnum_and_band = base_query
         else:
