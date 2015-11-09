@@ -21,6 +21,7 @@ def cmdline():
                         help="username that will submit")
     parser.add_argument("--labels", action="store", default='me-tests',
                         help="Coma-separated labels")
+    parser.add_argument("--reqnum",help='JIRA ticket number')
     parser.add_argument('--jira_parent',help='JIRA parent ticket under which\
                          new ticket will be created.')
     parser.add_argument('--jira_description',help='Description of ticket\
@@ -63,23 +64,30 @@ if __name__ == "__main__":
     # Create JIRA ticket
     new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
                                               description=args.jira_description,
-                                              summary=jira_summary,
-                                              ticket=reqnum,parent=jira_parent,
+                                              summary=args.jira_summary,
+                                              ticket=args.reqnum,parent=args.jira_parent,
                                               use_existing=True)    
 
+    args.reqnum,args.jira_parent = new_reqnum,new_jira_parent
+
     submit_template_path = os.path.join("pipelines/hostname","hostname_template.des")
-    output_name = "%s_hostname_rendered_template.des" %s (args.reqnum)
+    output_name = "%s_hostname_rendered_template.des" % (args.reqnum)
     output_path = os.path.join(args.pipebox_work,output_name)
-    wclname = pipebox_utils.write_template(submit_template_path,output_path,args)
-   
+    args.rendered_template_path = []
+    args.rendered_template_path.append(output_path)
+       
     if args.savefiles: 
+        pipebox_utils.write_template(submit_template_path,output_path,args)
+        bash_template_path = os.path.join("scripts","submitme_template.sh")
         # Current schema of writing dessubmit bash script
         bash_script_name = "submitme_hostname_%s_%s.sh" % (args.reqnum,args.target_site)
         bash_script_path= os.path.join(args.pipebox_work,bash_script_name)
-        args.rendered_template_path.append(output_path)
+        # Write bash script
+        pipebox_utils.write_template(bash_template_path,bash_script_path,args)
+
         os.chmod(bash_script_path, 0755)
 
-        print pipebox_utils.print_submit_info('hostname',site=args.target_site,
+        pipebox_utils.print_submit_info('hostname',site=args.target_site,
                                               eups_product=args.eups_product,
                                               eups_version=args.eups_version,
                                               submit_file=bash_script_path)
