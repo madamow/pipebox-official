@@ -36,14 +36,11 @@ class WideField(PipeLine):
     def get_expnum_info(self,exposure_list):
         """ Query database for band and nite for each given exposure.
             Returns a list of dictionaries."""
-        info_dict = []
         for exp in exposure_list:
             expnum_info = "select distinct expnum, band, nite from exposure where expnum='%s'" % exp
             self.cur.execute(expnum_info)
             results = self.cur.fetchall()[0]
-            info_dict.append(results)
-
-        return info_dict
+            yield results
 
     def update_df(self,df):
         """ Takes a pandas dataframe and for each exposure add column:value
@@ -188,7 +185,6 @@ class NitelyCal(PipeLine):
     def update_df(self,df):
         """ Takes a pandas dataframe and for each exposure add column:value
             band, nite, obstype. Returns dataframe"""
-        info_dict = []
         for index,row in df.iterrows():
             expnum_info = "select distinct expnum, band, nite, obstype from exposure where expnum='%s'" % row['expnum']
             self.cur.execute(expnum_info)

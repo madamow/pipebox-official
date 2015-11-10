@@ -51,7 +51,7 @@ def run(args):
     wakingup = "\n%s: Waking up. Checking if I can submit..." % datetime.now()
     logfile.write(wakingup)
        
-    allexpnumnband = cur.get_expnums(nite=nite,**defaults_dict)
+    allexpnumnband = list(cur.get_expnums(nite=nite,**defaults_dict))
     # If no exposures are found, do nothing.
     if len(allexpnumnband) == 0:
         logfile.write("\nNo exposures found. Exiting...")
