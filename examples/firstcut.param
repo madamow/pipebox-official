@@ -20,34 +20,34 @@ jira_summary       =                   # Title of JIRA ticket. To submit multipl
 eups_product       = firstcut          # EUPS production stack, e.g., finalcut
 eups_version       = Y3N+1             # EUPS production stack version, e.g., Y2A1+1
 
-expnum             =                # A single expnum or comma-separated list of expnums
-ccdnum             =                # CCDs to be processed
-nite               =                # For auto mode: if specified will submit all exposures
-                                    # found from nite
-calnite            =                # bias/flat calibration nite/niterange, i.e., 20151020
-                                    # or 20151020t1030
-calrun             =                # bias/flat calibration run, i.e., r1948p03
-caltag             =                # Tag in OPS_PROCTAG to use if you calnite/calrun not
-                                    # specified
+expnum             =                   # A single expnum or comma-separated list of expnums
+ccdnum             =                   # CCDs to be processed
+nite               =                   # For auto mode: if specified will submit all exposures
+                                       # found from nite
+calnite            =                   # bias/flat calibration nite/niterange, i.e., 20151020
+                                       # or 20151020t1030
+calrun             =                   # bias/flat calibration run, i.e., r1948p03
+caltag             =                   # Tag in OPS_PROCTAG to use if you calnite/calrun not
+                                       # specified
 
-campaign           = Y3N            # Used in archive dir, e.g., Y2T3
-project            = ACT            # Archive directory where runs are stored, e.g.,
-                                    # $ARCHIVE/-->ACT<--/finalcut/
-labels             =                # Human-readable labels to "mark" a given processing
-                                    # attempt
+campaign           = Y3N               # Used in archive dir, e.g., Y2T3
+project            = ACT               # Archive directory where runs are stored, e.g.,
+                                       # $ARCHIVE/-->ACT<--/finalcut/
+labels             =                   # Human-readable labels to "mark" a given processing
+                                       # attempt
 
-user               =                # username that will submit  
-queue_size         =                # If set and savefiles is not specified, code will
-                                    # submit specified runs up until queue_size is reached.
-                                    # Code will wait until queue drops below limit to submit
-                                    # next job
-savefiles          =                # Saves submit files to submit later
-list               =                # File of line-separated expnums
-csv                =                # CSV of exposures and information specified by user. If
-                                    # specified, code will use exposures in csv to submit
-                                    # jobs. Must also specify --delimiter
-delimiter          =                # The delimiter if specifying csv and is not comma-
-                                    # separated
-paramfile          =                # Key = Value file that can be used to replace command-
-                                    # line
-exptag             =                # Grab all expnums with given tag in exposuretag table
+user               =                   # username that will submit  
+queue_size         =                   # If set and savefiles is not specified, code will
+                                       # submit specified runs up until queue_size is reached.
+                                       # Code will wait until queue drops below limit to submit
+                                       # next job
+savefiles          =                   # Saves submit files to submit later
+list               =                   # File of line-separated expnums
+csv                =                   # CSV of exposures and information specified by user. If
+                                       # specified, code will use exposures in csv to submit
+                                       # jobs. Must also specify --delimiter
+delimiter          =                   # The delimiter if specifying csv and is not comma-
+                                       # separated
+paramfile          =                   # Key = Value file that can be used to replace command-
+                                       # line
+exptag             =                   # Grab all expnums with given tag in exposuretag table

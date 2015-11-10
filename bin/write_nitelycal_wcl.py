@@ -27,6 +27,7 @@ def cmdline():
     parser.add_argument('--jira_section',default='jira-desdm',help='')
     parser.add_argument('--eups_product',help='')
     parser.add_argument('--eups_version',help='')
+    parser.add_argument('--queue_size',help='')
     parser.add_argument('--campaign',help='')
     parser.add_argument('--campaignlib',help='')
     parser.add_argument('--project',default='ACT',help='')
