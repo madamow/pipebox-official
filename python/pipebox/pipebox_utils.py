@@ -51,7 +51,7 @@ def update_from_param_file(args,delimiter='='):
     file = args.paramfile
     with open(file,'r') as paramfile:
         lines = paramfile.readlines()
-    param_dict = {row.split(delimiter)[0].strip():row.split(delimiter)[1].strip()\
+    param_dict = {row.split(delimiter)[0].strip():row.split(delimiter)[1].strip()
                   for row in lines} 
 
     args_dict = vars(args)    
