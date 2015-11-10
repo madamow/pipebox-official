@@ -104,13 +104,11 @@ if __name__ == "__main__":
         # For each use-case create bias/flat list and dataframe
         if args.biaslist and args.flatlist:
             # create biaslist from file
-            with open(args.biaslist) as listfile:
-                args.bias_list = listfile.read().splitlines()
+            args.bias_list = list(pipebox_utils.read_file(args.biaslist))
             args.bias_df = pd.DataFrame(args.bias_list,columns=['expnum'])
             
             # create flatlist from file
-            with open(args.flatlist) as listfile:
-                args.flat_list = listfile.read().splitlines()
+            args.flat_list = list(pipebox_utils.read_file(args.flatlist))
             args.flat_df = pd.DataFrame(args.flat_list,columns=['expnum'])
         
             args.dataframe = pd.concat([args.flat_df,args.bias_df],ignore_index=True)

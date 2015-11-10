@@ -96,8 +96,7 @@ if __name__ == "__main__":
             args.exposure_list = args.expnum.split(',')
             args.exposure_df = pd.DataFrame(args.exposure_list,columns=['expnum'])
         elif args.list: 
-            with open(args.list) as listfile:
-                args.exposure_list = listfile.read().splitlines()
+            args.exposure_list = list(pipebox_utils.read_file(args.list))
             args.exposure_df = pd.DataFrame(args.exposure_list,columns=['expnum'])
         elif args.csv: 
             args.exposure_df = pd.read_csv(args.csv,sep=args.delimiter)

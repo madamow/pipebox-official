@@ -42,11 +42,16 @@ def less_than_queue(pipeline,queue_size=1000):
     else:
         return False
 
+def read_file(file):
+    """Read file as generator"""
+    with open(file) as listfile:
+        for line in listfile: yield line.strip()
+
 def update_from_param_file(args,delimiter='='):
     file = args.paramfile
     with open(file,'r') as paramfile:
         lines = paramfile.readlines()
-    param_dict = {row.split(delimiter)[0].strip():row.split(delimiter)[1].strip()
+    param_dict = {row.split(delimiter)[0].strip():row.split(delimiter)[1].strip()\
                   for row in lines} 
 
     args_dict = vars(args)    
