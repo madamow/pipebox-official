@@ -23,17 +23,17 @@ class PipeLine(object):
         diff_list = []
         for name,minexpnum,maxexpnum in epochs:
             # Calculate difference between epoch min,max with given exposure
-            # and append minimum to list
-            diff = min([abs(exposure - minexpnum),abs(exposure - maxexpnum)])
-            diff_list.append((name,diff))
+            # and take minimum
+            min_diff = min([abs(exposure - minexpnum),abs(exposure - maxexpnum)])
+            diff_list.append((name,min_diff))
             if exposure > int(minexpnum) and exposure < int(maxexpnum):
                 # If exposure within epoch limits return epoch name
                 found = 1
                 return name
         if found == 0:
             # If exposure doesn't live within epoch limits find closest epoch to use
-            min_diff = min([tu[1] for tu in diff_list])
-            name = [tu[0] for tu in diff_list if tu[1] == min_diff][0]
+            min_of_min_diff = min([diff for name,diff in diff_list])
+            name = [name for name,diff in diff_list if diff == min_of_min_diff][0]
             return name
     
     def get_expnums_from_tag(self,tag):
