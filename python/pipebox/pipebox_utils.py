@@ -13,7 +13,8 @@ def write_template(template,outfile,args):
         rendered template, and args namespace and writes rendered template"""
     config_template = env.get_template(template)
     rendered_config_template = config_template.render(args=args)
-
+    
+    args.submittime = datetime.now()
     with open(outfile,'w') as rendered_template:
         rendered_template.write(rendered_config_template)
 
