@@ -10,17 +10,32 @@ class PipeLine(object):
         cur = dbh.cursor()
         self.section = section
         self.cur = cur 
-
+    
     def find_epoch(self,exposure):
-        exposure = int(exposure)
-        """ Find correct epoch for exposure in order to find proper calibrations"""
+        """ Return correct epoch name for exposure in order to use
+            appropriate calibrations file"""
         epoch_query = "select name,minexpnum,maxexpnum from mjohns44.epoch"
         self.cur.execute(epoch_query)
         epochs = self.cur.fetchall()
-        for name,minexpnum,maxexpnum in epochs:
-            if exposure > int(minexpnum) and exposure < int(maxexpnum):
-                return name
 
+        found = 0
+        exposure = int(exposure)
+        diff_list = []
+        for name,minexpnum,maxexpnum in epochs:
+            # Calculate difference between epoch min,max with given exposure
+            # and append minimum to list
+            diff = min([abs(exposure - minexpnum),abs(exposure - maxexpnum)])
+            diff_list.append((name,diff))
+            if exposure > int(minexpnum) and exposure < int(maxexpnum):
+                # If exposure within epoch limits return epoch name
+                found = 1
+                return name
+        if found == 0:
+            # If exposure doesn't live within epoch limits find closest epoch to use
+            min_diff = min([tu[1] for tu in diff_list])
+            name = [tu[0] for tu in diff_list if tu[1] == min_diff][0]
+            return name
+    
     def get_expnums_from_tag(self,tag):
         """ Query database for each exposure with a given exposure tag.
         Returns a list of expnums."""
