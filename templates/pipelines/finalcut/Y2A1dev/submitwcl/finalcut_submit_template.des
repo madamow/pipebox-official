@@ -46,6 +46,19 @@ target_des_db_section = {{ args.db_section }}
 
 target_site = {{ args.target_site }}
 
+{% if args.nginx %}
+<archive>
+    <{{args.archive_name}}>
+        host = {{args.nginx_server}}.cosmology.illinois.edu
+        root_http = http://{{args.nginx_server}}.cosmology.illinois.edu:8095/Prodbeta/archive
+        input_transfer_semname_home  = nginx10-input
+        output_transfer_semname_home = nginx20-output
+    </{{args.archive_name}}>
+</archive>
+{% endif %}
+
+
+
 {% if args.target_site in ['bluewaters-dev','bluewaters'] %}
 # <job_environment>
 #    DESPYFITS_USE_INDIRECT_WRITE=True

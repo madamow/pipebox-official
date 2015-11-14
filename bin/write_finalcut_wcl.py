@@ -62,6 +62,7 @@ def cmdline():
                          SVE1,SVE2,Y1E1,Y1E2,Y2E1,Y2E2...')
     parser.add_argument('--campaignlib',help='Directory in pipebox where templates are stored, e.g., \
                          $PIPEBOX_DIR/templates/pipelines/finalcut/-->Y2A1dev<--')
+    parser.add_argument('--nginx',action='store_true',help='Use nginx?')
 
     args = parser.parse_args()
     return args
@@ -72,6 +73,10 @@ if __name__ == "__main__":
 
     args.submittime = datetime.now()
     
+    if not args.archive_name:
+        if args.db_section  == 'db-destest': args.archive_name = 'prodbeta'
+        if args.db_section  == 'db-desoper': args.archive_name = 'desar2home'
+
     if args.paramfile:
         args = pipebox_utils.update_from_param_file(args)
         args = pipebox_utils.replace_none_str(args)
@@ -160,6 +165,10 @@ if __name__ == "__main__":
         output_name = "%s_%s_r%s_%s_finalcut_rendered_template.des" % (args.expnum,args.band,args.reqnum,args.target_site)
         output_path = os.path.join(args.pipebox_work,output_name)
         # Writing template
+        if args.nginx:
+            args.nginx_server = pipebox_utils.cycle_list_index(index,['descmp0','descmp4'])
+            print args.expnum, args.nginx_server
+
         pipebox_utils.write_template(submit_template_path,output_path,args)
 
         if args.savefiles:

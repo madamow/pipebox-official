@@ -143,3 +143,8 @@ def ask_string(question, default, check=None, passwd=False):
             sys.stderr.write("Reached end of input. Aborting.\n")
             sys.exit(2)
     return answer
+
+
+def cycle_list_index(index,options):
+    k = index % len(options)
+    return options[k]
