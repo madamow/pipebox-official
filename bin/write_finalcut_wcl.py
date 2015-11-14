@@ -164,11 +164,10 @@ if __name__ == "__main__":
             args.epoch_name = cur.find_epoch(row['expnum'])
         output_name = "%s_%s_r%s_%s_finalcut_rendered_template.des" % (args.expnum,args.band,args.reqnum,args.target_site)
         output_path = os.path.join(args.pipebox_work,output_name)
-        # Writing template
+        # If ngix -- cycle trough servers
         if args.nginx:
             args.nginx_server = pipebox_utils.cycle_list_index(index,['descmp0','descmp4'])
-            print args.expnum, args.nginx_server
-
+        # Writing template
         pipebox_utils.write_template(submit_template_path,output_path,args)
 
         if args.savefiles:
