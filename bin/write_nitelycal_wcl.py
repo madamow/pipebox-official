@@ -139,7 +139,10 @@ if args.mode=='manual':
     
     # Render and write templates
     campaign_path = "pipelines/nitelycal/%s/submitwcl" % args.campaignlib
-    submit_template_path = os.path.join(campaign_path,"nitelycal_submit_template.des")
+    if args.template_name:
+        submit_template_path = os.path.join(campaign_path,args.template_name)
+    else:
+        submit_template_path = os.path.join(campaign_path,"nitelycal_submit_template.des")
     bash_template_path = os.path.join("scripts","submitme_template.sh")
     args.rendered_template_path = []
     # Create templates for each entry in dataframe
@@ -157,8 +160,12 @@ if args.mode=='manual':
             args.flat_list = ','.join(str(i) for i in flat_list)
 
         args.reqnum,args.jira_parent= group['reqnum'].unique()[0],group['jira_parent'].unique()[0]
+        req_dir = 'r%s' % args.reqnum
+        output_dir = os.path.join(args.pipebox_work,req_dir)
+        if not os.path.isdir(output_dir):
+            os.makedirs(output_dir) 
         output_name = "%s_r%s_nitelycal_rendered_template.des" % (args.nite,args.reqnum)
-        output_path = os.path.join(args.pipebox_work,output_name)
+        output_path = os.path.join(output_dir,output_name)
         # Writing template
         pipebox_utils.write_template(submit_template_path,output_path,args)
 
@@ -168,8 +175,8 @@ if args.mode=='manual':
                 bash_script_name = "submitme_%s_%s.sh" % (datetime.now().strftime('%Y-%m-%dT%H:%M'),args.target_site)
             else:
                 bash_script_name = "submitme_%s_%s.sh" % (args.reqnum,args.target_site)
-            bash_script_path= os.path.join(args.pipebox_work,bash_script_name)
-            args.rendered_template_path.append(output_path)
+            bash_script_path= os.path.join(output_dir,bash_script_name)
+            args.rendered_template_path.append(bash_script_path)
         else:
             # If less than queue size submit exposure
             if pipebox_utils.less_than_queue('nitelycal',args.queue_size):

@@ -26,6 +26,7 @@ class PipeArgs(object):
                              will submit specified runs up until queue_size is reached. Code \
                              will wait until queue drops below limit to submit next job')
         parser.add_argument('--labels',help='Human-readable labels to "mark" a given processing attempt')
+        parser.add_argument('--template_name',help='submitwcl template within pipeline/campaign')
         parser.add_argument('--auto',action='store_true',help='Will run autosubmit mode if specified')
            
         # Archive arguments

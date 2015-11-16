@@ -26,8 +26,12 @@ new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jir
 args.reqnum,args.jira_parent = new_reqnum,new_jira_parent
 
 submit_template_path = os.path.join("pipelines/hostname","hostname_template.des")
+req_dir = 'r%s' % args.reqnum
+output_dir = os.path.join(args.pipebox_work,req_dir)
+if not os.path.isdir(output_dir):
+    os.makedirs(output_dir)
 output_name = "%s_hostname_rendered_template.des" % (args.reqnum)
-output_path = os.path.join(args.pipebox_work,output_name)
+output_path = os.path.join(output_dir,output_name)
 args.rendered_template_path = []
 args.rendered_template_path.append(output_path)
    
@@ -36,7 +40,7 @@ if args.savefiles:
     bash_template_path = os.path.join("scripts","submitme_template.sh")
     # Current schema of writing dessubmit bash script
     bash_script_name = "submitme_hostname_%s_%s.sh" % (args.reqnum,args.target_site)
-    bash_script_path= os.path.join(args.pipebox_work,bash_script_name)
+    bash_script_path= os.path.join(output_dir,bash_script_name)
     # Write bash script
     pipebox_utils.write_template(bash_template_path,bash_script_path,args)
 

@@ -101,15 +101,22 @@ else:
     
     # Render and write templates
     campaign_path = "pipelines/firstcut/%s/submitwcl" % args.campaign
-    submit_template_path = os.path.join(campaign_path,"firstcut_submit_template.des")
+    if args.template_name:
+        submit_template_path = os.path.join(campaign_path,args.template_name)
+    else:
+        submit_template_path = os.path.join(campaign_path,"firstcut_submit_template.des")
     bash_template_path = os.path.join("scripts","submitme_template.sh")
     args.rendered_template_path = []
     # Create templates for each entry in dataframe
     reqnum_count = len(args.exposure_df.groupby(by=['reqnum']))
     for index,row in args.exposure_df.iterrows():
         args.expnum,args.band,args.nite,args.reqnum,args.jira_parent = row['expnum'],row['band'],row['nite'],int(row['reqnum']),row['jira_parent']
+        req_dir = 'r%s' % args.reqnum
+        output_dir = os.path.join(args.pipebox_work,req_dir)
+        if not os.path.isdir(output_dir):
+            os.makedirs(output_dir)
         output_name = "%s_%s_r%s_firstcut_rendered_template.des" % (args.expnum,args.band,args.reqnum)
-        output_path = os.path.join(args.pipebox_work,output_name)
+        output_path = os.path.join(output_dir,output_name)
         # Writing template
         pipebox_utils.write_template(submit_template_path,output_path,args)
 
@@ -119,8 +126,8 @@ else:
                 bash_script_name = "submitme_%s_%s.sh" % (datetime.now().strftime('%Y-%m-%dT%H:%M'),args.target_site)
             else:
                 bash_script_name = "submitme_%s_%s.sh" % (args.reqnum,args.target_site)
-            bash_script_path= os.path.join(args.pipebox_work,bash_script_name)
-            args.rendered_template_path.append(output_path)
+            bash_script_path= os.path.join(output_dir,bash_script_name)
+            args.rendered_template_path.append(bash_script_path)
         else:
             # If less than queue size submit exposure
             if pipebox_utils.less_than_queue('firstcut',args.queue_size):
