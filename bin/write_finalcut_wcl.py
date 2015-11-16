@@ -166,7 +166,7 @@ if __name__ == "__main__":
         output_path = os.path.join(args.pipebox_work,output_name)
         # If ngix -- cycle trough servers
         if args.nginx:
-            args.nginx_server = pipebox_utils.cycle_list_index(index,['descmp0','descmp4'])
+            args.nginx_server = pipebox_utils.cycle_list_index(index,['descmp0','descmp4','desftp', 'deslogin'])
         # Writing template
         pipebox_utils.write_template(submit_template_path,output_path,args)
 
