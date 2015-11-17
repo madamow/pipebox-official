@@ -5,8 +5,8 @@ from pipebox import pipebox_utils, jira_utils, commandline
 
 
 # Get the options
-pipeargs = commandline.PipeArgs()
-args  = pipeargs.cmdline()[1]
+pipeargs = commandline.HostnameArgs()
+args  = pipeargs.cmdline()
 
 try:
     pipebox_work = os.environ['PIPEBOX_WORK']
