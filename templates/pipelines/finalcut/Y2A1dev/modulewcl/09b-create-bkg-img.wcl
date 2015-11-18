@@ -40,6 +40,7 @@
             dirpat = se
             ops_enddir = bkg
             rundir = bkg
+            savefiles = false
         </red_bkg>
     </file>
 
