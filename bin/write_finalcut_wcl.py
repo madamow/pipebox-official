@@ -124,7 +124,8 @@ for index,row in args.exposure_df.iterrows():
         else:
             bash_script_name = "submitme_%s_%s.sh" % (args.reqnum,args.target_site)
         bash_script_path= os.path.join(output_dir,bash_script_name)
-        args.rendered_template_path.append(bash_script_path)
+        args.rendered_template_path.append(output_path)
+
     else:
         # If less than queue size submit exposure
         if pipebox_utils.less_than_queue('finalcut',args.queue_size):
