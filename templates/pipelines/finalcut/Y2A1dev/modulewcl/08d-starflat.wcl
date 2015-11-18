@@ -22,7 +22,7 @@
                 dirpat = se
                 ops_enddir = red/starflat
                 rundir = red/starflat
-                savefiles = true
+                savefiles = false
             </red_starflat>
             <cal_starflat>
                 # metadata info

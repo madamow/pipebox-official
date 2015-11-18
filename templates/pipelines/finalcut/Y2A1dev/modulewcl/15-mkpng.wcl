@@ -54,7 +54,7 @@
                 rundir = red/immask
             </red_nullweight_immask>
             <cat_finalcut>
-		        listonly = True
+                listonly = True
                 filetype = cat_finalcut
                 filepat = ccdnum_band
                 flabel = red-fullcat
@@ -70,48 +70,49 @@
                 ops_enddir = qa
             </png_proj>
 	        <png_proj_tn>
-		        filetype = png     
+                filetype = png     
                 filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_TN.png
                 dirpat = se
                 rundir = qa
-		        ops_enddir = qa
+                ops_enddir = qa
 	        </png_proj_tn>
 	        <png_ell>
-		        filetype = png     
+                filetype = png     
                 filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_ell.png
                 dirpat = se
                 rundir = qa
-		        ops_enddir = qa
+                ops_enddir = qa
             </png_ell>
  	        <png_ell_tn>
-		        filetype = png     
+                filetype = png     
                 filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_ell_TN.png
                 dirpat = se
                 rundir = qa
-		        ops_enddir = qa
-	        </png_ell_tn>
-	        <png_focus>
+                ops_enddir = qa
+                </png_ell_tn>
+               <png_focus>
                 filetype = png
                 filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_focus.png
                 dirpat = se
                 rundir = qa
-		        ops_enddir = qa
+                ops_enddir = qa
             </png_focus>
 	        <png_focus_tn>
                 filetype = png
                 filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_focus_TN.png
                 dirpat = se
                 rundir = qa
-		        ops_enddir = qa
+                ops_enddir = qa
             </png_focus_tn>
 	        <red_proj>
-		        filetype = png
-		        filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_proj.fits
+                filetype = png
+                filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_proj.fits
                 flabel = proj
                 fsuffix = fits
                 dirpat = se
                 ops_enddir = qa
                 rundir = qa
+                savefiles = false
 	        </red_proj>
         </file>
 
