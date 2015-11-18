@@ -32,7 +32,7 @@
                 rundir = binned-fp
 
                 # whether to bring file home
-                savefiles = True 
+                savefiles = True
             </skyfit_binned_fp>
             <skypca_binned_fp>
                 filetype = skypca_binned_fp

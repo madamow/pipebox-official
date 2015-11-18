@@ -40,7 +40,7 @@
                 dirpat = se
                 ops_enddir = red/wcs
                 rundir = red/wcs
-		        savefiles = true
+                savefiles = false
             </red_wcs>
             <scamp_update_head>
                 filetype = config
@@ -54,7 +54,7 @@
             execname = fwhm()
             used = file.scamp_cat
             <cmdline>
-                _01_scamp_cat = filespecs.scamp_cat.fullname
+            _01_scamp_cat = filespecs.scamp_cat.fullname
             </cmdline>
         </exec_1>
     

@@ -9,16 +9,16 @@
                 filetype = config
                 filename = ${confignite}_decam_pvmodel_${scampaheadnite}_${band}.ahead
                 dirpat = se
-        		ops_enddir = aux
+                ops_enddir = aux
                 rundir = config
             </ahead_full>
             <ahead_partial>
                 filetype = config 
-		        filename = ${camera}${expnum:8}_${band}_r${reqnum}p${attnum:2}_scamp.ahead
+                filename = ${camera}${expnum:8}_${band}_r${reqnum}p${attnum:2}_scamp.ahead
                 dirpat = se
                 ops_enddir = aux
                 rundir = aux
-                savefiles = true
+                savefiles = false
             </ahead_partial>
         </file>
         <exec_1>
@@ -27,7 +27,7 @@
             was_generated_by = file.ahead_partial
             ancestry = file.ahead_full:file.ahead_partial
             <cmdline>
-        		i = ${file.ahead_full.fullname}
+                i = ${file.ahead_full.fullname}
                 o = ${file.ahead_partial.fullname}
                 c = ${ccdnum}
             </cmdline>

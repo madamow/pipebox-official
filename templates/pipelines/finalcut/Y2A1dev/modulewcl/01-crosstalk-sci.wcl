@@ -7,7 +7,7 @@
 
         <file>
             <raw>
-	            filetype = raw
+                filetype = raw
                 filename = DECam_${expnum:8}.fits.fz
                 dirpat = raw
                 rundir = raw
@@ -26,10 +26,10 @@
                 dirpat = se
                 ops_enddir = red
                 rundir = red 
-		        savefiles = false
+                savefiles = false
             </red_xtalked>
 	        <hupdate>
-        		filetype = config
+                filetype = config
                 filename = ${hupdatefile}
                 dirpat = se
                 rundir = config

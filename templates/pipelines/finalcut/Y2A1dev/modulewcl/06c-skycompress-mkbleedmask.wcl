@@ -29,7 +29,7 @@
                 rundir = mini
 
                 # whether to bring file home
-                savefiles = True
+                savefiles = false
             </bleedmask_mini>
         </file>
         <exec_1>

@@ -59,7 +59,7 @@
                 rundir = red/pixcor
 
                 # whether to bring file home
-                savefiles = true
+                savefiles = false
             </red_pixcor>
             <pixcor_mini_red>
                 # what metadata to get
@@ -76,7 +76,7 @@
                 rundir = mini
 
                 # whether to bring file home
-                savefiles = True
+                savefiles = false
             </pixcor_mini_red>
         </file>
         <exec_1>

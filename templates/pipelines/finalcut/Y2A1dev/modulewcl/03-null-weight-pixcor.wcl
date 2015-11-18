@@ -32,7 +32,7 @@
                 rundir = red/pixcor
 
                 # whether to bring file home
-                savefiles = true
+                savefiles = false
             </red_nullweight_pixcor>
         </file>
         <exec_1>

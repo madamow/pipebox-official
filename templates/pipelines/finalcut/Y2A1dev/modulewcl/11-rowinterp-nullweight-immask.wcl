@@ -27,7 +27,7 @@
                 rundir = red/immask
 
                 # whether to bring file home
-                savefiles = true
+                savefiles = false
             </red_nullweight_immask>
         </file>
         <exec_1>
