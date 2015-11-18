@@ -61,6 +61,9 @@ class PipeArgs(object):
         parser.add_argument('--ccdnum',default=pipebox_utils.ALL_CCDS,help='Ccds to be processed.')
         parser.add_argument('--nite',help='For auto mode: if specified will submit all exposures found \
                          from nite')
+
+        # Transfers
+        parser.add_argument('--nginx',action='store_true',help='Use nginx?')
         
         return parser
 

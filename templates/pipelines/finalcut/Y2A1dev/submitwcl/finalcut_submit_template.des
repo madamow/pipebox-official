@@ -51,18 +51,16 @@ target_site = {{ args.target_site }}
     <{{args.archive_name}}>
         host = {{args.nginx_server}}.cosmology.illinois.edu
         root_http = http://{{args.nginx_server}}.cosmology.illinois.edu:8095/Prodbeta/archive
-        input_transfer_semname_home  = nginx10-input
-        output_transfer_semname_home = nginx20-output
+        input_transfer_semname_home  = nginx10-{{args.nginx_server}}-input
+        output_transfer_semname_home = nginx10-{{args.nginx_server}}-output
     </{{args.archive_name}}>
 </archive>
 {% endif %}
 
-
-
 {% if args.target_site in ['bluewaters-dev','bluewaters'] %}
-# <job_environment>
-#    DESPYFITS_USE_INDIRECT_WRITE=True
-# </job_environment>
+<job_environment>
+   HOME=/u/staff/args.user
+</job_environment>
 {% endif %}
 
 reqnum = {{ args.reqnum }}
