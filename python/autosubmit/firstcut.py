@@ -33,8 +33,12 @@ def run(args):
     args = pipebox_utils.replace_none_str(args)
     
     cur = query.FirstCut(args.db_section)
+    defaults_dict = {'propid':['2012B-0001'],
+                     'program':['supernova','survey','photom-std-field'],
+                     'ignore_all':False}
+
     if not args.nite:
-        nite = cur.get_max()[1]
+        nite = cur.get_max(**defaults_dict)[1]
         args.nite = nite
     if not args.calnite:
         precal = cur.find_precal(args.nite,threshold=7,override=True,tag=args.caltag)
@@ -47,7 +51,7 @@ def run(args):
     wakingup = "\n%s: Waking up. Checking if I can submit..." % datetime.now()
     logfile.write(wakingup)
        
-    allexpnumnband = cur.get_expnums(nite)
+    allexpnumnband = list(cur.get_expnums(nite=nite,**defaults_dict))
     # If no exposures are found, do nothing.
     if len(allexpnumnband) == 0:
         logfile.write("\nNo exposures found. Exiting...")

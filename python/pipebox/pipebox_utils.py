@@ -13,7 +13,8 @@ def write_template(template,outfile,args):
         rendered template, and args namespace and writes rendered template"""
     config_template = env.get_template(template)
     rendered_config_template = config_template.render(args=args)
-
+    
+    args.submittime = datetime.now()
     with open(outfile,'w') as rendered_template:
         rendered_template.write(rendered_config_template)
 
@@ -41,6 +42,11 @@ def less_than_queue(pipeline,queue_size=1000):
         return True
     else:
         return False
+
+def read_file(file):
+    """Read file as generator"""
+    with open(file) as listfile:
+        for line in listfile: yield line.strip()
 
 def update_from_param_file(args,delimiter='='):
     file = args.paramfile

@@ -10,17 +10,32 @@ class PipeLine(object):
         cur = dbh.cursor()
         self.section = section
         self.cur = cur 
-
+    
     def find_epoch(self,exposure):
-        exposure = int(exposure)
-        """ Find correct epoch for exposure in order to find proper calibrations"""
+        """ Return correct epoch name for exposure in order to use
+            appropriate calibrations file"""
         epoch_query = "select name,minexpnum,maxexpnum from mjohns44.epoch"
         self.cur.execute(epoch_query)
         epochs = self.cur.fetchall()
-        for name,minexpnum,maxexpnum in epochs:
-            if exposure > int(minexpnum) and exposure < int(maxexpnum):
-                return name
 
+        found = 0
+        exposure = int(exposure)
+        diff_list = []
+        for name,minexpnum,maxexpnum in epochs:
+            # Calculate difference between epoch min,max with given exposure
+            # and take minimum
+            min_diff = min([abs(exposure - minexpnum),abs(exposure - maxexpnum)])
+            diff_list.append((name,min_diff))
+            if exposure > int(minexpnum) and exposure < int(maxexpnum):
+                # If exposure within epoch limits return epoch name
+                found = 1
+                return name
+        if found == 0:
+            # If exposure doesn't live within epoch limits find closest epoch to use
+            min_of_min_diff = min([diff for name,diff in diff_list])
+            name = [name for name,diff in diff_list if diff == min_of_min_diff][0]
+            return name
+    
     def get_expnums_from_tag(self,tag):
         """ Query database for each exposure with a given exposure tag.
         Returns a list of expnums."""
@@ -36,14 +51,11 @@ class WideField(PipeLine):
     def get_expnum_info(self,exposure_list):
         """ Query database for band and nite for each given exposure.
             Returns a list of dictionaries."""
-        info_dict = []
         for exp in exposure_list:
             expnum_info = "select distinct expnum, band, nite from exposure where expnum='%s'" % exp
             self.cur.execute(expnum_info)
             results = self.cur.fetchall()[0]
-            info_dict.append(results)
-
-        return info_dict
+            yield results
 
     def update_df(self,df):
         """ Takes a pandas dataframe and for each exposure add column:value
@@ -67,9 +79,17 @@ class FirstCut(WideField):
         submitted_or_not = self.cur.fetchone()[0]
         return submitted_or_not       
     
-    def get_max(self):
+    def get_max(self,ignore_propid=False,ignore_program=False,ignore_all=False,**kwargs):
         """Returns expnum,nite of max(expnum) in the exposure table"""
-        max_object = "select max(expnum) from exposure where obstype='object' and propid='2012B-0001' and program in ('supernova','survey','photom-std-field')"
+        base_query = "select max(expnum) from exposure where obstype='object'"
+        if ignore_program:
+            max_object = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['propid'])
+        elif ignore_propid:
+            max_object = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['program'])
+        elif ignore_all:
+            max_object = base_query
+        else:
+            max_object = base_query + " and program in (%s) and propid in (%s)" % (','.join("'{0}'".format(k) for k in kwargs['program']),','.join("'{0}'".format(k) for k in kwargs['propid']))
         self.cur.execute(max_object)
         max_expnum = self.cur.fetchone()[0]
         fetch_nite = "select distinct nite from exposure where expnum=%s" % (max_expnum)
@@ -77,11 +97,20 @@ class FirstCut(WideField):
         object_nite = self.cur.fetchone()[0]
         return max_expnum,object_nite
 
-    def get_expnums(self,nite):
+    def get_expnums(self,nite=None,ignore_propid=False,ignore_program=False,ignore_all=False,**kwargs):
         """ Get exposure numbers and band for incoming exposures"""
+        if not nite:
+            raise Exception("Must specify nite!")
         print "selecting exposures to submit..."
-        get_expnum_and_band = "select distinct expnum, band from exposure where nite = '%s' and propid='2012B-0001' and object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' and object not like '%%test%%' and object not like '%%junk%%' and obstype='object' and program in ('survey','supernova','photom-std-field')" % nite
-
+        base_query = "select distinct expnum, band from exposure where obstype='object' and object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' and object not like '%%test%%' and object not like '%%junk%%' and nite = '%s' " % nite
+        if ignore_propid:
+            get_expnum_and_band = base_query + " program in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['program'])
+        elif ignore_program:
+            get_expnum_and_band = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['propid'])
+        elif ignore_all:
+            get_expnum_and_band = base_query
+        else:
+            get_expnum_and_band = base_query + " and program in (%s) and propid in (%s)" % (','.join("'{0}'".format(k) for k in kwargs['program']),','.join("'{0}'".format(k) for k in kwargs['propid']))
         self.cur.execute(get_expnum_and_band)
         results = self.cur.fetchall()
 
@@ -171,7 +200,6 @@ class NitelyCal(PipeLine):
     def update_df(self,df):
         """ Takes a pandas dataframe and for each exposure add column:value
             band, nite, obstype. Returns dataframe"""
-        info_dict = []
         for index,row in df.iterrows():
             expnum_info = "select distinct expnum, band, nite, obstype from exposure where expnum='%s'" % row['expnum']
             self.cur.execute(expnum_info)
