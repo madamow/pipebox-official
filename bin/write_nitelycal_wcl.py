@@ -38,7 +38,7 @@ if args.mode=='auto':
         # Will run once, but if put in crontab will run however you specify in cron
 
         # Kill current process if cron is running from last execution
-        common.stop_if_already_running()
+        pipebox_utils.stop_if_already_running(os.path.basename(__file__))
         nitelycal.run(args)
 
 if args.mode=='manual': 

@@ -28,7 +28,6 @@ def make_comment(date,nite,reqnum,campaign):
     return comment
 
 def run(args): 
-    
     # Replace any "None" strings with Nonetype
     args = pipebox_utils.replace_none_str(args)
     

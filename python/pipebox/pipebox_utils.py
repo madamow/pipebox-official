@@ -2,6 +2,7 @@ import os
 import sys
 import time
 from subprocess import Popen,PIPE,STDOUT
+from commands import getstatusoutput
 from despydb import desdbi
 from datetime import datetime,timedelta
 from pipebox import env
@@ -98,6 +99,13 @@ def print_submit_info(pipeline,site=None,eups_product=None,eups_version=None,sub
         print "\t setenv X509_USER_PROXY $HOME/.globus/osg/user.proxy"
         print "\t voms-proxy-info --all"
 
+def stop_if_already_running(script_name):
+    """ Exits program if program is already running """
+    l = getstatusoutput("ps aux | grep -e '%s' | grep -v grep | grep -v vim | awk '{print $2}'| awk '{print $2}' " % script_name)
+    if l[1]:
+        print "Already running.  Aborting"
+        print l[1]
+        sys.exit(0)
 # --------------------------------------------------------------
 # These functions were copied/adapted from desdm_eupsinstal.py
 

@@ -2,11 +2,11 @@
 
 import os,sys
 from datetime import datetime
+import time
 from argparse import ArgumentParser
 import pandas as pd
 from pipebox import pipebox_utils,jira_utils,query,commandline
 from autosubmit import firstcut
-from opstoolkit import common
 
 widefield = commandline.WidefieldArgs()
 args = widefield.cmdline()
@@ -38,7 +38,8 @@ if args.auto:
         # Will run once, but if put in crontab will run however you specify in cron
     
         # Kill current process if cron is running from last execution
-        common.stop_if_already_running()
+        pipebox_utils.stop_if_already_running(os.path.basename(__file__))
+        time.sleep(5)
         firstcut.run(args)
 
 else: 
