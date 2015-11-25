@@ -107,10 +107,13 @@ des_http_section = file-http-prodbeta
 
 pipeline = finalcut    # used in desstat output
 
-basket = ${campaign}
+basket = ${nite}
 camsym = ${camera}
 unitname = ${camera}${expnum:8}
-ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/${unitname}/p${attnum:2}
+{% if args.rundir %}
+ops_run_dir = {{ args.rundir }}
+{% else %}
+ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/${unitname}/p${attnum:2} {% endif %}
 submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
 
 save_run_vals = nite, camera, band, expnum, jira_id

@@ -141,6 +141,7 @@ distortion = ${qa_file_prefix}_distortion
                 ASTREFMAG_LIMITS = -99,17
                 POSITION_MAXERR = 10.0
                 ASTREF_CATALOG = UCAC-4
+                REF_SERVER = cocat1.u-strasbg.fr,vizier.nao.ac.jp
                 WRITE_XML = Y
                 FULLOUTCAT_TYPE = NONE
                 c = ${file.scamp_config.fullname}

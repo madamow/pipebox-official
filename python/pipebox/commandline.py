@@ -38,6 +38,7 @@ class PipeArgs(object):
         parser.add_argument('--campaign',help='Used in archive dir, e.g., Y2T3')
         parser.add_argument('--project',default='ACT',help='Archive directory where runs are \
                              stored, e.g., $ARCHIVE/-->ACT<--/finalcut/')
+        parser.add_argument('--rundir',help='Archive directory structure')
       
         # JIRA arguments
         parser.add_argument('--jira_parent',help='JIRA parent ticket under which\
