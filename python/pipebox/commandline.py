@@ -1,9 +1,9 @@
 import os
 from argparse import ArgumentParser
-from pipebox import jira_utils,pipebox_utils,pipebox_parse
-    
+from pipebox import jira_utils,pipebox_parse
+
 class PipeArgs(object):
-   
+
     @staticmethod 
     def argument_parser():
         # Create command line arguments
@@ -27,6 +27,7 @@ class PipeArgs(object):
                              will wait until queue drops below limit to submit next job')
         parser.add_argument('--labels',help='Human-readable labels to "mark" a given processing attempt')
         parser.add_argument('--template_name',help='submitwcl template within pipeline/campaign')
+        parser.add_argument('--configfile',help='Name of user cfg file')
         parser.add_argument('--auto',action='store_true',help='Will run autosubmit mode if specified')
            
         # Archive arguments
@@ -58,7 +59,7 @@ class PipeArgs(object):
         parser.add_argument('--eups_version',help='EUPS production stack version, e.g., Y2A1+1')
         
         # Science arguments
-        parser.add_argument('--ccdnum',default=pipebox_utils.ALL_CCDS,help='Ccds to be processed.')
+        parser.add_argument('--ccdnum',help='CCDs to be processed.')
         parser.add_argument('--nite',help='For auto mode: if specified will submit all exposures found \
                          from nite')
 

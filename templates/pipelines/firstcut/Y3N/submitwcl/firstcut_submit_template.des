@@ -1,5 +1,8 @@
 # {{ args.submittime }}
-<<include {{ args.pipebox_work }}/config/{{ args.user }}_cfg.des>>
+{% if args.configfile %}
+<<include {{ args.pipebox_work }}/config/{{ args.configfile }}>>
+{% else %}
+<<include {{ args.pipebox_work }}/config/{{ args.user }}_cfg.des>> {% endif %}
 
 <<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/modnamepat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/01-crosstalk-sci.wcl>>
@@ -44,7 +47,8 @@ nite = {{ args.nite }}
 calnite = {{ args.calnite }}
 calrun = {{ args.calrun }}
 
-ccdnum = {{ args.ccdnum }}
+{% if args.ccdnum %}
+ccdnum = {{ args.ccdnum }} {% endif %}
 
 {# adding defaults!!! #}
 {% if args.band in ['z','Y'] %} 

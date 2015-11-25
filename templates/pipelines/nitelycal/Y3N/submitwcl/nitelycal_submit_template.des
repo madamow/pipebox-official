@@ -1,5 +1,8 @@
 # {{ args.submittime }}
-<<include {{ args.pipebox_work }}/{{ args.user }}_cfg.des>>
+{% if args.configfile %}
+<<include {{ args.pipebox_work }}/{{ args.configfile }}>>
+{% else %}
+<<include {{ args.pipebox_work }}/{{ args.user }}_cfg.des>> {% endif %}
 
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/modnamepat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/nitelycal/01-crosstalk-bias.wcl>>
@@ -23,7 +26,8 @@ campaign = {{ args.campaign }}
 
 nite = {{ args.nite }}
 project = {{ args.project }}
-ccdnum = {{ args.ccdnum }}
+{% if args.ccdnum %}
+ccdnum = {{ args.ccdnum }} {% endif %}
 
 unitname = ${nite}
 ops_run_dir = ${project}/${pipeline}/${nite}-r${reqnum}/p${attnum:2}
