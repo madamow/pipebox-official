@@ -22,7 +22,7 @@ class PipeArgs(object):
         parser.add_argument('--campaignlib',help='Directory in pipebox where templates are stored, e.g., \
                              $PIPEBOX_DIR/templates/pipelines/finalcut/-->Y2A1dev<--')
         parser.add_argument('--savefiles',action='store_true',help='Saves submit files to submit later.')
-        parser.add_argument('--queue_size',help='If set and savefiles is not specified, code \
+        parser.add_argument('--queue_size',default=1000,help='If set and savefiles is not specified, code \
                              will submit specified runs up until queue_size is reached. Code \
                              will wait until queue drops below limit to submit next job')
         parser.add_argument('--labels',help='Human-readable labels to "mark" a given processing attempt')

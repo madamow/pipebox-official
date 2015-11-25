@@ -1,4 +1,3 @@
-scampupdateheadfile = ${confignite}_updateWCS.config
 
 <module>
     <update-scamp-headers>
@@ -36,8 +35,7 @@ scampupdateheadfile = ${confignite}_updateWCS.config
                 fsuffix = fits
                 ops_enddir = red/wcs
                 rundir = red/wcs
-                savefiles = false 
-                compress_files = true
+                savefiles = false
             </red_wcs>
             <scamp_cat>
                 dirpat = se

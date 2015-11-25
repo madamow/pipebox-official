@@ -76,6 +76,7 @@
                 updateDB = _flag
                 list = ${list.cat_list.fullname}
                 over_table = FINALCUT_EVAL
+                verbose = _flag
             </cmdline>
         </exec_1>
     </finalcut-assess>

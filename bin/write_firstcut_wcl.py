@@ -132,7 +132,7 @@ else:
 
         else:
             # If less than queue size submit exposure
-            if pipebox_utils.less_than_queue('firstcut',args.queue_size):
+            if pipebox_utils.less_than_queue('firstcut',queue_size=args.queue_size):
                 pipebox_utils.submit_command(output_path)
 
     if args.savefiles:

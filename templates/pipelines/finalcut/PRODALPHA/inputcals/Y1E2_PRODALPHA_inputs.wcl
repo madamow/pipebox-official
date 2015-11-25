@@ -11,7 +11,7 @@ lintablenite = 20130624
 photflatcornite = null
 scampaheadnite = 20131115
 scampconfigfile = ${confignite}_default.scamp.20140423
-scampupdateheadfile = ${confignite}_scamp_update_head.config.20140340
+scampupdateheadfile = ${confignite}_updateWCS.config
 hupdatefile = ${confignite}_DES_header_update.20140303
 ### Changes per Epoch ###
 skycampaign = Y2A1

@@ -23,7 +23,7 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/08b-skysub.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/08c-starflat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/09a-null-weight-bkg.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/09b-create-bkg-img.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/09b-create-immask-bkg.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/10-immask.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/11-rowinterp-nullweight-immask.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/12a-create-psfex-cat.wcl>>
@@ -108,6 +108,7 @@ des_http_section = file-http-prodbeta
 pipeline = finalcut    # used in desstat output
 
 basket = ${campaign}
+camsym = ${camera}
 unitname = ${camera}${expnum:8}
 ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/${unitname}/p${attnum:2}
 submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
