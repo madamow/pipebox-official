@@ -11,9 +11,10 @@ def write_template(template,outfile,args):
     """ Takes template (relative to jinja2 template dir), output name of 
         rendered template, and args namespace and writes rendered template"""
     config_template = env.get_template(template)
+
+    args.submittime = datetime.now()
     rendered_config_template = config_template.render(args=args)
     
-    args.submittime = datetime.now()
     with open(outfile,'w') as rendered_template:
         rendered_template.write(rendered_config_template)
 

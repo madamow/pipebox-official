@@ -11,8 +11,6 @@ from opstoolkit import common
 nitelycal = commandline.NitelycalArgs()   
 args = nitelycal.cmdline()
 
-args.submittime = datetime.now()
-
 if args.paramfile:
     args = pipebox_utils.update_from_param_file(args)
     args = pipebox_utils.replace_none_str(args)

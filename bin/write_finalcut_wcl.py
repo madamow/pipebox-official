@@ -10,7 +10,6 @@ from opstoolkit import common
 widefield = commandline.WidefieldArgs()  
 args = widefield.cmdline()
 
-args.submittime = datetime.now()
 if args.paramfile:
     args = pipebox_utils.update_from_param_file(args)
     args = pipebox_utils.replace_none_str(args)
