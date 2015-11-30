@@ -28,6 +28,7 @@ class PipeArgs(object):
         parser.add_argument('--labels',help='Human-readable labels to "mark" a given processing attempt')
         parser.add_argument('--template_name',help='submitwcl template within pipeline/campaign')
         parser.add_argument('--configfile',help='Name of user cfg file')
+        parser.add_argument('--out',help='Output directory for submit files')
         parser.add_argument('--auto',action='store_true',help='Will run autosubmit mode if specified')
            
         # Archive arguments
@@ -63,7 +64,8 @@ class PipeArgs(object):
         parser.add_argument('--ccdnum',help='CCDs to be processed.')
         parser.add_argument('--nite',help='For auto mode: if specified will submit all exposures found \
                          from nite')
-
+        parser.add_argument('--epoch',help='Observing epoch. If not specified, will be calculated. E.g.,\
+                         SVE1,SVE2,Y1E1,Y1E2,Y2E1,Y2E2...')
         # Transfers
         parser.add_argument('--nginx',action='store_true',help='Use nginx?')
         
@@ -78,8 +80,6 @@ class WidefieldArgs(PipeArgs):
         parser.add_argument('--expnum',help='A single expnum or comma-separated list of expnums')
         parser.add_argument('--list',help='File of line-separated expnums')
         parser.add_argument('--exptag',help='Grab all expnums with given tag in exposuretag table')
-        parser.add_argument('--epoch',help='Observing epoch. If not specified, will be calculated. E.g., \
-                         SVE1,SVE2,Y1E1,Y1E2,Y2E1,Y2E2...')
         parser.add_argument('--calnite',help='bias/flat calibration nite/niterange,\
                                           i.e., 20151020 or 20151020t1030')
         parser.add_argument('--calrun',help='bias/flat calibration run, i.e., r1948p03')
