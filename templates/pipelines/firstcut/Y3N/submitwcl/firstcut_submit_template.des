@@ -92,9 +92,9 @@ GROUP_SUBMIT_ID = 1
             <ahead_full>
                 filetype = config
                 {% if args.band in ['u'] %}
-                filename = ${etcnite}_decam_pvmodel_${scampupdatenite}_g.ahead
+                filename = ${confignite}_decam_pvmodel_${scampupdatenite}_g.ahead
                 {% elif args.band in ['VR'] %}
-                filename = ${etcnite}_decam_pvmodel_${scampupdatenite}_r.ahead
+                filename = ${confignite}_decam_pvmodel_${scampupdatenite}_r.ahead
                 {% endif %}
                 dirpat = se
                 ops_enddir = aux
