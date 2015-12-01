@@ -8,6 +8,10 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/01-crosstalk-sci.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/02-detrend-fringe.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/02-detrend-nofringe.wcl>>
+{% if args.band in ['u','VR'] %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/02-detrend-nofringe-u-VR.wcl>>
+{% else %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/02-detrend-nofringe.wcl>> {% endif %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/03-create-scamp-cat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/03b-split-scamp-ahead.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/04-run-scamp.wcl>>
@@ -102,40 +106,6 @@ GROUP_SUBMIT_ID = 1
             </ahead_full>
         </file>
     </split-scamp-ahead>
-    <detrend-nofringe>
-        <file>
-            <pupil>
-                filetype = cal_pupil
-                dirpat = se
-                rundir = pupil/${pupilnite}
-                filename = null_pupil_${ccdnum:2}.fits
-            </pupil>
-        </file>
-        <exec_1>
-            execname = imcorrect
-            used = file.red_xtalked, file.biascor, file.flatcor, file.bpm, file.photflatcor, file.pupil,file.lintable
-            was_generated_by = file.red_detrend
-            ancestry = file.red_xtalked:file.red_detrend, file.biascor:file.red_detrend, file.flatcor:file.red_detrend, file.photflatcor:file.red_detrend, file.pupil:file.red_detrend, file.lintable:file.red_detrend
-            <cmdline>
-                _01_red_xtalked = ${file.red_xtalked.fullname}
-                output = ${file.red_detrend.fullname}
-                bias = ${file.biascor.fullname}
-                flatten = ${file.flatcor.fullname}
-                bpm = ${file.bpm.fullname}
-                photflatten = ${file.photflatcor.fullname}
-                pupil = ${file.pupil.fullname}
-                linear = ${file.lintable.fullname}
-                verbose = 3
-                variancetype = WEIGHT
-                interpolate_col = 2.0
-                updatesky = _flag
-                MEF = _flag
-                fast = _flag
-                maskdownweight = 0
-                maskweightzero = 915
-            </cmdline>
-        </exec_1>
-    </detrend-nofringe>
 </module>
 {% endif %}
 
