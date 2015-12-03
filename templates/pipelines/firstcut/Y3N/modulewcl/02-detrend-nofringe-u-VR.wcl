@@ -34,7 +34,7 @@
                 filetype = cal_pupil
                 dirpat = se
                 rundir = pupil/null
-                filename = null_pupil_${band}_${ccdnum:2}.fits
+                filename = null_pupil_${ccdnum:2}.fits
             </pupil>
             <red_xtalked>
                 match = ccdnum,band

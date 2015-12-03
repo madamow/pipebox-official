@@ -28,6 +28,7 @@ distortion = ${qa_file_prefix}_distortion
                 rundir = list
                 ops_enddir = list
                 columns = scamp_cat.fullname
+                sortkey = ccdnum
         
             </ccd_scamp_cat>
         </list>
@@ -141,7 +142,7 @@ distortion = ${qa_file_prefix}_distortion
                 ASTREFMAG_LIMITS = -99,17
                 POSITION_MAXERR = 10.0
                 ASTREF_CATALOG = UCAC-4
-                REF_SERVER = cocat1.u-strasbg.fr,vizier.nao.ac.jp
+                REF_SERVER = cocat1.u-strasbg.fr,vizier.nao.ac.jp,vizier.cfa.harvard.edu
                 WRITE_XML = Y
                 FULLOUTCAT_TYPE = NONE
                 c = ${file.scamp_config.fullname}

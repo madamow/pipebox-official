@@ -7,11 +7,11 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/modnamepat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/01-crosstalk-sci.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/02-detrend-fringe.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/02-detrend-nofringe.wcl>>
 {% if args.band in ['u','VR'] %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/02-detrend-nofringe-u-VR.wcl>>
 {% else %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/02-detrend-nofringe.wcl>> {% endif %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/02-detrend-nofringe.wcl>> 
+{% endif %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/03-create-scamp-cat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/03b-split-scamp-ahead.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/firstcut/Y3N/modulewcl/04-run-scamp.wcl>>

@@ -59,6 +59,8 @@
                 dirpat = se
                 rundir = red/bkg
                 ops_enddir = red/bkg
+                savefiles = true
+                compress_files = true
             </red_bkg>
             <psfex_model>
                 filetype = psfex_model

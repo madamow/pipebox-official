@@ -40,6 +40,8 @@
             dirpat = se
             ops_enddir = bkg/immask
             rundir = bkg/immask
+            savefiles = false
+            compress_files = true
         </red_immask_bkg>
     </file>
 
