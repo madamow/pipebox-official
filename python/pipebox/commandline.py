@@ -1,9 +1,9 @@
 import os
 from argparse import ArgumentParser
-from pipebox import jira_utils,pipebox_utils,pipebox_parse
-    
+from pipebox import jira_utils,pipebox_parse
+
 class PipeArgs(object):
-   
+
     @staticmethod 
     def argument_parser():
         # Create command line arguments
@@ -22,11 +22,13 @@ class PipeArgs(object):
         parser.add_argument('--campaignlib',help='Directory in pipebox where templates are stored, e.g., \
                              $PIPEBOX_DIR/templates/pipelines/finalcut/-->Y2A1dev<--')
         parser.add_argument('--savefiles',action='store_true',help='Saves submit files to submit later.')
-        parser.add_argument('--queue_size',help='If set and savefiles is not specified, code \
+        parser.add_argument('--queue_size',default=1000,help='If set and savefiles is not specified, code \
                              will submit specified runs up until queue_size is reached. Code \
                              will wait until queue drops below limit to submit next job')
         parser.add_argument('--labels',help='Human-readable labels to "mark" a given processing attempt')
         parser.add_argument('--template_name',help='submitwcl template within pipeline/campaign')
+        parser.add_argument('--configfile',help='Name of user cfg file')
+        parser.add_argument('--out',help='Output directory for submit files')
         parser.add_argument('--auto',action='store_true',help='Will run autosubmit mode if specified')
            
         # Archive arguments
@@ -37,6 +39,7 @@ class PipeArgs(object):
         parser.add_argument('--campaign',help='Used in archive dir, e.g., Y2T3')
         parser.add_argument('--project',default='ACT',help='Archive directory where runs are \
                              stored, e.g., $ARCHIVE/-->ACT<--/finalcut/')
+        parser.add_argument('--rundir',help='Archive directory structure')
       
         # JIRA arguments
         parser.add_argument('--jira_parent',help='JIRA parent ticket under which\
@@ -58,10 +61,11 @@ class PipeArgs(object):
         parser.add_argument('--eups_version',help='EUPS production stack version, e.g., Y2A1+1')
         
         # Science arguments
-        parser.add_argument('--ccdnum',default=pipebox_utils.ALL_CCDS,help='Ccds to be processed.')
+        parser.add_argument('--ccdnum',help='CCDs to be processed.')
         parser.add_argument('--nite',help='For auto mode: if specified will submit all exposures found \
                          from nite')
-
+        parser.add_argument('--epoch',help='Observing epoch. If not specified, will be calculated. E.g.,\
+                         SVE1,SVE2,Y1E1,Y1E2,Y2E1,Y2E2...')
         # Transfers
         parser.add_argument('--nginx',action='store_true',help='Use nginx?')
         
@@ -76,8 +80,6 @@ class WidefieldArgs(PipeArgs):
         parser.add_argument('--expnum',help='A single expnum or comma-separated list of expnums')
         parser.add_argument('--list',help='File of line-separated expnums')
         parser.add_argument('--exptag',help='Grab all expnums with given tag in exposuretag table')
-        parser.add_argument('--epoch',help='Observing epoch. If not specified, will be calculated. E.g., \
-                         SVE1,SVE2,Y1E1,Y1E2,Y2E1,Y2E2...')
         parser.add_argument('--calnite',help='bias/flat calibration nite/niterange,\
                                           i.e., 20151020 or 20151020t1030')
         parser.add_argument('--calrun',help='bias/flat calibration run, i.e., r1948p03')

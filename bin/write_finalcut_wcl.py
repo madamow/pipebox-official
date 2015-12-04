@@ -129,7 +129,7 @@ for index,row in args.exposure_df.iterrows():
 
     else:
         # If less than queue size submit exposure
-        if pipebox_utils.less_than_queue('finalcut',args.queue_size):
+        if pipebox_utils.less_than_queue('finalcut',queue_size=args.queue_size):
             pipebox_utils.submit_command(output_path)
 
 if args.savefiles:

@@ -2,19 +2,19 @@ import os
 import sys
 import time
 from subprocess import Popen,PIPE,STDOUT
+from commands import getstatusoutput
 from despydb import desdbi
 from datetime import datetime,timedelta
 from pipebox import env
-
-ALL_CCDS='1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,62' # No 2,31,61
 
 def write_template(template,outfile,args):
     """ Takes template (relative to jinja2 template dir), output name of 
         rendered template, and args namespace and writes rendered template"""
     config_template = env.get_template(template)
+
+    args.submittime = datetime.now()
     rendered_config_template = config_template.render(args=args)
     
-    args.submittime = datetime.now()
     with open(outfile,'w') as rendered_template:
         rendered_template.write(rendered_config_template)
 
@@ -98,6 +98,13 @@ def print_submit_info(pipeline,site=None,eups_product=None,eups_version=None,sub
         print "\t setenv X509_USER_PROXY $HOME/.globus/osg/user.proxy"
         print "\t voms-proxy-info --all"
 
+def stop_if_already_running(script_name):
+    """ Exits program if program is already running """
+    l = getstatusoutput("ps aux | grep -e '%s' | grep -v grep | grep -v vim | awk '{print $2}'| awk '{print $2}' " % script_name)
+    if l[1]:
+        print "Already running.  Aborting"
+        print l[1]
+        sys.exit(0)
 # --------------------------------------------------------------
 # These functions were copied/adapted from desdm_eupsinstal.py
 

@@ -2,8 +2,8 @@
 {% if args.configfile %}
 <<include {{ args.pipebox_work }}/config/{{ args.configfile }}>>
 {% else %}
-<<include {{ args.pipebox_work }}/config/{{ args.user }}_cfg.des>> {% endif %}
-
+<<include {{ args.pipebox_work }}/config/{{ args.user }}_cfg.des>>
+{% endif %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/modnamepat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/01-crosstalk-sci.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/02-pixcorrect.wcl>>
@@ -11,32 +11,27 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/04a-create-scamp-cat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/04b-split-scamp-ahead.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/05a-run-scamp.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/05b-ingest-scamp-xml.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/05c-update-scamp-headers.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/05b-update-scamp-headers.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/06a-mkbleedmask.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/06b-ingest-bleedmask.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/06c-skycompress-mkbleedmask.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/06b-skycompress-mkbleedmask.wcl>>
 {% if args.epoch_name in ['SVE1','SVE2'] %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/07-SV-skycombine-mkbleedmask.wcl>> 
 {% else %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/07-skycombine-mkbleedmask.wcl>> 
 {% endif %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/08a-skyfit.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/08b-ingest-skyfit.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/08c-skysub.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/08d-starflat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/08b-skysub.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/08c-starflat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/09a-null-weight-bkg.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/09b-create-bkg-img.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/09b-create-immask-bkg.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/10-immask.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/11-rowinterp-nullweight-immask.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/12a-create-psfex-cat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/12b-run-psfex.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/12c-ingest-psfex-xml.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/13a-create-finalcut-catalog.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/13b-ingest-se-objects.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/14-finalcut-assess.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/modulewcl/15-mkpng.wcl>>
-
 {% if args.epoch_name %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/finalcut/{{ args.campaignlib }}/inputcals/{{ args.epoch_name }}_{{ args.campaignlib }}_inputs.wcl>>
 {% else %}
@@ -62,9 +57,7 @@ target_site = {{ args.target_site }}
 
 {% if args.target_site in ['bluewaters-dev','bluewaters'] %}
 <job_environment>
-   HOME=/u/staff/{{ args.user }}
-   USER={{ args.user }}
-   EUPS_USERDATA=/tmp/.eups_{{ args.user }}
+   HOME=/u/staff/args.user
 </job_environment>
 {% endif %}
 
@@ -90,7 +83,12 @@ calnite = {{ args.calnite }}
 calrun = {{ args.calrun }} {% endif %}
 
 {% if args.ccdnum %}
-ccdnum = {{ args.ccdnum }} {% endif %}
+ccdnum = {{ args.ccdnum }}{% endif %}
+
+{% if args.db_section == 'db-prodalpha' %}
+se_object_table = PRODALPHA.SE_OBJECT
+home_archive = prodalpha
+des_http_section = file-http-prodbeta {% endif %}
 
 {% if args.db_section == 'db-desoper' %}
 se_object_table = PROD.SE_OBJECT
@@ -109,9 +107,14 @@ des_http_section = file-http-prodbeta
 
 pipeline = finalcut    # used in desstat output
 
-basket = ${campaign}
+basket = ${nite}
+camsym = ${camera}
 unitname = ${camera}${expnum:8}
-ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/${unitname}/p${attnum:2}
+{% if args.rundir %}
+ops_run_dir = {{ args.rundir }}
+{% else %}
+ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/${unitname}/p${attnum:2} 
+{% endif %}
 submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
 
 save_run_vals = nite, camera, band, expnum, jira_id
@@ -122,7 +125,6 @@ blocklist = se
 
 <block>
    <se>
-#        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit,ingest-skyfit,skysub,starflat,null-weight-bkg,create-bkg-img,immask,rowinterp-nullweight-immask,create-psfex-catalog,run-psfex,ingest-psfex-xml,create-finalcut-catalog,ingest-se-objects,finalcut-assess,mkpng
-        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,run-scamp,ingest-scamp-xml,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit,ingest-skyfit,skysub,starflat,null-weight-bkg,create-bkg-img,immask,rowinterp-nullweight-immask,create-psfex-catalog,run-psfex,ingest-psfex-xml,create-finalcut-catalog,mkpng
+        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit,skysub,starflat,null-weight-bkg,create-bkg-img,immask,rowinterp-nullweight-immask,create-psfex-catalog,run-psfex,create-finalcut-catalog,ingest-se-objects,finalcut-assess,mkpng
     </se>    
 </block>

@@ -4,7 +4,7 @@ import os,sys
 from datetime import datetime
 from argparse import ArgumentParser
 import pandas as pd
-from pipebox import pipebox_utils,jira_utils,query,commandline,nitelycal_lib,
+from pipebox import pipebox_utils,jira_utils,query,commandline,nitelycal_lib
 from autosubmit import nitelycal 
 from opstoolkit import common
 
@@ -22,7 +22,7 @@ except:
     print "must declare $PIPEBOX_WORK"
     sys.exit(1)    
 
-if args.mode=='auto':
+if args.auto:
     # Set crontab path
     cron_template_path = os.path.join('scripts',"cron_nitelycal_autosubmit_template.sh")
     cron_submit_path = os.path.join(args.pipebox_work,"cron_nitelycal_autosubmit_rendered_template.sh")
@@ -38,11 +38,10 @@ if args.mode=='auto':
         # Will run once, but if put in crontab will run however you specify in cron
 
         # Kill current process if cron is running from last execution
-        common.stop_if_already_running()
+        pipebox_utils.stop_if_already_running(os.path.basename(__file__))
         nitelycal.run(args)
 
-if args.mode=='manual': 
-
+else:
     # Create list of nites
     if args.nite:
         args.nitelist = args.nite.split(',')
@@ -159,11 +158,19 @@ if args.mode=='manual':
             args.bias_list = ','.join(str(i) for i in bias_list)
             args.flat_list = ','.join(str(i) for i in flat_list)
 
+        if args.epoch:
+            args.epoch_name = args.epoch
+        else:
+            args.epoch_name = cur.find_epoch(bias_list[0])
         args.reqnum,args.jira_parent= group['reqnum'].unique()[0],group['jira_parent'].unique()[0]
-        req_dir = 'r%s' % args.reqnum
-        output_dir = os.path.join(args.pipebox_work,req_dir)
-        if not os.path.isdir(output_dir):
-            os.makedirs(output_dir) 
+        #req_dir = 'r%s' % args.reqnum
+        #output_dir = os.path.join(args.pipebox_work,req_dir)
+        #if not os.path.isdir(output_dir):
+        #    os.makedirs(output_dir) 
+        if args.out:
+            output_dir = args.out
+        else:
+            output_dir = args.pipebox_work
         output_name = "%s_r%s_nitelycal_rendered_template.des" % (args.nite,args.reqnum)
         output_path = os.path.join(output_dir,output_name)
         # Writing template

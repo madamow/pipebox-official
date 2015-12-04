@@ -1,28 +1,34 @@
 # {{ args.submittime }}
-<<include {{ args.pipebox_work }}/{{ args.user }}_cfg.des>>
+<<include {{ args.pipebox_work }}/config/{{ args.user }}_cfg.des>>
 
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/modnamepat.wcl>>
 
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/crosstalk-bias.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/mkbiascor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/crosstalk-dflat.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/pixcorrect-dflat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/crosstalk-bias.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/mkbiascor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/crosstalk-dflat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/pixcorrect-dflat.wcl>>
 {% if args.epoch_name in ['SVE1','SVE2'] %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/SV-skycombine-pixcor-dflat.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/SV-skycombine-dflatcor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/SV-skycombine-norm-dflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/SV-skycombine-pixcor-dflat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/SV-skycombine-dflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/SV-skycombine-norm-dflatcor.wcl>>
 {% else %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycombine-pixcor-dflat.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycombine-dflatcor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycombine-norm-dflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/skycombine-pixcor-dflat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/skycombine-dflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/skycombine-norm-dflatcor.wcl>>
 {% endif %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycompare-pixcor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/ingest-skycompare-pixcor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/mkdflatcor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycompress-dflatcor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/find-flat-norm.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/scale-flat.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/supercal_sv/skycompress-norm-dflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/skycompare-pixcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/ingest-skycompare-pixcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/mkdflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/skycompress-dflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/find-flat-norm.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/scale-flat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/skycompress-norm-dflatcor.wcl>>
+
+{% if args.epoch_name %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/inputcals/{{ args.epoch_name }}_{{ args.campaignlib }}_inputs.wcl>>
+{% else %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/inputcals/{{ args.campaignlib }}_inputs.wcl>>
+{% endif %}
 
 bias_expnum = {{ args.bias_list }}
 dflat_expnum = {{ args.flat_list }}
@@ -41,12 +47,34 @@ pipeprod = {{ args.eups_product }}
 pipever = {{ args.eups_version }}
 campaign = {{ args.campaign }}
 
+unitname = ${nite}
 nite = {{ args.nite }}
 project = {{ args.project }}
-ccdnum = {{ args.ccdnum }}
+{% if args.ccdnum %}
+ccdnum = {{ args.ccdnum }} {% endif %}
 
-unitname = ${nite}
-ops_run_dir = ${project}/${pipeline}/${nite}-r${reqnum}/p${attnum:2}
+submit_des_db_section = {{ args.db_section }}
+target_des_db_section = {{ args.db_section }}
+
+{% if args.db_section == 'db-desoper' %}
+se_object_table = PROD.SE_OBJECT
+home_archive = desar2home
+des_http_section = file-http {% endif %}
+
+{% if args.db_section == 'db-destest' %}
+se_object_table = PRODBETA.SE_OBJECT
+{% if args.archive_name %}
+home_archive = {{args.archive_name}}
+{% else %}
+home_archive = prodbeta
+{% endif %}
+des_http_section = file-http-prodbeta
+{% endif %}
+
+{% if args.rundir %}
+ops_run_dir = {{ args.rundir }}
+{% else %}
+ops_run_dir = ${project}/${pipeline}/${nite}-r${reqnum}/p${attnum:2} {% endif %}
 submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
 
 save_run_vals = nite, camera, jira_id
@@ -86,7 +114,7 @@ blocklist = xtalk-bias, mkbiascor, dflat-exp, skycombine-pixcor-dflat,skycompare
         divide_jobs_by = band
         modulelist = skycombine-dflatcor
     </skycombine-dflatcor>
-    skycompress-norm-dflatcor>
+    <skycompress-norm-dflatcor>
         divide_jobs_by = ccdnum, band
         modulelist = skycompress-norm-dflatcor
     </skycompress-norm-dflatcor>
