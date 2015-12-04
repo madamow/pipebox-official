@@ -52,6 +52,11 @@
 		        ops_enddir = seg
                 savefiles = true
                 compress_files = true
+                <hdrupd_compression>
+                    FZALGOR=PLIO_1
+                    FZQVALUE=16
+                    FZDTHRSD=CHECKSUM
+                </hdrupd_compression>
 	        </red_segmap>
             <red_bkg>
                 filetype = red_bkg
@@ -63,6 +68,9 @@
                 ops_enddir = red/bkg
                 savefiles = true
                 compress_files = true
+                <hdrupd_compression>
+                    FZQVALUE=4
+                </hdrupd_compression>
             </red_bkg>
             <psfex_model>
                 filetype = psfex_model

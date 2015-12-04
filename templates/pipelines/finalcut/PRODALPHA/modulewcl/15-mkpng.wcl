@@ -113,6 +113,7 @@
                 dirpat = se
                 ops_enddir = qa
                 rundir = qa
+                savefiles = false
 	        </red_proj>
         </file>
 
