@@ -11,6 +11,8 @@ class PipeArgs(object):
         # General arguments
         parser.add_argument('--db_section',help = "Database section in your \
                              .desservices.ini file, e.g., db-desoper or db-destest")
+        #parser.add_argument('--pipebox_work',default=self.pipebox_work)
+        #parser.add_argument('--pipebox_dir',default=self.pipebox_dir)
         parser.add_argument("--user", action="store", default=os.environ['USER'],
                             help="username that will submit")
         parser.add_argument('--paramfile',help='Key = Value file that can be used to replace command- \

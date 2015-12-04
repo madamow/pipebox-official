@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime,timedelta
 from sys import exit
 
-class PipeLine(object):
+class PipeQuery(object):
     def __init__(self,section):
         """ Connect to database using user's .desservices file"""
         dbh = DesDbi(None,section)
@@ -46,7 +46,7 @@ class PipeLine(object):
 
         return expnum_list
 
-class WideField(PipeLine):
+class WidefieldQuery(PipeQuery):
 
     def get_expnum_info(self,exposure_list):
         """ Query database for band and nite for each given exposure.
@@ -68,8 +68,6 @@ class WideField(PipeLine):
             df.loc[index,'band'] = band
 
         return df
-
-class FirstCut(WideField):
 
     def check_submitted(self,expnum,reqnum):
         """ Queries database to find number of attempts submitted for
@@ -158,7 +156,7 @@ class FirstCut(WideField):
         precal_run = 'r%sp0%s' % (precal_reqnum,precal_attnum)
         return precal_nite, precal_run
 
-class NitelyCal(PipeLine):
+class NitelycalQuery(PipeQuery):
 
     def check_submitted(self,date):
         """Check to see if a nitelycal has been submitted with given date"""

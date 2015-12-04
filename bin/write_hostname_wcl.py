@@ -1,19 +1,13 @@
 #!/usr/bin/env python
 
 import os,sys
-from pipebox import pipebox_utils, jira_utils, commandline
-
+from pipebox import pipebox_utils, jira_utils, pipeline
 
 # Get the options
-pipeargs = commandline.HostnameArgs()
-args  = pipeargs.cmdline()
+hostname = pipeline.Hostname()
+args  = hostname.args
 
-try:
-    args.pipebox_work = os.environ['PIPEBOX_WORK']
-    args.pipebox_dir  = os.environ['PIPEBOX_DIR']
-except:
-    print "must declare $PIPEBOX_WORK"
-    sys.exit(1)    
+args.pipebox_work,args.pipebox_dir = pipebox_work.pipebox_work,hostname.pipebox_dir
 
 # Create JIRA ticket
 new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,

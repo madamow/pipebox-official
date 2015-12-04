@@ -6,7 +6,6 @@ import time
 from datetime import datetime
 import shlex
 from opstoolkit import jiracmd
-from pipebox import query
 
 def make_comment(date,nite,reqnum):
     comment = """
@@ -26,14 +25,13 @@ def make_comment(date,nite,reqnum):
               """ % (date,nite,reqnum,nite,reqnum)
     return comment
 
-def run(args):    
+def run(args,cur):    
     # Check to see if precal has been submitted with dflat_nite.
-    inputs = query.NitelyCal(args.db_section)
     if args.nite:
         nite = args.nite
     else:
-        nite = inputs.get_max()[1]
-    if inputs.check_submitted(nite) != 0:
+        nite = cur.get_max()[1]
+    if cur.check_submitted(nite) != 0:
         submitted_string = "%s: %s previously submitted! Exiting...(l32)" % (datetime.now(),nite)
         print submitted_string
         sys.exit()

@@ -2,30 +2,22 @@
 
 import os,sys
 from datetime import datetime
-import time
-from argparse import ArgumentParser
-import pandas as pd
-from pipebox import pipebox_utils,jira_utils,query,commandline
-from autosubmit import firstcut
+from pipebox import pipebox_utils,pipeline
 
-widefield = commandline.WidefieldArgs()
-args = widefield.cmdline()
+widefield = pipeline.WideField()
+args = widefield.args
+
+#add this to default arguments in pipeargs
+args.pipebox_dir,args.pipebox_work=widefield.pipebox_dir,widefield.pipebox_work
 
 if args.paramfile:
     args = pipebox_utils.update_from_param_file(args)
     args = pipebox_utils.replace_none_str(args)
 
-try:
-    args.pipebox_work = os.environ['PIPEBOX_WORK']
-    args.pipebox_dir = os.environ['PIPEBOX_DIR']
-except:
-    print "must declare $PIPEBOX_WORK"
-    sys.exit(1)    
-
 if args.auto:
     # Set crontab path
     cron_template_path = os.path.join('scripts',"cron_firstcut_autosubmit_template.sh")
-    cron_submit_path = os.path.join(args.pipebox_work,"cron_firstcut_autosubmit_rendered_template.sh")
+    cron_submit_path = os.path.join(widefield.pipebox_work,"cron_firstcut_autosubmit_rendered_template.sh")
     if args.savefiles:
         # Writing template
         pipebox_utils.write_template(cron_template_path,cron_submit_path,args)
@@ -39,66 +31,11 @@ if args.auto:
     
         # Kill current process if cron is running from last execution
         pipebox_utils.stop_if_already_running(os.path.basename(__file__))
-        time.sleep(5)
-        firstcut.run(args)
+        widefield.auto()
 
 else: 
-    cur = query.FirstCut(args.db_section)
-
     # For each use-case create exposures list and exposure dataframe
-    if args.exptag:
-        args.exposure_list = query.get_expnums_from_tag(args.exptag)
-        args.exposure_df = pd.DataFrame(args.exposure_list,columns=['expnum'])
-    elif args.expnum: 
-        args.exposure_list = args.expnum.split(',')
-        args.exposure_df = pd.DataFrame(args.exposure_list,columns=['expnum'])
-    elif args.list: 
-        args.exposure_list = list(pipebox_utils.read_file(args.list))
-        args.exposure_df = pd.DataFrame(args.exposure_list,columns=['expnum'])
-    elif args.csv: 
-        args.exposure_df = pd.read_csv(args.csv,sep=args.delimiter)
-        args.exposure_df.columns = [col.lower() for col in args.exposure_df.columns]
-        args.exposure_list = list(args.exposure_df['expnum'].values)
-    
-    # Update dataframe for each exposure and add band,nite if not exists
-    cur.update_df(args.exposure_df) 
-    
-    args.exposure_df =args.exposure_df.fillna(False) 
-    nite_group = args.exposure_df.groupby(by=['nite'])
-    for nite,group in nite_group:
-        # create JIRA ticket per nite and add jira_id,reqnum to dataframe
-        index = args.exposure_df[args.exposure_df['nite'] == nite].index
-        
-        if args.jira_summary:
-            jira_summary = args.jira_summary
-        else: 
-            jira_summary = str(nite)
-        if args.reqnum:
-            reqnum = args.reqnum
-        else:
-            reqnum = None
-        if args.jira_parent:
-            jira_parent = args.jira_parent
-        else:
-            jira_parent = None
-        # Create JIRA ticket
-        new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
-                                              description=args.jira_description,
-                                              summary=jira_summary,
-                                              ticket=reqnum,parent=jira_parent,
-                                              use_existing=True)
-        # Update dataframe with reqnum, jira_id
-        # If row exists replace value, if not insert new column/value
-        try:
-            args.exposure_df.loc[index,('reqnum')] = new_reqnum
-        except: 
-            args.exposure_df.insert(len(args.exposure_df.columns),'reqnum',None)
-            args.exposure_df.loc[index,('reqnum')] = new_reqnum
-        try:
-            args.exposure_df.loc[index,('jira_parent')] = new_jira_parent
-        except: 
-            args.exposure_df.insert(len(args.exposure_df.columns),'jira_parent',None)
-            args.exposure_df.loc[index,('jira_parent')] = new_jira_parent
+    widefield.ticket(args = args)
     
     # Render and write templates
     campaign_path = "pipelines/firstcut/%s/submitwcl" % args.campaign

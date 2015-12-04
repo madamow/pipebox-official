@@ -5,7 +5,7 @@ from datetime import datetime
 from shlex import split
 import time
 
-from pipebox import pipebox_utils,query,jira_utils
+from pipebox import pipebox_utils,jira_utils
 from opstoolkit import jiracmd
 
 def make_comment(date,nite,reqnum,campaign):
@@ -27,11 +27,10 @@ def make_comment(date,nite,reqnum,campaign):
               """ % (date,nite,reqnum,campaign,nite,reqnum)
     return comment
 
-def run(args): 
+def run(args,cur): 
     # Replace any "None" strings with Nonetype
     args = pipebox_utils.replace_none_str(args)
     
-    cur = query.FirstCut(args.db_section)
     defaults_dict = {'propid':['2012B-0001'],
                      'program':['supernova','survey','photom-std-field'],
                      'ignore_all':False}
