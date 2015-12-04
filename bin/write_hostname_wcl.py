@@ -9,12 +9,11 @@ pipeargs = commandline.HostnameArgs()
 args  = pipeargs.cmdline()
 
 try:
-    pipebox_work = os.environ['PIPEBOX_WORK']
+    args.pipebox_work = os.environ['PIPEBOX_WORK']
+    args.pipebox_dir  = os.environ['PIPEBOX_DIR']
 except:
     print "must declare $PIPEBOX_WORK"
-    sys.exit(1)
-
-args.pipebox_work = pipebox_work
+    sys.exit(1)    
 
 # Create JIRA ticket
 new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
@@ -34,7 +33,7 @@ output_name = "%s_hostname_rendered_template.des" % (args.reqnum)
 output_path = os.path.join(output_dir,output_name)
 args.rendered_template_path = []
 args.rendered_template_path.append(output_path)
-   
+
 if args.savefiles: 
     pipebox_utils.write_template(submit_template_path,output_path,args)
     bash_template_path = os.path.join("scripts","submitme_template.sh")

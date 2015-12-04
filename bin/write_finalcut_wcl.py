@@ -112,7 +112,8 @@ for index,row in args.exposure_df.iterrows():
 
     # If ngix -- cycle trough server's list
     if args.nginx:
-        args.nginx_server = pipebox_utils.cycle_list_index(index,['descmp0','descmp4','desftp', 'deslogin'])
+        #args.nginx_server = pipebox_utils.cycle_list_index(index,['descmp0','descmp4','desftp', 'deslogin'])
+        args.nginx_server = pipebox_utils.cycle_list_index(index,['desnginx', 'dessub'])
 
     # Writing template
     pipebox_utils.write_template(submit_template_path,output_path,args)

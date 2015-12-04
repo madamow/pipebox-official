@@ -97,6 +97,7 @@
                 ASTREF_CATALOG = UCAC-4
                 WRITE_XML = Y
                 FULLOUTCAT_TYPE = NONE
+		REF_SERVER = cocat1.u-strasbg.fr,vizier.nao.ac.jp
                 c = ${file.scamp_config.fullname}
                 XML_NAME = ${file.scamp_xml.fullname}
                 NTHREADS = 1

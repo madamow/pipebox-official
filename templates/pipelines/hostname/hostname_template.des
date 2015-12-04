@@ -1,4 +1,10 @@
-<<include {{ args.pipebox_work }}/{{ args.user }}_cfg.des>>
+<<include {{ args.pipebox_work }}/config/{{ args.user }}_cfg.des>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/hostname/modulewcl/modnamepat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/hostname/modulewcl/hostname.wcl>>
+
+# Database dependent definitions
+submit_des_db_section = {{ args.db_section }}
+target_des_db_section = {{ args.db_section }}
 
 target_site = {{ args.target_site }}
 
