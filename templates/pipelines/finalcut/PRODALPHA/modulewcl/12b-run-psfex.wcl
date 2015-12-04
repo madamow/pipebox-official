@@ -29,7 +29,7 @@
             dirpat = se
             ops_enddir = qa
             rundir = qa
-            savefiles = false
+            savefiles = true
         </psfex_xml>
         <psfex_model>
             filetype = psfex_model

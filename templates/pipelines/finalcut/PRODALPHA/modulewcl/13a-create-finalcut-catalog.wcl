@@ -49,7 +49,9 @@
                 fsuffix = fits
                 dirpat = se
                 rundir = seg
-		       ops_enddir = seg
+		        ops_enddir = seg
+                savefiles = true
+                compress_files = true
 	        </red_segmap>
             <red_bkg>
                 filetype = red_bkg
@@ -109,6 +111,8 @@
     		    CHECKIMAGE_TYPE = SEGMENTATION,BACKGROUND
 	         	CHECKIMAGE_NAME = ${file.red_segmap.fullname},${file.red_bkg.fullname}
                 DETECT_THRESH = 1.5
+                INTERP_MAXXLAG = 4 
+                INTERP_MAXYLAG = 4 
             </cmdline>
         </exec_1>
     </create-finalcut-catalog>
