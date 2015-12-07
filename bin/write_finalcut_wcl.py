@@ -2,6 +2,7 @@
 
 import os,sys
 from datetime import datetime
+import time
 from pipebox import pipebox_utils,pipeline
 
 widefield = pipeline.WideField()
@@ -67,6 +68,12 @@ for index,row in args.dataframe.iterrows():
         # If less than queue size submit exposure
         if pipebox_utils.less_than_queue('finalcut',queue_size=args.queue_size):
             pipebox_utils.submit_command(output_path)
+        else:
+            while not pipebox_utils.less_than_queue('finalcut',queue_size=args.queue_size):
+                time.sleep(30)
+            else:
+                pipebox_utils.submit_command(output_path)
+        
 
 if args.savefiles:
     # Writing bash submit scripts

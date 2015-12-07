@@ -71,6 +71,11 @@ else:
             # If less than queue size submit exposure
             if pipebox_utils.less_than_queue('firstcut',queue_size=args.queue_size):
                 pipebox_utils.submit_command(output_path)
+            else:
+                while not pipebox_utils.less_than_queue('firstcut',queue_size=args.queue_size):
+                    time.sleep(30)
+                else:
+                    pipebox_utils.submit_command(output_path)
 
     if args.savefiles:
         # Writing bash submit scripts

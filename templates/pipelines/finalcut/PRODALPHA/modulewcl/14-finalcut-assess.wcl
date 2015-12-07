@@ -5,6 +5,8 @@
         loopobj = list.cat_list
         <list>
             <cat_list>
+                depends create-finalcut-catalog.file.cat_finalcut
+
                 filepat = exposure
                 flabel = cat-finalcut
                 fsuffix = list
@@ -15,7 +17,7 @@
                 rundir = list
 
                 # what goes into list (normally is a query code)
-                output_fields = filename
+                #output_fields = filename
                 divide_by = expnum   # perhaps can default to wrapperloop
                 columns = cat_finalcut.fullname
                 sortkey = ccdnum

@@ -7,6 +7,7 @@
 	
 	    <list>
 	        <in_img_list>
+                depends rowinterp-nullweight-immask.file.red_nullweight_immask
 		        filepat = exposure
                 flabel = immask-nullwgt
                 fsuffix = list
@@ -17,12 +18,13 @@
                 rundir = list
 
                 # what goes into list (normally is a query code)
-                output_fields = filename
+                #output_fields = filename
                 divide_by = expnum   # perhaps can default to wrapperloop
 			    columns = red_nullweight_immask.fullname
 			    sortkey = ccdnum
 	        </in_img_list>
             <in_cat_list>
+                depends create-finalcut-catalog.file.cat_finalcut
                 filepat = exposure
                 flabel = red-fullcat
                 fsuffix = list
@@ -33,7 +35,7 @@
                 rundir = list
 
                 # what goes into list (normally is a query code)
-                output_fields = filename
+                #output_fields = filename
                 divide_by = expnum   # perhaps can default to wrapperloop
 		        columns = cat_finalcut.fullname
 	    	    sortkey = ccdnum
