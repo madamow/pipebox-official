@@ -3,13 +3,11 @@
 import os,sys
 from datetime import datetime
 import time
-from argparse import ArgumentParser
 import pandas as pd
-from pipebox import pipebox_utils,jira_utils,query,commandline,nitelycal_lib
+from pipebox import pipebox_utils,jira_utils,pipequery,pipeargs,nitelycal_lib
 from autosubmit import nitelycal 
-from opstoolkit import common
 
-nitelycal = commandline.NitelycalArgs()   
+nitelycal = pipeargs.NitelycalArgs()   
 args = nitelycal.cmdline()
 
 if args.paramfile:
@@ -52,7 +50,7 @@ else:
         print "Please specify --nite or --maxnite and --minnite"
         sys.exit(1)
     
-    cur = query.NitelyCal(args.db_section)
+    cur = pipequery.NitelycalQuery(args.db_section)
     if args.count:
         cur.count_by_band(args.nitelist)
         sys.exit(0)
