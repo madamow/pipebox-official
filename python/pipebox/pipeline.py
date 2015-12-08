@@ -86,13 +86,13 @@ class WideField(PipeLine):
 
     def auto(self):
         firstcut.run(self.args,self.cur)
-
+   
 class NitelyCal(PipeLine):
 
     def __init__(self):
         self.args = pipeargs.NitelycalArgs().cmdline()
         self.cur = pipequery.NitelycalQuery(self.args.db_section)
-
+    
     def auto(self):
         nitelycal.run(self.args,self.cur)
 
