@@ -4,7 +4,7 @@ import sys
 from datetime import datetime
 import pandas as pd
 
-from pipebox import query
+from pipebox import pipequery
 
 def create_dataframe(query_object):
     df = pd.DataFrame(query_object,columns=['nite','date_obs','expnum','band',
@@ -96,7 +96,7 @@ def create_clean_df(query_object):
     return final_df
 
 if __name__ == "__main__":
-    cur = query.NitelyCal('db-desoper')
+    cur = pipequery.NitelyCal('db-desoper')
     query = cur.get_cals(['20130919', '20131007'])
     #query = cur.get_cals(['20130916', '20130917', '20130918', '20130919', '20130920', '20130921', '20130922','20130923', '20130924', '20130925', '20130926'])
     count = cur.count_by_band(['20130919', '20131007'])
