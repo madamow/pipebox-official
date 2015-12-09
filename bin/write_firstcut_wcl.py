@@ -37,7 +37,6 @@ if args.auto:
 else: 
     # For each use-case create exposures list and exposure dataframe
     widefield.ticket(args = args)
-    
     # Render and write templates
     campaign_path = "pipelines/firstcut/%s/submitwcl" % args.campaign
     if args.template_name:
@@ -47,8 +46,8 @@ else:
     bash_template_path = os.path.join("scripts","submitme_template.sh")
     args.rendered_template_path = []
     # Create templates for each entry in dataframe
-    reqnum_count = len(args.exposure_df.groupby(by=['reqnum']))
-    for index,row in args.exposure_df.iterrows():
+    reqnum_count = len(args.dataframe.groupby(by=['reqnum']))
+    for index,row in args.dataframe.iterrows():
         args.expnum,args.band,args.nite,args.reqnum,args.jira_parent = row['expnum'],row['band'],row['nite'],int(row['reqnum']),row['jira_parent']
         req_dir = 'r%s' % args.reqnum
         output_dir = os.path.join(args.pipebox_work,req_dir)
