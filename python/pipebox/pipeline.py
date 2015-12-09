@@ -1,7 +1,7 @@
 import os
 import sys
 import pandas as pd
-from pipebox import pipequery,pipeargs,jira_utils
+from pipebox import pipequery,pipeargs,jira_utils,pipebox_utils
 from autosubmit import firstcut,nitelycal
 
 class PipeLine(object):
@@ -70,7 +70,7 @@ class WideField(PipeLine):
             self.args.exposure_list = self.args.expnum.split(',')
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.list:
-            self.args.exposure_list = list(pipeutils.read_file(args.list))
+            self.args.exposure_list = list(pipebox_utils.read_file(args.list))
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.csv:
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
