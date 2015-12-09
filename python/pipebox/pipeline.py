@@ -70,7 +70,7 @@ class WideField(PipeLine):
             self.args.exposure_list = self.args.expnum.split(',')
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.list:
-            self.args.exposure_list = list(pipebox_utils.read_file(args.list))
+            self.args.exposure_list = list(pipebox_utils.read_file(self.args.list))
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.csv:
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
