@@ -25,13 +25,13 @@ def make_comment(date,nite,reqnum):
               """ % (date,nite,reqnum,nite,reqnum)
     return comment
 
-def run(args,cur):    
+def run(args):    
     # Check to see if precal has been submitted with dflat_nite.
     if args.nite:
         nite = args.nite
     else:
-        nite = cur.get_max()[1]
-    if cur.check_submitted(nite) != 0:
+        nite = args.cur.get_max()[1]
+    if args.cur.check_submitted(nite) != 0:
         submitted_string = "%s: %s previously submitted! Exiting...(l32)" % (datetime.now(),nite)
         print submitted_string
         sys.exit()
