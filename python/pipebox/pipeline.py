@@ -62,7 +62,10 @@ class WideField(PipeLine):
     def __init__(self):
         self.args = pipeargs.WidefieldArgs().cmdline()
         self.cur = pipequery.WidefieldQuery(self.args.db_section)
-
+        
+        if self.args.paramfile:
+            self.args = pipebox_utils.update_from_param_file(self.args)
+            #self.args = pipebox_utils.replace_none_str(self.args)
         if self.args.exptag:
             self.args.exposure_list = self.cur.get_expnums_from_tag(self.args.exptag)
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
