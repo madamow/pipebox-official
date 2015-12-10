@@ -45,7 +45,7 @@ else:
     if args.nite:
         args.nitelist = args.nite.split(',')
     elif args.maxnite and args.minnite:
-        args.nitelist = [str(x) for x in range(args.minnite,args.maxnite +1)]
+        args.nitelist = [str(x) for x in range(int(args.minnite),int(args.maxnite) +1)]
     else:
         print "Please specify --nite or --maxnite and --minnite"
         sys.exit(1)
@@ -160,7 +160,7 @@ else:
         if args.epoch:
             args.epoch_name = args.epoch
         else:
-            args.epoch_name = cur.find_epoch(bias_list[0])
+            args.epoch_name = cur.find_epoch(args.bias_list[0])
         args.reqnum,args.jira_parent= group['reqnum'].unique()[0],group['jira_parent'].unique()[0]
         #req_dir = 'r%s' % args.reqnum
         #output_dir = os.path.join(args.pipebox_work,req_dir)
