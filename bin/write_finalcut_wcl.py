@@ -13,7 +13,7 @@ args.pipebox_dir,args.pipebox_work=widefield.pipebox_dir,widefield.pipebox_work
 
 if args.paramfile:
     args = pipebox_utils.update_from_param_file(args)
-    args = pipebox_utils.replace_none_str(args)
+    #args = pipebox_utils.replace_none_str(args)
 
 # create JIRA ticket per nite and add jira_id,reqnum to dataframe
 widefield.ticket(args = args)
