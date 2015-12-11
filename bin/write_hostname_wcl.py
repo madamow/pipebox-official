@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os,sys
-from pipebox import copy_pipeline as pipeline
+from pipebox import pipeline
 
 # initialize and get options
 hostname = pipeline.HostName()
