@@ -1,0 +1,127 @@
+<module> 
+    <run-scamp>
+        wrappername = runScamp.py  
+        modnamepat = ${modnamepat_expband}
+
+        <file>
+            <scamp_fullcat>
+                filetype = cat_scamp_full 
+                filepat = exposure
+                flabel = scampcat
+                fsuffix = fits
+                dirpat = se
+                ops_enddir = cat
+                rundir = cat
+            </scamp_fullcat>
+            <scamp_cat>
+                filetype = cat_scamp
+                filepat = ccdnum_band
+                flabel = scampcat
+                fsuffix = fits
+                dirpat = se
+                ops_enddir = cat
+                rundir = cat
+            </scamp_cat>
+            <scamp_config>
+                filetype = config
+                filename = ${scampconfigfile} 
+                dirpat = se
+                rundir = config
+            </scamp_config>
+            <scamp_ahead>
+                filetype = config
+		        filename = ${camera}${expnum:8}_${band}_r${reqnum}p${attnum:2}_scamp.ahead
+                dirpat = se
+        		ops_enddir = aux
+                rundir = aux
+            </scamp_ahead>
+            <scamp_fullhead>
+                filetype = head_scamp_full
+                filepat = exposure
+                flabel = scampcat   # must match flabel for scamp_fullcat
+                fsuffix = head
+                dirpat = se
+                ops_enddir = cat
+                rundir = cat  # must match rundir for scamp_fullcat
+            </scamp_fullhead>
+            <scamp_head>
+                filetype = head_scamp
+                filepat = ccdnum_band
+                flabel = scamp
+                fsuffix = head
+                dirpat = se
+                ops_enddir = aux
+                rundir = aux
+            </scamp_head>
+            <scamp_xml>
+                filetype = xml_scamp
+                filepat = exposure
+                flabel = scamp
+                fsuffix = xml
+                dirpat = se
+                ops_enddir = qa
+                rundir = qa
+            </scamp_xml>
+            <scamp_qa>
+                filetype = qa_scamp
+                fullname = $RNMLST{${wrapper.qa_file_prefix},${wrapper.qa_file_list}}
+                dirpat = se
+                rundir = qa
+                ops_enddir = qa
+            </scamp_qa>
+        </file>
+
+        <exec_1>
+            execname = mergeScampCats()
+            used = file.scamp_cat
+            was_generated_by = file.scamp_fullcat
+            ancestry = file.scamp_cat:file.scamp_fullcat
+            <cmdline>
+                _01_scamp_cat = file.scamp_cat.fullname
+                _02_scamp_fullcat = file.scamp_fullcat.fullname
+            </cmdline>
+        </exec_1>
+        <exec_2>
+            execname = scamp
+            used = file.scamp_fullcat,file.scamp_ahead,file.scamp_config
+            was_generated_by = file.scamp_fullhead,file.scamp_xml,file.scamp_qa
+            <cmdline>
+                _01_scamp_fullcat = ${file.scamp_fullcat.fullname}
+                ASTREF_BAND = DEFAULT
+                MOSAIC_TYPE = SAME_CRVAL
+                AHEADER_GLOBAL = ${file.scamp_ahead.fullname}
+                ASTRINSTRU_KEY = DUMMY
+                AHEADER_SUFFIX = .aheadnoexist
+                ASTREFMAG_LIMITS = -99,17
+                POSITION_MAXERR = 10.0
+                ASTREF_CATALOG = UCAC-4
+                WRITE_XML = Y
+                FULLOUTCAT_TYPE = NONE
+		REF_SERVER = cocat1.u-strasbg.fr,vizier.nao.ac.jp
+                c = ${file.scamp_config.fullname}
+                XML_NAME = ${file.scamp_xml.fullname}
+                NTHREADS = 1
+            </cmdline>
+    </exec_2> 
+    <exec_3>
+        execname = splitScampHead()
+        used = file.scamp_fullhead
+        was_generated_by = file.scamp_head
+        #ancestry = file.scamp_fullhead:file.scamp_head
+        <cmdline>
+            _01_scamp_fullhead = file.scamp_fullhead.fullname
+            _02_scamp_head = file.scamp_head.fullname
+        </cmdline>
+    </exec_3>
+        <wrapper>
+            #maxpv = 10
+            #noretry = 1
+            maxtries = 2
+            #match_resol = 2.0
+    	    astromSigmaTol = 0.5 
+            position_maxerr = 10.0
+            qa_file_prefix = qa/${camera}${expnum:8}_r${reqnum}p${attnum:2}_
+            qa_file_list = astr_pixerror1d_1.ps,astr_referror1d_1.ps,fgroups_1.ps,astr_referror2d_1.ps,astr_refsysmap_1.ps,distortion_1.ps
+        </wrapper>
+    </run-scamp>
+</module>

@@ -1,0 +1,31 @@
+<module> 
+    <ingest-skyfit>
+        wrappername = generic.py  
+        modnamepat = ${modnamepat_expband}
+
+        <file>
+            <skyfit_binned_fp>
+                # what metadata to get
+                filetype = skyfit_binned_fp
+
+                # how to name the file
+                filepat = exposure
+                flabel = skyfit-binned-fp
+                fsuffix = fits
+
+                # where to put the file
+                dirpat = se
+                rundir = binned-fp
+            </skyfit_binned_fp>
+        </file>
+        <exec_1>
+            execname = datafile_ingest.py
+            cmd_hyphen = alldouble
+            used = file.skyfit_binned_fp
+            <cmdline>
+                filename = ${file.skyfit_binned_fp.fullname}
+                filetype = ${file.skyfit_binned_fp.filetype}
+            </cmdline>
+        </exec_1>
+    </ingest-skyfit>
+</module>

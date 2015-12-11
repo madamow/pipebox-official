@@ -27,7 +27,7 @@ def make_comment(date,nite,reqnum,campaign):
               """ % (date,nite,reqnum,campaign,nite,reqnum)
     return comment
 
-def run(args,cur): 
+def run(args): 
     # Replace any "None" strings with Nonetype
     args = pipebox_utils.replace_none_str(args)
     
@@ -36,10 +36,10 @@ def run(args,cur):
                      'ignore_all':False}
 
     if not args.nite:
-        nite = cur.get_max(**defaults_dict)[1]
+        nite = args.cur.get_max(**defaults_dict)[1]
         args.nite = nite
     if not args.calnite:
-        precal = cur.find_precal(args.nite,threshold=7,override=True,tag=args.caltag)
+        precal = args.cur.find_precal(args.nite,threshold=7,override=True,tag=args.caltag)
         args.calnite,args.calrun = precal[0],precal[1]
         
     # Create log file if exposures found.
@@ -49,7 +49,7 @@ def run(args,cur):
     wakingup = "\n%s: Waking up. Checking if I can submit..." % datetime.now()
     logfile.write(wakingup)
        
-    allexpnumnband = list(cur.get_expnums(nite=nite,**defaults_dict))
+    allexpnumnband = list(args.cur.get_expnums(nite=nite,**defaults_dict))
     # If no exposures are found, do nothing.
     if len(allexpnumnband) == 0:
         logfile.write("\nNo exposures found. Exiting...")
@@ -75,7 +75,7 @@ def run(args,cur):
     # Keep only exposures that have not already been processed.
     for enb in sorted(allexpnumnband):
         args.expnum,args.band = enb[0], enb[1]
-        yesorno = cur.check_submitted(args.expnum,args.reqnum) 
+        yesorno = args.cur.check_submitted(args.expnum,args.reqnum) 
         count_unsubmitted = 0
         if yesorno != 0:
             continue
