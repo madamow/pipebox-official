@@ -1,6 +1,6 @@
 <module>
     <skycompare-pixcor>
-        wrappername = generic.py
+        wrappername = genwrap.py
         wrapperloop = expnum,band
         modnamepat = ${modnamepat_expband}
         loopobj = file.pixcor_dflat_binned_fp

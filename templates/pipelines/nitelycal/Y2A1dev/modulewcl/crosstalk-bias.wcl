@@ -1,6 +1,6 @@
 <module>
     <crosstalk-bias>
-        wrappername = generic.py
+        wrappername = genwrap.py
         wrapperloop = expnum
         loopobj = file.raw
         modnamepat=${modnamepat_exp_noband}

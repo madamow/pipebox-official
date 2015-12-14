@@ -1,6 +1,6 @@
 <module>
     <find-flat-norm>
-        wrappername = generic.py
+        wrappername = genwrap.py
         wrapperloop = band
         modnamepat = ${modnamepat_nite_band}
         loopobj = list.inlist

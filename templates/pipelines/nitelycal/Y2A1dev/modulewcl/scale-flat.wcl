@@ -1,6 +1,6 @@
 <module>
     <scale-flat>
-        wrappername = generic.py
+        wrappername = genwrap.py
         wrapperloop = ccdnum, band
         modnamepat = ${modnamepat_nite_ccdnum_band}
         loopobj = file.dflatcor

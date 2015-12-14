@@ -1,6 +1,6 @@
 <module>
     <skycombine-pixcor-dflat>
-        wrappername = generic.py
+        wrappername = genwrap.py
         wrapperloop = expnum,band
         modnamepat = ${modnamepat_expband}
         loopobj = list.minilist
