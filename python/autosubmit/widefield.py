@@ -91,8 +91,8 @@ def run(args):
                 submit = path.join(args.pipebox_work,submitname)
                 if not path.isfile(submit):
                     # Add template into newly created submit file.
-                    template_relpath = 'pipelines/firstcut/%s/submitwcl' % args.campaign
-                    template = path.join(template_relpath,'firstcut_submit_template.des')                                    # Render template
+                    template_relpath = 'pipelines/widefield/%s/submitwcl' % args.campaign
+                    template = path.join(template_relpath,'widefield_submit_template.des')                                    # Render template
                     pipebox_utils.write_template(template,submit,args)
                     time.sleep(5)
 
