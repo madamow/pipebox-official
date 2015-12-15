@@ -1253,6 +1253,7 @@
                     <w>
                         filename = filename
                         filetype = filetype
+                        pfw_attempt_id = pfw_attempt_id
                     </w>
                 </r>
             </primary>
@@ -1276,6 +1277,7 @@
                     <w>
                         filename = filename
                         filetype = filetype
+                        pfw_attempt_id = pfw_attempt_id
                     </w>
                 </r>
             </primary>
@@ -4190,6 +4192,7 @@
                     <w>
                         filename = filename
                         filetype = filetype
+                        pfw_attempt_id = pfw_attempt_id
                     </w>
                 </r>
             </primary>
