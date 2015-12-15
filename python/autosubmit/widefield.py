@@ -5,7 +5,7 @@ from datetime import datetime
 from shlex import split
 import time
 
-from pipebox import pipebox_utils,jira_utils
+from pipebox import pipeutils,jira_utils
 from opstoolkit import jiracmd
 
 def make_comment(date,nite,reqnum,campaign):
@@ -29,7 +29,7 @@ def make_comment(date,nite,reqnum,campaign):
 
 def run(args): 
     # Replace any "None" strings with Nonetype
-    args = pipebox_utils.replace_none_str(args)
+    args = pipeutils.replace_none_str(args)
     
     defaults_dict = {'propid':['2012B-0001'],
                      'program':['supernova','survey','photom-std-field'],
@@ -82,9 +82,9 @@ def run(args):
         else:
             # If under queue_size keep submitting jobs...
             if args.queue_size:
-                not_queued = pipebox_utils.less_than_queue('firstcut',queue_size = args.queue_size)
+                not_queued = pipeutils.less_than_queue('firstcut',queue_size = args.queue_size)
             else:
-                not_queued = pipebox_utils.less_than_queue('firstcut')
+                not_queued = pipeutils.less_than_queue('firstcut')
             if not_queued:
                 count_unsubmitted += 1
                 submitname = 'firstcut_r%s_%s_%s_%s_submit.des' % (args.reqnum,args.nite,args.expnum,args.band)
@@ -93,12 +93,12 @@ def run(args):
                     # Add template into newly created submit file.
                     template_relpath = 'pipelines/widefield/%s/submitwcl' % args.campaign
                     template = path.join(template_relpath,'widefield_submit_template.des')                                    # Render template
-                    pipebox_utils.write_template(template,submit,args)
+                    pipeutils.write_template(template,submit,args)
                     time.sleep(5)
 
                 # Executing dessubmit command... 
                 logfile.flush()
-                submit_me = pipebox_utils.submit_command(submit,logfile=logfile)
+                submit_me = pipeutils.submit_command(submit,logfile=logfile)
                 logfile.write("\nSleeping...\n")
                 # Adding comment to JIRA ticket...
                 comment = make_comment(datetime.now(),args.nite,args.reqnum,args.campaign)
