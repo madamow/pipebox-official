@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from pipebox import pipebox_utils, pipeline
+from pipebox import pipeline
 
 # initialize and get options
 widefield = pipeline.WideField()
