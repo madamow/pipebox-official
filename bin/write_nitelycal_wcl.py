@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from pipebox import pipeline, pipebox_utils
+from pipebox import pipeline
 
 # initialize and get options
 nitelycal = pipeline.NitelyCal()   
