@@ -1,7 +1,7 @@
 import os
 import sys
 import pandas as pd
-from pipebox import pipequery,pipeargs,jira_utils,nitelycal_lib,pipebox_utils
+from pipebox import pipequery,pipeargs,pipeutils,jira_utils,nitelycal_lib
 from autosubmit import widefield,nitelycal
 
 class PipeLine(object):
@@ -66,9 +66,9 @@ class PipeLine(object):
                                     "cron_{0}_autosubmit_rendered_template.sh".format(args.pipeline))
         if args.savefiles:
             # Writing template
-            pipebox_utils.write_template(cron_template_path,cron_submit_path,args)
+            pipeutils.write_template(cron_template_path,cron_submit_path,args)
             os.chmod(cron_submit_path, 0755)
-            pipebox_utils.print_cron_info(args.pipeline,site=args.target_site,
+            pipeutils.print_cron_info(args.pipeline,site=args.target_site,
                                                    pipebox_work=args.pipebox_work,
                                                    cron_path=cron_submit_path)
         else:
@@ -76,7 +76,7 @@ class PipeLine(object):
             # Will run once, but if put in crontab will run however you specify in cron
 
             # Kill current process if cron is running from last execution
-            pipebox_utils.stop_if_already_running('write_{0}_wcl.py'.format(args.pipeline))
+            pipeutils.stop_if_already_running('write_{0}_wcl.py'.format(args.pipeline))
             pipeline = __import__("autosubmit")
             getattr(pipeline,args.pipeline).run(args)
 
@@ -102,22 +102,22 @@ class PipeLine(object):
             bash_script_name = "submitme_%s_%s.sh" % (args.reqnum,args.target_site)
         bash_script_path= os.path.join(args.output_dir,bash_script_name)
 
-        pipebox_utils.write_template(bash_template_path,bash_script_path,args)
+        pipeutils.write_template(bash_template_path,bash_script_path,args)
         os.chmod(bash_script_path, 0755)
-        pipebox_utils.print_submit_info(args.pipeline,site=args.target_site,
+        pipeutils.print_submit_info(args.pipeline,site=args.target_site,
                                                eups_product=args.eups_product,
                                                eups_version=args.eups_version,
                                                submit_file=bash_script_path) 
 
     def submit(self,args):
         # If less than queue size submit exposure
-        if pipebox_utils.less_than_queue(args.pipeline,queue_size=args.queue_size):
-            pipebox_utils.submit_command(submitfile)
+        if pipeutils.less_than_queue(args.pipeline,queue_size=args.queue_size):
+            pipeutils.submit_command(submitfile)
         else:
-            while not pipebox_utils.less_than_queue(ags.pipeline,queue_size=args.queue_size):
+            while not pipeutils.less_than_queue(ags.pipeline,queue_size=args.queue_size):
                 time.sleep(30)
             else:
-                pipebox_utils.submit_command(submitfile)
+                pipeutils.submit_command(submitfile)
 
 class WideField(PipeLine):
 
@@ -129,15 +129,15 @@ class WideField(PipeLine):
         self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
         self.args.pipeline = "widefield"
         if self.args.paramfile:
-            self.args = pipebox_utils.update_from_param_file(self.args)
-            #args = pipebox_utils.replace_none_str(args)
+            self.args = pipeutils.update_from_param_file(self.args)
+            #args = pipeutils.replace_none_str(args)
 
         super(WideField,self).set_paths(self.args)         
         self.args.cur = pipequery.WidefieldQuery(self.args.db_section)
         
         # If ngix -- cycle trough server's list
         if self.args.nginx:
-            self.args.nginx_server = pipebox_utils.cycle_list_index(index,['desnginx', 'dessub'])
+            self.args.nginx_server = pipeutils.cycle_list_index(index,['desnginx', 'dessub'])
 
         # Creating dataframe from exposures 
         if self.args.exptag:
@@ -180,7 +180,7 @@ class WideField(PipeLine):
             output_path = os.path.join(self.args.output_dir,output_name)
     
             # Writing template
-            pipebox_utils.write_template(self.args.submit_template_path,output_path,self.args)
+            pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
             self.args.rendered_template_path.append(output_path)
             if not self.args.savefiles:
                 super(WideField,self).submit(self.args)
@@ -196,8 +196,8 @@ class NitelyCal(PipeLine):
         self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
         self.args.pipeline = "nitelycal"
         if self.args.paramfile:
-            self.args = pipebox_utils.update_from_param_file(self.args)
-            self.args = pipebox_utils.replace_none_str(self.args)
+            self.args = pipeutils.update_from_param_file(self.args)
+            self.args = pipeutils.replace_none_str(self.args)
 
         super(NitelyCal,self).set_paths(self.args)
         self.args.cur = pipequery.NitelycalQuery(self.args.db_section)
@@ -220,11 +220,11 @@ class NitelyCal(PipeLine):
         # For each use-case create bias/flat list and dataframe
         if self.args.biaslist and self.args.flatlist:
             # create biaslist from file
-            self.args.bias_list = list(pipebox_utils.read_file(self.args.biaslist))
+            self.args.bias_list = list(pipeutils.read_file(self.args.biaslist))
             self.args.bias_df = pd.DataFrame(self.args.bias_list,columns=['expnum'])
 
             # create flatlist from file
-            self.args.flat_list = list(pipebox_utils.read_file(self.args.flatlist))
+            self.args.flat_list = list(pipeutils.read_file(self.args.flatlist))
             self.args.flat_df = pd.DataFrame(self.args.flat_list,columns=['expnum'])
 
             self.args.dataframe = pd.concat([self.args.flat_df,self.args.bias_df],ignore_index=True)
@@ -284,7 +284,7 @@ class NitelyCal(PipeLine):
             output_name = "%s_r%s_nitelycal_rendered_template.des" % (self.args.nite,self.args.reqnum)
             output_path = os.path.join(self.args.output_dir,output_name)
             # Writing template
-            pipebox_utils.write_template(self.args.submit_template_path,output_path,self.args)
+            pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
             self.args.rendered_template_path.append(output_path)
             if not self.args.savefiles:
                 super(NitelyCal,self).submit(self.args)
@@ -320,7 +320,7 @@ class HostName(PipeLine):
         output_path = os.path.join(self.args.output_dir,output_name)
         self.args.rendered_template_path = []
         self.args.rendered_template_path.append(output_path)
-        pipebox_utils.write_template(self.args.submit_template_path,output_path,self.args)
+        pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
 
     def submit_or_save(self):
         if self.args.savefiles:
@@ -330,10 +330,10 @@ class HostName(PipeLine):
                                                          self.args.target_site)
             bash_script_path= os.path.join(self.args.output_dir,bash_script_name)
             # Write bash script
-            pipebox_utils.write_template(bash_template_path,bash_script_path,self.args)
+            pipeutils.write_template(bash_template_path,bash_script_path,self.args)
             os.chmod(bash_script_path, 0755)
 
-            pipebox_utils.print_submit_info(self.args.pipeline,site=self.args.target_site,
+            pipeutils.print_submit_info(self.args.pipeline,site=self.args.target_site,
                                           eups_product=self.args.eups_product,
                                           eups_version=self.args.eups_version,
                                           submit_file=bash_script_path)
@@ -341,4 +341,4 @@ class HostName(PipeLine):
         else:
             # Placeholder for submitting jobs
             for submitfile in self.args.rendered_template_path:
-                pipebox_utils.submit_command(submitfile)
+                pipeutils.submit_command(submitfile)
