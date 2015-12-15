@@ -3,7 +3,6 @@ import sys
 import time
 from subprocess import Popen,PIPE,STDOUT
 from commands import getstatusoutput
-from despydb import desdbi
 from datetime import datetime,timedelta
 from pipebox import env
 
