@@ -27,7 +27,7 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/modulewcl/12-ingest-se-objects.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/modulewcl/13-mkpng.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/modulewcl/14-firstcut-assess.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/inputcals/{{ args.campaign }}_inputs.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/inputcals/{{ args.campaignlib }}_inputs.wcl>>
 
 # Database dependent definitions
 submit_des_db_section = {{ args.db_section }}
@@ -68,7 +68,7 @@ se_object_table = PRODBETA.SE_OBJECT
 home_archive = prodbeta
 des_http_section = file-http-prodbeta {% endif %}
 
-pipeline = firstcut    # used in desstat output 
+pipeline = {{args.desstat_pipeline}}    # used in desstat output 
 
 basket = ${nite}
 unitname = ${camera}${expnum:8}

@@ -11,6 +11,9 @@ if args.auto:
     widefield.auto(args)
 else:
     # create JIRA ticket per nite found (default)
-    widefield.ticket(args)
+    if args.exptag:
+        widefield.ticket(args,groupby='tag')
+    else:
+        widefield.ticket(args)
     # write submit files and submit if necessary
     widefield.make_templates()

@@ -26,7 +26,7 @@ jira_id = {{ args.jira_parent }}
 label= ${nite} {% else %}
 label = {{ args.labels }} {% endif %}
 
-pipeline = nitelycal
+pipeline = {{args.desstat_pipeline }}
 pipeprod = {{ args.eups_product }}
 pipever = {{ args.eups_version }}
 campaign = {{ args.campaign }}

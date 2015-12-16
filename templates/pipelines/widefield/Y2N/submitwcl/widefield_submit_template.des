@@ -64,7 +64,7 @@ se_object_table = PRODBETA.SE_OBJECT
 home_archive = prodbeta
 des_http_section = file-http-prodbeta {% endif %}
 
-pipeline = firstcut    # used in desstat output 
+pipeline = {{args.desstat_pipeline}}    # used in desstat output 
 
 basket = ${nite}
 unitname = ${camera}${expnum:8}

@@ -39,12 +39,19 @@ class PipeQuery(object):
     def get_expnums_from_tag(self,tag):
         """ Query database for each exposure with a given exposure tag.
         Returns a list of expnums."""
-        expnum_query = "select distinct expnum from exposuretag where tag='%s'" % tag
-        self.cur.execute(expnum_query)
-        results = self.cur.fetchall()
-        expnum_list = [exp[0] for exp in results]
-
-        return expnum_list
+        taglist = tag.split(',')
+        tag_list_of_dict = []
+        for t in taglist:
+            expnum_query = "select distinct expnum from exposuretag where tag='%s'" % t
+            self.cur.execute(expnum_query)
+            results = self.cur.fetchall()
+            expnum_list = [exp[0] for exp in results]
+            for e in expnum_list:
+                tag_dict = {}
+                tag_dict['expnum'] = e
+                tag_dict['tag'] = t
+                tag_list_of_dict.append(tag_dict)
+        return tag_list_of_dict
 
 class WidefieldQuery(PipeQuery):
 

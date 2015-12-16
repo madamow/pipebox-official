@@ -108,7 +108,7 @@ home_archive = prodbeta
 des_http_section = file-http-prodbeta 
 {% endif %}
 
-pipeline = finalcut    # used in desstat output
+pipeline = {{args.desstat_pipeline}}   # used in desstat output
 
 basket = ${nite}
 camsym = ${camera}

@@ -45,7 +45,7 @@ label = {{ args.labels }}
 {% else %}
 label = {{ args.campaign }}_{{ args.nite }}
 {% endif %}
-pipeline = nitelycal
+pipeline = {{args.desstat_pipeline }}
 pipeprod = {{ args.eups_product }}
 pipever = {{ args.eups_version }}
 campaign = {{ args.campaign }}
