@@ -1000,10 +1000,10 @@
         name = SKYSIGMA
     </skysigma>
     <skyvara>
-        name = #skyvarA
+        name = SKYVARA
     </skyvara>
     <skyvarb>
-        name = #skyvarB
+        name = SKYVARB
     </skyvarb>
     <softid>
         description = Software version number used for processin
@@ -1253,6 +1253,7 @@
                     <w>
                         filename = filename
                         filetype = filetype
+                        pfw_attempt_id = pfw_attempt_id
                     </w>
                 </r>
             </primary>
@@ -1276,6 +1277,7 @@
                     <w>
                         filename = filename
                         filetype = filetype
+                        pfw_attempt_id = pfw_attempt_id
                     </w>
                 </r>
             </primary>
@@ -2760,11 +2762,11 @@
                         sky = sky
                         skybrite = skybrite
                         skysigma = skysigma
-                        #skyvara = #skyvara
-                        #skyvarb = #skyvarb
+                        skyvara = skyvara
+                        skyvarb = skyvarb
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -2862,11 +2864,11 @@
                         sky = sky
                         skybrite = skybrite
                         skysigma = skysigma
-                        #skyvara = skyvara
-                        #skyvarb = skyvarb
+                        skyvara = skyvara
+                        skyvarb = skyvarb
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -2964,11 +2966,11 @@
                         sky = sky
                         skybrite = skybrite
                         skysigma = skysigma
-                        #skyvara = skyvara
-                        #skyvarb = skyvarb
+                        skyvara = skyvara
+                        skyvarb = skyvarb
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -3068,11 +3070,11 @@
                         sky = sky
                         skybrite = skybrite
                         skysigma = skysigma
-                        #skyvara = skyvara
-                        #skyvarb = skyvarb
+                        skyvara = skyvara
+                        skyvarb = skyvarb
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -3172,11 +3174,11 @@
                         sky = sky
                         skybrite = skybrite
                         skysigma = skysigma
-                        #skyvara = skyvara
-                        #skyvarb = skyvarb
+                        skyvara = skyvara
+                        skyvarb = skyvarb
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -3276,11 +3278,11 @@
                         sky = sky
                         skybrite = skybrite
                         skysigma = skysigma
-                        #skyvara = skyvara
-                        #skyvarb = skyvarb
+                        skyvara = skyvara
+                        skyvarb = skyvarb
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -3380,11 +3382,11 @@
                         sky = sky
                         skybrite = skybrite
                         skysigma = skysigma
-                        #skyvara = skyvara
-                        #skyvarb = skyvarb
+                        skyvara = skyvara
+                        skyvarb = skyvarb
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -3484,11 +3486,11 @@
                         sky = sky
                         skybrite = skybrite
                         skysigma = skysigma
-                        #skyvara = skyvara
-                        #skyvarb = skyvarb
+                        skyvara = skyvara
+                        skyvarb = skyvarb
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -3588,11 +3590,11 @@
                         sky = sky
                         skybrite = skybrite
                         skysigma = skysigma
-                        #skyvara = skyvara
-                        #skyvarb = skyvarb
+                        skyvara = skyvara
+                        skyvarb = skyvarb
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -3692,11 +3694,11 @@
                         sky = sky
                         skybrite = skybrite
                         skysigma = skysigma
-                        #skyvara = skyvara
-                        #skyvarb = skyvarb
+                        skyvara = skyvara
+                        skyvarb = skyvarb
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -3796,11 +3798,11 @@
                         sky = sky
                         skybrite = skybrite
                         skysigma = skysigma
-                        #skyvara = skyvara
-                        #skyvarb = skyvarb
+                        skyvara = skyvara
+                        skyvarb = skyvarb
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -3920,11 +3922,11 @@
                         sky = sky
                         skybrite = skybrite
                         skysigma = skysigma
-                        #skyvara = skyvara
-                        #skyvarb = skyvarb
+                        skyvara = skyvara
+                        skyvarb = skyvarb
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -4024,11 +4026,11 @@
                         sky = sky
                         skybrite = skybrite
                         skysigma = skysigma
-                        #skyvara = skyvara
-                        #skyvarb = skyvarb
+                        skyvara = skyvara
+                        skyvarb = skyvarb
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -4056,8 +4058,8 @@
                     <h>
                         gaina = gaina
                         gainb = gainb
-                        #skyvara = skyvara
-                        #skyvarb = skyvarb
+                        skyvara = skyvara
+                        skyvarb = skyvarb
                     </h>
                 </o>
                 <r>
@@ -4150,11 +4152,11 @@
                         sky = sky
                         skybrite = skybrite
                         skysigma = skysigma
-                        #skyvara = skyvara
-                        #skyvarb = skyvarb
+                        skyvara = skyvara
+                        skyvarb = skyvarb
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -4190,6 +4192,7 @@
                     <w>
                         filename = filename
                         filetype = filetype
+                        pfw_attempt_id = pfw_attempt_id
                     </w>
                 </r>
             </primary>
@@ -4259,7 +4262,7 @@
                         skysigma = skysigma
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -4692,7 +4695,7 @@
                         skysigma = skysigma
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -4786,7 +4789,7 @@
                         skysigma = skysigma
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -4880,7 +4883,7 @@
                         skysigma = skysigma
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -4974,7 +4977,7 @@
                         skysigma = skysigma
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -5068,7 +5071,7 @@
                         skysigma = skysigma
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -5175,7 +5178,7 @@
                         skysigma = skysigma
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -5347,7 +5350,7 @@
                         skysigma = skysigma
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -5511,7 +5514,7 @@
                         trimsec = trimsec
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
@@ -5763,7 +5766,7 @@
                         trimsec = trimsec
                         wcsaxes = wcsaxes
                         zero = zero
-                        #zp = zp
+                        zp = zp
                     </h>
                 </o>
                 <r>
