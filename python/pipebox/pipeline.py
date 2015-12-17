@@ -141,7 +141,7 @@ class WideField(PipeLine):
         super(WideField,self).set_paths(self.args)         
         self.args.cur = pipequery.WidefieldQuery(self.args.db_section)
         
-# If ngix -- cycle trough server's list
+        # If ngix -- cycle trough server's list
         if self.args.nginx:
             self.args.nginx_server = pipeutils.cycle_list_index(index,['desnginx', 'dessub'])
 
@@ -152,6 +152,10 @@ class WideField(PipeLine):
         elif self.args.expnum:
             self.args.exposure_list = self.args.expnum.split(',')
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
+        elif self.args.nite:
+            exposure_and_band = self.args.cur.get_expnums(self.args.nite,ignore_all=True)
+            self.args.exposure_list = [expnum for expnum,band in exposure_and_band]
+            self.args.dataframe = pd.DataFrame(exposure_and_band,columns=['expnum','band'])
         elif self.args.list:
             self.args.exposure_list = list(pipeutils.read_file(self.args.list))
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
@@ -159,7 +163,7 @@ class WideField(PipeLine):
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.exposure_list = list(self.args.dataframe['expnum'].values)
-
+        
         # Update dataframe for each exposure and add band,nite if not exists
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
