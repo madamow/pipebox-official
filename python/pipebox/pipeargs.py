@@ -32,7 +32,7 @@ class PipeArgs(object):
         parser.add_argument('--configfile',help='Name of user cfg file')
         parser.add_argument('--out',help='Output directory for submit files')
         parser.add_argument('--auto',action='store_true',help='Will run autosubmit mode if specified')
-           
+        
         # Archive arguments
         parser.add_argument('--target_site',help='Computing node, i.e., fermigrid-sl6')
         parser.add_argument('--http_section',help='')
@@ -77,7 +77,9 @@ class WidefieldArgs(PipeArgs):
 
     def cmdline(self):
         parser = super(WidefieldArgs,self).argument_parser()
-
+        
+        parser.add_argument('--after_merge',action='store_true',help='Run in mode to directly insert\
+                            objects into SE_OBJECT table')
         # Science arguments
         parser.add_argument('--expnum',help='A single expnum or comma-separated list of expnums')
         parser.add_argument('--list',help='File of line-separated expnums')

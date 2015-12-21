@@ -29,7 +29,11 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaignlib }}/modulewcl/12a-create-psfex-cat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaignlib }}/modulewcl/12b-run-psfex.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaignlib }}/modulewcl/13a-create-finalcut-catalog.wcl>>
+{% if args.after_merge %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaignlib }}/modulewcl/13b-ingest-se-objects-after-merge.wcl>>
+{% else %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaignlib }}/modulewcl/13b-ingest-se-objects.wcl>>
+{% endif %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaignlib }}/modulewcl/14-finalcut-assess.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaignlib }}/modulewcl/15-mkpng.wcl>>
 {% if args.epoch_name %}

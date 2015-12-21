@@ -24,7 +24,11 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/modulewcl/10-run-psfex.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/modulewcl/10b-ingest-psfex-xml.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/modulewcl/11-create-finalcut-catalog.wcl>>
+{% if args.after_merge %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/modulewcl/12-ingest-se-objects-after-merge.wcl>>
+{% else %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/modulewcl/12-ingest-se-objects.wcl>>
+{% endif %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/modulewcl/13-mkpng.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/modulewcl/14-firstcut-assess.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/inputcals/{{ args.campaignlib }}_inputs.wcl>>
