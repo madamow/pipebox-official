@@ -39,7 +39,7 @@
 {% endif %}
 
 # Added to run new framework in PROD
-<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaignlib }}/inputcals/PRODALPHA_db_config.des>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaignlib }}/inputcals/{{ args.campaignlib }}_db_config.des>>
 
 # Database dependent definitions
 submit_des_db_section = {{ args.db_section }}
