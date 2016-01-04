@@ -33,7 +33,7 @@ def run(args):
     
     defaults_dict = {'propid':['2012B-0001'],
                      'program':['supernova','survey','photom-std-field'],
-                     'ignore_all':False}
+                     'ignore_all':True}
 
     if not args.nite:
         nite = args.cur.get_max(**defaults_dict)[1]
@@ -43,13 +43,13 @@ def run(args):
         args.calnite,args.calrun = precal[0],precal[1]
         
     # Create log file if exposures found.
-    logname = '%s_firstcut_submit.log' % (nite)
+    logname = '%s_firstcut_submit.log' % (args.nite)
     log = path.join(args.pipebox_work,logname)
     logfile = open(log,'a')
     wakingup = "\n%s: Waking up. Checking if I can submit..." % datetime.now()
     logfile.write(wakingup)
-       
-    allexpnumnband = list(args.cur.get_expnums(nite=nite,**defaults_dict))
+    
+    allexpnumnband = list(args.cur.get_expnums(nite=args.nite,**defaults_dict))
     # If no exposures are found, do nothing.
     if len(allexpnumnband) == 0:
         logfile.write("\nNo exposures found. Exiting...")
