@@ -27,8 +27,10 @@ class PipeLine(object):
         for name,vals in group:
             # create JIRA ticket per nite and add jira_id,reqnum to dataframe
             index = args.dataframe[args.dataframe[groupby] == name].index
-
-            if not args.jira_summary:
+          
+            if args.jira_summary:
+                jira_summary = args.jira_summary 
+            else:
                 jira_summary = str(name)
             if args.reqnum:
                 reqnum = args.reqnum

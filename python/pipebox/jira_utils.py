@@ -61,11 +61,15 @@ def create_ticket(jira_section,jira_user,ticket=None,parent=None,summary=None,de
     if ticket and not parent:
         ticket = project + '-' + ticket
         args_dict['ticket'] = ticket
+        reqnum = ticket.split('-')[1] 
 
         # Use ticket specified and find parent key
-        jira_id = con.get_issue(ticket).fields.parent.key
-        reqnum = ticket.split('-')[1] 
+        try:
+            jira_id = con.get_issue(ticket).fields.parent.key
+        except:
+            jira_id = reqnum
         return (reqnum,jira_id)
+
     if parent and not ticket:
         parent = project + '-' + parent
         args_dict['parent'] = parent
