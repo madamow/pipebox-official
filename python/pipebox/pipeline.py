@@ -115,10 +115,16 @@ class PipeLine(object):
 
     def submit(self,args):
         # If less than queue size submit exposure
-        if pipeutils.less_than_queue(args.desstat_pipeline,queue_size=args.queue_size):
+        if args.total_queue:
+            desstat_user = None
+        else:
+            desstat_user = args.jira_user
+        if pipeutils.less_than_queue(pipeline=args.desstat_pipeline,
+                                     user=desstat_user,queue_size=args.queue_size):
             pipeutils.submit_command(args.submitfile)
         else:
-            while not pipeutils.less_than_queue(args.desstat_pipeline,queue_size=args.queue_size):
+            while not pipeutils.less_than_queue(pipeline=args.desstat_pipeline,
+                                                user=desstat_user,queue_size=args.queue_size):
                 time.sleep(30)
             else:
                 pipeutils.submit_command(args.submitfile)

@@ -82,9 +82,9 @@ def run(args):
         else:
             # If under queue_size keep submitting jobs...
             if args.queue_size:
-                not_queued = pipeutils.less_than_queue('firstcut',queue_size = args.queue_size)
+                not_queued = pipeutils.less_than_queue(pipeline='firstcut',queue_size = args.queue_size)
             else:
-                not_queued = pipeutils.less_than_queue('firstcut')
+                not_queued = pipeutils.less_than_queue(pipeline='firstcut')
             if not_queued:
                 count_unsubmitted += 1
                 submitname = 'firstcut_r%s_%s_%s_%s_submit.des' % (args.reqnum,args.nite,args.expnum,args.band)

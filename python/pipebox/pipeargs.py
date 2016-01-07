@@ -27,6 +27,8 @@ class PipeArgs(object):
         parser.add_argument('--queue_size',default=1000,help='If set and savefiles is not specified, code \
                              will submit specified runs up until queue_size is reached. Code \
                              will wait until queue drops below limit to submit next job')
+        parser.add_argument('--total_queue',action='store_true',help='If specified, total jobs per \
+                             pipeline per machine will be counted and user will be ignored')
         parser.add_argument('--labels',help='Human-readable labels to "mark" a given processing attempt')
         parser.add_argument('--template_name',help='submitwcl template within pipeline/campaign')
         parser.add_argument('--configfile',help='Name of user cfg file')

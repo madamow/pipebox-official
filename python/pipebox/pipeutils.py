@@ -28,20 +28,27 @@ def submit_command(submitfile,wait=30,logfile=None):
         command = Popen(commandline,stdout = PIPE, stderr = STDOUT, shell = False)
     time.sleep(wait)
 
-def less_than_queue(pipeline,queue_size=1000):
-    """ Returns True if desstat count is less than specified queue_size, 
+def less_than_queue(pipeline=None,user=None,queue_size=1000):
+    """ Returns True if desstat count is less than specified queue_size,
         false if not"""
+    if not pipeline:
+        print "Must specify pipeline!"
+        sys.exit(1)
     desstat_cmd = Popen(('desstat'),stdout=PIPE)
     grep_cmd = Popen(('grep',pipeline),stdin=desstat_cmd.stdout,stdout=PIPE)
     desstat_cmd.stdout.close()
-    count_cmd = Popen(('wc','-l'),stdin=grep_cmd.stdout,stdout=PIPE)
-    grep_cmd.stdout.close()
+    if user:
+        grep_user_cmd = Popen(('grep',user),stdin=grep_cmd.stdout,stdout=PIPE)
+        grep_cmd.stdout.close()
+    else:
+        grep_user_cmd = grep_cmd
+    count_cmd = Popen(('wc','-l'),stdin=grep_user_cmd.stdout,stdout=PIPE)
+    grep_user_cmd.stdout.close()
     output,error = count_cmd.communicate()
     if int(output) < int(queue_size):
         return True
     else:
         return False
-
 def read_file(file):
     """Read file as generator"""
     with open(file) as listfile:
