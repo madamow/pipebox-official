@@ -171,6 +171,9 @@ class WideField(PipeLine):
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.exposure_list = list(self.args.dataframe['expnum'].values)
+        elif self.args.resubmit:
+            self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum)
+            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         
         # Update dataframe for each exposure and add band,nite if not exists
         try:

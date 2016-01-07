@@ -34,6 +34,7 @@ class PipeArgs(object):
         parser.add_argument('--configfile',help='Name of user cfg file')
         parser.add_argument('--out',help='Output directory for submit files')
         parser.add_argument('--auto',action='store_true',help='Will run autosubmit mode if specified')
+        parser.add_argument('--resubmit',action='store_true',help='Will ressubmit failed runs')
         
         # Archive arguments
         parser.add_argument('--target_site',help='Computing node, i.e., fermigrid-sl6')

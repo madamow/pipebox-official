@@ -102,6 +102,28 @@ class WidefieldQuery(PipeQuery):
         object_nite = self.cur.fetchone()[0]
         return max_expnum,object_nite
 
+    def get_failed_expnums(self,reqnum):
+        """ Queries database to find number of failed attempts without success.
+            Returns expnums for failed, non-null, nonzero attempts."""
+        submitted = "select distinct unitname,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        self.cur.execute(submitted)
+        failed_query = cur.fetchall()
+        df = pd.DataFrame(failed_query,columns=['unitname','status'])
+        df = df.fillna('NULL')
+        passed_expnums = []
+        for u in df['unitname'].unique():
+            count = df[(df.unitname==u) & (df.status==0)].count()[0]
+            if count ==1:
+                passed_expnums.append(u)
+        failed_list = df[(~df.unitname.isin(passed_expnums)) & (df.status!='NULL')]['unitname'].values
+        resubmit_list = []
+        for r in failed_list:
+            if 'NULL' not in list(df[(df.unitname==r)]['status'].values):
+                resubmit_list.append(r)
+        expnum_list = [u[3:] for u in resubmit_list]
+
+        return expnum_list
+
     def get_expnums(self,nite=None,ignore_propid=False,ignore_program=False,ignore_all=False,**kwargs):
         """ Get exposure numbers and band for incoming exposures"""
         if not nite:
