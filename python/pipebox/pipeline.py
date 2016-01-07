@@ -171,7 +171,7 @@ class WideField(PipeLine):
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.exposure_list = list(self.args.dataframe['expnum'].values)
-        elif self.args.resubmit:
+        elif self.args.resubmit_failed:
             self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum)
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         
@@ -206,10 +206,19 @@ class WideField(PipeLine):
             output_path = os.path.join(self.args.output_dir,output_name)
             self.args.submitfile = output_path 
             # Writing template
-            pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
-            self.args.rendered_template_path.append(output_path)
-            if not self.args.savefiles:
-                super(WideField,self).submit(self.args)
+            if self.args.ignore_processed:
+                if self.args.cur.check_submitted(self.args.expnum,self.args.reqnum):
+                    continue
+                else:
+                    pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
+                    self.args.rendered_template_path.append(output_path)
+                    if not self.args.savefiles:
+                        super(WideField,self).submit(self.args)
+            else: 
+                pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
+                self.args.rendered_template_path.append(output_path)
+                if not self.args.savefiles:
+                    super(WideField,self).submit(self.args)
 
         if self.args.savefiles:
             super(WideField,self).save(self.args)
