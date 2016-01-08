@@ -218,7 +218,7 @@ class WideField(PipeLine):
             else: 
                 pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
                 self.args.rendered_template_path.append(output_path)
-                if args.auto:
+                if self.args.auto:
                     if not self.args.rendered_template_path: 
                         print "No new exposures found on %s..." % datetime.now()
                     else: print "%s exposures found on %s..." % (len(args.rendered_template_path),
