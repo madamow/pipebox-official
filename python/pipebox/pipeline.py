@@ -14,7 +14,7 @@ class PipeLine(object):
     else:
         pipebox_work = os.environ['PIPEBOX_WORK']
         pipebox_dir = os.environ['PIPEBOX_DIR']
-
+    
     def ticket(self,args,groupby='nite'):
         """ Create  JIRA ticket for each group specified"""
         try:
@@ -218,6 +218,11 @@ class WideField(PipeLine):
             else: 
                 pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
                 self.args.rendered_template_path.append(output_path)
+                if args.auto:
+                    if not self.args.rendered_template_path: 
+                        print "No new exposures found on %s..." % datetime.now()
+                    else: print "%s exposures found on %s..." % (len(args.rendered_template_path),
+                                                                 datetime.now())
                 if not self.args.savefiles:
                     super(WideField,self).submit(self.args)
 
