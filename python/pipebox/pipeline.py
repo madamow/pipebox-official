@@ -172,6 +172,7 @@ class WideField(PipeLine):
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.exposure_list = list(self.args.dataframe['expnum'].values)
         elif self.args.resubmit_failed:
+            self.args.ignore_processed=False
             self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum)
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         
