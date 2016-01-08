@@ -39,10 +39,11 @@ def less_than_queue(pipeline=None,user=None,queue_size=1000):
     desstat_cmd.stdout.close()
     if user:
         grep_user_cmd = Popen(('grep',user),stdin=grep_cmd.stdout,stdout=PIPE)
+        grep_cmd.stdout.close()
     else:
         grep_user_cmd = grep_cmd
-    grep_cmd.stdout.close()
     count_cmd = Popen(('wc','-l'),stdin=grep_user_cmd.stdout,stdout=PIPE)
+    if not user: grep_cmd.stdout.close()
     grep_user_cmd.stdout.close()
     output,error = count_cmd.communicate()
     if int(output) < int(queue_size):
