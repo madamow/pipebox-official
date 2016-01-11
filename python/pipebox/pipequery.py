@@ -107,7 +107,7 @@ class WidefieldQuery(PipeQuery):
             Returns expnums for failed, non-null, nonzero attempts."""
         submitted = "select distinct unitname,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
         self.cur.execute(submitted)
-        failed_query = cur.fetchall()
+        failed_query = self.cur.fetchall()
         df = pd.DataFrame(failed_query,columns=['unitname','status'])
         df = df.fillna('NULL')
         passed_expnums = []
