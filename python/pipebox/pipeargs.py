@@ -73,6 +73,11 @@ class PipeArgs(object):
                          from nite')
         parser.add_argument('--epoch',help='Observing epoch. If not specified, will be calculated. E.g.,\
                          SVE1,SVE2,Y1E1,Y1E2,Y2E1,Y2E2...')
+
+        # glide in options
+        parser.add_argument('--time_to_live',default=None,type=float,help='The amount of time-to-live (in hours) for \
+                            the job to grab a glidein')
+        
         # Transfers
         parser.add_argument('--nginx',action='store_true',help='Use nginx?')
         

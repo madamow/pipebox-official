@@ -67,9 +67,13 @@ target_site = {{ args.target_site }}
    HOME=/u/staff/{{ args.user }}
    USER={{ args.user }}
    EUPS_USERDATA=/tmp/.eups_{{ args.user }}
-   glidein_use_wall = True
-   jobwalltime = 840
 </job_environment>
+{% endif %}
+
+{% if args.time_to_live %}
+# Time-to-live in minutes
+glidein_use_wall = True
+jobwalltime = {{ (60*args.time_to_live)|round|int }}
 {% endif %}
 
 reqnum = {{ args.reqnum }}
