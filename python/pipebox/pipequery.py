@@ -115,13 +115,20 @@ class WidefieldQuery(PipeQuery):
             count = df[(df.unitname==u) & (df.status==0)].count()[0]
             if count ==1:
                 passed_expnums.append(u)
-        failed_list = df[(~df.unitname.isin(passed_expnums)) & (df.status!='NULL')]['unitname'].values
+        try:
+            failed_list = df[(~df.unitname.isin(passed_expnums)) & (df.status != 'NULL')]['unitname'].values
+        except:
+            failed_list = df[(~df.unitname.isin(passed_expnums)) & (df.status !=0)]['unitname'].values
+        else:
+            print 'No new failed exposures found!'
+            exit()
+        
         resubmit_list = []
         for r in failed_list:
             if 'NULL' not in list(df[(df.unitname==r)]['status'].values):
                 resubmit_list.append(r)
         expnum_list = [u[3:] for u in resubmit_list]
-
+        
         return expnum_list
 
     def get_expnums(self,nite=None,ignore_propid=False,ignore_program=False,ignore_all=False,**kwargs):
