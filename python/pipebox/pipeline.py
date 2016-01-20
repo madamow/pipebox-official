@@ -343,6 +343,8 @@ class HostName(PipeLine):
         self.args.pipebox_work,self.args.pipebox_dir = self.pipebox_work,self.pipebox_dir
         self.args.submit_template_path = os.path.join("pipelines/{0}".format(self.args.pipeline),
                                                    "{0}_template.des".format(self.args.pipeline)) 
+        if self.args.paramfile:
+            self.args = pipeutils.update_from_param_file(self.args)
 
     def ticket(self):
         # Create JIRA ticket
