@@ -11,7 +11,8 @@ def write_template(template,outfile,args):
         rendered template, and args namespace and writes rendered template"""
     config_template = env.get_template(template)
 
-    args.submittime = datetime.now()
+    try: args.submittime = datetime.now()
+    except: args['submittime'] = datetime.now()
     rendered_config_template = config_template.render(args=args)
     
     with open(outfile,'w') as rendered_template:
