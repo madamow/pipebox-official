@@ -109,17 +109,16 @@ class WidefieldQuery(PipeQuery):
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
         df = pd.DataFrame(failed_query,columns=['unitname','status'])
-        df = df.fillna('NULL')
+        # Set Null values to -99
+        df = df.fillna(-99)
         passed_expnums = []
         for u in df['unitname'].unique():
             count = df[(df.unitname==u) & (df.status==0)].count()[0]
             if count ==1:
                 passed_expnums.append(u)
         try:
-            failed_list = df[(~df.unitname.isin(passed_expnums)) & (df.status != 'NULL')]['unitname'].values
+            failed_list = df[(~df.unitname.isin(passed_expnums)) & (~df.status.isin([0,-99]))]['unitname'].values
         except:
-            failed_list = df[(~df.unitname.isin(passed_expnums)) & (df.status !=0)]['unitname'].values
-        else:
             print 'No new failed exposures found!'
             exit()
         
