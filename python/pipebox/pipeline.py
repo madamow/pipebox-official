@@ -156,7 +156,7 @@ class WideField(PipeLine):
         # Creating dataframe from exposures 
         if self.args.exptag:
             self.args.exposure_list = self.args.cur.get_expnums_from_tag(self.args.exptag)
-            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum','tag']).sort(columns=['expnum','tag'],ascending=True)
+            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum','tag']).sort(columns=['tag','expnum'],ascending=True)
         elif self.args.expnum:
             self.args.exposure_list = self.args.expnum.split(',')
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])

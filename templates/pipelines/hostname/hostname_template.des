@@ -1,4 +1,9 @@
-<<include {{ args.pipebox_work }}/config/{{ args.user }}_cfg.des>>
+# {{ args.submittime }}
+{% if args.configfile %}
+<<include {{ args.pipebox_work }}/config/{{ args.configfile }}>>
+{% else %}
+<<include {{ args.pipebox_work }}/config/{{ args.user }}_cfg.des>> {% endif %}
+
 <<include {{ args.pipebox_dir }}/templates/pipelines/hostname/modulewcl/modnamepat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/hostname/modulewcl/hostname.wcl>>
 
