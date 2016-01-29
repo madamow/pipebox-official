@@ -98,7 +98,6 @@ blocklist = xtalk-bias, mkbiascor, dflat-exp, skycombine-pixcor-dflat,skycompare
     <mkbiascor>
         divide_jobs_by = ccdnum
         modulelist = mkbiascor
-        target_site = fermigrid-sl6-himem
     </mkbiascor>
     <pixcor-dflat>
         expnum = ${dflat_expnum}
@@ -130,7 +129,6 @@ blocklist = xtalk-bias, mkbiascor, dflat-exp, skycombine-pixcor-dflat,skycompare
         expnum = ${dflat_expnum}
         divide_jobs_by = ccdnum, band
         modulelist = mkdflatcor
-        target_site = fermigrid-sl6-himem
     </mkdflatcor>
     <find-flat-norm>
         divide_jobs_by = band

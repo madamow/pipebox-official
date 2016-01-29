@@ -137,14 +137,15 @@ class WideField(PipeLine):
         # Setting global parameters
         self.args = pipeargs.WidefieldArgs().cmdline()
         self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
+        if self.args.paramfile:
+            self.args = pipeutils.update_from_param_file(self.args)
+            #args = pipeutils.replace_none_str(args)
+        
         self.args.pipeline = "widefield"
         if 'N' in self.args.campaignlib:
             self.args.desstat_pipeline = "firstcut"
         else:
             self.args.desstat_pipeline = "finalcut" 
-        if self.args.paramfile:
-            self.args = pipeutils.update_from_param_file(self.args)
-            #args = pipeutils.replace_none_str(args)
 
         super(WideField,self).set_paths(self.args)         
         self.args.cur = pipequery.WidefieldQuery(self.args.db_section)
