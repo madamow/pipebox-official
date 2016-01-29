@@ -77,7 +77,7 @@
                 miniskylist = ${list.minilist.fullname}
                 outfilename = ${file.binned_fp.fullname}
                 ccdnums = ${ccdnum}
-                ignore = N30
+                invalid = N30
             </cmdline>
         </exec_1>
     </skycombine-pixcor-dflat>
