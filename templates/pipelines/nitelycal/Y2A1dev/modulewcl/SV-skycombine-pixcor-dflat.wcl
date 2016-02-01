@@ -1,6 +1,6 @@
 <module>
     <skycombine-pixcor-dflat>
-        wrappername = generic.py
+        wrappername = genwrap.py
         wrapperloop = expnum,band
         modnamepat = ${modnamepat_expband}
         loopobj = list.minilist
@@ -77,7 +77,7 @@
                 miniskylist = ${list.minilist.fullname}
                 outfilename = ${file.binned_fp.fullname}
                 ccdnums = ${ccdnum}
-                ignore = N30
+                invalid = N30
             </cmdline>
         </exec_1>
     </skycombine-pixcor-dflat>

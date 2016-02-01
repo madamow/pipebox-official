@@ -1,6 +1,6 @@
 <module>
     <skycombine-norm-dflatcor>
-        wrappername = generic.py
+        wrappername = genwrap.py
         wrapperloop = band
         modnamepat = ${modnamepat_nite_band}
         loopobj = list.mininormdflatlist
@@ -73,7 +73,7 @@
                 miniskylist = ${list.mininormdflatlist.fullname}
                 outfilename = ${file.binned_fp.fullname}
                 ccdnums = ${ccdnum}
-                ignore = N30
+                invalid = N30
             </cmdline>
         </exec_1>
     </skycombine-norm-dflatcor>

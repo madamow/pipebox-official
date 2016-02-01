@@ -1,6 +1,6 @@
 <module>
     <mkbiascor>
-        wrappername = generic.py
+        wrappername = genwrap.py
         wrapperloop = ccdnum
         loopobj = list.inlist
         modnamepat = ${modnamepat_nite_ccdnum_noband}

@@ -1,6 +1,6 @@
 <module>
     <pixcorrect-dflat>
-        wrappername = generic.py
+        wrappername = genwrap.py
         wrapperloop = expnum,ccdnum
         modnamepat = ${modnamepat_ccdnumband}
         loopobj = file.xtalked_dflat

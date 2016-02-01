@@ -30,6 +30,9 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/inputcals/{{ args.campaignlib }}_inputs.wcl>>
 {% endif %}
 
+# Added to run new framework in PROD
+ <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/inputcals/PRODALPHA_db_config.des>>
+
 bias_expnum = {{ args.bias_list }}
 dflat_expnum = {{ args.flat_list }}
 
@@ -42,13 +45,13 @@ label = {{ args.labels }}
 {% else %}
 label = {{ args.campaign }}_{{ args.nite }}
 {% endif %}
-pipeline = nitelycal
+pipeline = {{args.desstat_pipeline }}
 pipeprod = {{ args.eups_product }}
 pipever = {{ args.eups_version }}
 campaign = {{ args.campaign }}
 
-unitname = ${nite}
 nite = {{ args.nite }}
+unitname = ${nite}
 project = {{ args.project }}
 {% if args.ccdnum %}
 ccdnum = {{ args.ccdnum }} {% endif %}
@@ -74,7 +77,8 @@ des_http_section = file-http-prodbeta
 {% if args.rundir %}
 ops_run_dir = {{ args.rundir }}
 {% else %}
-ops_run_dir = ${project}/${pipeline}/${nite}-r${reqnum}/p${attnum:2} {% endif %}
+ops_run_dir = ${project}/${pipeline}/${nite}-r${reqnum}/p${attnum:2} 
+{% endif %}
 submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
 
 save_run_vals = nite, camera, jira_id
@@ -94,7 +98,6 @@ blocklist = xtalk-bias, mkbiascor, dflat-exp, skycombine-pixcor-dflat,skycompare
     <mkbiascor>
         divide_jobs_by = ccdnum
         modulelist = mkbiascor
-        target_site = fermigrid-sl6-himem
     </mkbiascor>
     <pixcor-dflat>
         expnum = ${dflat_expnum}
@@ -126,7 +129,6 @@ blocklist = xtalk-bias, mkbiascor, dflat-exp, skycombine-pixcor-dflat,skycompare
         expnum = ${dflat_expnum}
         divide_jobs_by = ccdnum, band
         modulelist = mkdflatcor
-        target_site = fermigrid-sl6-himem
     </mkdflatcor>
     <find-flat-norm>
         divide_jobs_by = band

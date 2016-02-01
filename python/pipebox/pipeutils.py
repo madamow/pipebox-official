@@ -3,7 +3,6 @@ import sys
 import time
 from subprocess import Popen,PIPE,STDOUT
 from commands import getstatusoutput
-from despydb import desdbi
 from datetime import datetime,timedelta
 from pipebox import env
 
@@ -12,7 +11,8 @@ def write_template(template,outfile,args):
         rendered template, and args namespace and writes rendered template"""
     config_template = env.get_template(template)
 
-    args.submittime = datetime.now()
+    try: args.submittime = datetime.now()
+    except: args['submittime'] = datetime.now()
     rendered_config_template = config_template.render(args=args)
     
     with open(outfile,'w') as rendered_template:
@@ -29,14 +29,23 @@ def submit_command(submitfile,wait=30,logfile=None):
         command = Popen(commandline,stdout = PIPE, stderr = STDOUT, shell = False)
     time.sleep(wait)
 
-def less_than_queue(pipeline,queue_size=1000):
-    """ Returns True if desstat count is less than specified queue_size, 
+def less_than_queue(pipeline=None,user=None,queue_size=1000):
+    """ Returns True if desstat count is less than specified queue_size,
         false if not"""
+    if not pipeline:
+        print "Must specify pipeline!"
+        sys.exit(1)
     desstat_cmd = Popen(('desstat'),stdout=PIPE)
     grep_cmd = Popen(('grep',pipeline),stdin=desstat_cmd.stdout,stdout=PIPE)
     desstat_cmd.stdout.close()
-    count_cmd = Popen(('wc','-l'),stdin=grep_cmd.stdout,stdout=PIPE)
-    grep_cmd.stdout.close()
+    if user:
+        grep_user_cmd = Popen(('grep',user),stdin=grep_cmd.stdout,stdout=PIPE)
+        grep_cmd.stdout.close()
+    else:
+        grep_user_cmd = grep_cmd
+    count_cmd = Popen(('wc','-l'),stdin=grep_user_cmd.stdout,stdout=PIPE)
+    if not user: grep_cmd.stdout.close()
+    grep_user_cmd.stdout.close()
     output,error = count_cmd.communicate()
     if int(output) < int(queue_size):
         return True
@@ -51,10 +60,10 @@ def read_file(file):
 def update_from_param_file(args,delimiter='='):
     file = args.paramfile
     with open(file,'r') as paramfile:
-        lines = paramfile.readlines()
+        lines = paramfile.read().splitlines()
     param_dict = {row.split(delimiter)[0].strip():row.split(delimiter)[1].strip()
-                  for row in lines} 
-
+                  for row in lines if row} 
+    
     args_dict = vars(args)    
     for key,val in args_dict.items():
         for pkey,pval in param_dict.items():

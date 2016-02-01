@@ -27,12 +27,17 @@ class PipeArgs(object):
         parser.add_argument('--queue_size',default=1000,help='If set and savefiles is not specified, code \
                              will submit specified runs up until queue_size is reached. Code \
                              will wait until queue drops below limit to submit next job')
+        parser.add_argument('--total_queue',action='store_true',help='If specified, total jobs per \
+                             pipeline per machine will be counted and user will be ignored')
         parser.add_argument('--labels',help='Human-readable labels to "mark" a given processing attempt')
         parser.add_argument('--template_name',help='submitwcl template within pipeline/campaign')
         parser.add_argument('--configfile',help='Name of user cfg file')
         parser.add_argument('--out',help='Output directory for submit files')
         parser.add_argument('--auto',action='store_true',help='Will run autosubmit mode if specified')
-           
+        parser.add_argument('--resubmit_failed',action='store_true',help='Will ressubmit failed runs')
+        parser.add_argument('--ignore_processed',action='store_true',help='Will skip any expnum \
+                             that has been attempted to process, pass/fail.')
+        
         # Archive arguments
         parser.add_argument('--target_site',help='Computing node, i.e., fermigrid-sl6')
         parser.add_argument('--http_section',help='')
@@ -68,6 +73,11 @@ class PipeArgs(object):
                          from nite')
         parser.add_argument('--epoch',help='Observing epoch. If not specified, will be calculated. E.g.,\
                          SVE1,SVE2,Y1E1,Y1E2,Y2E1,Y2E2...')
+
+        # glide in options
+        parser.add_argument('--time_to_live',default=None,type=float,help='The amount of time-to-live (in hours) for \
+                            the job to grab a glidein')
+        
         # Transfers
         parser.add_argument('--nginx',action='store_true',help='Use nginx?')
         
@@ -97,7 +107,9 @@ class WidefieldArgs(PipeArgs):
 
     def cmdline(self):
         parser = super(WidefieldArgs,self).argument_parser()
-
+        
+        parser.add_argument('--after_merge',action='store_true',help='Run in mode to directly insert\
+                            objects into SE_OBJECT table')
         # Science arguments
         parser.add_argument('--expnum',help='A single expnum or comma-separated list of expnums')
         parser.add_argument('--list',help='File of line-separated expnums')
