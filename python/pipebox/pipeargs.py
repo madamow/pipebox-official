@@ -73,6 +73,26 @@ class PipeArgs(object):
         
         return parser
 
+class SupernocaArgs(PipeArgs):
+
+    def cmdline(self):
+        parser = super(SupernovaArgs,self).argument_parser()
+
+        # Science arguments
+        parser.add_argument('--triplet',help='A single triplet formated as "nite,field,filter" (e.g. "20160114,C3,g")')
+        parser.add_argument('--list',help='File of line-separated triplets (no commas)')
+# Reasonable certain we don't want this
+#        parser.add_argument('--exptag',help='Grab all expnums with given tag in exposuretag table')
+        parser.add_argument('--calnite',help='bias/flat calibration nite/niterange,\
+                                          i.e., 20151020 or 20151020t1030')
+        parser.add_argument('--calrun',help='bias/flat calibration run, i.e., r1948p03')
+        parser.add_argument('--caltag',help='Tag in OPS_PROCTAG to use if you \
+                         calnite/calrun not specified')
+
+        args = parser.parse_args()
+
+        return args
+
 class WidefieldArgs(PipeArgs):
 
     def cmdline(self):

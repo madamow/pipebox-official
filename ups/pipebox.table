@@ -1,4 +1,4 @@
-SetupRequired(despydb 2.0.0+4)
+StupRequired(despydb 2.0.0+4)
 SetupRequired(pandas 0.15.2+1)
 SetupRequired(jinja2 2.6+8)
 SetupRequired(jirapython 0.16+3)

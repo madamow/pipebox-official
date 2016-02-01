@@ -1,6 +1,7 @@
 import os
 import sys
 import pandas as pd
+import numpy as np
 from pipebox import pipequery,pipeargs,jira_utils,nitelycal_lib,pipebox_utils
 from autosubmit import widefield,nitelycal
 
@@ -118,6 +119,76 @@ class PipeLine(object):
                 time.sleep(30)
             else:
                 pipebox_utils.submit_command(submitfile)
+
+class SuperNova(PipeLine):
+
+    def __init__(self):
+        """ Initialize arguments and configure"""
+
+        # Setting global parameters
+        self.args = pipeargs.SuperNovaArgs().cmdline()
+        self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
+        self.args.pipeline = "supernova"
+        if self.args.paramfile:
+            self.args = pipebox_utils.update_from_param_file(self.args)
+            #args = pipebox_utils.replace_none_str(args)
+
+        super(SuperNova,self).set_paths(self.args)         
+        self.args.cur = pipequery.SupernovaQuery(self.args.db_section)
+        
+        # If ngix -- cycle trough server's list
+        if self.args.nginx:
+            self.args.nginx_server = pipebox_utils.cycle_list_index(index,['desnginx', 'dessub'])
+
+        # Creating dataframe from exposures 
+#       I don't think we want this for SN
+#        if self.args.exptag:
+#            self.args.exposure_list = self.args.cur.get_expnums_from_tag(self.args.exptag)
+#            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
+        elif self.args.triplet:
+            self.args.triplet_list = np.array(self.args.triplet.split(',')).reshape([-1,3])
+            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['nite','field','band'])
+        elif self.args.list:
+            self.args.triplet_list = list(pipeutils.read_file(self.args.list))
+            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['nite','field','band'])
+        elif self.args.csv:
+            self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
+            self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
+            self.args.triplet_list = np.array(self.args.dataframe[['nite','field','band']].values)
+
+        # Update dataframe for each exposure and add band,nite if not exists
+        try:
+            self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
+            self.args.dataframe = self.args.dataframe.fillna(False)
+        except: 
+            pass
+
+    def make_templates(self):
+        """ Loop through dataframe and write submitfile for each exposures"""
+        for index,row in self.args.dataframe.iterrows():
+            self.args.expnum,self.args.band,self.args.nite = row['expnum'],row['band'],row['nite']
+            self.args.reqnum, self.args.jira_parent= int(row['reqnum']),row['jira_parent']
+            if self.args.epoch:
+                self.args.epoch_name = self.args.epoch
+            else:
+                self.args.epoch_name = self.args.cur.find_epoch(row['expnum'])
+            # Making output directories and filenames
+            req_dir = 'r%s' % self.args.reqnum
+            self.args.output_dir = os.path.join(self.args.pipebox_work,req_dir)
+            if not os.path.isdir(self.args.output_dir):
+                os.makedirs(self.args.output_dir)
+            output_name = "%s_%s_r%s_%s_supernova_rendered_template.des" % \
+                        (self.args.expnum,self.args.band,self.args.reqnum,self.args.target_site)
+            output_path = os.path.join(self.args.output_dir,output_name)
+    
+            # Writing template
+            pipebox_utils.write_template(self.args.submit_template_path,output_path,self.args)
+            self.args.rendered_template_path.append(output_path)
+            if not self.args.savefiles:
+                super(SuperNova,self).submit(self.args)
+
+        if self.args.savefiles:
+            super(SuperNova,self).save(self.args)
 
 class WideField(PipeLine):
 
