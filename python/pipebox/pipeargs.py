@@ -83,7 +83,7 @@ class PipeArgs(object):
         
         return parser
 
-class SupernocaArgs(PipeArgs):
+class SupernovaArgs(PipeArgs):
 
     def cmdline(self):
         parser = super(SupernovaArgs,self).argument_parser()
