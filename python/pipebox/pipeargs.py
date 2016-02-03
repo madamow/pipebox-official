@@ -1,6 +1,6 @@
 import os
 from argparse import ArgumentParser
-from pipebox import jira_utils,pipebox_parse
+from pipebox import jira_utils
 
 class PipeArgs(object):
 
