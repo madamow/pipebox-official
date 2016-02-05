@@ -65,17 +65,15 @@ class SupernovaQuery(PipeQuery):
             results = self.cur.fetchall()[0]
             yield results
 
-# Copied from widefield (unedited)
+# Edited from widefield (takes in nite, field and band and yield expnums)
     def update_df(self,df):
         """ Takes a pandas dataframe and for each exposure add column:value
             band and nite. Returns dataframe"""
         for index,row in df.iterrows():
-            expnum_info = "select distinct expnum, band, nite from exposure where expnum='%s'" % row['expnum']
-            self.cur.execute(expnum_info)
-            expnum,band,nite = self.cur.fetchall()[0]
-            df.loc[index,'nite'] = nite
-            df.loc[index,'band'] = band
-
+            expnums=self.get_expnums(row['nite'],row['field'],row['band'])
+            df.loc[index,'expnums'] = expnums
+            firstexp = expnums.split(',')[0]
+            df.loc[index,'firstexp'] = firstexp
         return df
 
 # Copied from widefield (unedited)
