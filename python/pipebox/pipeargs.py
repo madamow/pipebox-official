@@ -1,5 +1,5 @@
 import os
-from argparse import ArgumentParser
+from configargparse import ArgParser
 from pipebox import jira_utils
 
 class PipeArgs(object):
@@ -7,79 +7,80 @@ class PipeArgs(object):
     @staticmethod 
     def argument_parser():
         # Create command line arguments
-        parser = ArgumentParser(description=__doc__)
+        parser = ArgParser()
         # General arguments
-        parser.add_argument('--db_section',help = "Database section in your \
+        parser.add('--db_section',required=True,help = "Database section in your \
                              .desservices.ini file, e.g., db-desoper or db-destest")
-        #parser.add_argument('--pipebox_work',default=self.pipebox_work)
-        #parser.add_argument('--pipebox_dir',default=self.pipebox_dir)
-        parser.add_argument("--user", action="store", default=os.environ['USER'],
+        parser.add("--user", action="store", default=os.environ['USER'],
                             help="username that will submit")
-        parser.add_argument('--paramfile',help='Key = Value file that can be used to replace command- \
-                             line')
-        parser.add_argument('--csv',help='CSV of exposures and information specified by user. If specified, \
-                             code will use exposures in csv to submit jobs. Must also specify --delimiter')
-        parser.add_argument('--delimiter',default=',',help='The delimiter if specifying csv and is not \
+        parser.add('--paramfile',is_config_file=True,help='Key = Value file that can be used to replace\
+                             command-line')
+        parser.add('--csv',help='CSV of exposures and information specified by user. If specified, \
+                             code will use exposures in csv to submit jobs. Must also specify \
+                             --delimiter')
+        parser.add('--delimiter',default=',',help='The delimiter if specifying csv and is not \
                              comma-separated')
-        parser.add_argument('--campaignlib',help='Directory in pipebox where templates are stored, e.g., \
-                             $PIPEBOX_DIR/templates/pipelines/finalcut/-->Y2A1dev<--')
-        parser.add_argument('--savefiles',action='store_true',help='Saves submit files to submit later.')
-        parser.add_argument('--queue_size',default=1000,help='If set and savefiles is not specified, code \
+        parser.add('--campaignlib',required=True, help='Directory in pipebox where templates are \
+                             stored, e.g., $PIPEBOX_DIR/templates/pipelines/finalcut/-->Y2A1dev<--')
+        parser.add('--savefiles',action='store_true',help='Saves submit files to submit later.')
+        parser.add('--queue_size',default=1000,help='If set and savefiles is not specified, code \
                              will submit specified runs up until queue_size is reached. Code \
                              will wait until queue drops below limit to submit next job')
-        parser.add_argument('--total_queue',action='store_true',help='If specified, total jobs per \
+        parser.add('--total_queue',action='store_true',help='If specified, total jobs per \
                              pipeline per machine will be counted and user will be ignored')
-        parser.add_argument('--labels',help='Human-readable labels to "mark" a given processing attempt')
-        parser.add_argument('--template_name',help='submitwcl template within pipeline/campaign')
-        parser.add_argument('--configfile',help='Name of user cfg file')
-        parser.add_argument('--out',help='Output directory for submit files')
-        parser.add_argument('--auto',action='store_true',help='Will run autosubmit mode if specified')
-        parser.add_argument('--resubmit_failed',action='store_true',help='Will ressubmit failed runs')
-        parser.add_argument('--ignore_processed',action='store_true',help='Will skip any expnum \
+        parser.add('--labels',help='Human-readable labels to "mark" a given processing attempt')
+        parser.add('--template_name',help='submitwcl template within pipeline/campaign')
+        parser.add('--configfile',help='Name of user cfg file')
+        parser.add('--out',help='Output directory for submit files')
+        parser.add('--auto',action='store_true',help='Will run autosubmit mode if specified')
+        parser.add('--resubmit_failed',action='store_true',help='Will ressubmit failed runs')
+        parser.add('--ignore_processed',action='store_true',help='Will skip any expnum \
                              that has been attempted to process, pass/fail.')
+        parser.add('--wait',default=30,help='Wait time (seconds) between dessubmits. \
+                                             Default=30s')
         
         # Archive arguments
-        parser.add_argument('--target_site',help='Computing node, i.e., fermigrid-sl6')
-        parser.add_argument('--http_section',help='')
-        parser.add_argument('--archive_name',help='Home archive to store products, e.g., \
+        parser.add('--target_site',required=True,help='Computing node, i.e., fermigrid-sl6')
+        parser.add('--http_section',help='')
+        parser.add('--archive_name',help='Home archive to store products, e.g., \
                              desar2home,prodbeta,...')
-        parser.add_argument('--campaign',help='Used in archive dir, e.g., Y2T3')
-        parser.add_argument('--project',default='ACT',help='Archive directory where runs are \
+        parser.add('--campaign',required=True,help='Used in archive dir, e.g., Y2T3')
+        parser.add('--project',default='ACT',help='Archive directory where runs are \
                              stored, e.g., $ARCHIVE/-->ACT<--/finalcut/')
-        parser.add_argument('--rundir',help='Archive directory structure')
+        parser.add('--rundir',help='Archive directory structure')
       
         # JIRA arguments
-        parser.add_argument('--jira_parent',help='JIRA parent ticket under which\
+        parser.add('--jira_parent',help='JIRA parent ticket under which\
                              new ticket will be created.')
-        parser.add_argument('--jira_description',help='Description of ticket\
+        parser.add('--jira_description',help='Description of ticket\
                              found in JIRA')
-        parser.add_argument('--jira_project',default='DESOPS',help='JIRA project where \
+        parser.add('--jira_project',default='DESOPS',help='JIRA project where \
                              ticket will be created, e.g., DESOPS')
-        parser.add_argument('--jira_summary',help='Title of JIRA ticket. To submit multiple \
+        parser.add('--jira_summary',help='Title of JIRA ticket. To submit multiple \
                              exposures under same ticket you can specify jira_summary')
-        parser.add_argument('--jira_user',default = jira_utils.get_jira_user(),help='JIRA username')
-        parser.add_argument('--jira_section',default='jira-desdm',help='JIRA section \
+        parser.add('--jira_user',default = jira_utils.get_jira_user(),help='JIRA username')
+        parser.add('--jira_section',default='jira-desdm',help='JIRA section \
                              in .desservices.ini file')
-        parser.add_argument('--reqnum',help='Part of processing unique identifier. Tied to JIRA ticket \
+        parser.add('--reqnum',help='Part of processing unique identifier. Tied to JIRA ticket \
                              number')
     
         # EUPS arguments
-        parser.add_argument('--eups_product',help='EUPS production stack, e.g., finalcut')
-        parser.add_argument('--eups_version',help='EUPS production stack version, e.g., Y2A1+1')
+        parser.add('--eups_product',required=True,help='EUPS production stack, e.g., finalcut')
+        parser.add('--eups_version',required=True,help='EUPS production stack version, e.g., Y2A1+1')
         
         # Science arguments
-        parser.add_argument('--ccdnum',help='CCDs to be processed.')
-        parser.add_argument('--nite',help='For auto mode: if specified will submit all exposures found \
+        parser.add('--ccdnum',help='CCDs to be processed.')
+        parser.add('--nite',help='For auto mode: if specified will submit all exposures found \
                          from nite')
-        parser.add_argument('--epoch',help='Observing epoch. If not specified, will be calculated. E.g.,\
+        parser.add('--epoch',help='Observing epoch. If not specified, will be calculated. E.g.,\
                          SVE1,SVE2,Y1E1,Y1E2,Y2E1,Y2E2...')
 
         # glide in options
-        parser.add_argument('--time_to_live',default=None,type=float,help='The amount of time-to-live (in hours) for \
-                            the job to grab a glidein')
+        parser.add('--time_to_live',default=None,type=float,help='The amount of time-to-live (in hours)\
+                          for the job to grab a glidein')
         
         # Transfers
-        parser.add_argument('--nginx',action='store_true',help='Use nginx?')
+        parser.add('--nginx',action='store_true',help='Use nginx?')
         
         return parser
 
@@ -89,14 +90,14 @@ class SupernovaArgs(PipeArgs):
         parser = super(SupernovaArgs,self).argument_parser()
 
         # Science arguments
-        parser.add_argument('--triplet',help='A single triplet formated as "nite,field,filter" (e.g. "20160114,C3,g")')
-        parser.add_argument('--list',help='File of line-separated triplets (no commas)')
-# Reasonable certain we don't want this
-#        parser.add_argument('--exptag',help='Grab all expnums with given tag in exposuretag table')
-        parser.add_argument('--calnite',help='bias/flat calibration nite/niterange,\
+        parser.add('--triplet',help='A single triplet formated as "nite,field,filter" (e.g. "20160114,C3,g")')
+        parser.add('--list',help='File of line-separated triplets (no commas)')
+        # Reasonable certain we don't want this
+        # parser.add('--exptag',help='Grab all expnums with given tag in exposuretag table')
+        parser.add('--calnite',help='bias/flat calibration nite/niterange,\
                                           i.e., 20151020 or 20151020t1030')
-        parser.add_argument('--calrun',help='bias/flat calibration run, i.e., r1948p03')
-        parser.add_argument('--caltag',help='Tag in OPS_PROCTAG to use if you \
+        parser.add('--calrun',help='bias/flat calibration run, i.e., r1948p03')
+        parser.add('--caltag',help='Tag in OPS_PROCTAG to use if you \
                          calnite/calrun not specified')
 
         args = parser.parse_args()
@@ -108,16 +109,16 @@ class WidefieldArgs(PipeArgs):
     def cmdline(self):
         parser = super(WidefieldArgs,self).argument_parser()
         
-        parser.add_argument('--after_merge',action='store_true',help='Run in mode to directly insert\
+        parser.add('--after_merge',action='store_true',help='Run in mode to directly insert\
                             objects into SE_OBJECT table')
         # Science arguments
-        parser.add_argument('--expnum',help='A single expnum or comma-separated list of expnums')
-        parser.add_argument('--list',help='File of line-separated expnums')
-        parser.add_argument('--exptag',help='Grab all expnums with given tag in exposuretag table')
-        parser.add_argument('--calnite',help='bias/flat calibration nite/niterange,\
+        parser.add('--expnum',help='A single expnum or comma-separated list of expnums')
+        parser.add('--list',help='File of line-separated expnums')
+        parser.add('--exptag',help='Grab all expnums with given tag in exposuretag table')
+        parser.add('--calnite',help='bias/flat calibration nite/niterange,\
                                           i.e., 20151020 or 20151020t1030')
-        parser.add_argument('--calrun',help='bias/flat calibration run, i.e., r1948p03')
-        parser.add_argument('--caltag',help='Tag in OPS_PROCTAG to use if you \
+        parser.add('--calrun',help='bias/flat calibration run, i.e., r1948p03')
+        parser.add('--caltag',help='Tag in OPS_PROCTAG to use if you \
                          calnite/calrun not specified')
 
         args = parser.parse_args()
@@ -130,14 +131,14 @@ class NitelycalArgs(PipeArgs):
         parser = super(NitelycalArgs,self).argument_parser()
 
         # Science arguments
-        parser.add_argument('--biaslist',help='list of line-separated bias expnums')
-        parser.add_argument('--flatlist',help='list of line-separated flat expnums')
-        parser.add_argument('--minnite',type=int,help='to create a supercal or many precals specify minnite\
+        parser.add('--biaslist',help='list of line-separated bias expnums')
+        parser.add('--flatlist',help='list of line-separated flat expnums')
+        parser.add('--minnite',type=int,help='to create a supercal or many precals specify minnite\
                          along with maxnite')
-        parser.add_argument('--maxnite',type=int,help='to create a supercal or many precals specify maxnite\
+        parser.add('--maxnite',type=int,help='to create a supercal or many precals specify maxnite\
                          along with minnite')
-        parser.add_argument('--combine',action='store_true',help='combine all exposures found into one submit')
-        parser.add_argument('--count',action='store_true',help='print number of calibrations found')
+        parser.add('--combine',action='store_true',help='combine all exposures found into one submit')
+        parser.add('--count',action='store_true',help='print number of calibrations found')
 
         args = parser.parse_args()
 

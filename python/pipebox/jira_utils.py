@@ -47,7 +47,10 @@ def create_ticket(jira_section,jira_user,ticket=None,parent=None,summary=None,de
                  'parent':parent,'ticket':ticket,'summary':summary,
                  'description':description,'use_existing':use_existing,
                  'project':project}
-    con = jiracmd.Jira(jira_section)
+    if parent and ticket:
+        pass
+    else:
+        con = jiracmd.Jira(jira_section)
     if not summary:
         args_dict['summary'] = "%s's Processing Test" % jira_user
     if not description:

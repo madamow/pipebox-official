@@ -139,9 +139,6 @@ class SuperNova(PipeLine):
         self.args = pipeargs.SuperNovaArgs().cmdline()
         self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
         self.args.pipeline = "supernova"
-        if self.args.paramfile:
-            self.args = pipebox_utils.update_from_param_file(self.args)
-            #args = pipebox_utils.replace_none_str(args)
 
         super(SuperNova,self).set_paths(self.args)         
         self.args.cur = pipequery.SupernovaQuery(self.args.db_section)
@@ -208,9 +205,6 @@ class WideField(PipeLine):
         # Setting global parameters
         self.args = pipeargs.WidefieldArgs().cmdline()
         self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
-        if self.args.paramfile:
-            self.args = pipeutils.update_from_param_file(self.args)
-            #args = pipeutils.replace_none_str(args)
         
         self.args.pipeline = "widefield"
         if 'N' in self.args.campaignlib:
@@ -308,9 +302,6 @@ class NitelyCal(PipeLine):
         self.args = pipeargs.NitelycalArgs().cmdline()
         self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
         self.args.pipeline = "nitelycal"
-        if self.args.paramfile:
-            self.args = pipeutils.update_from_param_file(self.args)
-            self.args = pipeutils.replace_none_str(self.args)
 
         super(NitelyCal,self).set_paths(self.args)
         self.args.cur = pipequery.NitelycalQuery(self.args.db_section)
@@ -415,8 +406,6 @@ class HostName(PipeLine):
         self.args.pipebox_work,self.args.pipebox_dir = self.pipebox_work,self.pipebox_dir
         self.args.submit_template_path = os.path.join("pipelines/{0}".format(self.args.pipeline),
                                                    "{0}_template.des".format(self.args.pipeline)) 
-        if self.args.paramfile:
-            self.args = pipeutils.update_from_param_file(self.args)
 
     def ticket(self):
         # Create JIRA ticket
