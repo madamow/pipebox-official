@@ -233,6 +233,9 @@ class WideField(PipeLine):
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.nite:
             exposure_and_band = self.args.cur.get_expnums(self.args.nite,ignore_all=True)
+            if not exposure_and_band:
+                print "No exposures found for given nite. Please check nite."
+                sys.exit(1)
             self.args.exposure_list = [expnum for expnum,band in exposure_and_band]
             self.args.dataframe = pd.DataFrame(exposure_and_band,columns=['expnum','band'])
         elif self.args.list:
