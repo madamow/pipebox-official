@@ -122,13 +122,13 @@ class PipeLine(object):
             desstat_user = args.jira_user
         if pipeutils.less_than_queue(pipeline=args.desstat_pipeline,
                                      user=desstat_user,queue_size=args.queue_size):
-            pipeutils.submit_command(args.submitfile)
+            pipeutils.submit_command(args.submitfile,wait=float(args.wait))
         else:
             while not pipeutils.less_than_queue(pipeline=args.desstat_pipeline,
                                                 user=desstat_user,queue_size=args.queue_size):
                 time.sleep(30)
             else:
-                pipeutils.submit_command(args.submitfile)
+                pipeutils.submit_command(args.submitfile,wait=float(args.wait))
 
 class SuperNova(PipeLine):
 
@@ -453,4 +453,4 @@ class HostName(PipeLine):
         else:
             # Placeholder for submitting jobs
             for submitfile in self.args.rendered_template_path:
-                pipeutils.submit_command(submitfile)
+                pipeutils.submit_command(submitfile,wait=float(self.args.wait))
