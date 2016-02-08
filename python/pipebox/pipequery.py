@@ -127,7 +127,7 @@ class SupernovaQuery(PipeQuery):
         
         resubmit_list = []
         for r in failed_list:
-            if 'NULL' not in list(df[(df.unitname==r)]['status'].values):
+            if -99 not in list(df[(df.unitname==r)]['status'].values):
                 resubmit_list.append(r)
         expnum_list = [u[3:] for u in resubmit_list]
         

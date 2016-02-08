@@ -28,8 +28,6 @@ def make_comment(date,nite,reqnum,campaign):
     return comment
 
 def run(args): 
-    # Replace any "None" strings with Nonetype
-    args = pipeutils.replace_none_str(args)
     
     defaults_dict = {'propid':['2012B-0001'],
                      'program':['supernova','survey','photom-std-field'],
@@ -103,11 +101,15 @@ def run(args):
                 # Adding comment to JIRA ticket...
                 comment = make_comment(datetime.now(),args.nite,args.reqnum,args.campaign)
                 key = 'DESOPS-%s' % args.reqnum
-                Jira = jiracmd.Jira(args.jira_section)
-                jira_tix = Jira.get_issue(key) 
-                all_comments = jira_tix.fields.comment.comments
-                if len(all_comments) == 0:
-                   Jira.add_jira_comment(key,comment)
+                no_jira = False
+                if no_jira:
+                    pass
+                else:
+                    Jira = jiracmd.Jira(args.jira_section)
+                    jira_tix = Jira.get_issue(key) 
+                    all_comments = jira_tix.fields.comment.comments
+                    if len(all_comments) == 0:
+                       Jira.add_jira_comment(key,comment)
             
             elif not_queued is False:
                 logfile.write("\nReached queue limit! Exiting...")
