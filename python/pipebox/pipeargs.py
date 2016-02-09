@@ -61,6 +61,8 @@ class PipeArgs(object):
         parser.add('--jira_user',default = jira_utils.get_jira_user(),help='JIRA username')
         parser.add('--jira_section',default='jira-desdm',help='JIRA section \
                              in .desservices.ini file')
+        parser.add('--ignore_jira',default=False,action='store_true',help="If specified will not \
+                            connect to JIRA, but must specify reqnum and jira_parent.")
         parser.add('--reqnum',help='Part of processing unique identifier. Tied to JIRA ticket \
                              number')
     
@@ -120,7 +122,18 @@ class WidefieldArgs(PipeArgs):
         parser.add('--calrun',help='bias/flat calibration run, i.e., r1948p03')
         parser.add('--caltag',help='Tag in OPS_PROCTAG to use if you \
                          calnite/calrun not specified')
-
+       
+        # Exposure query for args.nite
+        parser.add('--propid',default=['2012B-0001'],help="Propid in exposure table to filter expnums \
+                        on by nite")
+        parser.add('--program',default=['supernova','survey','photom-std-field'],help="Programs in \
+                        exposure table to filter expnums on by nite")
+        parser.add('--ignore_all',action='store_true',default=True,help="By default process all \
+                        exposures from a given nite")
+        parser.add('--ignore_program',action='store_true',default=False,help="By default process all \
+                        exposures from a given nite.")
+        parser.add('--ignore_propid',action='store_true',default=False,help="By default process all \
+                        exposures from a given nite")
         args = parser.parse_args()
 
         return args

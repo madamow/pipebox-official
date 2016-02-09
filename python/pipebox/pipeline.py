@@ -210,6 +210,10 @@ class WideField(PipeLine):
         # Setting global parameters
         self.args = pipeargs.WidefieldArgs().cmdline()
         self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
+        if self.args.ignore_jira:
+            if not self.args.reqnum or not self.args.jira_parent:
+                print "Must specify both --reqnum and --jira_parent to avoid using JIRA!"
+                sys.exit(1)
         
         self.args.pipeline = "widefield"
         if 'N' in self.args.campaignlib:
@@ -219,6 +223,18 @@ class WideField(PipeLine):
 
         super(WideField,self).set_paths(self.args)         
         self.args.cur = pipequery.WidefieldQuery(self.args.db_section)
+
+        # If auto-submit mode on
+        if self.args.auto:
+            self.args.ignore_processed=True
+            pipeutils.stop_if_already_running('write_{0}_wcl.py'.format(self.args.pipeline))
+
+            self.args.nite = self.args.cur.get_max(propid=self.args.propid,program=self.args.program,
+                                                   ignore_all=self.args.ignore_all)[1]
+            if not self.args.calnite:
+                precal = self.args.cur.find_precal(self.args.nite,threshold=7,override=True,
+                                                   tag=self.args.caltag)
+                self.args.calnite,self.args.calrun = precal[0],precal[1]
         
         # If ngix -- cycle trough server's list
         if self.args.nginx:
@@ -295,10 +311,16 @@ class WideField(PipeLine):
                 if self.args.auto:
                     if not self.args.rendered_template_path: 
                         print "No new exposures found on %s..." % datetime.now()
-                    else: print "%s exposures found on %s..." % (len(args.rendered_template_path),
+                    else: print "%s exposures found on %s..." % (len(self.args.rendered_template_path),
                                                                  datetime.now())
                 if not self.args.savefiles:
                     super(WideField,self).submit(self.args)
+
+                    # Make comment in JIRA
+                    if not self.args.ignore_jira:
+                        con=jira_utils.get_con(self.args.jira_section)
+                        if not jira_utils.does_comment_exist(con,reqnum=self.args.reqnum):
+                               jira_utils.make_comment(con,date=datetime.now(),reqnum=self.args.reqnum)
 
         if self.args.savefiles:
             super(WideField,self).save(self.args)
