@@ -308,11 +308,7 @@ class WideField(PipeLine):
             else: 
                 pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
                 self.args.rendered_template_path.append(output_path)
-                if self.args.auto:
-                    if not self.args.rendered_template_path: 
-                        print "No new exposures found on %s..." % datetime.now()
-                    else: print "%s exposures found on %s..." % (len(self.args.rendered_template_path),
-                                                                 datetime.now())
+
                 if not self.args.savefiles:
                     super(WideField,self).submit(self.args)
 
@@ -321,6 +317,11 @@ class WideField(PipeLine):
                         con=jira_utils.get_con(self.args.jira_section)
                         if not jira_utils.does_comment_exist(con,reqnum=self.args.reqnum):
                                jira_utils.make_comment(con,date=datetime.now(),reqnum=self.args.reqnum)
+        if self.args.auto:
+            if not self.args.rendered_template_path: 
+                print "No new exposures found on %s..." % datetime.now()
+            else: print "%s exposures found on %s..." % (len(self.args.rendered_template_path),
+                                                             datetime.now())
 
         if self.args.savefiles:
             super(WideField,self).save(self.args)
