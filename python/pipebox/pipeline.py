@@ -316,7 +316,7 @@ class WideField(PipeLine):
                     if not self.args.ignore_jira:
                         con=jira_utils.get_con(self.args.jira_section)
                         if not jira_utils.does_comment_exist(con,reqnum=self.args.reqnum):
-                               jira_utils.make_comment(con,date=datetime.now(),reqnum=self.args.reqnum)
+                            jira_utils.make_comment(con,datetime=datetime.now(),reqnum=self.args.reqnum)
         if self.args.auto:
             if not self.args.rendered_template_path: 
                 print "No new exposures found on %s..." % datetime.now()
