@@ -21,7 +21,7 @@ class PipeLine(object):
         try:
             args.dataframe
         except:
-            print "Must specify args.dataframe!"
+            print "Must specify input data!"
             sys.exit(1)
 
         group = args.dataframe.groupby(by=[groupby])

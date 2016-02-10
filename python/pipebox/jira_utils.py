@@ -22,7 +22,7 @@ def make_comment(con,datetime=None,content=None,reqnum=None,attempt=None):
         key= "DESOPS-%s" % reqnum
         jira_tix = con.get_issue(key)
         all_comments = jira_tix.fields.comment.comments
-        self.con.add_jira_comment(key,comment)
+        con.add_jira_comment(key,comment)
         return (comment,len(all_comments))
 
 def get_jira_user(section='jira-desdm',services_file=None):
