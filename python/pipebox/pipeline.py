@@ -314,7 +314,7 @@ class WideField(PipeLine):
 
                 if not self.args.savefiles:
                     super(WideField,self).submit(self.args)
-
+                    
                     # Make comment in JIRA
                     if not self.args.ignore_jira:
                         con=jira_utils.get_con(self.args.jira_section)

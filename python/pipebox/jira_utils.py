@@ -16,7 +16,7 @@ def does_comment_exist(con,reqnum=None):
 
 def make_comment(con,datetime=None,content=None,reqnum=None,attempt=None):
         """ Comment given jiraticket when auto-submitted"""
-        comment = """Autosubmit started at %s
+        comment = """Submit started at %s
                      -----
                      %s""" % (datetime,content)
         key= "DESOPS-%s" % reqnum
