@@ -166,8 +166,11 @@ class SuperNova(PipeLine):
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.triplet_list = np.array(self.args.dataframe[['nite','field','band']].values)
         nrows=len(self.args.triplet.split(','))/3
-        self.args.dataframe['expnums']=np.zeros(nrows)
-        self.args.dataframe['firstexp']=np.zeros(nrows)
+        self.args.dataframe['exp_nums']=np.zeros(nrows, dtype=str)
+        self.args.dataframe['first_exp']=np.zeros(nrows, dtype=str)
+        self.args.dataframe['single']=np.ones(nrows, dtype=bool)
+        self.args.dataframe['ccdlist']=np.zeros(nrows, dtype=str)
+        self.args.dataframe['seqnum']=np.ones(nrows, dtype=int)
         # Update dataframe for each exposure and add expnums,firstexp if not exists
 #        try:
 #            self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
@@ -180,12 +183,12 @@ class SuperNova(PipeLine):
     def make_templates(self):
         """ Loop through dataframe and write submitfile for each exposures"""
         for index,row in self.args.dataframe.iterrows():
-            self.args.expnums,self.args.band,self.args.nite,self.args.firstexp,self.args.field = row['expnums'],row['band'],row['nite'],row['firstexp'],row['field']
+            self.args.expnums,self.args.band,self.args.nite,self.args.firstexp,self.args.field,self.args.single,self.args.ccdlist,self.args.seqnum = row['exp_nums'],row['band'],row['nite'],row['first_exp'],row['field'],row['single'],row['ccdlist'],row['seqnum']
             self.args.reqnum, self.args.jira_parent= int(row['reqnum']),row['jira_parent']
 #            if self.args.epoch:
 #                self.args.epoch_name = self.args.epoch
 #            else:
-#                self.args.epoch_name = self.args.cur.find_epoch(int(row['firstexp']))
+#                self.args.epoch_name = self.args.cur.find_epoch(int(row['first_exp']))
             # Making output directories and filenames
             req_dir = 'r%s' % self.args.reqnum
             self.args.output_dir = os.path.join(self.args.pipebox_work,req_dir)
