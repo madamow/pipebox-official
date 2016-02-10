@@ -2,6 +2,29 @@ import os
 import ConfigParser
 from opstoolkit import jiracmd
 
+def get_con(jira_section):
+    return jiracmd.Jira(jira_section)
+
+def does_comment_exist(con,reqnum=None):
+        key= "DESOPS-%s" % reqnum
+        jira_tix = con.get_issue(key)
+        all_comments = jira_tix.fields.comment.comments
+        if len(all_comments) == 0:
+            return False
+        else:
+            return True
+
+def make_comment(con,datetime=None,content=None,reqnum=None,attempt=None):
+        """ Comment given jiraticket when auto-submitted"""
+        comment = """Autosubmit started at %s
+                     -----
+                     %s""" % (datetime,content)
+        key= "DESOPS-%s" % reqnum
+        jira_tix = con.get_issue(key)
+        all_comments = jira_tix.fields.comment.comments
+        self.con.add_jira_comment(key,comment)
+        return (comment,len(all_comments))
+
 def get_jira_user(section='jira-desdm',services_file=None):
     Config = ConfigParser.ConfigParser()
     if not services_file:
@@ -47,7 +70,10 @@ def create_ticket(jira_section,jira_user,ticket=None,parent=None,summary=None,de
                  'parent':parent,'ticket':ticket,'summary':summary,
                  'description':description,'use_existing':use_existing,
                  'project':project}
-    con = jiracmd.Jira(jira_section)
+    if parent and ticket:
+        pass
+    else:
+        con = get_con(jira_section)
     if not summary:
         args_dict['summary'] = "%s's Processing Test" % jira_user
     if not description:

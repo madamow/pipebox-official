@@ -6,14 +6,10 @@ from pipebox import pipeline
 widefield = pipeline.WideField()
 args = widefield.args
 
-if args.auto:
-    # run auto-submit 
-    widefield.auto(args)
+# create JIRA ticket per nite found (default)
+if args.exptag:
+    widefield.ticket(args,groupby='tag')
 else:
-    # create JIRA ticket per nite found (default)
-    if args.exptag:
-        widefield.ticket(args,groupby='tag')
-    else:
-        widefield.ticket(args)
-    # write submit files and submit if necessary
-    widefield.make_templates()
+    widefield.ticket(args)
+# write submit files and submit if necessary
+widefield.make_templates()

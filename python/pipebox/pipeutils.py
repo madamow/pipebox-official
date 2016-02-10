@@ -57,29 +57,6 @@ def read_file(file):
     with open(file) as listfile:
         for line in listfile: yield line.strip()
 
-def update_from_param_file(args,delimiter='='):
-    file = args.paramfile
-    with open(file,'r') as paramfile:
-        lines = paramfile.read().splitlines()
-    param_dict = {row.split(delimiter)[0].strip():row.split(delimiter)[1].strip()
-                  for row in lines if row} 
-    
-    args_dict = vars(args)    
-    for key,val in args_dict.items():
-        for pkey,pval in param_dict.items():
-            if pkey==key:
-                args_dict[key] = param_dict[key]
-    return args
-
-def replace_none_str(args):
-    args_dict = vars(args)
-    for key,val in args_dict.items():
-        if val=='None':
-            args_dict[key] = None
-        elif not val:
-            args_dict[key] = None
-    return args
-
 def print_cron_info(pipeline,site=None,pipebox_work=None,cron_path='.'):
     print "\n"
     print "# To submit files (from dessub/descmp1):\n"

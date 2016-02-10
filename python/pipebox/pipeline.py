@@ -122,13 +122,13 @@ class PipeLine(object):
             desstat_user = args.jira_user
         if pipeutils.less_than_queue(pipeline=args.desstat_pipeline,
                                      user=desstat_user,queue_size=args.queue_size):
-            pipeutils.submit_command(args.submitfile)
+            pipeutils.submit_command(args.submitfile,wait=float(args.wait))
         else:
             while not pipeutils.less_than_queue(pipeline=args.desstat_pipeline,
                                                 user=desstat_user,queue_size=args.queue_size):
                 time.sleep(30)
             else:
-                pipeutils.submit_command(args.submitfile)
+                pipeutils.submit_command(args.submitfile,wait=float(args.wait))
 
 class SuperNova(PipeLine):
 
@@ -139,9 +139,6 @@ class SuperNova(PipeLine):
         self.args = pipeargs.SupernovaArgs().cmdline()
         self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
         self.args.pipeline = "sne"
-        if self.args.paramfile:
-            self.args = pipebox_utils.update_from_param_file(self.args)
-            #args = pipebox_utils.replace_none_str(args)
 
         super(SuperNova,self).set_paths(self.args)         
         self.args.cur = pipequery.SupernovaQuery(self.args.db_section)
@@ -216,9 +213,10 @@ class WideField(PipeLine):
         # Setting global parameters
         self.args = pipeargs.WidefieldArgs().cmdline()
         self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
-        if self.args.paramfile:
-            self.args = pipeutils.update_from_param_file(self.args)
-            #args = pipeutils.replace_none_str(args)
+        if self.args.ignore_jira:
+            if not self.args.reqnum or not self.args.jira_parent:
+                print "Must specify both --reqnum and --jira_parent to avoid using JIRA!"
+                sys.exit(1)
         
         self.args.pipeline = "widefield"
         if 'N' in self.args.campaignlib:
@@ -228,6 +226,18 @@ class WideField(PipeLine):
 
         super(WideField,self).set_paths(self.args)         
         self.args.cur = pipequery.WidefieldQuery(self.args.db_section)
+
+        # If auto-submit mode on
+        if self.args.auto:
+            self.args.ignore_processed=True
+            pipeutils.stop_if_already_running('write_{0}_wcl.py'.format(self.args.pipeline))
+
+            self.args.nite = self.args.cur.get_max(propid=self.args.propid,program=self.args.program,
+                                                   ignore_all=self.args.ignore_all)[1]
+            if not self.args.calnite:
+                precal = self.args.cur.find_precal(self.args.nite,threshold=7,override=True,
+                                                   tag=self.args.caltag)
+                self.args.calnite,self.args.calrun = precal[0],precal[1]
         
         # If ngix -- cycle trough server's list
         if self.args.nginx:
@@ -242,6 +252,9 @@ class WideField(PipeLine):
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.nite:
             exposure_and_band = self.args.cur.get_expnums(self.args.nite,ignore_all=True)
+            if not exposure_and_band:
+                print "No exposures found for given nite. Please check nite."
+                sys.exit(1)
             self.args.exposure_list = [expnum for expnum,band in exposure_and_band]
             self.args.dataframe = pd.DataFrame(exposure_and_band,columns=['expnum','band'])
         elif self.args.list:
@@ -298,13 +311,20 @@ class WideField(PipeLine):
             else: 
                 pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
                 self.args.rendered_template_path.append(output_path)
-                if self.args.auto:
-                    if not self.args.rendered_template_path: 
-                        print "No new exposures found on %s..." % datetime.now()
-                    else: print "%s exposures found on %s..." % (len(args.rendered_template_path),
-                                                                 datetime.now())
+
                 if not self.args.savefiles:
                     super(WideField,self).submit(self.args)
+
+                    # Make comment in JIRA
+                    if not self.args.ignore_jira:
+                        con=jira_utils.get_con(self.args.jira_section)
+                        if not jira_utils.does_comment_exist(con,reqnum=self.args.reqnum):
+                            jira_utils.make_comment(con,datetime=datetime.now(),reqnum=self.args.reqnum)
+        if self.args.auto:
+            if not self.args.rendered_template_path: 
+                print "No new exposures found on %s..." % datetime.now()
+            else: print "%s exposures found on %s..." % (len(self.args.rendered_template_path),
+                                                             datetime.now())
 
         if self.args.savefiles:
             super(WideField,self).save(self.args)
@@ -316,9 +336,6 @@ class NitelyCal(PipeLine):
         self.args = pipeargs.NitelycalArgs().cmdline()
         self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
         self.args.pipeline = "nitelycal"
-        if self.args.paramfile:
-            self.args = pipeutils.update_from_param_file(self.args)
-            self.args = pipeutils.replace_none_str(self.args)
 
         super(NitelyCal,self).set_paths(self.args)
         self.args.cur = pipequery.NitelycalQuery(self.args.db_section)
@@ -423,8 +440,6 @@ class HostName(PipeLine):
         self.args.pipebox_work,self.args.pipebox_dir = self.pipebox_work,self.pipebox_dir
         self.args.submit_template_path = os.path.join("pipelines/{0}".format(self.args.pipeline),
                                                    "{0}_template.des".format(self.args.pipeline)) 
-        if self.args.paramfile:
-            self.args = pipeutils.update_from_param_file(self.args)
 
     def ticket(self):
         # Create JIRA ticket
@@ -467,4 +482,4 @@ class HostName(PipeLine):
         else:
             # Placeholder for submitting jobs
             for submitfile in self.args.rendered_template_path:
-                pipeutils.submit_command(submitfile)
+                pipeutils.submit_command(submitfile,wait=float(self.args.wait))
