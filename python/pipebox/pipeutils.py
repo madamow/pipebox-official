@@ -1,5 +1,6 @@
 import os
 import sys
+import re
 import time
 from subprocess import Popen,PIPE,STDOUT
 from commands import getstatusoutput
@@ -25,7 +26,7 @@ def submit_command(submitfile,wait=30,logfile=None):
     commandline = ['dessubmit',submitfile]
     if logfile:
         command = Popen(commandline,stdout = logfile, stderr = logfile, shell = False)
-    else:   
+    else:
         command = Popen(commandline,stdout = PIPE, stderr = STDOUT, shell = False)
     time.sleep(wait)
 
@@ -91,6 +92,14 @@ def stop_if_already_running(script_name):
         print "Already running.  Aborting"
         print l[1]
         sys.exit(0)
+
+def rename_file(args):
+    """ Rename submitfile with attempt number."""
+    add_string = '_p%02d' % int(self.args.attnum)
+    update_submitfile = args.submitfile.replace(self.args.target_site, 
+                                                add_string + '_' + self.args.target_site)
+    os.rename(args.submitfile,update_submitfile)
+    return args.submitfile
 # --------------------------------------------------------------
 # These functions were copied/adapted from desdm_eupsinstal.py
 
