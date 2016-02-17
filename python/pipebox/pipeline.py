@@ -403,11 +403,11 @@ class NitelyCal(PipeLine):
                 bias_list,flat_list = nitelycal_lib.create_lists(group)
                 self.args.bias_list = ','.join(str(i) for i in bias_list)
                 self.args.flat_list = ','.join(str(i) for i in flat_list)
-
+           
             if self.args.epoch:
                 self.args.epoch_name = self.args.epoch
             else:
-                self.args.epoch_name = self.args.cur.find_epoch(self.args.bias_list[0])
+                self.args.epoch_name = self.args.cur.find_epoch(self.args.bias_list.split(',')[0])
             self.args.reqnum = group['reqnum'].unique()[0]
             self.args.jira_parent = group['jira_parent'].unique()[0]
     
