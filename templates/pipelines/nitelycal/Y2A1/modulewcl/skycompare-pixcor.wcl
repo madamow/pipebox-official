@@ -35,7 +35,7 @@
                 savefiles = True
             </compare_dflat_binned_fp>
             <pixcor_dflat_binned_fp>
-                depends skycombine-01.file.binned_fp
+                depends skycombine-pixcor-dflat.file.binned_fp
                 match = expnum, band
                 dirpat = precal
                 rundir = binned-fp

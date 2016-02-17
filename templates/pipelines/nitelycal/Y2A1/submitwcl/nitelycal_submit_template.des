@@ -102,11 +102,11 @@ blocklist = bias-exp, bias-ccd, dflat-exp, dflat-band
     <dflat-exp>
         divide_jobs_by = expnum
         expnum = ${dflat_expnum}
-        modulelist = crosstalk-dflat, pixcorrect-dflat, skycombine-01, skycompare-pixcor,ingest-skycompare-pixcor
+        modulelist = crosstalk-dflat, pixcorrect-dflat, skycombine-pixcor-dflat, skycompare-pixcor,ingest-skycompare-pixcor
     </dflat-exp>
     <dflat-band>
         divide_jobs_by = band
         expnum = ${dflat_expnum}
-        modulelist = mkdflatcor, skycompress-01, skycombine-02, find-flat-norm, scale-flat, skycompress-02, skycombine-03
+        modulelist = mkdflatcor, skycompress-dflatcor, skycombine-dflatcor, find-flat-norm, scale-flat, skycompress-norm-dflatcor, skycombine-norm-dflatcor
     </dflat-band>
 </block>
