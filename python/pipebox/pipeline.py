@@ -2,10 +2,11 @@ import os
 import sys
 from datetime import datetime
 import time
+from abc import ABCMeta, abstractmethod
 import pandas as pd
 import numpy as np
 from pipebox import pipequery,pipeargs,pipeutils,jira_utils,nitelycal_lib
-from autosubmit import widefield,nitelycal
+from autosubmit import nitelycal
 
 class PipeLine(object):
     # Setup key arguments and environment here instead of write_*.sh
@@ -15,6 +16,12 @@ class PipeLine(object):
     else:
         pipebox_work = os.environ['PIPEBOX_WORK']
         pipebox_dir = os.environ['PIPEBOX_DIR']
+
+    __metaclass__ = ABCMeta
+    @abstractmethod
+    def make_templates():
+        """Must be defined for each pipeline subclass"""
+        pass
     
     def ticket(self,args,groupby='nite'):
         """ Create  JIRA ticket for each group specified"""
