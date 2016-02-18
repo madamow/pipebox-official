@@ -122,13 +122,16 @@ class PipeLine(object):
             desstat_user = args.jira_user
         if pipeutils.less_than_queue(pipeline=args.desstat_pipeline,
                                      user=desstat_user,queue_size=args.queue_size):
-            pipeutils.submit_command(args.submitfile,wait=float(args.wait))
+            args.unitname,args.attnum = pipeutils.submit_command(args.submitfile,wait=float(args.wait))
         else:
             while not pipeutils.less_than_queue(pipeline=args.desstat_pipeline,
                                                 user=desstat_user,queue_size=args.queue_size):
                 time.sleep(30)
             else:
-                pipeutils.submit_command(args.submitfile,wait=float(args.wait))
+                args.unitname,args.attnum = pipeutils.submit_command(args.submitfile,wait=float(args.wait))
+    
+        # Update submitfile name with attnum
+        pipeutils.rename_file(args)
 
 class SuperNova(PipeLine):
 
@@ -457,7 +460,7 @@ class HostName(PipeLine):
         self.args.output_dir = os.path.join(self.args.pipebox_work,req_dir)
         if not os.path.isdir(self.args.output_dir):
             os.makedirs(self.args.output_dir)
-        output_name = "%s_%s_rendered_template.des" % (self.args.reqnum,self.args.pipeline)
+        output_name = "%s_r%s_%s_rendered_template.des" % (self.args.pipeline,self.args.reqnum,self.args.target_site)
         output_path = os.path.join(self.args.output_dir,output_name)
         self.args.rendered_template_path = []
         self.args.rendered_template_path.append(output_path)
@@ -480,6 +483,8 @@ class HostName(PipeLine):
                                           submit_file=bash_script_path)
 
         else:
-            # Placeholder for submitting jobs
             for submitfile in self.args.rendered_template_path:
-                pipeutils.submit_command(submitfile,wait=float(self.args.wait))
+                self.args.submitfile = submitfile
+                self.args.unitname,self.args.attnum = pipeutils.submit_command(submitfile,wait=float(self.args.wait))
+                # Adding attnum to output_name
+                pipeutils.rename_file(self.args)
