@@ -81,7 +81,7 @@ class PipeLine(object):
             # Will run once, but if put in crontab will run however you specify in cron
 
             # Kill current process if cron is running from last execution
-            pipeutils.stop_if_already_running('write_{0}_wcl.py'.format(args.pipeline))
+            pipeutils.stop_if_already_running('submit_{0}.py'.format(args.pipeline))
             pipeline = __import__("autosubmit")
             getattr(pipeline,args.pipeline).run(args)
 
@@ -230,7 +230,7 @@ class WideField(PipeLine):
         # If auto-submit mode on
         if self.args.auto:
             self.args.ignore_processed=True
-            pipeutils.stop_if_already_running('write_{0}_wcl.py'.format(self.args.pipeline))
+            pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
 
             self.args.nite = self.args.cur.get_max(propid=self.args.propid,program=self.args.program,
                                                    ignore_all=self.args.ignore_all)[1]
