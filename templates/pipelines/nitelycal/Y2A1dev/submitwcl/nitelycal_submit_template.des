@@ -1,6 +1,6 @@
 # {{ args.submittime }}
 {% if args.configfile %}
-<<include {{args.pipebox_work}}/config/{{args.configfile}} >>
+<<include {{args.pipebox_work}}/config/{{args.configfile}}>>
 {% else %}
 <<include {{ args.pipebox_work }}/config/{{ args.user }}_cfg.des>>
 {% endif %}
