@@ -27,6 +27,10 @@ def submit_command(submitfile,wait=30,logfile=None):
     commandline = ['dessubmit',submitfile]
     command = Popen(commandline,stdout = PIPE, stderr = STDOUT, shell = False)
     output,error = output,error = command.communicate()
+    if logfile:
+        for line in output: logfile.write(line)
+    time.sleep(wait)
+
     try:
         runid = re.findall("[a-zA-z0-9_-]*_r\d+p\d+",output)[0]
         unitname,run = runid.rsplit('_',1)
@@ -35,11 +39,8 @@ def submit_command(submitfile,wait=30,logfile=None):
     except:
         print output
         print 'Error in submission!'
-    if logfile:
-        for line in output: logfile.write(line)
+        pass
 
-    time.sleep(wait)
-    
 def less_than_queue(pipeline=None,user=None,queue_size=1000):
     """ Returns True if desstat count is less than specified queue_size,
         false if not"""

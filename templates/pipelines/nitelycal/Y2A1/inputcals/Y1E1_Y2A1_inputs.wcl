@@ -7,6 +7,7 @@ lintablefile = lin_tbl_v0.4
 lintablenite = 20130624
 pupilnite = null
 hupdatefile = ${confignite}_DES_header_update.20140303
+refcampaign = Y2T1
 ### Changes per Epoch ###
 bpmnite = 20130115t0130
 bpmreq = 1975
