@@ -134,7 +134,9 @@ class WidefieldArgs(PipeArgs):
                         exposures from a given nite.")
         parser.add('--ignore_propid',action='store_true',default=False,help="By default process all \
                         exposures from a given nite")
-        args = parser.parse_args()
+	parser.add('--RA', '-ra', nargs=2, help='RA in degrees, in the order of min, max')
+	parser.add('--Dec', '-dec', nargs=2, help='Dec in degrees')
+	args = parser.parse_args()
 
         return args
 

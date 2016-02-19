@@ -252,7 +252,9 @@ class WideField(PipeLine):
         # If ngix -- cycle trough server's list
         if self.args.nginx:
             self.args.nginx_server = pipeutils.cycle_list_index(index,['desnginx', 'dessub'])
-
+	if not self.args.RA or not self.args.Dec:
+            print "Must specify both RA and Dec."
+	    sys.exit(1)
         # Creating dataframe from exposures 
         if self.args.exptag:
             self.args.exposure_list = self.args.cur.get_expnums_from_tag(self.args.exptag)
@@ -274,7 +276,10 @@ class WideField(PipeLine):
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.exposure_list = list(self.args.dataframe['expnum'].values)
-        elif self.args.resubmit_failed:
+        elif self.args.RA and self.args.Dec:
+	    self.args.exposure_list = pipequery.get_expnum_from_radec(self.args.RA, self.args.Dec)
+	    self.args.dataframe = pd.DataFrame(self.args.exposure_list, columns=['expnum'])
+	elif self.args.resubmit_failed:
             self.args.ignore_processed=False
             self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum)
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
