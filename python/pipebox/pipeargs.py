@@ -128,12 +128,8 @@ class WidefieldArgs(PipeArgs):
                         on by nite")
         parser.add('--program',default=['supernova','survey','photom-std-field'],help="Programs in \
                         exposure table to filter expnums on by nite")
-        parser.add('--ignore_all',action='store_true',default=True,help="By default process all \
-                        exposures from a given nite")
-        parser.add('--ignore_program',action='store_true',default=False,help="By default process all \
-                        exposures from a given nite.")
-        parser.add('--ignore_propid',action='store_true',default=False,help="By default process all \
-                        exposures from a given nite")
+        parser.add('--process_all',action='store_true',help="Ignore propid and program when processing \
+                        by nite.")
         args = parser.parse_args()
 
         return args

@@ -242,8 +242,8 @@ class WideField(PipeLine):
             self.args.ignore_processed=True
             pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
 
-            self.args.nite = self.args.cur.get_max(propid=self.args.propid,program=self.args.program,
-                                                   ignore_all=self.args.ignore_all)[1]
+            self.args.nite = self.args.cur.get_max_nite(propid=self.args.propid,program=self.args.program,
+                                                   process_all=self.args.process_all)[1]
             if not self.args.calnite:
                 precal = self.args.cur.find_precal(self.args.nite,threshold=7,override=True,
                                                    tag=self.args.caltag)
@@ -254,19 +254,24 @@ class WideField(PipeLine):
             self.args.nginx_server = pipeutils.cycle_list_index(index,['desnginx', 'dessub'])
 
         # Creating dataframe from exposures 
-        if self.args.exptag:
+        if self.args.resubmit_failed:
+            self.args.ignore_processed=False
+            self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum)
+            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
+        elif self.args.exptag:
             self.args.exposure_list = self.args.cur.get_expnums_from_tag(self.args.exptag)
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum','tag']).sort(columns=['tag','expnum'],ascending=True)
         elif self.args.expnum:
             self.args.exposure_list = self.args.expnum.split(',')
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.nite:
-            exposure_and_band = self.args.cur.get_expnums(self.args.nite,ignore_all=True)
-            if not exposure_and_band:
+            exposures = self.args.cur.get_expnums_from_nite(self.args.nite,propid=self.args.propid,
+                                program=self.args.program,process_all=self.args.process_all)
+            if not exposures:
                 print "No exposures found for given nite. Please check nite."
                 sys.exit(1)
-            self.args.exposure_list = [expnum for expnum,band in exposure_and_band]
-            self.args.dataframe = pd.DataFrame(exposure_and_band,columns=['expnum','band'])
+            self.args.exposure_list = [expnum for expnum,band in exposures]
+            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.list:
             self.args.exposure_list = list(pipeutils.read_file(self.args.list))
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
@@ -274,10 +279,6 @@ class WideField(PipeLine):
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.exposure_list = list(self.args.dataframe['expnum'].values)
-        elif self.args.resubmit_failed:
-            self.args.ignore_processed=False
-            self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum)
-            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         
         # Update dataframe for each exposure and add band,nite if not exists
         try:
