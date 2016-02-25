@@ -283,7 +283,13 @@ class WideField(PipeLine):
             self.args.ignore_processed=False
             self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum)
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
-        
+	
+	# Remove unwanted exposures 
+	if self.args.exclude_list:
+	    self.args.exclude_list = self.args.exclude_list.strip().split(',')
+	    self.args.exclude_list = [float(e) for e in self.args.exclude_list]
+	    self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
+ 
         # Update dataframe for each exposure and add band,nite if not exists
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)

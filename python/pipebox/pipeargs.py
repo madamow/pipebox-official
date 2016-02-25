@@ -131,11 +131,12 @@ class WidefieldArgs(PipeArgs):
         parser.add('--ignore_all',action='store_true',default=True,help="By default process all \
                         exposures from a given nite")
         parser.add('--ignore_program',action='store_true',default=False,help="By default process all \
-                        exposures from a given nite.")
+                        exposures from a given nite")
         parser.add('--ignore_propid',action='store_true',default=False,help="By default process all \
                         exposures from a given nite")
-	parser.add('--RA', '-ra', nargs=2, help='RA in degrees, in the order of min, max')
-	parser.add('--Dec', '-dec', nargs=2, help='Dec in degrees')
+	parser.add('--RA','-ra',nargs=2,help='RA in degrees, in the order of min, max')
+	parser.add('--Dec','-dec',nargs=2,help='Dec in degrees')
+	parser.add('--exclude_list',help='A list to exclude from the dataframe')
 	args = parser.parse_args()
 
         return args
