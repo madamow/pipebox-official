@@ -124,16 +124,16 @@ class WidefieldArgs(PipeArgs):
                          calnite/calrun not specified')
        
         # Exposure query for args.nite
-        parser.add('--propid',default=['2012B-0001'],help="Propid in exposure table to filter expnums \
+        parser.add('--propid',default='2012B-0001',help="Propid in exposure table to filter expnums \
                         on by nite")
-        parser.add('--program',default=['supernova','survey','photom-std-field'],help="Programs in \
+        parser.add('--program',default='supernova,survey,photom-std-field',help="Programs in \
                         exposure table to filter expnums on by nite")
         parser.add('--process_all',action='store_true',help="Ignore propid and program when processing \
                         by nite.")
-    	parser.add('--RA','-ra',nargs=2,help='RA in degrees, in the order of min, max')
-	    parser.add('--Dec','-dec',nargs=2,help='Dec in degrees')
-    	parser.add('--exclude_list',help='A list to exclude from the dataframe')
-	    args = parser.parse_args()
+        parser.add('--RA','-ra',nargs=2,help='RA in degrees, in the order of min, max')
+        parser.add('--Dec','-dec',nargs=2,help='Dec in degrees')
+        parser.add('--exclude_list',help='A list to exclude from the dataframe')
+        args = parser.parse_args()
 
         return args
 

@@ -236,7 +236,10 @@ class WideField(PipeLine):
 
         super(WideField,self).set_paths(self.args)         
         self.args.cur = pipequery.WidefieldQuery(self.args.db_section)
-
+        
+        self.args.propid = self.args.propid.strip().split(',')
+        self.args.program = self.args.program.strip().split(',')
+        
         # If auto-submit mode on
         if self.args.auto:
             self.args.ignore_processed=True
@@ -252,10 +255,10 @@ class WideField(PipeLine):
         # If ngix -- cycle trough server's list
         if self.args.nginx:
             self.args.nginx_server = pipeutils.cycle_list_index(index,['desnginx', 'dessub'])
-	    if self.args.RA or self.args.Dec:	
-	        if not (self.args.RA and self.args.Dec):
+        if self.args.RA or self.args.Dec:
+            if not (self.args.RA and self.args.Dec):
                 print "Must specify both RA and Dec."
-    	    	sys.exit(1)
+                sys.exit(1)
         # Creating dataframe from exposures 
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
