@@ -259,6 +259,7 @@ class WideField(PipeLine):
             if not (self.args.RA and self.args.Dec):
                 print "Must specify both RA and Dec."
                 sys.exit(1)
+        
         # Creating dataframe from exposures 
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
