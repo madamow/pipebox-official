@@ -326,7 +326,6 @@ class WideField(PipeLine):
             else: 
                 pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
                 self.args.rendered_template_path.append(output_path)
-
                 if not self.args.savefiles:
                     super(WideField,self).submit(self.args)
                     
@@ -335,6 +334,7 @@ class WideField(PipeLine):
                         con=jira_utils.get_con(self.args.jira_section)
                         if not jira_utils.does_comment_exist(con,reqnum=self.args.reqnum):
                             jira_utils.make_comment(con,datetime=datetime.now(),reqnum=self.args.reqnum)
+
         if self.args.auto:
             if not self.args.rendered_template_path: 
                 print "No new exposures found on %s..." % datetime.now()
@@ -354,7 +354,8 @@ class NitelyCal(PipeLine):
 
         super(NitelyCal,self).set_paths(self.args)
         self.args.cur = pipequery.NitelycalQuery(self.args.db_section)
-       
+        self.args.bands = self.args.bands.strip().split(',') 
+
         # If auto-submit mode on
         if self.args.auto:
             self.args.ignore_processed=True
@@ -413,7 +414,8 @@ class NitelyCal(PipeLine):
 
         # Exit if there are not at least 5 exposures per band
         if self.args.auto:
-            nitelycal_lib.is_count_by_band(self.args.dataframe)
+            nitelycal_lib.is_count_by_band(self.args.dataframe,bands_to_process=self.args.bands,
+                                           min_per_sequence=self.args.min_per_sequence)
         
 
     def make_templates(self):
@@ -457,9 +459,20 @@ class NitelyCal(PipeLine):
                     pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
                     self.args.rendered_template_path.append(output_path)
                     self.args.submitfile = output_path
-                    
                     if not self.args.savefiles:
                         super(NitelyCal,self).submit(self.args)
+            else:
+                pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
+                self.args.rendered_template_path.append(output_path)
+                self.args.submitfile = output_path
+                if not self.args.savefiles:
+                    super(NitelyCal,self).submit(self.args)
+
+                # Make comment in JIRA
+                if not self.args.ignore_jira:
+                    con=jira_utils.get_con(self.args.jira_section)
+                    jira_utils.make_comment(con,datetime=datetime.now(),reqnum=self.args.reqnum,
+                                            content = self.args.attnum)
 
         if self.args.savefiles:
             super(NitelyCal,self).save(self.args)

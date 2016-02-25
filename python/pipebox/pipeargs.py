@@ -151,7 +151,8 @@ class NitelycalArgs(PipeArgs):
                          along with minnite')
         parser.add('--combine',action='store_true',help='combine all exposures found into one submit')
         parser.add('--count',action='store_true',help='print number of calibrations found')
-
+        parser.add('--bands',default='u,g,r,i,z,VR',help='Bands to process')
+        parser.add('--min_per_sequence',type=int,default=5,help='minimun number of exposures per band')
         args = parser.parse_args()
 
         return args
