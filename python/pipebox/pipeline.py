@@ -6,7 +6,6 @@ from abc import ABCMeta, abstractmethod
 import pandas as pd
 import numpy as np
 from pipebox import pipequery,pipeargs,pipeutils,jira_utils,nitelycal_lib
-from autosubmit import nitelycal
 
 class PipeLine(object):
     # Setup key arguments and environment here instead of write_*.sh
@@ -83,14 +82,6 @@ class PipeLine(object):
             pipeutils.print_cron_info(args.pipeline,site=args.target_site,
                                                    pipebox_work=args.pipebox_work,
                                                    cron_path=cron_submit_path)
-        else:
-            # Run autosubmit code directly
-            # Will run once, but if put in crontab will run however you specify in cron
-
-            # Kill current process if cron is running from last execution
-            pipeutils.stop_if_already_running('submit_{0}.py'.format(args.pipeline))
-            pipeline = __import__("autosubmit")
-            getattr(pipeline,args.pipeline).run(args)
 
     def set_paths(self,args):
         """ Update pipeline's arguments with template paths"""
@@ -363,7 +354,13 @@ class NitelyCal(PipeLine):
 
         super(NitelyCal,self).set_paths(self.args)
         self.args.cur = pipequery.NitelycalQuery(self.args.db_section)
-        
+       
+        # If auto-submit mode on
+        if self.args.auto:
+            self.args.ignore_processed=True
+            pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
+            self.args.nite = self.args.cur.get_max_nite()[1] 
+
         # Create list of nites
         if self.args.nite:
             self.args.nitelist = self.args.nite.split(',')
@@ -414,6 +411,11 @@ class NitelyCal(PipeLine):
                     self.args.dataframe.insert(len(self.args.dataframe.columns),'niterange',None)
                     self.args.dataframe.loc[index,('niterange')] = str(row['nite'])
 
+        # Exit if there are not at least 5 exposures per band
+        if self.args.auto:
+            nitelycal_lib.is_count_by_band(self.args.dataframe)
+        
+
     def make_templates(self):
         """ Loop through dataframe and write submitfile for each nite/niterange"""
         for niterange,group in self.args.dataframe.groupby(by=['niterange']):
@@ -445,14 +447,20 @@ class NitelyCal(PipeLine):
                 #if not os.path.isdir(output_dir):
                 #    os.makedirs(output_dir)
                 self.args.output_dir = self.args.pipebox_work
-            output_name = "%s_r%s_nitelycal_rendered_template.des" % (self.args.nite,self.args.reqnum)
+            output_name = "%s_r%s_%s_nitelycal_rendered_template.des" % (self.args.nite,self.args.reqnum,self.args.target_site)
             output_path = os.path.join(self.args.output_dir,output_name)
             # Writing template
-            pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
-            self.args.rendered_template_path.append(output_path)
-            self.args.submitfile = output_path
-            if not self.args.savefiles:
-                super(NitelyCal,self).submit(self.args)
+            if self.args.ignore_processed:
+                if self.args.cur.check_submitted(self.args.nite):
+                    continue
+                else:
+                    pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
+                    self.args.rendered_template_path.append(output_path)
+                    self.args.submitfile = output_path
+                    
+                    if not self.args.savefiles:
+                        super(NitelyCal,self).submit(self.args)
+
         if self.args.savefiles:
             super(NitelyCal,self).save(self.args)
 

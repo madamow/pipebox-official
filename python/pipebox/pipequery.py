@@ -348,7 +348,7 @@ class NitelycalQuery(PipeQuery):
         count = self.cur.fetchone()[0]
         return count
 
-    def get_max(self):
+    def get_max_nite(self):
         """Get nite of max dflat"""
         max_dflat = "select max(expnum) from exposure where obstype='dome flat'"
         self.cur.execute(max_dflat)

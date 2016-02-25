@@ -82,6 +82,28 @@ def final_count_by_band(dataframe):
     grouped = df.groupby(by=['obstype','band']).agg(['count'])['expnum']
     print grouped
 
+def is_count_by_band(dataframe,bands_to_process=['g','r','Y','i','z','u','VR'],min_per_sequence=5):
+    """ Returns count per band of exposures to be included in processing """
+    grouped_df = df.groupby(by=['obstype','band'])
+    agged = grouped_df.agg(['count'])['expnum']
+    is_false = []
+    for name,group in grouped_df:
+        count = len(group)
+        if group.band.unique()[0] in bands_to_process:
+            if count < min_per_sequence:
+                print 'Not enough exposures:\n%s' % agged
+                is_false.append(False)
+            else:
+                is_false.append(True)
+
+    if False in is_false:
+        print 'Not enough exposures!'
+        print agged
+        print 'Exiting...'
+        sys.exit(1)
+    else:
+        print 'Enough exposures per band are present. Able to process!'
+
 def create_clean_df(query_object):
     """ Combines all functions in nitelycal_lib """
     df = create_dataframe(query_object)
@@ -96,11 +118,11 @@ def create_clean_df(query_object):
     return final_df
 
 if __name__ == "__main__":
-    cur = pipequery.NitelyCal('db-desoper')
+    cur = pipequery.NitelycalQuery('db-desoper')
     query = cur.get_cals(['20130919', '20131007'])
-    #query = cur.get_cals(['20130916', '20130917', '20130918', '20130919', '20130920', '20130921', '20130922','20130923', '20130924', '20130925', '20130926'])
+    df = create_clean_df(query)
+    is_count_by_band(df)
     count = cur.count_by_band(['20130919', '20131007'])
-    #count = cur.count_by_band(['20130916', '20130917', '20130918', '20130919', '20130920', '20130921', '20130922', '20130923', '20130924', '20130925', '20130926'])
 
     df = create_dataframe(query)
     df = fillna(df)
@@ -110,6 +132,4 @@ if __name__ == "__main__":
     df = df.reset_index()
     df = remove_gap_expnums(df)
     df = remove_first_in_sequence(df)
-    #print df
-    #print bias_list,dflat_list
     final_count_by_band(df)
