@@ -241,7 +241,7 @@ class WideField(PipeLine):
         if self.args.auto:
             self.args.ignore_processed=True
             pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
-
+            
             self.args.nite = self.args.cur.get_max_nite(propid=self.args.propid,program=self.args.program,
                                                    process_all=self.args.process_all)[1]
             if not self.args.calnite:

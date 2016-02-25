@@ -1,6 +1,6 @@
 <module>
     <hostname>
-        wrappername = generic.py
+        wrappername = genwrap.py
         xml = generic.xml
         modnamepat=${modnamepat_hostname}
         <exec_1>
