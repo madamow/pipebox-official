@@ -197,15 +197,15 @@ class SupernovaQuery(PipeQuery):
         return precal_nite, precal_run
 
 class WidefieldQuery(PipeQuery):
-    def get_expnum_from_radec(self, RA, Dec):
+    def get_expnums_from_radec(self, RA, Dec):
 	RA = [float(r) for r in RA]
 	Dec = [float(d) for d in Dec]
 	if RA[0]==min(RA):
-            query = "select expnum,radeg,decdeg from exposure where radeg>{minRA} and radeg<{maxRA} and decdeg>{minDec} and decdeg<{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
+            query = "select expnum from exposure where radeg>{minRA} and radeg<{maxRA} and decdeg>{minDec} and decdeg<{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
 	else:
-            query = "select expnum,radeg,decdeg from exposure where (radeg>{minRA} or radeg<{maxRA}) and decdeg>{minDec} and decdeg<{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
+            query = "select expnum from exposure where (radeg>{minRA} or radeg<{maxRA}) and decdeg>{minDec} and decdeg<{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
 	self.cur.execute(query)
-	return self.cur.fechall()
+	return self.cur.fetchall()
 
     def get_expnum_info(self,exposure_list):
         """ Query database for band and nite for each given exposure.

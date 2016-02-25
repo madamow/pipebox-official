@@ -252,9 +252,10 @@ class WideField(PipeLine):
         # If ngix -- cycle trough server's list
         if self.args.nginx:
             self.args.nginx_server = pipeutils.cycle_list_index(index,['desnginx', 'dessub'])
-	if not self.args.RA or not self.args.Dec:
-            print "Must specify both RA and Dec."
-	    sys.exit(1)
+	if self.args.RA or self.args.Dec:	
+	    if not (self.args.RA and self.args.Dec):
+            	print "Must specify both RA and Dec."
+	    	sys.exit(1)
         # Creating dataframe from exposures 
         if self.args.exptag:
             self.args.exposure_list = self.args.cur.get_expnums_from_tag(self.args.exptag)
@@ -277,26 +278,23 @@ class WideField(PipeLine):
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.exposure_list = list(self.args.dataframe['expnum'].values)
         elif self.args.RA and self.args.Dec:
-	    self.args.exposure_list = pipequery.get_expnum_from_radec(self.args.RA, self.args.Dec)
+	    self.args.exposure_list = self.args.cur.get_expnums_from_radec(self.args.RA, self.args.Dec)
 	    self.args.dataframe = pd.DataFrame(self.args.exposure_list, columns=['expnum'])
 	elif self.args.resubmit_failed:
             self.args.ignore_processed=False
             self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum)
-            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
-	
+            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])	
 	# Remove unwanted exposures 
 	if self.args.exclude_list:
 	    self.args.exclude_list = self.args.exclude_list.strip().split(',')
-	    self.args.exclude_list = [float(e) for e in self.args.exclude_list]
 	    self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
- 
         # Update dataframe for each exposure and add band,nite if not exists
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
             self.args.dataframe = self.args.dataframe.fillna(False)
         except: 
             pass
-    
+
     def make_templates(self):
         """ Loop through dataframe and write submitfile for each exposures"""
         for index,row in self.args.dataframe.iterrows():
