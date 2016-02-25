@@ -252,10 +252,11 @@ class WideField(PipeLine):
         # If ngix -- cycle trough server's list
         if self.args.nginx:
             self.args.nginx_server = pipeutils.cycle_list_index(index,['desnginx', 'dessub'])
-	    if self.args.RA or self.args.Dec:	
-	        if not (self.args.RA and self.args.Dec):
+        if self.args.RA or self.args.Dec:
+            if not (self.args.RA and self.args.Dec):
                 print "Must specify both RA and Dec."
-    	    	sys.exit(1)
+    	        sys.exit(1)
+
         # Creating dataframe from exposures 
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
