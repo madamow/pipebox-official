@@ -7,4 +7,4 @@
 - setenv PIPEBOX_WORK $HOME/PIPEBOX_WORK  (tcsh)
 - export PIPEBOX_WORK=$HOME/PIPEBOX_WORK (bash)
 - create_user_config.py 
-- write_<pipeline>_wcl_exposure.py -h
+- submit_<pipeline>.py -h
