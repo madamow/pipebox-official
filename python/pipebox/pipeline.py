@@ -252,10 +252,10 @@ class WideField(PipeLine):
         # If ngix -- cycle trough server's list
         if self.args.nginx:
             self.args.nginx_server = pipeutils.cycle_list_index(index,['desnginx', 'dessub'])
-	if self.args.RA or self.args.Dec:	
-	    if not (self.args.RA and self.args.Dec):
-            	print "Must specify both RA and Dec."
-	    	sys.exit(1)
+	    if self.args.RA or self.args.Dec:	
+	        if not (self.args.RA and self.args.Dec):
+                print "Must specify both RA and Dec."
+    	    	sys.exit(1)
         # Creating dataframe from exposures 
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
@@ -285,10 +285,10 @@ class WideField(PipeLine):
         elif self.args.RA and self.args.Dec:
 	    self.args.exposure_list = self.args.cur.get_expnums_from_radec(self.args.RA, self.args.Dec)
 	    self.args.dataframe = pd.DataFrame(self.args.exposure_list, columns=['expnum'])
-	# Remove unwanted exposures 
-	if self.args.exclude_list:
-	    self.args.exclude_list = self.args.exclude_list.strip().split(',')
-	    self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
+	    # Remove unwanted exposures 
+    	if self.args.exclude_list:
+	        self.args.exclude_list = self.args.exclude_list.strip().split(',')
+	        self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
         # Update dataframe for each exposure and add band,nite if not exists
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
