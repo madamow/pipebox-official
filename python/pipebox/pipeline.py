@@ -287,12 +287,12 @@ class WideField(PipeLine):
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.exposure_list = list(self.args.dataframe['expnum'].values)
         elif self.args.RA and self.args.Dec:
-	    self.args.exposure_list = self.args.cur.get_expnums_from_radec(self.args.RA, self.args.Dec)
-	    self.args.dataframe = pd.DataFrame(self.args.exposure_list, columns=['expnum'])
-	    # Remove unwanted exposures 
-    	if self.args.exclude_list:
-	        self.args.exclude_list = self.args.exclude_list.strip().split(',')
-	        self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
+        self.args.exposure_list = self.args.cur.get_expnums_from_radec(self.args.RA, self.args.Dec)
+        self.args.dataframe = pd.DataFrame(self.args.exposure_list, columns=['expnum'])
+        # Remove unwanted exposures 
+        if self.args.exclude_list:
+            self.args.exclude_list = self.args.exclude_list.strip().split(',')
+            self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
         # Update dataframe for each exposure and add band,nite if not exists
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
