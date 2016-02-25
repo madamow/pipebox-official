@@ -2,6 +2,7 @@
 
 from pipebox import pipeline
 
+
 # initialize and get options
 nitelycal = pipeline.NitelyCal()   
 args = nitelycal.args
