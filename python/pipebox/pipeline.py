@@ -287,8 +287,8 @@ class WideField(PipeLine):
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.exposure_list = list(self.args.dataframe['expnum'].values)
         elif self.args.RA and self.args.Dec:
-        self.args.exposure_list = self.args.cur.get_expnums_from_radec(self.args.RA, self.args.Dec)
-        self.args.dataframe = pd.DataFrame(self.args.exposure_list, columns=['expnum'])
+            self.args.exposure_list = self.args.cur.get_expnums_from_radec(self.args.RA, self.args.Dec)
+            self.args.dataframe = pd.DataFrame(self.args.exposure_list, columns=['expnum'])
         # Remove unwanted exposures 
         if self.args.exclude_list:
             self.args.exclude_list = self.args.exclude_list.strip().split(',')
