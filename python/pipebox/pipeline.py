@@ -470,6 +470,7 @@ class NitelyCal(PipeLine):
 
                 # Make comment in JIRA
                 if not self.args.ignore_jira:
+                    if not self.args.attnum: self.args.attnum= None
                     con=jira_utils.get_con(self.args.jira_section)
                     jira_utils.make_comment(con,datetime=datetime.now(),reqnum=self.args.reqnum,
                                             content = self.args.attnum)
