@@ -1,5 +1,5 @@
 <module>
-    <skycompres-dflatcor>
+    <skycompress-dflatcor>
         <exec_1>
             ancestry = file.dflatcor:file.mini_dflatcor
             cmd_hyphen = mixed_gnu
@@ -34,5 +34,5 @@
         modnamepat = ${modnamepat_nite_ccdnum_band}
         wrapperloop = ccdnum, band
         wrappername = genwrap.py
-    </skycompres-dflatcor>
+    </skycompress-dflatcor>
 </module>
