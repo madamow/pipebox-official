@@ -78,6 +78,8 @@ class SupernovaQuery(PipeQuery):
             df.loc[index,'seqnum'] = 1
             if (row['field'] in ['C3','X3']) or (row['band'] == 'z'):
               df.loc[index,'single']= False
+            if (row['band'] in ['z','Y']):
+              df.loc[index,'fringe']= True
         return df
 
 # Copied from widefield (unedited)

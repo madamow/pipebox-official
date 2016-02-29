@@ -166,6 +166,7 @@ class SuperNova(PipeLine):
         self.args.dataframe['exp_nums']=np.zeros(nrows, dtype=str)
         self.args.dataframe['first_exp']=np.zeros(nrows, dtype=str)
         self.args.dataframe['single']=np.ones(nrows, dtype=bool)
+        self.args.dataframe['fringe']=np.zeros(nrows, dtype=bool)
         self.args.dataframe['ccdlist']=np.zeros(nrows, dtype=str)
         self.args.dataframe['seqnum']=np.ones(nrows, dtype=int)
         # Update dataframe for each exposure and add expnums,firstexp if not exists
@@ -180,7 +181,7 @@ class SuperNova(PipeLine):
     def make_templates(self):
         """ Loop through dataframe and write submitfile for each exposures"""
         for index,row in self.args.dataframe.iterrows():
-            self.args.expnums,self.args.band,self.args.nite,self.args.firstexp,self.args.field,self.args.single,self.args.ccdlist,self.args.seqnum = row['exp_nums'],row['band'],row['nite'],row['first_exp'],row['field'],row['single'],row['ccdlist'],row['seqnum']
+            self.args.expnums,self.args.band,self.args.nite,self.args.firstexp,self.args.field,self.args.single,self.args.fringe,self.args.ccdlist,self.args.seqnum = row['exp_nums'],row['band'],row['nite'],row['first_exp'],'SN-'+row['field'],row['single'],row['fringe'],row['ccdlist'],row['seqnum']
             self.args.reqnum, self.args.jira_parent= int(row['reqnum']),row['jira_parent']
 #            if self.args.epoch:
 #                self.args.epoch_name = self.args.epoch
