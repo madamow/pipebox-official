@@ -124,16 +124,15 @@ class WidefieldArgs(PipeArgs):
                          calnite/calrun not specified')
        
         # Exposure query for args.nite
-        parser.add('--propid',default=['2012B-0001'],help="Propid in exposure table to filter expnums \
+        parser.add('--propid',default='2012B-0001',help="Propid in exposure table to filter expnums \
                         on by nite")
-        parser.add('--program',default=['supernova','survey','photom-std-field'],help="Programs in \
+        parser.add('--program',default='supernova,survey,photom-std-field',help="Programs in \
                         exposure table to filter expnums on by nite")
-        parser.add('--ignore_all',action='store_true',default=True,help="By default process all \
-                        exposures from a given nite")
-        parser.add('--ignore_program',action='store_true',default=False,help="By default process all \
-                        exposures from a given nite.")
-        parser.add('--ignore_propid',action='store_true',default=False,help="By default process all \
-                        exposures from a given nite")
+        parser.add('--process_all',action='store_true',help="Ignore propid and program when processing \
+                        by nite.")
+        parser.add('--RA','-ra',nargs=2,help='RA in degrees, in the order of min, max')
+        parser.add('--Dec','-dec',nargs=2,help='Dec in degrees')
+        parser.add('--exclude_list',help='A list to exclude from the dataframe')
         args = parser.parse_args()
 
         return args
@@ -152,7 +151,8 @@ class NitelycalArgs(PipeArgs):
                          along with minnite')
         parser.add('--combine',action='store_true',help='combine all exposures found into one submit')
         parser.add('--count',action='store_true',help='print number of calibrations found')
-
+        parser.add('--bands',default='u,g,r,i,z,VR',help='Bands to process')
+        parser.add('--min_per_sequence',type=int,default=5,help='minimun number of exposures per band')
         args = parser.parse_args()
 
         return args

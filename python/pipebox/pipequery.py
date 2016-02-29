@@ -199,6 +199,15 @@ class SupernovaQuery(PipeQuery):
         return precal_nite, precal_run
 
 class WidefieldQuery(PipeQuery):
+    def get_expnums_from_radec(self, RA, Dec):
+	RA = [float(r) for r in RA]
+	Dec = [float(d) for d in Dec]
+	if RA[0]==min(RA):
+            query = "select expnum from exposure where radeg>{minRA} and radeg<{maxRA} and decdeg>{minDec} and decdeg<{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
+	else:
+            query = "select expnum from exposure where (radeg>{minRA} or radeg<{maxRA}) and decdeg>{minDec} and decdeg<{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
+	self.cur.execute(query)
+	return self.cur.fetchall()
 
     def get_expnum_info(self,exposure_list):
         """ Query database for band and nite for each given exposure.
@@ -229,17 +238,15 @@ class WidefieldQuery(PipeQuery):
         submitted_or_not = self.cur.fetchone()[0]
         return submitted_or_not       
     
-    def get_max(self,ignore_propid=False,ignore_program=False,ignore_all=False,**kwargs):
+    def get_max_nite(self,propid=None,program=None,process_all=False):
         """Returns expnum,nite of max(expnum) in the exposure table"""
         base_query = "select max(expnum) from exposure where obstype='object'"
-        if ignore_program:
+        if propid:
             max_object = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['propid'])
-        elif ignore_propid:
+        if program:
             max_object = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['program'])
-        elif ignore_all:
+        if process_all:
             max_object = base_query
-        else:
-            max_object = base_query + " and program in (%s) and propid in (%s)" % (','.join("'{0}'".format(k) for k in kwargs['program']),','.join("'{0}'".format(k) for k in kwargs['propid']))
         self.cur.execute(max_object)
         max_expnum = self.cur.fetchone()[0]
         fetch_nite = "select distinct nite from exposure where expnum=%s" % (max_expnum)
@@ -275,20 +282,18 @@ class WidefieldQuery(PipeQuery):
         
         return expnum_list
 
-    def get_expnums(self,nite=None,ignore_propid=False,ignore_program=False,ignore_all=False,**kwargs):
+    def get_expnums_from_nite(self,nite=None,process_all=False,program=None,propid=None):
         """ Get exposure numbers and band for incoming exposures"""
         if not nite:
             raise Exception("Must specify nite!")
         print "selecting exposures to submit..."
-        base_query = "select distinct expnum, band from exposure where obstype='object' and object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' and object not like '%%test%%' and object not like '%%junk%%' and nite = '%s' " % nite
-        if ignore_propid:
+        base_query = "select distinct expnum from exposure where obstype='object' and object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' and object not like '%%test%%' and object not like '%%junk%%' and nite = '%s' " % nite
+        if program:
             get_expnum_and_band = base_query + " program in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['program'])
-        elif ignore_program:
+        if propid:
             get_expnum_and_band = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['propid'])
-        elif ignore_all:
+        if process_all:
             get_expnum_and_band = base_query
-        else:
-            get_expnum_and_band = base_query + " and program in (%s) and propid in (%s)" % (','.join("'{0}'".format(k) for k in kwargs['program']),','.join("'{0}'".format(k) for k in kwargs['propid']))
         self.cur.execute(get_expnum_and_band)
         results = self.cur.fetchall()
 
@@ -345,7 +350,7 @@ class NitelycalQuery(PipeQuery):
         count = self.cur.fetchone()[0]
         return count
 
-    def get_max(self):
+    def get_max_nite(self):
         """Get nite of max dflat"""
         max_dflat = "select max(expnum) from exposure where obstype='dome flat'"
         self.cur.execute(max_dflat)

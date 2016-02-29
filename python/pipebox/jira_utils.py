@@ -14,15 +14,15 @@ def does_comment_exist(con,reqnum=None):
         else:
             return True
 
-def make_comment(con,datetime=None,content=None,reqnum=None,attempt=None):
+def make_comment(con,datetime=None,content='',reqnum=None,attempt=None):
         """ Comment given jiraticket when auto-submitted"""
-        comment = """Autosubmit started at %s
+        comment = """Submit started at %s
                      -----
                      %s""" % (datetime,content)
         key= "DESOPS-%s" % reqnum
         jira_tix = con.get_issue(key)
         all_comments = jira_tix.fields.comment.comments
-        self.con.add_jira_comment(key,comment)
+        con.add_jira_comment(key,comment)
         return (comment,len(all_comments))
 
 def get_jira_user(section='jira-desdm',services_file=None):

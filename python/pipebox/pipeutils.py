@@ -1,5 +1,6 @@
 import os
 import sys
+import re
 import time
 from subprocess import Popen,PIPE,STDOUT
 from commands import getstatusoutput
@@ -22,12 +23,23 @@ def submit_command(submitfile,wait=30,logfile=None):
     """ Takes des submit file and executes dessubmit. Default sleep after
         sleep is 30 seconds. If provided a logfile will write stdout,stderr
         to specified logfile"""
+
     commandline = ['dessubmit',submitfile]
+    command = Popen(commandline,stdout = PIPE, stderr = STDOUT, shell = False)
+    output,error = output,error = command.communicate()
     if logfile:
-        command = Popen(commandline,stdout = logfile, stderr = logfile, shell = False)
-    else:   
-        command = Popen(commandline,stdout = PIPE, stderr = STDOUT, shell = False)
+        for line in output: logfile.write(line)
     time.sleep(wait)
+
+    try:
+        runid = re.findall("[a-zA-z0-9_-]*_r\d+p\d+",output)[0]
+        unitname,run = runid.rsplit('_',1)
+        attempt = run.split('p')[1]
+        return (unitname,attempt)
+    except:
+        print output
+        print 'Error in submission!'
+        pass
 
 def less_than_queue(pipeline=None,user=None,queue_size=1000):
     """ Returns True if desstat count is less than specified queue_size,
@@ -91,6 +103,14 @@ def stop_if_already_running(script_name):
         print "Already running.  Aborting"
         print l[1]
         sys.exit(0)
+
+def rename_file(args):
+    """ Rename submitfile with attempt number."""
+    add_string = 'p%02d' % int(args.attnum)
+    update_submitfile = args.submitfile.replace(args.target_site, 
+                                                add_string + '_' + args.target_site)
+    os.rename(args.submitfile,update_submitfile)
+    return args.submitfile
 # --------------------------------------------------------------
 # These functions were copied/adapted from desdm_eupsinstal.py
 

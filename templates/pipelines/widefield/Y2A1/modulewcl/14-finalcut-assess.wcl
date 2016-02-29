@@ -20,7 +20,7 @@
                 #output_fields = filename
                 divide_by = expnum   # perhaps can default to wrapperloop
                 columns = cat_finalcut.fullname
-                sortkey = ccdnum
+                sortkey = (ccdnum,True,False)
             </cat_list>
         </list>
         <file>

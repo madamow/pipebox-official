@@ -21,7 +21,7 @@
                 #output_fields = filename
                 divide_by = expnum   # perhaps can default to wrapperloop
 			    columns = red_nullweight_immask.fullname
-			    sortkey = ccdnum
+			    sortkey = (ccdnum,True,False)
 	        </in_img_list>
             <in_cat_list>
                 depends create-finalcut-catalog.file.cat_finalcut
@@ -38,7 +38,7 @@
                 #output_fields = filename
                 divide_by = expnum   # perhaps can default to wrapperloop
 		        columns = cat_finalcut.fullname
-	    	    sortkey = ccdnum
+	    	    sortkey = (ccdnum,True,False)
             </in_cat_list>
         </list>
 	    <file>
