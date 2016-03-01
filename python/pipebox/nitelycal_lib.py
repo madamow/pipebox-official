@@ -79,7 +79,7 @@ def create_lists(dataframe):
 
 def final_count_by_band(dataframe):
     """ Returns count per band of exposures to be included in processing """
-    grouped = df.groupby(by=['obstype','band']).agg(['count'])['expnum']
+    grouped = dataframe.groupby(by=['obstype','band']).agg(['count'])['expnum']
     print grouped
 
 def is_count_by_band(dataframe,bands_to_process=['g','r','Y','i','z','u','VR'],min_per_sequence=5):

@@ -374,10 +374,6 @@ class NitelyCal(PipeLine):
 
         self.args.niterange = str(self.args.minnite) + 't' + str(self.args.maxnite)[4:]
 
-        if self.args.count:
-            self.args.cur.count_by_band(self.args.nitelist)
-            sys.exit(0)
-    
         # For each use-case create bias/flat list and dataframe
         if self.args.biaslist and self.args.flatlist:
             # create biaslist from file
@@ -397,7 +393,7 @@ class NitelyCal(PipeLine):
             self.args.cur.update_df(self.args.dataframe)
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
         else:
-            cal_query = self.args.cur.get_cals(self.args.nitelist)
+            cal_query = self.args.cur.get_cals(self.args.nitelist,bands=self.args.bands)
             self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
 
@@ -417,7 +413,13 @@ class NitelyCal(PipeLine):
         if self.args.auto:
             nitelycal_lib.is_count_by_band(self.args.dataframe,bands_to_process=self.args.bands,
                                            min_per_sequence=self.args.min_per_sequence)
-        
+       
+        if self.args.count:
+            print "Data found in database:"
+            self.args.cur.count_by_band(self.args.nitelist)
+            print "\nData to be processed:"
+            nitelycal_lib.final_count_by_band(self.args.dataframe)
+            sys.exit(0)
 
     def make_templates(self):
         """ Loop through dataframe and write submitfile for each nite/niterange"""
