@@ -393,8 +393,11 @@ class NitelyCal(PipeLine):
             self.args.cur.update_df(self.args.dataframe)
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
         else:
-            cal_query = self.args.cur.get_cals(self.args.nitelist,bands=self.args.bands)
+            cal_query = self.args.cur.get_cals(self.args.nitelist)
             self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
+            # Removing bands that are not specified
+            self.args.dataframe = self.args.dataframe[self.args.dataframe.band.isin(self.args.bands)\
+                                                      |self.args.dataframe.obstype.isin(['zero'])]
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
 
         if self.args.combine:
