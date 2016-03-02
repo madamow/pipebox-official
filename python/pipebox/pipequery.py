@@ -200,8 +200,8 @@ class SupernovaQuery(PipeQuery):
 
 class WidefieldQuery(PipeQuery):
     def get_expnums_from_radec(self, RA, Dec):
-	RA = [float(r) for r in RA]
-	Dec = [float(d) for d in Dec]
+	RA = [float(r) for r in RA[0]]
+	Dec = [float(d) for d in Dec[0]]
 	if RA[0]==min(RA):
             query = "select expnum from exposure where radeg>{minRA} and radeg<{maxRA} and decdeg>{minDec} and decdeg<{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
 	else:
