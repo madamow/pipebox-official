@@ -119,11 +119,18 @@ def create_clean_df(query_object):
 
 if __name__ == "__main__":
     cur = pipequery.NitelycalQuery('db-desoper')
-    query = cur.get_cals(['20130919', '20131007'])
+    niterange = [str(n) for n in range(20151117,20151128)]
+    bands = ['u','r','i','g','z','Y','VR']
+    query = cur.get_cals(niterange,bands=bands)
+    df = create_dataframe(query)
+    #print df
+    print replace_bias_band(df)
     df = create_clean_df(query)
-    is_count_by_band(df)
-    count = cur.count_by_band(['20130919', '20131007'])
-
+    #print df
+    
+    #is_count_by_band(df)
+    count = cur.count_by_band(bands=bands)
+    
     df = create_dataframe(query)
     df = fillna(df)
     df = replace_bias_band(df)
