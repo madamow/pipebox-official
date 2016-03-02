@@ -83,11 +83,11 @@ def print_cron_info(pipeline,site=None,pipebox_work=None,cron_path='.'):
         print "\t setenv X509_USER_PROXY $HOME/.globus/osg/user.proxy"
         print "\t voms-proxy-info --all"
 
-def print_submit_info(pipeline,site=None,eups_product=None,eups_version=None,submit_file=None):
+def print_submit_info(pipeline,site=None,eups_stack=None,submit_file=None):
     print "\n"
     print "# To submit files (from dessub/descmp1):\n"
     print "\t ssh dessub/descmp1"
-    print "\t setup -v %s %s" % (eups_product,eups_version)
+    print "\t setup -v %s %s" % (eups_stack[0],eups_stack[1])
     print "\t %s\n" % submit_file 
 
     # Print warning of Fermigrid credentials

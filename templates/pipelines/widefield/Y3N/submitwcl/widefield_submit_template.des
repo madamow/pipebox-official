@@ -44,8 +44,8 @@ jira_id = {{ args.jira_parent }}
 label= ${nite} {% else %}
 label = {{ args.labels }} {% endif %}
 
-pipeprod = {{ args.eups_product }}
-pipever = {{ args.eups_version }}
+pipeprod = {{ args.eups_stack[0] }}
+pipever = {{ args.eups_stack[1] }}
 campaign = {{ args.campaign }}
 project = {{ args.project }}
 

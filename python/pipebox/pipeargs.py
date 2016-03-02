@@ -20,7 +20,7 @@ class PipeArgs(object):
                              --delimiter')
         parser.add('--delimiter',default=',',help='The delimiter if specifying csv and is not \
                              comma-separated')
-        parser.add('--campaignlib',required=True, help='Directory in pipebox where templates are \
+        parser.add('--campaign',required=True, help='Directory in pipebox where templates are \
                              stored, e.g., $PIPEBOX_DIR/templates/pipelines/finalcut/-->Y2A1dev<--')
         parser.add('--savefiles',action='store_true',help='Saves submit files to submit later.')
         parser.add('--queue_size',default=1000,help='If set and savefiles is not specified, code \
@@ -44,7 +44,6 @@ class PipeArgs(object):
         parser.add('--http_section',help='')
         parser.add('--archive_name',help='Home archive to store products, e.g., \
                              desar2home,prodbeta,...')
-        parser.add('--campaign',required=True,help='Used in archive dir, e.g., Y2T3')
         parser.add('--project',default='ACT',help='Archive directory where runs are \
                              stored, e.g., $ARCHIVE/-->ACT<--/finalcut/')
         parser.add('--rundir',help='Archive directory structure')
@@ -67,8 +66,8 @@ class PipeArgs(object):
                              number')
     
         # EUPS arguments
-        parser.add('--eups_product',required=True,help='EUPS production stack, e.g., finalcut')
-        parser.add('--eups_version',required=True,help='EUPS production stack version, e.g., Y2A1+1')
+        parser.add('--eups_stack',action='append',nargs='+', required=True,help='EUPS production stack, \
+                                                                               e.g., finalcut Y2A1+4')
         
         # Science arguments
         parser.add('--ccdnum',help='CCDs to be processed.')
