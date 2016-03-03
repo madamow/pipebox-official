@@ -4,12 +4,12 @@
 {% else %}
 <<include {{ args.pipebox_work }}/config/{{ args.user }}_cfg.des>> {% endif %}
 
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/modnamepat.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/01-crosstalk-bias.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/02-crosstalk-dflat.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/03-mkbiascor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/04-mkdflatcor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/inputcals/Y3N_nitelycal_inputs.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/modnamepat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/01-crosstalk-bias.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/02-crosstalk-dflat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/03-mkbiascor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/04-mkdflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/inputcals/Y3N_nitelycal_inputs.wcl>>
 
 # Database dependent definitions
 submit_des_db_section = {{ args.db_section }}
@@ -27,8 +27,8 @@ label= ${nite} {% else %}
 label = {{ args.labels }} {% endif %}
 
 pipeline = {{args.desstat_pipeline }}
-pipeprod = {{ args.eups_product }}
-pipever = {{ args.eups_version }}
+pipeprod = {{ args.eups_stack[0] }}
+pipever = {{ args.eups_stack[1] }}
 campaign = {{ args.campaign }}
 
 nite = {{ args.nite }}

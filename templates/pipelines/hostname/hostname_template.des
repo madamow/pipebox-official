@@ -23,8 +23,8 @@ basket = ${reqnum}
 GROUP_SUBMIT_ID = 1
 
 pipeline = hostname    # used in desstat output 
-pipeprod = {{ args.eups_product }}
-pipever = {{ args.eups_version }}
+pipeprod = {{ args.eups_stack[0] }}
+pipever = {{ args.eups_stack[1] }}
 campaign = {{ args.campaign }}
 project = {{ args.project }}
 

@@ -17,7 +17,7 @@ unset EUPS_DIR
 unset EUPS_PATH
 source /work/apps/RHEL6/dist/eups/desdm_eups_setup.sh
 
-setup --nolocks {{ args.eups_product }} {{ args.eups_version }}
+setup --nolocks {{ args.eups_stack[0] }} {{ args.eups_stack[1] }}
 setup --nolocks jirapython 
 setup --nolocks pandas
 setup --nolocks opstoolkit
@@ -25,4 +25,4 @@ setup -r {{ args.pipebox_dir }}
 
 export PIPEBOX_WORK={{ args.pipebox_work }}
 
-{{ args.pipebox_dir }}/bin/write_nitelycal_wcl.py --auto --campaign {{ args.campaign }} --target_site {{ args.target_site }} --archive_name {{ args.archive_name }} --jira_parent {{ args.jira_parent }} --jira_user {{ args.jira_user }} --jira_section {{ args.jira_section }} --eups_product {{ args.eups_product }} --eups_version {{ args.eups_version }} --project {{ args.project }} --db_section {{ args.db_section }} --queue_size {{ args.queue_size }}
+{{ args.pipebox_dir }}/bin/write_nitelycal_wcl.py --auto --campaign {{ args.campaign }} --target_site {{ args.target_site }} --archive_name {{ args.archive_name }} --jira_parent {{ args.jira_parent }} --jira_user {{ args.jira_user }} --jira_section {{ args.jira_section }} --eups_stack {{ args.eups_stack[0] }} {{ args.eups_stack[1] }} --project {{ args.project }} --db_section {{ args.db_section }} --queue_size {{ args.queue_size }}

@@ -16,6 +16,24 @@ class PipeLine(object):
         pipebox_work = os.environ['PIPEBOX_WORK']
         pipebox_dir = os.environ['PIPEBOX_DIR']
 
+    def update_args(self,args):
+        """ Update pipeline's arguments with template paths"""
+        if len(args.eups_stack[0])>1:
+            args.eups_stack = args.eups_stack[0]
+        else:
+            args.eups_stack = args.eups_stack[0][0].split()
+        
+        args.pipebox_dir,args.pipebox_work=self.pipebox_dir,self.pipebox_work
+        
+        campaign_path = "pipelines/%s/%s/submitwcl" % (args.pipeline,args.campaign)
+        if args.template_name:
+            args.submit_template_path = os.path.join(campaign_path,args.template_name)
+        else:
+            args.submit_template_path = os.path.join(campaign_path,
+                                        "{0}_submit_template.des".format(args.pipeline))
+        args.rendered_template_path = []
+        
+
     __metaclass__ = ABCMeta
     @abstractmethod
     def make_templates():
@@ -83,17 +101,6 @@ class PipeLine(object):
                                                    pipebox_work=args.pipebox_work,
                                                    cron_path=cron_submit_path)
 
-    def set_paths(self,args):
-        """ Update pipeline's arguments with template paths"""
-        # Render and write templates
-        campaign_path = "pipelines/%s/%s/submitwcl" % (args.pipeline,args.campaignlib)
-        if args.template_name:
-            args.submit_template_path = os.path.join(campaign_path,args.template_name)
-        else:
-            args.submit_template_path = os.path.join(campaign_path,
-                                        "{0}_submit_template.des".format(args.pipeline))
-        args.rendered_template_path = []
-
     def save(self,args):
         bash_template_path = os.path.join("scripts","submitme_template.sh")
         # Writing bash submit scripts
@@ -108,8 +115,7 @@ class PipeLine(object):
         pipeutils.write_template(bash_template_path,bash_script_path,args)
         os.chmod(bash_script_path, 0755)
         pipeutils.print_submit_info(args.pipeline,site=args.target_site,
-                                               eups_product=args.eups_product,
-                                               eups_version=args.eups_version,
+                                               eups_stack=args.eups_stack,
                                                submit_file=bash_script_path) 
 
     def submit(self,args):
@@ -141,7 +147,7 @@ class SuperNova(PipeLine):
         self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
         self.args.pipeline = "sne"
 
-        super(SuperNova,self).set_paths(self.args)         
+        super(SuperNova,self).update_args(self.args)         
         self.args.cur = pipequery.SupernovaQuery(self.args.db_section)
         
         # If ngix -- cycle trough server's list
@@ -214,22 +220,20 @@ class WideField(PipeLine):
 
     def __init__(self):
         """ Initialize arguments and configure"""
-
         # Setting global parameters
         self.args = pipeargs.WidefieldArgs().cmdline()
-        self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
+        self.args.pipeline = "widefield"
+        if 'N' in self.args.campaign:
+            self.args.desstat_pipeline = "firstcut"
+        else:
+            self.args.desstat_pipeline = "finalcut" 
+        super(WideField,self).update_args(self.args)
+
         if self.args.ignore_jira:
             if not self.args.reqnum or not self.args.jira_parent:
                 print "Must specify both --reqnum and --jira_parent to avoid using JIRA!"
                 sys.exit(1)
-        
-        self.args.pipeline = "widefield"
-        if 'N' in self.args.campaignlib:
-            self.args.desstat_pipeline = "firstcut"
-        else:
-            self.args.desstat_pipeline = "finalcut" 
-
-        super(WideField,self).set_paths(self.args)         
+       
         self.args.cur = pipequery.WidefieldQuery(self.args.db_section)
         
         self.args.propid = self.args.propid.strip().split(',')
@@ -240,8 +244,9 @@ class WideField(PipeLine):
             self.args.ignore_processed=True
             pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
             
-            self.args.nite = self.args.cur.get_max_nite(propid=self.args.propid,program=self.args.program,
-                                                   process_all=self.args.process_all)[1]
+            self.args.nite = self.args.cur.get_max_nite(propid=self.args.propid,
+                                                        program=self.args.program,
+                                                        process_all=self.args.process_all)[1]
             if not self.args.calnite:
                 precal = self.args.cur.find_precal(self.args.nite,threshold=7,override=True,
                                                    tag=self.args.caltag)
@@ -353,10 +358,9 @@ class NitelyCal(PipeLine):
     def __init__(self):
         """ Initialize arguments and configure"""
         self.args = pipeargs.NitelycalArgs().cmdline()
-        self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
         self.args.pipeline = "nitelycal"
 
-        super(NitelyCal,self).set_paths(self.args)
+        super(NitelyCal,self).update_args(self.args)
         self.args.cur = pipequery.NitelycalQuery(self.args.db_section)
         self.args.bands = self.args.bands.strip().split(',') 
 
@@ -377,10 +381,6 @@ class NitelyCal(PipeLine):
 
         self.args.niterange = str(self.args.minnite) + 't' + str(self.args.maxnite)[4:]
 
-        if self.args.count:
-            self.args.cur.count_by_band(self.args.nitelist)
-            sys.exit(0)
-    
         # For each use-case create bias/flat list and dataframe
         if self.args.biaslist and self.args.flatlist:
             # create biaslist from file
@@ -402,6 +402,9 @@ class NitelyCal(PipeLine):
         else:
             cal_query = self.args.cur.get_cals(self.args.nitelist)
             self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
+            # Removing bands that are not specified
+            self.args.dataframe = self.args.dataframe[self.args.dataframe.band.isin(self.args.bands)\
+                                                      |self.args.dataframe.obstype.isin(['zero'])]
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
 
         if self.args.combine:
@@ -421,6 +424,14 @@ class NitelyCal(PipeLine):
             nitelycal_lib.is_count_by_band(self.args.dataframe,bands_to_process=self.args.bands,
                                            min_per_sequence=self.args.min_per_sequence)
         
+        self.args.dataframe = nitelycal_lib.trim_excess_exposures(self.args.dataframe,self.args.bands,k=self.args.max_num)
+         
+        if self.args.count:
+            print "Data found in database:"
+            self.args.cur.count_by_band(self.args.nitelist)
+            print "\nData to be processed:"
+            nitelycal_lib.final_count_by_band(self.args.dataframe)
+            sys.exit(0)
 
     def make_templates(self):
         """ Loop through dataframe and write submitfile for each nite/niterange"""
@@ -526,9 +537,8 @@ class HostName(PipeLine):
             os.chmod(bash_script_path, 0755)
 
             pipeutils.print_submit_info(self.args.pipeline,site=self.args.target_site,
-                                          eups_product=self.args.eups_product,
-                                          eups_version=self.args.eups_version,
-                                          submit_file=bash_script_path)
+                                        eups_stack=self.args.eups_stack,
+                                        submit_file=bash_script_path)
 
         else:
             for submitfile in self.args.rendered_template_path:

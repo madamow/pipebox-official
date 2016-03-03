@@ -79,7 +79,7 @@ def create_lists(dataframe):
 
 def final_count_by_band(dataframe):
     """ Returns count per band of exposures to be included in processing """
-    grouped = df.groupby(by=['obstype','band']).agg(['count'])['expnum']
+    grouped = dataframe.groupby(by=['obstype','band']).agg(['count'])['expnum']
     print grouped
 
 def is_count_by_band(dataframe,bands_to_process=['g','r','Y','i','z','u','VR'],min_per_sequence=5):
@@ -117,13 +117,37 @@ def create_clean_df(query_object):
         
     return final_df
 
+def trim_excess_exposures(df,bands,k=150):
+    # k = maximum number
+
+    df2 = pd.DataFrame()
+    
+    for i in range(0,len(bands)):
+        if len(df[df.band.isin([bands[i]])])<k:
+            print "Warning: less than {k} found for {obstype} {band} band.".format(k=k,obstype='dome flat',band=bands[i])
+        df2 = df2.append(df[df.band.isin([bands[i]])&~df.obstype.isin(['zero'])].head(k))
+    
+    if len(df[df.obstype.isin(['zero'])])<k:
+        print "Warning: less than {k} found for {obstype}.".format(k=k,obstype='zero')
+    df_zero = df[df.obstype.isin(['zero'])].head(k)
+    df2 = df2.append(df_zero)
+
+    return df2 
+
 if __name__ == "__main__":
     cur = pipequery.NitelycalQuery('db-desoper')
-    query = cur.get_cals(['20130919', '20131007'])
+    niterange = [str(n) for n in range(20151117,20151128)]
+    bands = ['u','r','i','g','z','Y','VR']
+    query = cur.get_cals(niterange,bands=bands)
+    df = create_dataframe(query)
+    #print df
+    print replace_bias_band(df)
     df = create_clean_df(query)
-    is_count_by_band(df)
-    count = cur.count_by_band(['20130919', '20131007'])
-
+    #print df
+    
+    #is_count_by_band(df)
+    count = cur.count_by_band(bands=bands)
+    
     df = create_dataframe(query)
     df = fillna(df)
     df = replace_bias_band(df)

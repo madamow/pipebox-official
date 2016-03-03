@@ -4,37 +4,37 @@
 {% else %}
 <<include {{ args.pipebox_work }}/config/{{ args.user }}_cfg.des>>
 {% endif %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/modnamepat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/modnamepat.wcl>>
 
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/crosstalk-bias.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/mkbiascor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/crosstalk-dflat.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/pixcorrect-dflat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/crosstalk-bias.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/mkbiascor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/crosstalk-dflat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/pixcorrect-dflat.wcl>>
 {% if args.epoch_name in ['SVE1','SVE2'] %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/SV-skycombine-pixcor-dflat.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/SV-skycombine-dflatcor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/SV-skycombine-norm-dflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/SV-skycombine-pixcor-dflat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/SV-skycombine-dflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/SV-skycombine-norm-dflatcor.wcl>>
 {% else %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/skycombine-pixcor-dflat.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/skycombine-dflatcor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/skycombine-norm-dflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/skycombine-pixcor-dflat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/skycombine-dflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/skycombine-norm-dflatcor.wcl>>
 {% endif %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/skycompare-pixcor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/ingest-skycompare-pixcor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/mkdflatcor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/skycompress-dflatcor.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/find-flat-norm.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/scale-flat.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/modulewcl/skycompress-norm-dflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/skycompare-pixcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/ingest-skycompare-pixcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/mkdflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/skycompress-dflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/find-flat-norm.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/scale-flat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/skycompress-norm-dflatcor.wcl>>
 
 {% if args.epoch_name %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/inputcals/{{ args.epoch_name }}_{{ args.campaignlib }}_inputs.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/inputcals/{{ args.epoch_name }}_{{ args.campaign }}_inputs.wcl>>
 {% else %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/inputcals/{{ args.campaignlib }}_inputs.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/inputcals/{{ args.campaign }}_inputs.wcl>>
 {% endif %}
 
 # Added to run new framework in PROD
-# <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaignlib }}/inputcals/PRODALPHA_db_config.des>>
+# <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/inputcals/PRODALPHA_db_config.des>>
 
 bias_expnum = {{ args.bias_list }}
 dflat_expnum = {{ args.flat_list }}
@@ -49,8 +49,8 @@ label = {{ args.labels }}
 label = {{ args.campaign }}_{{ args.nite }}
 {% endif %}
 pipeline = {{args.desstat_pipeline }}
-pipeprod = {{ args.eups_product }}
-pipever = {{ args.eups_version }}
+pipeprod = {{ args.eups_stack[0] }}
+pipever = {{ args.eups_stack[1] }}
 campaign = {{ args.campaign }}
 
 nite = {{ args.nite }}
