@@ -420,7 +420,9 @@ class NitelyCal(PipeLine):
         if self.args.auto:
             nitelycal_lib.is_count_by_band(self.args.dataframe,bands_to_process=self.args.bands,
                                            min_per_sequence=self.args.min_per_sequence)
-       
+        
+        self.args.dataframe = nitelycal_lib.trim_excess_exposures(self.args.dataframe,self.args.bands,k=self.args.max_num)
+         
         if self.args.count:
             print "Data found in database:"
             self.args.cur.count_by_band(self.args.nitelist)

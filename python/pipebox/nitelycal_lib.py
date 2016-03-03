@@ -117,6 +117,23 @@ def create_clean_df(query_object):
         
     return final_df
 
+def trim_excess_exposures(df,bands,k=150):
+    # k = maximum number
+
+    df2 = pd.DataFrame()
+    
+    for i in range(0,len(bands)):
+        if len(df[df.band.isin([bands[i]])])<k:
+            print "Warning: less than {k} found for {obstype} {band} band.".format(k=k,obstype='dome flat',band=bands[i])
+        df2 = df2.append(df[df.band.isin([bands[i]])&~df.obstype.isin(['zero'])].head(k))
+    
+    if len(df[df.obstype.isin(['zero'])])<k:
+        print "Warning: less than {k} found for {obstype}.".format(k=k,obstype='zero')
+    df_zero = df[df.obstype.isin(['zero'])].head(k)
+    df2 = df2.append(df_zero)
+
+    return df2 
+
 if __name__ == "__main__":
     cur = pipequery.NitelycalQuery('db-desoper')
     niterange = [str(n) for n in range(20151117,20151128)]
