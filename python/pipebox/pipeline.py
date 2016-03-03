@@ -20,10 +20,8 @@ class PipeLine(object):
         """ Update pipeline's arguments with template paths"""
         if len(args.eups_stack[0])>1:
             args.eups_stack = args.eups_stack[0]
-            print args.eups_stack
         else:
             args.eups_stack = args.eups_stack[0][0].split()
-            print args.eups_stack
         
         args.pipebox_dir,args.pipebox_work=self.pipebox_dir,self.pipebox_work
         
@@ -227,7 +225,7 @@ class WideField(PipeLine):
         else:
             self.args.desstat_pipeline = "finalcut" 
         super(WideField,self).update_args(self.args)
-        print self.args.eups_stack
+
         if self.args.ignore_jira:
             if not self.args.reqnum or not self.args.jira_parent:
                 print "Must specify both --reqnum and --jira_parent to avoid using JIRA!"
