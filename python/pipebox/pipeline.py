@@ -499,6 +499,11 @@ class HostName(PipeLine):
         self.args.pipebox_work,self.args.pipebox_dir = self.pipebox_work,self.pipebox_dir
         self.args.submit_template_path = os.path.join("pipelines/{0}".format(self.args.pipeline),
                                                    "{0}_template.des".format(self.args.pipeline)) 
+        if len(args.eups_stack[0])>1:
+            args.eups_stack = args.eups_stack[0]
+        else:
+            args.eups_stack = args.eups_stack[0][0].split()
+
 
     def ticket(self):
         # Create JIRA ticket
