@@ -1,0 +1,69 @@
+# {{ args.submittime }}
+{% if args.configfile %}
+<<include {{ args.pipebox_work }}/config/{{ args.configfile }}>>
+{% else %}
+<<include {{ args.pipebox_work }}/config/{{ args.user }}_cfg.des>>
+
+target_site = {{ args.target_site }}
+
+{% if args.nginx %}
+<archive>
+    <{{args.archive_name}}>
+        host = {{args.nginx_server}}.cosmology.illinois.edu
+        root_http = http://{{args.nginx_server}}.cosmology.illinois.edu:8095/Prodbeta/archive
+        input_transfer_semname_home  = nginx10-{{args.nginx_server}}-input
+        output_transfer_semname_home = nginx10-{{args.nginx_server}}-output
+    </{{args.archive_name}}>
+</archive>
+{% endif %}
+
+{% if args.target_site in ['bluewaters-dev','bluewaters'] %}
+<job_environment>
+   HOME=/u/staff/{{ args.user }}
+   USER={{ args.user }}
+   EUPS_USERDATA=/tmp/.eups_{{ args.user }}
+</job_environment>
+{% endif %}
+
+{% if args.time_to_live %}
+# Time-to-live in minutes
+glidein_use_wall = True
+jobwalltime = {{ (60*args.time_to_live)|round|int }}
+{% endif %}
+
+reqnum = {{ args.reqnum }}
+jira_id = {{ args.jira_parent }}
+{% if args.labels %}
+label = {{ args.labels }} {% else %}
+label = ${nite} {% endif %}
+
+pipeprod = {{ args.eups_stack[0] }}
+pipever = {{ args.eups_stack[1] }}
+campaign = {{ args.campaign }}
+
+project = {{ args.project }}
+
+{% if args.ccdnum %}
+ccdnum = {{ args.ccdnum }}{% endif %}
+
+{% if args.db_section == 'db-prodalpha' %}
+se_object_table = PRODALPHA.SE_OBJECT
+home_archive = prodalpha
+des_http_section = file-http-prodbeta {% endif %}
+
+{% if args.db_section == 'db-desoper' %}
+se_object_table = PROD.SE_OBJECT
+home_archive = desar2home
+des_http_section = file-http {% endif %}
+
+{% if args.db_section == 'db-destest' %}
+se_object_table = PRODBETA.SE_OBJECT
+{% if args.archive_name %}
+home_archive = {{args.archive_name}}
+{% else %}
+home_archive = prodbeta
+{% endif %}
+des_http_section = file-http-prodbeta
+{% endif %}
+
+

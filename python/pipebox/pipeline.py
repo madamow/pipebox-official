@@ -22,7 +22,12 @@ class PipeLine(object):
             args.eups_stack = args.eups_stack[0]
         else:
             args.eups_stack = args.eups_stack[0][0].split()
-        
+       
+        if '/' in args.configfile:
+            pass
+        else:
+            args.configfile = os.path.join(os.getcwd(),args.configfile) 
+
         args.pipebox_dir,args.pipebox_work=self.pipebox_dir,self.pipebox_work
         
         campaign_path = "pipelines/%s/%s/submitwcl" % (args.pipeline,args.campaign)
@@ -204,7 +209,6 @@ class SuperNova(PipeLine):
             output_path = os.path.join(self.args.output_dir,output_name)
     
             # Writing template
-            print self.args.submit_template_path, output_path
             pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
             self.args.rendered_template_path.append(output_path)
             if not self.args.savefiles:
@@ -225,7 +229,6 @@ class WideField(PipeLine):
         else:
             self.args.desstat_pipeline = "finalcut" 
         super(WideField,self).update_args(self.args)
-        print self.args.eups_stack
         if self.args.ignore_jira:
             if not self.args.reqnum or not self.args.jira_parent:
                 print "Must specify both --reqnum and --jira_parent to avoid using JIRA!"
@@ -534,7 +537,6 @@ class HostName(PipeLine):
             # Write bash script
             pipeutils.write_template(bash_template_path,bash_script_path,self.args)
             os.chmod(bash_script_path, 0755)
-            print self.args.eups_stack
             pipeutils.print_submit_info(self.args.pipeline,site=self.args.target_site,
                                         eups_stack=self.args.eups_stack,
                                         submit_file=bash_script_path)
