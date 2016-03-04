@@ -6,31 +6,6 @@
 
 target_site = {{ args.target_site }}
 
-{% if args.nginx %}
-<archive>
-    <{{args.archive_name}}>
-        host = {{args.nginx_server}}.cosmology.illinois.edu
-        root_http = http://{{args.nginx_server}}.cosmology.illinois.edu:8095/Prodbeta/archive
-        input_transfer_semname_home  = nginx10-{{args.nginx_server}}-input
-        output_transfer_semname_home = nginx10-{{args.nginx_server}}-output
-    </{{args.archive_name}}>
-</archive>
-{% endif %}
-
-{% if args.target_site in ['bluewaters-dev','bluewaters'] %}
-<job_environment>
-   HOME=/u/staff/{{ args.user }}
-   USER={{ args.user }}
-   EUPS_USERDATA=/tmp/.eups_{{ args.user }}
-</job_environment>
-{% endif %}
-
-{% if args.time_to_live %}
-# Time-to-live in minutes
-glidein_use_wall = True
-jobwalltime = {{ (60*args.time_to_live)|round|int }}
-{% endif %}
-
 reqnum = {{ args.reqnum }}
 jira_id = {{ args.jira_parent }}
 {% if args.labels %}
@@ -42,8 +17,30 @@ campaign = {{ args.campaign }}
 
 project = {{ args.project }}
 
-{% if args.ccdnum %}
-ccdnum = {{ args.ccdnum }}{% endif %}
+{% if args.nginx %}
+<archive>
+    <{{args.archive_name}}>
+        host = {{args.nginx_server}}.cosmology.illinois.edu
+        root_http = http://{{args.nginx_server}}.cosmology.illinois.edu:8095/Prodbeta/archive
+        input_transfer_semname_home  = nginx10-{{args.nginx_server}}-input
+        output_transfer_semname_home = nginx10-{{args.nginx_server}}-output
+    </{{args.archive_name}}>
+</archive>
+{% endif %}
+
+{% if args.time_to_live %}
+# Time-to-live in minutes
+glidein_use_wall = True
+jobwalltime = {{ (60*args.time_to_live)|round|int }}
+{% endif %}
+
+{% if args.target_site in ['bluewaters-dev','bluewaters'] %}
+<job_environment>
+   HOME=/u/staff/{{ args.user }}
+   USER={{ args.user }}
+   EUPS_USERDATA=/tmp/.eups_{{ args.user }}
+</job_environment>
+{% endif %}
 
 {% if args.db_section == 'db-prodalpha' %}
 se_object_table = PRODALPHA.SE_OBJECT

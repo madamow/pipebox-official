@@ -14,6 +14,8 @@ dflat_expnum = {{ args.flat_list }}
 label= ${nite}{% endif %}
 
 nite = {{ args.nite }}
+{% if args.ccdnum %}
+ccdnum = {{ args.ccdnum }}{% endif %}
 
 unitname = ${nite}
 ops_run_dir = ${project}/${pipeline}/${nite}-r${reqnum}/p${attnum:2}

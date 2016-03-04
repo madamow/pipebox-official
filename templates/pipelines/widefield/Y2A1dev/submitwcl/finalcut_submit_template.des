@@ -45,7 +45,8 @@ label = ${nite} {% endif %}
 expnum = {{ args.expnum }}
 band = {{ args.band }}
 nite = {{ args.nite }}
-
+{% if args.ccdnum %}
+ccdnum = {{ args.ccdnum }}{% endif %}
 {% if args.calnite %}
 calnite = {{ args.calnite }} 
 {% endif %}

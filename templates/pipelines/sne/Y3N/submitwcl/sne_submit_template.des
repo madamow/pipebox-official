@@ -10,6 +10,8 @@ band = {{ args.band }}
 nite = {{ args.nite }}
 field = {{ args.field }}
 first_expnum = {{ args.firstexp }}
+{% if args.ccdnum %}
+ccdnum = {{ args.ccdnum }}{% endif %}
 
 {% if args.single %}
 {% if args.fringe %}
