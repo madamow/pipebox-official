@@ -5,6 +5,7 @@ import time
 from abc import ABCMeta, abstractmethod
 import pandas as pd
 import numpy as np
+import string
 from pipebox import pipequery,pipeargs,pipeutils,jira_utils,nitelycal_lib
 
 class PipeLine(object):
@@ -166,7 +167,8 @@ class SuperNova(PipeLine):
             self.args.triplet_list = np.array(self.args.triplet.split(',')).reshape([-1,3])
             self.args.dataframe = pd.DataFrame(self.args.triplet_list,columns=['nite','field','band'])
         elif self.args.list:
-            self.args.triplet_list = list(pipeutils.read_file(self.args.list))
+            self.args.triplet_list = np.array(string.join(pipeutils.read_file(self.args.list)).split(' ')).reshape([-1,3])
+            print self.args.triplet_list
             self.args.dataframe = pd.DataFrame(self.args.triplet_list,columns=['nite','field','band'])
         elif self.args.csv:
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
