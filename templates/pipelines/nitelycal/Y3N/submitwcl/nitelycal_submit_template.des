@@ -1,9 +1,5 @@
-# {{ args.submittime }}
-{% if args.configfile %}
-<<include {{ args.pipebox_work }}/{{ args.configfile }}>>
-{% else %}
-<<include {{ args.pipebox_work }}/config/{{ args.user }}_cfg.des>> {% endif %}
-
+{% extends "supportwcl/generic_submit.des" %}
+{% block content %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/modnamepat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/01-crosstalk-bias.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/02-crosstalk-dflat.wcl>>
@@ -11,39 +7,15 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/04-mkdflatcor.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/inputcals/Y3N_nitelycal_inputs.wcl>>
 
-# Database dependent definitions
-submit_des_db_section = {{ args.db_section }}
-target_des_db_section = {{ args.db_section }}
-
 bias_expnum = {{ args.bias_list }}
 dflat_expnum = {{ args.flat_list }}
 
-target_site = {{ args.target_site }}
-
-reqnum = {{ args.reqnum }}
-jira_id = {{ args.jira_parent }}
 {% if not args.labels %}
-label= ${nite} {% else %}
-label = {{ args.labels }} {% endif %}
-
-pipeline = {{args.desstat_pipeline }}
-pipeprod = {{ args.eups_stack[0] }}
-pipever = {{ args.eups_stack[1] }}
-campaign = {{ args.campaign }}
+label= ${nite}{% endif %}
 
 nite = {{ args.nite }}
-project = {{ args.project }}
 {% if args.ccdnum %}
-ccdnum = {{ args.ccdnum }} {% endif %}
-
-{% if args.db_section == 'db-desoper' %}
-se_object_table = PROD.SE_OBJECT
-home_archive = desar2home
-des_http_section = file-http {% endif %}
-{% if args.db_section == 'db-destest' %}
-se_object_table = PRODBETA.SE_OBJECT
-home_archive = prodbeta
-des_http_section = file-http-prodbeta {% endif %}
+ccdnum = {{ args.ccdnum }}{% endif %}
 
 unitname = ${nite}
 ops_run_dir = ${project}/${pipeline}/${nite}-r${reqnum}/p${attnum:2}
@@ -69,3 +41,5 @@ blocklist = xtalk-bias, xtalk-dflat, mkcor
         modulelist = mkbiascor,mkdflatcor
     </mkcor>
 </block>
+
+{% endblock %}

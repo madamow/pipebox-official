@@ -23,7 +23,12 @@ class PipeLine(object):
             args.eups_stack = args.eups_stack[0]
         else:
             args.eups_stack = args.eups_stack[0][0].split()
-        
+       
+        if '/' in args.configfile:
+            pass
+        else:
+            args.configfile = os.path.join(os.getcwd(),args.configfile) 
+
         args.pipebox_dir,args.pipebox_work=self.pipebox_dir,self.pipebox_work
         
         campaign_path = "pipelines/%s/%s/submitwcl" % (args.pipeline,args.campaign)
@@ -146,7 +151,7 @@ class SuperNova(PipeLine):
         # Setting global parameters
         self.args = pipeargs.SupernovaArgs().cmdline()
         self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
-        self.args.pipeline = "sne"
+        self.args.pipeline = self.args.desstat_pipeline = "sne"
 
         super(SuperNova,self).update_args(self.args)         
         self.args.cur = pipequery.SupernovaQuery(self.args.db_section)
@@ -209,7 +214,6 @@ class SuperNova(PipeLine):
             output_path = os.path.join(self.args.output_dir,output_name)
     
             # Writing template
-            print self.args.submit_template_path, output_path
             pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
             self.args.rendered_template_path.append(output_path)
             if not self.args.savefiles:
@@ -504,6 +508,10 @@ class HostName(PipeLine):
         self.args.pipebox_work,self.args.pipebox_dir = self.pipebox_work,self.pipebox_dir
         self.args.submit_template_path = os.path.join("pipelines/{0}".format(self.args.pipeline),
                                                    "{0}_template.des".format(self.args.pipeline)) 
+        if len(self.args.eups_stack[0])>1:
+            self.args.eups_stack = self.args.eups_stack[0]
+        else:
+            self.args.eups_stack = self.args.eups_stack[0][0].split()
 
     def ticket(self):
         # Create JIRA ticket
@@ -537,7 +545,6 @@ class HostName(PipeLine):
             # Write bash script
             pipeutils.write_template(bash_template_path,bash_script_path,self.args)
             os.chmod(bash_script_path, 0755)
-
             pipeutils.print_submit_info(self.args.pipeline,site=self.args.target_site,
                                         eups_stack=self.args.eups_stack,
                                         submit_file=bash_script_path)

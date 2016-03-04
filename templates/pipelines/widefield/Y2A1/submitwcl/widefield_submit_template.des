@@ -1,9 +1,5 @@
-# {{ args.submittime }}
-{% if args.configfile %}
-<<include {{ args.pipebox_work }}/config/{{ args.configfile }}>>
-{% else %}
-<<include {{ args.pipebox_work }}/config/{{ args.user }}_cfg.des>>
-{% endif %}
+{% extends "supportwcl/generic_submit.des" %}
+{% block content %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/modnamepat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/01-crosstalk-sci.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/02-pixcorrect.wcl>>
@@ -45,47 +41,8 @@
 # Added to run new framework in PROD
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/inputcals/{{ args.campaign }}_db_config.des>>
 
-# Database dependent definitions
-submit_des_db_section = {{ args.db_section }}
-target_des_db_section = {{ args.db_section }}
-
-target_site = {{ args.target_site }}
-
-{% if args.nginx %}
-<archive>
-    <{{args.archive_name}}>
-        host = {{args.nginx_server}}.cosmology.illinois.edu
-        root_http = http://{{args.nginx_server}}.cosmology.illinois.edu:8095/Prodbeta/archive
-        input_transfer_semname_home  = nginx10-{{args.nginx_server}}-input
-        output_transfer_semname_home = nginx10-{{args.nginx_server}}-output
-    </{{args.archive_name}}>
-</archive>
-{% endif %}
-
-{% if args.target_site in ['bluewaters-dev','bluewaters'] %}
-<job_environment>
-   HOME=/u/staff/{{ args.user }}
-   USER={{ args.user }}
-   EUPS_USERDATA=/tmp/.eups_{{ args.user }}
-</job_environment>
-{% endif %}
-
-{% if args.time_to_live %}
-# Time-to-live in minutes
-glidein_use_wall = True
-jobwalltime = {{ (60*args.time_to_live)|round|int }}
-{% endif %}
-
-reqnum = {{ args.reqnum }}
-jira_id = {{ args.jira_parent }}
-{% if args.labels %}
-label = {{ args.labels }} {% else %}
+{% if not args.labels %}
 label = ${nite} {% endif %}
-
-pipeprod = {{ args.eups_stack[0] }}
-pipever = {{ args.eups_stack[1] }}
-campaign = {{ args.campaign }}
-project = {{ args.project }}
 
 expnum = {{ args.expnum }}
 band = {{ args.band }}
@@ -97,33 +54,10 @@ calnite = {{ args.calnite }}
 {% if args.calrun %}
 calrun = {{ args.calrun }} {% endif %}
 
-{% if args.ccdnum %}
-ccdnum = {{ args.ccdnum }}{% endif %}
-
-{% if args.db_section == 'db-prodalpha' %}
-se_object_table = PRODALPHA.SE_OBJECT
-home_archive = prodalpha
-des_http_section = file-http-prodbeta {% endif %}
-
-{% if args.db_section == 'db-desoper' %}
-se_object_table = PROD.SE_OBJECT
-home_archive = desar2home
-des_http_section = file-http {% endif %}
-
-{% if args.db_section == 'db-destest' %}
-se_object_table = PRODBETA.SE_OBJECT
-{% if args.archive_name %}
-home_archive = {{args.archive_name}} 
-{% else %}
-home_archive = prodbeta
-{% endif %}
-des_http_section = file-http-prodbeta 
-{% endif %}
-
-pipeline = {{args.desstat_pipeline}}   # used in desstat output
-
 basket = ${nite}
 camsym = ${camera}
+{% if args.ccdnum %}
+ccdnum = {{ args.ccdnum }}{% endif %}
 unitname = ${camera}${expnum:8}
 {% if args.rundir %}
 ops_run_dir = {{ args.rundir }}
@@ -143,3 +77,5 @@ blocklist = se
         modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit,skysub,starflat,null-weight-bkg,create-bkg-img,immask,rowinterp-nullweight-immask,create-psfex-catalog,run-psfex,create-finalcut-catalog,ingest-se-objects,finalcut-assess,mkpng
     </se>    
 </block>
+
+{% endblock %}
