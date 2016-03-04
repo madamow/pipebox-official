@@ -14,7 +14,7 @@ label = {{ args.labels }} {% endif %}
 pipeprod = {{ args.eups_stack[0] }}
 pipever = {{ args.eups_stack[1] }}
 campaign = {{ args.campaign }}
-
+pipeline = {{ args.desstat_pipeline }}
 project = {{ args.project }}
 
 {% if args.nginx %}
@@ -41,6 +41,9 @@ jobwalltime = {{ (60*args.time_to_live)|round|int }}
    EUPS_USERDATA=/tmp/.eups_{{ args.user }}
 </job_environment>
 {% endif %}
+
+submit_des_db_section = {{ args.db_section }}
+target_des_db_section = {{ args.db_section }}
 
 {% if args.db_section == 'db-prodalpha' %}
 se_object_table = PRODALPHA.SE_OBJECT

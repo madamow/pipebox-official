@@ -150,7 +150,7 @@ class SuperNova(PipeLine):
         # Setting global parameters
         self.args = pipeargs.SupernovaArgs().cmdline()
         self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
-        self.args.pipeline = "sne"
+        self.args.pipeline = self.args.desstat_pipeline = "sne"
 
         super(SuperNova,self).update_args(self.args)         
         self.args.cur = pipequery.SupernovaQuery(self.args.db_section)
