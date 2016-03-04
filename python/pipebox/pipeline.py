@@ -159,6 +159,9 @@ class SuperNova(PipeLine):
 #        if self.args.exptag:
 #            self.args.exposure_list = self.args.cur.get_expnums_from_tag(self.args.exptag)
 #            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
+        elif self.args.nite:
+            self.args.triplet_list = self.args.cur.get_triplets_from_nite(self.args.nite)
+            self.args.dataframe = pd.DataFrame(self.args.triplet_list,columns=['nite','field','band'])
         elif self.args.triplet:
             self.args.triplet_list = np.array(self.args.triplet.split(',')).reshape([-1,3])
             self.args.dataframe = pd.DataFrame(self.args.triplet_list,columns=['nite','field','band'])
@@ -169,7 +172,7 @@ class SuperNova(PipeLine):
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.triplet_list = np.array(self.args.dataframe[['nite','field','band']].values)
-        nrows=len(self.args.triplet.split(','))/3
+        nrows=len(self.args.dataframe)
         self.args.dataframe['exp_nums']=np.zeros(nrows, dtype=str)
         self.args.dataframe['first_exp']=np.zeros(nrows, dtype=str)
         self.args.dataframe['single']=np.ones(nrows, dtype=bool)
@@ -188,7 +191,7 @@ class SuperNova(PipeLine):
     def make_templates(self):
         """ Loop through dataframe and write submitfile for each exposures"""
         for index,row in self.args.dataframe.iterrows():
-            self.args.expnums,self.args.band,self.args.nite,self.args.firstexp,self.args.field,self.args.single,self.args.fringe,self.args.ccdlist,self.args.seqnum = row['exp_nums'],row['band'],row['nite'],row['first_exp'],'SN-'+row['field'],row['single'],row['fringe'],row['ccdlist'],row['seqnum']
+            self.args.expnums,self.args.band,self.args.nite,self.args.firstexp,self.args.field,self.args.single,self.args.fringe,self.args.ccdlist,self.args.seqnum = row['exp_nums'],row['band'],row['nite'],row['first_exp'],'SN-'+row['field'][-2:],row['single'],row['fringe'],row['ccdlist'],row['seqnum']
             self.args.reqnum, self.args.jira_parent= int(row['reqnum']),row['jira_parent']
 #            if self.args.epoch:
 #                self.args.epoch_name = self.args.epoch
