@@ -1,7 +1,10 @@
 {% extends "supportwcl/generic_submit.des" %}
 {% block content %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/hostname/modulewcl/modnamepat.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/hostname/modulewcl/hostname.wcl>>
+{% if args.campaign in ['Y2N','Y3N'] %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/hostname/modulewcl/old_hostname.wcl>>
+{% else %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/hostname/modulewcl/hostname.wcl>>{% endif %}
 
 {% if not args.labels %}
 label = hostname

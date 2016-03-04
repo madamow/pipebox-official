@@ -1,0 +1,11 @@
+<module>
+    <hostname>
+        wrappername = generic.py
+        xml = generic.xml
+        modnamepat=${modnamepat_hostname}
+        <exec_1>
+	    execname = /bin/hostname
+	    #execname = /bin/env
+        </exec_1>
+    </hostname>
+</module>
