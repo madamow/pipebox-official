@@ -152,6 +152,7 @@ class NitelycalArgs(PipeArgs):
         parser.add('--count',action='store_true',help='print number of calibrations found')
         parser.add('--bands',default='u,g,r,i,z,VR',help='Bands to process')
         parser.add('--min_per_sequence',type=int,default=5,help='minimun number of exposures per band')
+        parser.add('--max_num',type=int,default=150,help='maximum number of exposures per obstype and band')
         args = parser.parse_args()
 
         return args

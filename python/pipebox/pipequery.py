@@ -70,6 +70,10 @@ class SupernovaQuery(PipeQuery):
         """ Takes a pandas dataframe and for each exposure add column:value
             band and nite. Returns dataframe"""
         for index,row in df.iterrows():
+            print row
+            print row['nite']
+            print row['field']
+            print row['band']
             expnums=self.get_expnums(row['nite'],row['field'],row['band'])
             df.loc[index,'exp_nums'] = expnums
             firstexp = expnums.split(',')[0]
@@ -138,6 +142,20 @@ class SupernovaQuery(PipeQuery):
         
         return expnum_list
 
+# SN only code
+    def get_triplets_from_nite(self,nite=None,**kwargs):
+        """ Get exposure numbers and band for a SN nite field band triplet"""
+        if not nite:
+            raise Exception("Must specify nite!")
+        print "selecting exposures to submit..."
+        query = "select distinct nite, field, band from manifest_exposure where exptime > 30  and nite = '%s' " % (str(nite))
+        self.cur.execute(query)
+#        triplets = np.ravel(np.array(self.cur.fetchall()))
+#        return string.join(map(str,triplets),',').reshape[-1:3]
+        return np.array(self.cur.fetchall())
+
+    
+
 # Edited from widefield (requires SN triplet)
     def get_expnums(self,nite=None,field=None,band=None,**kwargs):
         snfields=['C1','C2','C3','E1','E2','S1','S2','X1','X2','X3']
@@ -145,7 +163,7 @@ class SupernovaQuery(PipeQuery):
         """ Get exposure numbers and band for a SN nite field band triplet"""
         if not nite:
             raise Exception("Must specify nite!")
-        if not field in snfields:
+        if not field[-2:] in snfields:
             raise Exception("Must specify field!")
         if not band:
             raise Exception("Must specify nite!")
