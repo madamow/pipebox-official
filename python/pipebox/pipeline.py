@@ -20,10 +20,8 @@ class PipeLine(object):
         """ Update pipeline's arguments with template paths"""
         if len(args.eups_stack[0])>1:
             args.eups_stack = args.eups_stack[0]
-            print args.eups_stack
         else:
             args.eups_stack = args.eups_stack[0][0].split()
-            print args.eups_stack
         
         args.pipebox_dir,args.pipebox_work=self.pipebox_dir,self.pipebox_work
         
@@ -499,6 +497,10 @@ class HostName(PipeLine):
         self.args.pipebox_work,self.args.pipebox_dir = self.pipebox_work,self.pipebox_dir
         self.args.submit_template_path = os.path.join("pipelines/{0}".format(self.args.pipeline),
                                                    "{0}_template.des".format(self.args.pipeline)) 
+        if len(self.args.eups_stack[0])>1:
+            self.args.eups_stack = self.args.eups_stack[0]
+        else:
+            self.args.eups_stack = self.args.eups_stack[0][0].split()
 
     def ticket(self):
         # Create JIRA ticket
@@ -532,7 +534,7 @@ class HostName(PipeLine):
             # Write bash script
             pipeutils.write_template(bash_template_path,bash_script_path,self.args)
             os.chmod(bash_script_path, 0755)
-
+            print self.args.eups_stack
             pipeutils.print_submit_info(self.args.pipeline,site=self.args.target_site,
                                         eups_stack=self.args.eups_stack,
                                         submit_file=bash_script_path)
