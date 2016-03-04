@@ -22,11 +22,12 @@ class PipeLine(object):
             args.eups_stack = args.eups_stack[0]
         else:
             args.eups_stack = args.eups_stack[0][0].split()
-       
-        if '/' in args.configfile:
-            pass
-        else:
-            args.configfile = os.path.join(os.getcwd(),args.configfile) 
+      
+        if args.configfile: 
+            if '/' in args.configfile:
+                pass
+            else:
+                args.configfile = os.path.join(os.getcwd(),args.configfile) 
 
         args.pipebox_dir,args.pipebox_work=self.pipebox_dir,self.pipebox_work
         
