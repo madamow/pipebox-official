@@ -1,8 +1,8 @@
 # {{ args.submittime }}
 {% if args.configfile %}
-<<include {{ args.pipebox_work }}/config/{{ args.configfile }}>>
+<<include {{ args.configfile }}>>
 {% else %}
-<<include {{ args.pipebox_work }}/config/{{ args.user }}_cfg.des>>
+<<include {{ args.pipebox_work }}/config/{{ args.user }}_cfg.des>>{% endif %}
 
 target_site = {{ args.target_site }}
 
@@ -34,8 +34,7 @@ jobwalltime = {{ (60*args.time_to_live)|round|int }}
 reqnum = {{ args.reqnum }}
 jira_id = {{ args.jira_parent }}
 {% if args.labels %}
-label = {{ args.labels }} {% else %}
-label = ${nite} {% endif %}
+label = {{ args.labels }} {% endif %}
 
 pipeprod = {{ args.eups_stack[0] }}
 pipever = {{ args.eups_stack[1] }}
@@ -66,4 +65,4 @@ home_archive = prodbeta
 des_http_section = file-http-prodbeta
 {% endif %}
 
-
+{% block content %}{% endblock %}
