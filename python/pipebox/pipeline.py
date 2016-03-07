@@ -31,11 +31,16 @@ class PipeLine(object):
                 args.configfile = os.path.join(os.getcwd(),args.configfile) 
 
         if args.exclude_list:
-            try:
-               args.exclude_list =  list(pipeutils.read_file(args.exclude_list))
-            except:
-               args.exclude_list = args.exclude_list.strip().split(',')
-
+            exclude_file = os.path.isfile(args.exclude_list)
+            if exclude_file:
+                args.exclude_list =  list(pipeutils.read_file(args.exclude_list))
+            else:
+                try: 
+                    dig = int(args.exclude_list[0])
+                    args.exclude_list = args.exclude_list.strip().split(',')
+                except IOError:
+                   print "{0} does not exist!".format(args.exclude_list)
+        
         args.pipebox_dir,args.pipebox_work=self.pipebox_dir,self.pipebox_work
         
         campaign_path = "pipelines/%s/%s/submitwcl" % (args.pipeline,args.campaign)
