@@ -67,7 +67,10 @@ def less_than_queue(pipeline=None,user=None,queue_size=1000):
 def read_file(file):
     """Read file as generator"""
     with open(file) as listfile:
-        for line in listfile: yield line.strip()
+        for line in listfile: 
+            if line.strip(): 
+                if '#' not in line.strip():
+                    yield line.strip()
 
 def print_cron_info(pipeline,site=None,pipebox_work=None,cron_path='.'):
     print "\n"

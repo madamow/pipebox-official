@@ -5,6 +5,7 @@ import time
 from abc import ABCMeta, abstractmethod
 import pandas as pd
 import numpy as np
+import string
 from pipebox import pipequery,pipeargs,pipeutils,jira_utils,nitelycal_lib
 
 class PipeLine(object):
@@ -22,13 +23,24 @@ class PipeLine(object):
             args.eups_stack = args.eups_stack[0]
         else:
             args.eups_stack = args.eups_stack[0][0].split()
-       
+      
         if args.configfile: 
             if '/' in args.configfile:
                 pass
             else:
                 args.configfile = os.path.join(os.getcwd(),args.configfile) 
 
+        if args.exclude_list:
+            exclude_file = os.path.isfile(args.exclude_list)
+            if exclude_file:
+                args.exclude_list =  list(pipeutils.read_file(args.exclude_list))
+            else:
+                try: 
+                    dig = int(args.exclude_list[0])
+                    args.exclude_list = args.exclude_list.strip().split(',')
+                except IOError:
+                   print "{0} does not exist!".format(args.exclude_list)
+        
         args.pipebox_dir,args.pipebox_work=self.pipebox_dir,self.pipebox_work
         
         campaign_path = "pipelines/%s/%s/submitwcl" % (args.pipeline,args.campaign)
@@ -172,7 +184,8 @@ class SuperNova(PipeLine):
             self.args.triplet_list = np.array(self.args.triplet.split(',')).reshape([-1,3])
             self.args.dataframe = pd.DataFrame(self.args.triplet_list,columns=['nite','field','band'])
         elif self.args.list:
-            self.args.triplet_list = list(pipeutils.read_file(self.args.list))
+            self.args.triplet_list = np.array(string.join(pipeutils.read_file(self.args.list)).split(' ')).reshape([-1,3])
+            print self.args.triplet_list
             self.args.dataframe = pd.DataFrame(self.args.triplet_list,columns=['nite','field','band'])
         elif self.args.csv:
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
@@ -296,7 +309,6 @@ class WideField(PipeLine):
             self.args.dataframe = pd.DataFrame(self.args.exposure_list, columns=['expnum'])
         # Remove unwanted exposures 
         if self.args.exclude_list:
-            self.args.exclude_list = self.args.exclude_list.strip().split(',')
             self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
         # Update dataframe for each exposure and add band,nite if not exists
         try:
