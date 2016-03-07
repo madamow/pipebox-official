@@ -30,6 +30,12 @@ class PipeLine(object):
             else:
                 args.configfile = os.path.join(os.getcwd(),args.configfile) 
 
+        if args.exclude_list:
+            try:
+               args.exclude_list =  list(pipeutils.read_file(args.exclude_list))
+            except:
+               args.exclude_list = args.exclude_list.strip().split(',')
+
         args.pipebox_dir,args.pipebox_work=self.pipebox_dir,self.pipebox_work
         
         campaign_path = "pipelines/%s/%s/submitwcl" % (args.pipeline,args.campaign)
@@ -298,7 +304,6 @@ class WideField(PipeLine):
             self.args.dataframe = pd.DataFrame(self.args.exposure_list, columns=['expnum'])
         # Remove unwanted exposures 
         if self.args.exclude_list:
-            self.args.exclude_list = self.args.exclude_list.strip().split(',')
             self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
         # Update dataframe for each exposure and add band,nite if not exists
         try:
