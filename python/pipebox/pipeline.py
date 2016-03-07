@@ -1,6 +1,6 @@
 import os
 import sys
-from datetime import datetime
+import datetime
 import time
 from abc import ABCMeta, abstractmethod
 import pandas as pd
@@ -23,10 +23,11 @@ class PipeLine(object):
         else:
             args.eups_stack = args.eups_stack[0][0].split()
        
-        if '/' in args.configfile:
-            pass
-        else:
-            args.configfile = os.path.join(os.getcwd(),args.configfile) 
+        if args.configfile: 
+            if '/' in args.configfile:
+                pass
+            else:
+                args.configfile = os.path.join(os.getcwd(),args.configfile) 
 
         args.pipebox_dir,args.pipebox_work=self.pipebox_dir,self.pipebox_work
         
@@ -111,7 +112,7 @@ class PipeLine(object):
         # Writing bash submit scripts
         reqnum_count = len(args.dataframe.groupby(by=['reqnum']))
         if reqnum_count > 1:
-            bash_script_name = "submitme_%s_%s.sh" % (datetime.now().strftime('%Y-%m-%dT%H:%M'),
+            bash_script_name = "submitme_%s_%s.sh" % (datetime.datetime.now().strftime('%Y-%m-%dT%H:%M'),
                                                           args.target_site)
         else:
             bash_script_name = "submitme_%s_%s.sh" % (args.reqnum,args.target_site)
@@ -346,13 +347,13 @@ class WideField(PipeLine):
                     if not self.args.ignore_jira:
                         con=jira_utils.get_con(self.args.jira_section)
                         if not jira_utils.does_comment_exist(con,reqnum=self.args.reqnum):
-                            jira_utils.make_comment(con,datetime=datetime.now(),reqnum=self.args.reqnum)
+                            jira_utils.make_comment(con,datetime=datetime.datetime.now(),reqnum=self.args.reqnum)
 
         if self.args.auto:
             if not self.args.rendered_template_path: 
-                print "No new exposures found on %s..." % datetime.now()
+                print "No new exposures found on %s..." % datetime.datetime.now()
             else: print "%s exposures found on %s..." % (len(self.args.rendered_template_path),
-                                                             datetime.now())
+                                                             datetime.datetime.now())
 
         if self.args.savefiles:
             super(WideField,self).save(self.args)
@@ -377,14 +378,20 @@ class NitelyCal(PipeLine):
         # Create list of nites
         if self.args.nite:
             self.args.nitelist = self.args.nite.split(',')
-        elif self.args.maxnite and self.args.minnite:
-            self.args.nitelist = [str(x) for x in range(self.args.minnite,self.args.maxnite +1)]
+        elif self.args.maxnite and not self.args.minnite:
+            self.args.nitelist = self.args.maxnite.split(',')
+        elif self.args.minnite and not self.args.maxnite:
+            self.args.nitelist = self.args.minnite.split(',')
+        elif self.args.minnite and self.args.maxnite:
+            self.args.nitelist = self.args.minnite.split(',')
         else:
-            print "Please specify --nite or --maxnite and --minnite"
+            print "Please specify --nite or --maxnite or --minnite"
             sys.exit(1)
 
-        self.args.niterange = str(self.args.minnite) + 't' + str(self.args.maxnite)[4:]
-
+        if self.args.maxnite and self.args.minnite:
+            self.args.niterange = str(self.args.minnite) + 't' + str(self.args.maxnite)[4:]
+        else:
+            self.args.niterange = self.args.nite
         # For each use-case create bias/flat list and dataframe
         if self.args.biaslist and self.args.flatlist:
             # create biaslist from file
@@ -406,9 +413,44 @@ class NitelyCal(PipeLine):
         else:
             cal_query = self.args.cur.get_cals(self.args.nitelist)
             self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
+            if self.args.combine:
+                _,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,                                                                                     self.args.bands,
+                                                                       k=self.args.max_num)
+                if self.args.minnite and self.args.maxnite:
+                    oneday = datetime.timedelta(days=1)
+                    high_nite = datetime.datetime.strptime(self.args.nitelist[-1],'%Y%m%d').date()
+                    while int(str(high_nite).replace('-','')) <= int(self.args.maxnite):
+                        self.args.nitelist.append(str(high_nite+oneday).replace('-',''))
+                        high_nite = datetime.datetime.strptime(self.args.nitelist[-1],'%Y%m%d').date()
+                    cal_query = self.args.cur.get_cals(self.args.nitelist)            
+                    self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
+                else: 
+                    # If not enough exposures per band +/- one day until enough are found
+                    while not_enough_exp: 
+                        oneday = datetime.timedelta(days=1)
+                        low_nite = datetime.datetime.strptime(self.args.nitelist[0],'%Y%m%d').date()
+                        high_nite = datetime.datetime.strptime(self.args.nitelist[-1],'%Y%m%d').date()
+                        if self.args.nite:
+                            self.args.nitelist.insert(0,str(low_nite-oneday).replace('-',''))
+                            self.args.nitelist.append(str(high_nite+oneday).replace('-',''))
+                        if self.args.maxnite and not self.args.minnite:
+                            self.args.nitelist.insert(0,str(low_nite-oneday).replace('-',''))
+                        if self.args.minnite and not self.args.maxnite:
+                            self.args.nitelist.append(str(high_nite+oneday).replace('-',''))
+                        else:
+                            if int(str(high_nite).replace('-','')) <= int(self.args.maxnite):
+                                self.args.nitelist.append(str(high_nite+oneday).replace('-',''))
+
+                        cal_query = self.args.cur.get_cals(self.args.nitelist)            
+                        self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
+                        _,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,                                                                                     self.args.bands,
+                                                                               k=self.args.max_num)
+                self.args.niterange = str(self.args.nitelist[0]) + 't' + str(self.args.nitelist[-1])[4:]
+            
             # Removing bands that are not specified
             self.args.dataframe = self.args.dataframe[self.args.dataframe.band.isin(self.args.bands)\
                                                       |self.args.dataframe.obstype.isin(['zero'])]
+
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
 
         if self.args.combine:
@@ -427,9 +469,11 @@ class NitelyCal(PipeLine):
         if self.args.auto:
             nitelycal_lib.is_count_by_band(self.args.dataframe,bands_to_process=self.args.bands,
                                            min_per_sequence=self.args.min_per_sequence)
-        
-        self.args.dataframe = nitelycal_lib.trim_excess_exposures(self.args.dataframe,self.args.bands,k=self.args.max_num)
-         
+       
+        if self.args.combine: 
+            self.args.dataframe,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,                                                                                     self.args.bands,
+                                                                                     k=self.args.max_num,
+                                                                                     verbose= True)
         if self.args.count:
             print "Data found in database:"
             self.args.cur.count_by_band(self.args.nitelist)
@@ -492,7 +536,7 @@ class NitelyCal(PipeLine):
                     try: self.args.attnum
                     except: self.args.attnum= None
                     con=jira_utils.get_con(self.args.jira_section)
-                    jira_utils.make_comment(con,datetime=datetime.now(),reqnum=self.args.reqnum,
+                    jira_utils.make_comment(con,datetime=datetime.datetime.now(),reqnum=self.args.reqnum,
                                             content = self.args.attnum)
 
         if self.args.savefiles:

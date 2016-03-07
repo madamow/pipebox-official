@@ -18,6 +18,8 @@ class PipeArgs(object):
         parser.add('--csv',help='CSV of exposures and information specified by user. If specified, \
                              code will use exposures in csv to submit jobs. Must also specify \
                              --delimiter')
+        parser.add('--exclude_list',help='A comma-separated list or line-separated file of exposures \
+                             to exclude from the dataframe')
         parser.add('--delimiter',default=',',help='The delimiter if specifying csv and is not \
                              comma-separated')
         parser.add('--campaign',required=True, help='Directory in pipebox where templates are \
@@ -131,7 +133,6 @@ class WidefieldArgs(PipeArgs):
                         by nite.")
         parser.add('--RA','-ra',nargs='+',action='append',help='RA in degrees, in the order of min max')
         parser.add('--Dec','-dec',nargs='+',action='append',help='Dec in degrees, in the order of min max')
-        parser.add('--exclude_list',help='A list to exclude from the dataframe')
         args = parser.parse_args()
 
         return args
@@ -144,9 +145,9 @@ class NitelycalArgs(PipeArgs):
         # Science arguments
         parser.add('--biaslist',help='list of line-separated bias expnums')
         parser.add('--flatlist',help='list of line-separated flat expnums')
-        parser.add('--minnite',type=int,help='to create a supercal or many precals specify minnite\
+        parser.add('--minnite',help='to create a supercal or many precals specify minnite\
                          along with maxnite')
-        parser.add('--maxnite',type=int,help='to create a supercal or many precals specify maxnite\
+        parser.add('--maxnite',help='to create a supercal or many precals specify maxnite\
                          along with minnite')
         parser.add('--combine',action='store_true',help='combine all exposures found into one submit')
         parser.add('--count',action='store_true',help='print number of calibrations found')
