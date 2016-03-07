@@ -18,6 +18,8 @@ class PipeArgs(object):
         parser.add('--csv',help='CSV of exposures and information specified by user. If specified, \
                              code will use exposures in csv to submit jobs. Must also specify \
                              --delimiter')
+        parser.add('--exclude_list',help='A comma-separated list or line-separated file of exposures \
+                                          to exclude from the dataframe')
         parser.add('--delimiter',default=',',help='The delimiter if specifying csv and is not \
                              comma-separated')
         parser.add('--campaign',required=True, help='Directory in pipebox where templates are \
@@ -131,8 +133,6 @@ class WidefieldArgs(PipeArgs):
                         by nite.")
         parser.add('--RA','-ra',nargs='+',action='append',help='RA in degrees, in the order of min max')
         parser.add('--Dec','-dec',nargs='+',action='append',help='Dec in degrees, in the order of min max')
-        parser.add('--exclude_list',help='A comma-separated list or line-separated file of exposures \
-                                          to exclude from the dataframe')
         args = parser.parse_args()
 
         return args
