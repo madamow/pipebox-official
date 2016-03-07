@@ -131,7 +131,8 @@ class WidefieldArgs(PipeArgs):
                         by nite.")
         parser.add('--RA','-ra',nargs='+',action='append',help='RA in degrees, in the order of min max')
         parser.add('--Dec','-dec',nargs='+',action='append',help='Dec in degrees, in the order of min max')
-        parser.add('--exclude_list',help='A list to exclude from the dataframe')
+        parser.add('--exclude_list',help='A comma-separated list or line-separated file of exposures \
+                                          to exclude from the dataframe')
         args = parser.parse_args()
 
         return args
