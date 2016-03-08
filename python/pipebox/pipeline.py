@@ -404,6 +404,8 @@ class NitelyCal(PipeLine):
             self.args.niterange = str(self.args.minnite) + 't' + str(self.args.maxnite)[4:]
         else:
             self.args.niterange = self.args.nite
+
+        
         # For each use-case create bias/flat list and dataframe
         if self.args.biaslist and self.args.flatlist:
             # create biaslist from file
@@ -425,18 +427,20 @@ class NitelyCal(PipeLine):
         else:
             cal_query = self.args.cur.get_cals(self.args.nitelist)
             self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
+            if self.args.maxnite and self.args.minnite:
+                oneday = datetime.timedelta(days=1)
+                high_nite = datetime.datetime.strptime(self.args.nitelist[-1],'%Y%m%d').date()
+                while int(str(high_nite).replace('-','')) <= int(self.args.maxnite):
+                    self.args.nitelist.append(str(high_nite+oneday).replace('-',''))
+                    high_nite = datetime.datetime.strptime(self.args.nitelist[-1],'%Y%m%d').date()
+                cal_query = self.args.cur.get_cals(self.args.nitelist)
+                self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
+
             if self.args.combine:
                 _,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,                                                                                     self.args.bands,
                                                                        k=self.args.max_num)
-                if self.args.minnite and self.args.maxnite:
-                    oneday = datetime.timedelta(days=1)
-                    high_nite = datetime.datetime.strptime(self.args.nitelist[-1],'%Y%m%d').date()
-                    while int(str(high_nite).replace('-','')) <= int(self.args.maxnite):
-                        self.args.nitelist.append(str(high_nite+oneday).replace('-',''))
-                        high_nite = datetime.datetime.strptime(self.args.nitelist[-1],'%Y%m%d').date()
-                    cal_query = self.args.cur.get_cals(self.args.nitelist)            
-                    self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
-                else: 
+
+                if not self.args.maxnite and self.args.minnite:
                     # If not enough exposures per band +/- one day until enough are found
                     while not_enough_exp: 
                         oneday = datetime.timedelta(days=1)
@@ -449,9 +453,6 @@ class NitelyCal(PipeLine):
                             self.args.nitelist.insert(0,str(low_nite-oneday).replace('-',''))
                         if self.args.minnite and not self.args.maxnite:
                             self.args.nitelist.append(str(high_nite+oneday).replace('-',''))
-                        else:
-                            if int(str(high_nite).replace('-','')) <= int(self.args.maxnite):
-                                self.args.nitelist.append(str(high_nite+oneday).replace('-',''))
 
                         cal_query = self.args.cur.get_cals(self.args.nitelist)            
                         self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
