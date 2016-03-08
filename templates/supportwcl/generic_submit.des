@@ -36,7 +36,7 @@ jobwalltime = {{ (60*args.time_to_live)|round|int }}
 
 {% if args.target_site in ['bluewaters-dev','bluewaters'] %}
 <job_environment>
-   HOME=/u/staff/{{ args.user }}
+   HOME=/u/sciteam/{{ args.user }}
    USER={{ args.user }}
    EUPS_USERDATA=/tmp/.eups_{{ args.user }}
 </job_environment>
