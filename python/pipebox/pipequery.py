@@ -300,22 +300,26 @@ class WidefieldQuery(PipeQuery):
         
         return expnum_list
 
-    def get_expnums_from_nite(self,nite=None,process_all=False,program=None,propid=None):
+    def get_expnums_from_nites(self,nites=None,process_all=False,program=None,propid=None):
         """ Get exposure numbers and band for incoming exposures"""
-        if not nite:
+        if not nites:
             raise Exception("Must specify nite!")
         print "selecting exposures to submit..."
-        base_query = "select distinct expnum from exposure where obstype='object' and object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' and object not like '%%test%%' and object not like '%%junk%%' and nite = '%s' " % nite
+        base_query = "select distinct expnum,nite from exposure where obstype='object' and object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' and object not like '%%test%%' and object not like '%%junk%%' and nite in (%s)" % ','.join(nites)
         if program:
-            get_expnum_and_band = base_query + " program in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['program'])
+            get_expnum = base_query + " program in (%s)" % ','.join("'{0}'".format(k) for k in program)
         if propid:
-            get_expnum_and_band = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['propid'])
+            get_expnum = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
         if process_all:
-            get_expnum_and_band = base_query
-        self.cur.execute(get_expnum_and_band)
+            get_expnum = base_query
+        self.cur.execute(get_expnum)
         results = self.cur.fetchall()
+        [expnums,nites_from_query] = map(list, zip(*results))
+        diff = list(set(nites)-set(nites_from_query))
+        diff.sort(key=str.lower)
+        print "Warning: No expnums found for nites {}.".format(','.join(diff))    
 
-        return results
+        return expnums
 
     def find_precal(self,date,threshold,override=True,tag=None):
         """ Returns precalnite,precalrun given specified nitestring"""

@@ -256,7 +256,7 @@ class WideField(PipeLine):
         
         self.args.propid = self.args.propid.strip().split(',')
         self.args.program = self.args.program.strip().split(',')
-        
+ 
         # If auto-submit mode on
         if self.args.auto:
             self.args.ignore_processed=True
@@ -290,12 +290,13 @@ class WideField(PipeLine):
             self.args.exposure_list = self.args.expnum.split(',')
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.nite:
-            exposures = self.args.cur.get_expnums_from_nite(self.args.nite,propid=self.args.propid,
+            self.args.nite = self.args.nite.strip().split(',')
+            exposures = self.args.cur.get_expnums_from_nites(self.args.nite,propid=self.args.propid,
                                 program=self.args.program,process_all=self.args.process_all)
             if not exposures:
                 print "No exposures found for given nite. Please check nite."
                 sys.exit(1)
-            self.args.exposure_list = [expnum for expnum,band in exposures]
+            self.args.exposure_list = [expnum for expnum in exposures]
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.list:
             self.args.exposure_list = list(pipeutils.read_file(self.args.list))
