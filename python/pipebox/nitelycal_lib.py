@@ -138,6 +138,16 @@ def trim_excess_exposures(df,bands,k=150,verbose=False):
 
     return (df2,set_warning)
 
+def find_no_data(df,nitelist):
+    df2 = df[df.obstype=='dome flat']
+    df3 = df2.groupby('nite').count()
+    nites = list(df3.index) # nites with non-zero dome flats
+    diff = list(set(nitelist)-set(nites)) # list of nights with zero dome flats
+    if diff:
+        print "Warning: No flats found for nites {}!".format(','.join(diff))
+    df = df[df.nite.isin(nites)]
+    return df,nites
+
 if __name__ == "__main__":
     cur = pipequery.NitelycalQuery('db-desoper')
     niterange = [str(n) for n in range(20151117,20151128)]

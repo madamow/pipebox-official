@@ -484,10 +484,13 @@ class NitelyCal(PipeLine):
             self.args.dataframe,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,                                                                                     self.args.bands,
                                                                                      k=self.args.max_num,
                                                                                      verbose= True)
+        
+        self.args.dataframe,self.args.nitelist = nitelycal_lib.find_no_data(self.args.dataframe,self.args.nitelist)
+        
         if self.args.count:
             print "Data found in database:"
             self.args.cur.count_by_band(self.args.nitelist)
-            print "\nData to be processed: %s" % self.args.niterange
+            print "\nData to be processed: %s" % ','.join(self.args.nitelist)
             nitelycal_lib.final_count_by_band(self.args.dataframe)
             sys.exit(0)
 
