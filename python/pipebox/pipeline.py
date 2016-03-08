@@ -457,7 +457,7 @@ class NitelyCal(PipeLine):
                         self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
                         _,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,                                                                                     self.args.bands,
                                                                                k=self.args.max_num)
-                self.args.niterange = str(self.args.nitelist[0]) + 't' + str(self.args.nitelist[-1])[4:]
+                    self.args.niterange = str(self.args.nitelist[0]) + 't' + str(self.args.nitelist[-1])[4:]
             
             # Removing bands that are not specified
             self.args.dataframe = self.args.dataframe[self.args.dataframe.band.isin(self.args.bands)\
