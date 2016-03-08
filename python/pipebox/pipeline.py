@@ -489,7 +489,7 @@ class NitelyCal(PipeLine):
         if self.args.count:
             print "Data found in database:"
             self.args.cur.count_by_band(self.args.nitelist)
-            print "\nData to be processed:"
+            print "\nData to be processed: %s" % self.args.niterange
             nitelycal_lib.final_count_by_band(self.args.dataframe)
             sys.exit(0)
 
