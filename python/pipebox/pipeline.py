@@ -400,11 +400,7 @@ class NitelyCal(PipeLine):
             print "Please specify --nite or --maxnite or --minnite"
             sys.exit(1)
 
-        if self.args.maxnite and self.args.minnite:
-            self.args.niterange = str(self.args.minnite) + 't' + str(self.args.maxnite)[4:]
-        else:
-            self.args.niterange = self.args.nite
-
+        
         
         # For each use-case create bias/flat list and dataframe
         if self.args.biaslist and self.args.flatlist:
@@ -459,7 +455,8 @@ class NitelyCal(PipeLine):
                         _,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,                                                                                     self.args.bands,
                                                                                k=self.args.max_num)
                     self.args.niterange = str(self.args.nitelist[0]) + 't' + str(self.args.nitelist[-1])[4:]
-            
+                else: 
+                    self.args.niterange = str(self.args.minnite) + 't' + str(self.args.maxnite[-1])[4:]
             # Removing bands that are not specified
             self.args.dataframe = self.args.dataframe[self.args.dataframe.band.isin(self.args.bands)\
                                                       |self.args.dataframe.obstype.isin(['zero'])]
