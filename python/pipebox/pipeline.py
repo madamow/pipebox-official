@@ -401,8 +401,6 @@ class NitelyCal(PipeLine):
             print "Please specify --nite or --maxnite or --minnite"
             sys.exit(1)
 
-        
-        
         # For each use-case create bias/flat list and dataframe
         if self.args.biaslist and self.args.flatlist:
             # create biaslist from file

@@ -317,7 +317,8 @@ class WidefieldQuery(PipeQuery):
         [expnums,nites_from_query] = map(list, zip(*results))
         diff = list(set(nites)-set(nites_from_query))
         diff.sort(key=str.lower)
-        print "Warning: No expnums found for nites {}.".format(','.join(diff))    
+        if diff:
+            print "Warning: No expnums found for nites {}.".format(','.join(diff))    
 
         return expnums
 
