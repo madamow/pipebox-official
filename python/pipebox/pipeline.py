@@ -517,7 +517,7 @@ class HostName(PipeLine):
                                           use_existing=True)
 
         self.args.reqnum,self.args.jira_parent = new_reqnum,new_jira_parent
-
+    
     def make_templates(self):
         req_dir = 'r%s' % self.args.reqnum
         self.args.output_dir = os.path.join(self.args.pipebox_work,req_dir)
@@ -528,7 +528,7 @@ class HostName(PipeLine):
         self.args.rendered_template_path = []
         self.args.rendered_template_path.append(output_path)
         pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
-
+    
     def submit_or_save(self):
         if self.args.savefiles:
             bash_template_path = os.path.join("scripts","submitme_template.sh")
