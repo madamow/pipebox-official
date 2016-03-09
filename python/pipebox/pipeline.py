@@ -2,7 +2,6 @@ import os
 import sys
 import datetime
 import time
-from abc import ABCMeta, abstractmethod
 import pandas as pd
 import numpy as np
 import string
@@ -19,11 +18,18 @@ class PipeLine(object):
 
     def update_args(self,args):
         """ Update pipeline's arguments with template paths"""
+        if self.args.ignore_jira:
+            if not self.args.reqnum or not self.args.jira_parent:
+                print "Must specify both --reqnum and --jira_parent to avoid using JIRA!"
+                sys.exit(1)
         if len(args.eups_stack[0])>1:
             args.eups_stack = args.eups_stack[0]
         else:
             args.eups_stack = args.eups_stack[0][0].split()
-      
+        # If ngix -- cycle trough server's list
+        if self.args.nginx:
+            self.args.nginx_server = pipeutils.cycle_list_index(index,['desnginx', 'dessub'])
+     
         if args.configfile: 
             if '/' in args.configfile:
                 pass
@@ -51,12 +57,76 @@ class PipeLine(object):
                                         "{0}_submit_template.des".format(args.pipeline))
         args.rendered_template_path = []
         
+    def make_templates(self,columns=[],groupby=None):
+        """ Loop through dataframe and write submitfile for each exposures"""
+        # Updating args for each row
+        for name, group in self.args.dataframe.groupby(by=groupby):
+            # Setting jira parameters
+            self.args.reqnum, self.args.jira_parent= group['reqnum'].unique()[0],group['jira_parent'].unique()[0]
+            # Finding epoch of given data
+            if self.args.epoch:
+                self.args.epoch_name = self.args.epoch
+            else:
+                if self.pipeline ='widefield':
+                    first_expnum = group['expnum'].unique()[0]
+                else:
+                    first_expnum = group['first_exp'].unique()[0]
+                self.args.epoch_name = self.args.cur.find_epoch(first_exp)
+            # Adding column values to args
+            for c in columns:
+                setattr(self.args,c, group[c].unique()[0])
+            # Making output directories and filenames
+            if self.args.out:
+                if not os.path.isdir(self.args.out):
+                    os.makedirs(self.args.out)
+                self.args.output_dir = self.args.out
+            else:
+                req_dir = 'r%s' % self.args.reqnum
+                self.args.output_dir = os.path.join(self.args.pipebox_work,req_dir)
+                if not os.path.isdir(self.args.output_dir):
+                    os.makedirs(self.args.output_dir)
+            # Creating output name
+            output_name_suffix = "r%s_%s_%s_rendered_template.des" % \
+                                (self.args.reqnum,self.args.target_site,self.args.pipeline)
+            
+            str_base = []
+            for i,k in enumerate(self.args.output_name_keys):
+                st = "%s" % getattr(self.args,k)
+                str_base.append(st)
+            output_name_base = '_'.join(str_base)
+            output_name = output_name_base + '_' + output_name_suffix
+            output_path = os.path.join(self.args.output_dir,output_name)
+            self.args.submitfile = output_path 
+            # Writing template
+            if self.args.ignore_processed:
+                if self.args.cur.check_submitted(self.args.expnum,self.args.reqnum):
+                    continue
+                else:
+                    pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
+                    self.args.rendered_template_path.append(output_path)
+                    if not self.args.savefiles:
+                        super(self.__class__,self).submit(self.args)
+            else: 
+                pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
+                self.args.rendered_template_path.append(output_path)
+                if not self.args.savefiles:
+                    super(self.__class__,self).submit(self.args)
+                 
+                    # Make comment in JIRA
+                    if not self.args.ignore_jira:
+                        con=jira_utils.get_con(self.args.jira_section)
+                        if not jira_utils.does_comment_exist(con,reqnum=self.args.reqnum):
+                            jira_utils.make_comment(con,datetime=datetime.datetime.now(),reqnum=self.args.reqnum)
 
-    __metaclass__ = ABCMeta
-    @abstractmethod
-    def make_templates():
-        """Must be defined for each pipeline subclass"""
-        pass
+        if self.args.auto:
+            if not self.args.rendered_template_path: 
+                print "No new data found on %s..." % datetime.datetime.now()
+            else: print "%s data found on %s..." % (len(self.args.rendered_template_path),
+                                                         datetime.datetime.now())
+
+        if self.args.savefiles:
+            super(self.__class__,self).save(self.args)
+
     
     def ticket(self,args,groupby='nite'):
         """ Create  JIRA ticket for each group specified"""
@@ -164,20 +234,17 @@ class SuperNova(PipeLine):
         self.args = pipeargs.SupernovaArgs().cmdline()
         self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
         self.args.pipeline = self.args.desstat_pipeline = "sne"
+        self.args.output_name_keys = ['nite','field','band']
 
         super(SuperNova,self).update_args(self.args)         
         self.args.cur = pipequery.SupernovaQuery(self.args.db_section)
         
-        # If ngix -- cycle trough server's list
-        if self.args.nginx:
-            self.args.nginx_server = pipeutils.cycle_list_index(index,['desnginx', 'dessub'])
-
         # Creating dataframe from exposures 
 #       I don't think we want this for SN
 #        if self.args.exptag:
 #            self.args.exposure_list = self.args.cur.get_expnums_from_tag(self.args.exptag)
 #            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
-        elif self.args.nite:
+        if self.args.nite:
             self.args.triplet_list = self.args.cur.get_triplets_from_nite(self.args.nite)
             self.args.dataframe = pd.DataFrame(self.args.triplet_list,columns=['nite','field','band'])
         elif self.args.triplet:
@@ -207,33 +274,6 @@ class SuperNova(PipeLine):
         self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
         self.args.dataframe = self.args.dataframe.fillna(False)
 
-    def make_templates(self):
-        """ Loop through dataframe and write submitfile for each exposures"""
-        for index,row in self.args.dataframe.iterrows():
-            self.args.expnums,self.args.band,self.args.nite,self.args.firstexp,self.args.field,self.args.single,self.args.fringe,self.args.ccdlist,self.args.seqnum = row['exp_nums'],row['band'],row['nite'],row['first_exp'],'SN-'+row['field'][-2:],row['single'],row['fringe'],row['ccdlist'],row['seqnum']
-            self.args.reqnum, self.args.jira_parent= int(row['reqnum']),row['jira_parent']
-#            if self.args.epoch:
-#                self.args.epoch_name = self.args.epoch
-#            else:
-#                self.args.epoch_name = self.args.cur.find_epoch(int(row['first_exp']))
-            # Making output directories and filenames
-            req_dir = 'r%s' % self.args.reqnum
-            self.args.output_dir = os.path.join(self.args.pipebox_work,req_dir)
-            if not os.path.isdir(self.args.output_dir):
-                os.makedirs(self.args.output_dir)
-            output_name = "%s_%s_%s_r%s_%s_supernova_rendered_template.des" % \
-                        (self.args.nite,self.args.field,self.args.band,self.args.reqnum,self.args.target_site)
-            output_path = os.path.join(self.args.output_dir,output_name)
-    
-            # Writing template
-            pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
-            self.args.rendered_template_path.append(output_path)
-            if not self.args.savefiles:
-                super(SuperNova,self).submit(self.args)
-
-        if self.args.savefiles:
-            super(SuperNova,self).save(self.args)
-
 class WideField(PipeLine):
 
     def __init__(self):
@@ -245,12 +285,9 @@ class WideField(PipeLine):
             self.args.desstat_pipeline = "firstcut"
         else:
             self.args.desstat_pipeline = "finalcut" 
-        super(WideField,self).update_args(self.args)
 
-        if self.args.ignore_jira:
-            if not self.args.reqnum or not self.args.jira_parent:
-                print "Must specify both --reqnum and --jira_parent to avoid using JIRA!"
-                sys.exit(1)
+        super(WideField,self).update_args(self.args)
+        self.args.output_name_keys = ['nite','expnum','band']
        
         self.args.cur = pipequery.WidefieldQuery(self.args.db_section)
         
@@ -270,9 +307,6 @@ class WideField(PipeLine):
                                                    tag=self.args.caltag)
                 self.args.calnite,self.args.calrun = precal[0],precal[1]
         
-        # If ngix -- cycle trough server's list
-        if self.args.nginx:
-            self.args.nginx_server = pipeutils.cycle_list_index(index,['desnginx', 'dessub'])
         if self.args.RA or self.args.Dec:
             if not (self.args.RA and self.args.Dec):
                 print "Must specify both RA and Dec."
@@ -318,59 +352,6 @@ class WideField(PipeLine):
         except: 
             pass
 
-    def make_templates(self):
-        """ Loop through dataframe and write submitfile for each exposures"""
-        for index,row in self.args.dataframe.iterrows():
-            self.args.expnum,self.args.band,self.args.nite = row['expnum'],row['band'],row['nite']
-            self.args.reqnum, self.args.jira_parent= int(row['reqnum']),row['jira_parent']
-            if self.args.epoch:
-                self.args.epoch_name = self.args.epoch
-            else:
-                self.args.epoch_name = self.args.cur.find_epoch(row['expnum'])
-            # Making output directories and filenames
-            if self.args.out:
-                if not os.path.isdir(self.args.out):
-                    os.makedirs(self.args.out)
-                self.args.output_dir = self.args.out
-            else:
-                req_dir = 'r%s' % self.args.reqnum
-                self.args.output_dir = os.path.join(self.args.pipebox_work,req_dir)
-                if not os.path.isdir(self.args.output_dir):
-                    os.makedirs(self.args.output_dir)
-            output_name = "%s_%s_r%s_%s_widefield_rendered_template.des" % \
-                        (self.args.expnum,self.args.band,self.args.reqnum,self.args.target_site)
-            output_path = os.path.join(self.args.output_dir,output_name)
-            self.args.submitfile = output_path 
-            # Writing template
-            if self.args.ignore_processed:
-                if self.args.cur.check_submitted(self.args.expnum,self.args.reqnum):
-                    continue
-                else:
-                    pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
-                    self.args.rendered_template_path.append(output_path)
-                    if not self.args.savefiles:
-                        super(WideField,self).submit(self.args)
-            else: 
-                pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
-                self.args.rendered_template_path.append(output_path)
-                if not self.args.savefiles:
-                    super(WideField,self).submit(self.args)
-                    
-                    # Make comment in JIRA
-                    if not self.args.ignore_jira:
-                        con=jira_utils.get_con(self.args.jira_section)
-                        if not jira_utils.does_comment_exist(con,reqnum=self.args.reqnum):
-                            jira_utils.make_comment(con,datetime=datetime.datetime.now(),reqnum=self.args.reqnum)
-
-        if self.args.auto:
-            if not self.args.rendered_template_path: 
-                print "No new exposures found on %s..." % datetime.datetime.now()
-            else: print "%s exposures found on %s..." % (len(self.args.rendered_template_path),
-                                                             datetime.datetime.now())
-
-        if self.args.savefiles:
-            super(WideField,self).save(self.args)
-
 class NitelyCal(PipeLine):
 
     def __init__(self):
@@ -381,7 +362,7 @@ class NitelyCal(PipeLine):
         super(NitelyCal,self).update_args(self.args)
         self.args.cur = pipequery.NitelycalQuery(self.args.db_section)
         self.args.bands = self.args.bands.strip().split(',') 
-
+        self.args.output_name_keys = ['niterange']
         # If auto-submit mode on
         if self.args.auto:
             self.args.ignore_processed=True
@@ -401,8 +382,6 @@ class NitelyCal(PipeLine):
             print "Please specify --nite or --maxnite or --minnite"
             sys.exit(1)
 
-        
-        
         # For each use-case create bias/flat list and dataframe
         if self.args.biaslist and self.args.flatlist:
             # create biaslist from file
@@ -458,15 +437,16 @@ class NitelyCal(PipeLine):
                     self.args.niterange = str(self.args.nitelist[0]) + 't' + str(self.args.nitelist[-1])[4:]
                 else: 
                     self.args.niterange = str(self.args.minnite) + 't' + str(self.args.maxnite[-1])[4:]
+
             # Removing bands that are not specified
             self.args.dataframe = self.args.dataframe[self.args.dataframe.band.isin(self.args.bands)\
                                                       |self.args.dataframe.obstype.isin(['zero'])]
 
-            self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
-
         if self.args.combine:
             self.args.desstat_pipeline = "supercal"
             self.args.dataframe['niterange'] = self.args.niterange
+            self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
+
         else:
             self.args.desstat_pipeline = "precal"
             for index,row in self.args.dataframe.iterrows():
@@ -476,6 +456,25 @@ class NitelyCal(PipeLine):
                     self.args.dataframe.insert(len(self.args.dataframe.columns),'niterange',None)
                     self.args.dataframe.loc[index,('niterange')] = str(row['nite'])
 
+        # Update dataframe with lists
+        try:
+            self.args.dataframe.insert(len(self.args.dataframe),'bias_list',None)
+            self.args.dataframe.insert(len(self.args.dataframe),'bias_list',None)
+        except: pass
+
+        for niterange,group in self.args.dataframe.groupby(by=['niterange']):
+            index = group.index
+            if not self.args.combine:
+                # Append bias/flat lists to dataframe
+                self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(group)
+
+            self.args.first_exp = self.args.flat_list[0]
+            self.args.bias_list = ','.join(str(i) for i in self.args.bias_list)
+            self.args.flat_list = ','.join(str(i) for i in self.args.flat_list)
+            self.args.dataframe.loc[index,'flat_list'] = self.args.flat_list
+            self.args.dataframe.loc[index,'bias_list'] = self.args.bias_list
+            self.args.dataframe.loc[index,'expnum'] = self.args.expnum
+        
         # Exit if there are not at least 5 exposures per band
         if self.args.auto:
             nitelycal_lib.is_count_by_band(self.args.dataframe,bands_to_process=self.args.bands,
@@ -494,67 +493,6 @@ class NitelyCal(PipeLine):
             print "\nData to be processed: %s" % ','.join(self.args.nitelist)
             nitelycal_lib.final_count_by_band(self.args.dataframe)
             sys.exit(0)
-
-    def make_templates(self):
-        """ Loop through dataframe and write submitfile for each nite/niterange"""
-        for niterange,group in self.args.dataframe.groupby(by=['niterange']):
-            if self.args.combine:
-                self.args.nite = group['niterange'].unique()[0]
-                self.args.bias_list = ','.join(str(i) for i in self.args.bias_list)
-                self.args.flat_list = ','.join(str(i) for i in self.args.flat_list)
-            else:
-                self.args.nite = group['nite'].unique()[0]
-                # Append bias/flat lists to dataframe
-                bias_list,flat_list = nitelycal_lib.create_lists(group)
-                self.args.bias_list = ','.join(str(i) for i in bias_list)
-                self.args.flat_list = ','.join(str(i) for i in flat_list)
-           
-            if self.args.epoch:
-                self.args.epoch_name = self.args.epoch
-            else:
-                self.args.epoch_name = self.args.cur.find_epoch(self.args.bias_list.split(',')[0])
-            self.args.reqnum = group['reqnum'].unique()[0]
-            self.args.jira_parent = group['jira_parent'].unique()[0]
-    
-            if self.args.out:
-                if not os.path.isdir(self.args.out):
-                    os.makedirs(self.args.out)
-                self.args.output_dir = self.args.out
-            else:
-                #req_dir = 'r%s' % self.args.reqnum
-                #output_dir = os.path.join(self.args.pipebox_work,req_dir)
-                #if not os.path.isdir(output_dir):
-                #    os.makedirs(output_dir)
-                self.args.output_dir = self.args.pipebox_work
-            output_name = "%s_r%s_%s_nitelycal_rendered_template.des" % (self.args.nite,self.args.reqnum,self.args.target_site)
-            output_path = os.path.join(self.args.output_dir,output_name)
-            # Writing template
-            if self.args.ignore_processed:
-                if self.args.cur.check_submitted(self.args.nite):
-                    continue
-                else:
-                    pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
-                    self.args.rendered_template_path.append(output_path)
-                    self.args.submitfile = output_path
-                    if not self.args.savefiles:
-                        super(NitelyCal,self).submit(self.args)
-            else:
-                pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
-                self.args.rendered_template_path.append(output_path)
-                self.args.submitfile = output_path
-                if not self.args.savefiles:
-                    super(NitelyCal,self).submit(self.args)
-
-                # Make comment in JIRA
-                if not self.args.ignore_jira:
-                    try: self.args.attnum
-                    except: self.args.attnum= None
-                    con=jira_utils.get_con(self.args.jira_section)
-                    jira_utils.make_comment(con,datetime=datetime.datetime.now(),reqnum=self.args.reqnum,
-                                            content = self.args.attnum)
-
-        if self.args.savefiles:
-            super(NitelyCal,self).save(self.args)
 
 class HostName(PipeLine):
     

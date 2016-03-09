@@ -14,4 +14,4 @@ else:
     # create tickets based on each nite
     nitelycal.ticket(args)
 # write submit files for each nite and submit if necessary
-nitelycal.make_templates() 
+nitelycal.make_templates(columns=['niterange','bias_list','flat_list'],groupby='niterange') 

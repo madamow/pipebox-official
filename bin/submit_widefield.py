@@ -12,4 +12,4 @@ if args.exptag:
 else:
     widefield.ticket(args)
 # write submit files and submit if necessary
-widefield.make_templates()
+widefield.make_templates(columns=['nite','expnum','band'],groupby='expnum')
