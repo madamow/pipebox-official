@@ -67,7 +67,7 @@ class PipeLine(object):
             if self.args.epoch:
                 self.args.epoch_name = self.args.epoch
             else:
-                if self.pipeline ='widefield':
+                if self.pipeline =='widefield':
                     first_expnum = group['expnum'].unique()[0]
                 else:
                     first_expnum = group['first_exp'].unique()[0]
@@ -416,7 +416,7 @@ class NitelyCal(PipeLine):
                 _,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,                                                                                     self.args.bands,
                                                                        k=self.args.max_num)
 
-                if not self.args.maxnite and self.args.minnite:
+                if not self.args.maxnite and not self.args.minnite:
                     # If not enough exposures per band +/- one day until enough are found
                     while not_enough_exp: 
                         oneday = datetime.timedelta(days=1)
@@ -473,7 +473,7 @@ class NitelyCal(PipeLine):
             self.args.flat_list = ','.join(str(i) for i in self.args.flat_list)
             self.args.dataframe.loc[index,'flat_list'] = self.args.flat_list
             self.args.dataframe.loc[index,'bias_list'] = self.args.bias_list
-            self.args.dataframe.loc[index,'expnum'] = self.args.expnum
+            self.args.dataframe.loc[index,'first_expn'] = self.args.first_exp
         
         # Exit if there are not at least 5 exposures per band
         if self.args.auto:
