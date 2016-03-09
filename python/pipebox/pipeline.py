@@ -67,11 +67,11 @@ class PipeLine(object):
             if self.args.epoch:
                 self.args.epoch_name = self.args.epoch
             else:
-                if self.pipeline =='widefield':
+                if self.args.pipeline == 'widefield':
                     first_expnum = group['expnum'].unique()[0]
                 else:
                     first_expnum = group['first_exp'].unique()[0]
-                self.args.epoch_name = self.args.cur.find_epoch(first_exp)
+                self.args.epoch_name = self.args.cur.find_epoch(first_expnum)
             # Adding column values to args
             for c in columns:
                 setattr(self.args,c, group[c].unique()[0])
@@ -436,7 +436,7 @@ class NitelyCal(PipeLine):
                                                                                k=self.args.max_num)
                     self.args.niterange = str(self.args.nitelist[0]) + 't' + str(self.args.nitelist[-1])[4:]
                 else: 
-                    self.args.niterange = str(self.args.minnite) + 't' + str(self.args.maxnite[-1])[4:]
+                    self.args.niterange = str(self.args.minnite) + 't' + str(self.args.maxnite)[4:]
 
             # Removing bands that are not specified
             self.args.dataframe = self.args.dataframe[self.args.dataframe.band.isin(self.args.bands)\
@@ -473,7 +473,7 @@ class NitelyCal(PipeLine):
             self.args.flat_list = ','.join(str(i) for i in self.args.flat_list)
             self.args.dataframe.loc[index,'flat_list'] = self.args.flat_list
             self.args.dataframe.loc[index,'bias_list'] = self.args.bias_list
-            self.args.dataframe.loc[index,'first_expn'] = self.args.first_exp
+            self.args.dataframe.loc[index,'first_exp'] = self.args.first_exp
         
         # Exit if there are not at least 5 exposures per band
         if self.args.auto:

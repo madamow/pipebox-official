@@ -13,7 +13,7 @@ dflat_expnum = {{ args.flat_list }}
 {% if not args.labels %}
 label= ${nite}{% endif %}
 
-nite = {{ args.nite }}
+nite = {{ args.niterange }}
 {% if args.ccdnum %}
 ccdnum = {{ args.ccdnum }}{% endif %}
 

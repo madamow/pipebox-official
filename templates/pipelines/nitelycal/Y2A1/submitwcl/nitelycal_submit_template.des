@@ -34,10 +34,10 @@ dflat_expnum = {{ args.flat_list }}
 
 
 {% if not args.labels %}
-label = {{ args.campaign }}_{{ args.nite }}
+label = {{ args.campaign }}_{{ args.niterange }}
 {% endif %}
 
-nite = {{ args.nite }}
+nite = {{ args.niterange }}
 unitname = ${nite}
 
 {% if args.ccdnum %}
