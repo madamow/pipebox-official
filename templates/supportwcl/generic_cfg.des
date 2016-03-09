@@ -44,13 +44,13 @@ submit_files_mvmt     = filemgmt.job_mvmt_http.JobArchiveHttp
 
     # Blue Water services file for most NCSA BW users
     <bluewaters>
-	target_des_services = /u/sciteam/{{ args['USER'] }}/.desservices.ini
-        #jobroot = /u/sciteam/{{ args['USER'] }}/scratch
+	target_des_services = /scratch/sciteam/{{ args['USER'] }}/.desservices.ini
+        #jobroot = /scratch/sciteam/{{ args['USER'] }}/scratch
     </bluewaters>
 
     <bluewaters-dev>
-	target_des_services = /u/sciteam/{{ args['USER'] }}/.desservices.ini
-        #jobroot = /u/sciteam/{{ args['USER'] }}/scratch
+	target_des_services = /scratch/sciteam/{{ args['USER'] }}/.desservices.ini
+        #jobroot = /scratch/sciteam/{{ args['USER'] }}/scratch
     </bluewaters-dev>
 
     <campuscluster>

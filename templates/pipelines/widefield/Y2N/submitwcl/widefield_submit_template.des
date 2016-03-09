@@ -31,7 +31,8 @@ calnite = {{ args.calnite }}
 calrun = {{ args.calrun }}
 
 {% if args.ccdnum %}
-ccdnum = {{ args.ccdnum }} {% endif %}
+ccdnum = {{ args.ccdnum }} 
+{% endif %}
 
 {# adding defaults!!! #}
 {% if args.band in ['z','Y'] %} 
