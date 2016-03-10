@@ -33,17 +33,18 @@ class PipeLine(object):
                 sys.exit(1)
 
         for a in ['RA','Dec','niterange','eups_stack']:
-            if len(getattr(args,a)[0]) > 1:
-                setattr(args,a,getattr(args,a)[0])
-            else:
-                setattr(args,a,getattr(args,a)[0][0].split())
+            if getattr(args,a):
+                if len(getattr(args,a)[0]) > 1:
+                    setattr(args,a,getattr(args,a)[0])
+                else:
+                    setattr(args,a,getattr(args,a)[0][0].split())
         
         # Setting niterange
         if self.args.nite and self.args.niterange:
             print "Warning: Both nite and niterange are specified. Only nite will be used."
         if self.args.nite:
             self.args.nitelist = self.args.nite.strip().split(',')
-        else:
+        if self.args.niterange:
             self.args.nitelist = pipeutils.create_nitelist(self.args.niterange[0],self.args.niterange[1]) 
 
         # If ngix -- cycle trough server's list
@@ -383,16 +384,22 @@ class NitelyCal(PipeLine):
             self.args.ignore_processed=True
             pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
             self.args.nite = self.args.cur.get_max_nite()[1] 
-        
-        if self.args.maxnite or self.args.minnite and self.args.niterange:
+
+        if (self.args.maxnite or self.args.minnite) and self.args.niterange:
             print 'Warning: if specifying minnite and/or maxnite, do not use niterange' 
             sys.exit()
 
         # Create remaining list of nites if necessary
+        self.args.calculate_nites = False
+        if self.args.nite:
+            if len(self.args.nitelist) == 1:
+                self.args.calculate_nites = True
         if self.args.maxnite and not self.args.minnite:
             self.args.nitelist = self.args.maxnite.split(',')
+            self.args.calculate_nites = True
         elif self.args.minnite and not self.args.maxnite:
             self.args.nitelist = self.args.minnite.split(',')
+            self.args.calculate_nites = True
         elif self.args.minnite and self.args.maxnite:
             self.args.nitelist = pipeutils.create_nitelist(self.args.minnite,self.args.maxnite)
 
@@ -417,27 +424,19 @@ class NitelyCal(PipeLine):
         else:
             cal_query = self.args.cur.get_cals(self.args.nitelist)
             self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
-            if self.args.maxnite and self.args.minnite:
-                cal_query = self.args.cur.get_cals(self.args.nitelist)
-                self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
-
             if self.args.combine:
-                _,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,
-                                                                       self.args.bands,
-                                                                       k=self.args.max_num)
-
-                if not self.args.maxnite and not self.args.minnite:
+                if self.args.calculate_nites:
+                    _,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,
+                                                                           self.args.bands,
+                                                                           k=self.args.max_num)
                     # If not enough exposures per band +/- one day until enough are found
                     while not_enough_exp: 
                         oneday = datetime.timedelta(days=1)
                         low_nite = datetime.datetime.strptime(self.args.nitelist[0],'%Y%m%d').date()
                         high_nite = datetime.datetime.strptime(self.args.nitelist[-1],'%Y%m%d').date()
                         if self.args.nite:
-                            if len(self.args.nitelist) == 1:
-                                self.args.nitelist.insert(0,str(low_nite-oneday).replace('-',''))
-                                self.args.nitelist.append(str(high_nite+oneday).replace('-',''))
-                            else:
-                                self.args.nitelist = self.args.nitelist
+                            self.args.nitelist.insert(0,str(low_nite-oneday).replace('-',''))
+                            self.args.nitelist.append(str(high_nite+oneday).replace('-',''))
                         if self.args.maxnite and not self.args.minnite:
                             self.args.nitelist.insert(0,str(low_nite-oneday).replace('-',''))
                         if self.args.minnite and not self.args.maxnite:
