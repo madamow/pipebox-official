@@ -22,14 +22,23 @@ class PipeLine(object):
             if not self.args.reqnum or not self.args.jira_parent:
                 print "Must specify both --reqnum and --jira_parent to avoid using JIRA!"
                 sys.exit(1)
-        if len(args.eups_stack[0])>1:
-            args.eups_stack = args.eups_stack[0]
-        else:
-            args.eups_stack = args.eups_stack[0][0].split()
+        
+        # Format RA and Dec if given
+        if self.args.RA or self.args.Dec:
+            if not (self.args.RA and self.args.Dec):
+                print "Must specify both RA and Dec."
+                sys.exit(1)
+
+        for a in ['RA','Dec','niterange','eups_stack']:
+            if len(getattr(args,a)[0]) > 1:
+                setattr(args,a,getattr(args,a)[0])
+            else:
+                setattr(args,a,getattr(args,a)[0][0].split())
+
         # If ngix -- cycle trough server's list
         if self.args.nginx:
             self.args.nginx_server = pipeutils.cycle_list_index(index,['desnginx', 'dessub'])
-     
+    
         if args.configfile: 
             if '/' in args.configfile:
                 pass
@@ -307,10 +316,6 @@ class WideField(PipeLine):
                                                    tag=self.args.caltag)
                 self.args.calnite,self.args.calrun = precal[0],precal[1]
         
-        if self.args.RA or self.args.Dec:
-            if not (self.args.RA and self.args.Dec):
-                print "Must specify both RA and Dec."
-                sys.exit(1)
         
         # Creating dataframe from exposures 
         if self.args.resubmit_failed:
@@ -375,8 +380,11 @@ class NitelyCal(PipeLine):
             self.args.ignore_processed=True
             pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
             self.args.nite = self.args.cur.get_max_nite()[1] 
-
+        
         # Create list of nites
+        if self.args.niterange:
+            self.args.minnite = self.args.niterange[0]
+            self.args.maxnite = self.args.niterange[1] 
         if self.args.nite:
             self.args.nitelist = self.args.nite.split(',')
         elif self.args.maxnite and not self.args.minnite:

@@ -76,6 +76,8 @@ class PipeArgs(object):
         parser.add('--nite',help='For auto mode: if specified will submit all exposures found \
                          from nite')
         parser.add('--niterange',nargs='+',action='append',help='Specify a range of nites')
+        parser.add('--RA','-ra',nargs='+',action='append',help='RA in deg., in the order of min max')
+        parser.add('--Dec','-dec',nargs='+',action='append',help='Dec in deg., in the order of min max')
         parser.add('--epoch',help='Observing epoch. If not specified, will be calculated. E.g.,\
                          SVE1,SVE2,Y1E1,Y1E2,Y2E1,Y2E2...')
 
@@ -132,8 +134,6 @@ class WidefieldArgs(PipeArgs):
                         exposure table to filter expnums on by nite")
         parser.add('--process_all',action='store_true',help="Ignore propid and program when processing \
                         by nite.")
-        parser.add('--RA','-ra',nargs='+',action='append',help='RA in degrees, in the order of min max')
-        parser.add('--Dec','-dec',nargs='+',action='append',help='Dec in degrees, in the order of min max')
         args = parser.parse_args()
 
         return args
