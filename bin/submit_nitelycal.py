@@ -14,4 +14,5 @@ else:
     # create tickets based on each nite
     nitelycal.ticket(args)
 # write submit files for each nite and submit if necessary
+# columns should only be values that change per submit (groupby)
 nitelycal.make_templates(columns=['niterange','bias_list','flat_list'],groupby='niterange') 
