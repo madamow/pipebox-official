@@ -323,8 +323,13 @@ class WideField(PipeLine):
         elif self.args.expnum:
             self.args.exposure_list = self.args.expnum.split(',')
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
-        elif self.args.nite:
-            self.args.nite = self.args.nite.strip().split(',')
+        elif self.args.nite or self.args.niterange:
+            if self.args.nite:
+                self.args.nite = self.args.nite.strip().split(',')
+            else:
+                self.args.niterange = self.args.niterange[0]
+                self.args.niterange.sort()
+                self.args.nite = pipeutils.create_nitelist(self.args.niterange[0],self.args.niterange[1]) 
             exposures = self.args.cur.get_expnums_from_nites(self.args.nite,propid=self.args.propid,
                                 program=self.args.program,process_all=self.args.process_all)
             if not exposures:
@@ -404,11 +409,12 @@ class NitelyCal(PipeLine):
             cal_query = self.args.cur.get_cals(self.args.nitelist)
             self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
             if self.args.maxnite and self.args.minnite:
-                oneday = datetime.timedelta(days=1)
-                high_nite = datetime.datetime.strptime(self.args.nitelist[-1],'%Y%m%d').date()
-                while int(str(high_nite).replace('-','')) <= int(self.args.maxnite):
-                    self.args.nitelist.append(str(high_nite+oneday).replace('-',''))
-                    high_nite = datetime.datetime.strptime(self.args.nitelist[-1],'%Y%m%d').date()
+                # oneday = datetime.timedelta(days=1)
+                # high_nite = datetime.datetime.strptime(self.args.nitelist[-1],'%Y%m%d').date()
+                # while int(str(high_nite).replace('-','')) <= int(self.args.maxnite):
+                   #  self.args.nitelist.append(str(high_nite+oneday).replace('-',''))
+                   #  high_nite = datetime.datetime.strptime(self.args.nitelist[-1],'%Y%m%d').date()
+                self.args.nitelist = pipeutils.create_nitelist(self.args.minnite,self.args.maxnite)
                 cal_query = self.args.cur.get_cals(self.args.nitelist)
                 self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
 

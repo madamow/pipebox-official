@@ -314,12 +314,15 @@ class WidefieldQuery(PipeQuery):
             get_expnum = base_query
         self.cur.execute(get_expnum)
         results = self.cur.fetchall()
-        [expnums,nites_from_query] = map(list, zip(*results))
+        try:
+            [expnums,nites_from_query] = map(list, zip(*results))
+        except:
+            print "Warning: No expnums found for nites {}.".format(','.join(nites))
+            exit(0)
         diff = list(set(nites)-set(nites_from_query))
         diff.sort(key=str.lower)
         if diff:
             print "Warning: No expnums found for nites {}.".format(','.join(diff))    
-
         return expnums
 
     def find_precal(self,date,threshold,override=True,tag=None):

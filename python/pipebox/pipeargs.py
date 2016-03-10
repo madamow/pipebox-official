@@ -75,6 +75,7 @@ class PipeArgs(object):
         parser.add('--ccdnum',help='CCDs to be processed.')
         parser.add('--nite',help='For auto mode: if specified will submit all exposures found \
                          from nite')
+        parser.add('--niterange',nargs='+',action='append',help='Specify a range of nites')
         parser.add('--epoch',help='Observing epoch. If not specified, will be calculated. E.g.,\
                          SVE1,SVE2,Y1E1,Y1E2,Y2E1,Y2E2...')
 
