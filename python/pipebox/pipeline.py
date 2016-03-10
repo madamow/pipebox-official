@@ -384,25 +384,17 @@ class NitelyCal(PipeLine):
             pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
             self.args.nite = self.args.cur.get_max_nite()[1] 
         
-        if self.args.maxnite and self.args.minnite and self.args.niterange:
+        if self.args.maxnite or self.args.minnite and self.args.niterange:
             print 'Warning: if specifying minnite and/or maxnite, do not use niterange' 
             sys.exit()
 
-        # Create list of nites
-        if args.nite:
-            pass
-        if self.args.niterange:
-            self.args.minnite = self.args.niterange[0]
-            self.args.maxnite = self.args.niterange[1] 
+        # Create remaining list of nites if necessary
         if self.args.maxnite and not self.args.minnite:
             self.args.nitelist = self.args.maxnite.split(',')
         elif self.args.minnite and not self.args.maxnite:
             self.args.nitelist = self.args.minnite.split(',')
         elif self.args.minnite and self.args.maxnite:
             self.args.nitelist = pipeutils.create_nitelist(self.args.minnite,self.args.maxnite)
-        else:
-            print "Please specify --nite or --maxnite or --minnite or --niterange"
-            sys.exit(1)
 
         # For each use-case create bias/flat list and dataframe
         if self.args.biaslist and self.args.flatlist:
