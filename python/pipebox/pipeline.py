@@ -384,6 +384,10 @@ class NitelyCal(PipeLine):
             pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
             self.args.nite = self.args.cur.get_max_nite()[1] 
         
+        if self.args.maxnite and self.args.minnite and self.args.niterange:
+            print 'Warning: if specifying minnite and/or maxnite, do not use niterange' 
+            sys.exit()
+
         # Create list of nites
         if args.nite:
             pass
@@ -437,8 +441,11 @@ class NitelyCal(PipeLine):
                         low_nite = datetime.datetime.strptime(self.args.nitelist[0],'%Y%m%d').date()
                         high_nite = datetime.datetime.strptime(self.args.nitelist[-1],'%Y%m%d').date()
                         if self.args.nite:
-                            self.args.nitelist.insert(0,str(low_nite-oneday).replace('-',''))
-                            self.args.nitelist.append(str(high_nite+oneday).replace('-',''))
+                            if len(self.args.nitelist) == 1:
+                                self.args.nitelist.insert(0,str(low_nite-oneday).replace('-',''))
+                                self.args.nitelist.append(str(high_nite+oneday).replace('-',''))
+                            else:
+                                self.args.nitelist = self.args.nitelist
                         if self.args.maxnite and not self.args.minnite:
                             self.args.nitelist.insert(0,str(low_nite-oneday).replace('-',''))
                         if self.args.minnite and not self.args.maxnite:
