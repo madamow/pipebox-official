@@ -18,6 +18,9 @@ class PipeLine(object):
 
     def update_args(self,args):
         """ Update pipeline's arguments with template paths"""
+
+        args.pipebox_dir,args.pipebox_work=self.pipebox_dir,self.pipebox_work
+
         if self.args.ignore_jira:
             if not self.args.reqnum or not self.args.jira_parent:
                 print "Must specify both --reqnum and --jira_parent to avoid using JIRA!"
@@ -34,6 +37,14 @@ class PipeLine(object):
                 setattr(args,a,getattr(args,a)[0])
             else:
                 setattr(args,a,getattr(args,a)[0][0].split())
+        
+        # Setting niterange
+        if self.args.nite and self.args.niterange:
+            print "Warning: Both nite and niterange are specified. Only nite will be used."
+        if self.args.nite:
+            self.args.nitelist = self.args.nite.strip().split(',')
+        else:
+            self.args.nitelist = pipeutils.create_nitelist(self.args.niterange[0],self.args.niterange[1]) 
 
         # If ngix -- cycle trough server's list
         if self.args.nginx:
@@ -45,6 +56,7 @@ class PipeLine(object):
             else:
                 args.configfile = os.path.join(os.getcwd(),args.configfile) 
 
+        # Checking if exclude list is a comma-separated list of line-separated file
         if args.exclude_list:
             exclude_file = os.path.isfile(args.exclude_list)
             if exclude_file:
@@ -55,9 +67,8 @@ class PipeLine(object):
                     args.exclude_list = args.exclude_list.strip().split(',')
                 except IOError:
                    print "{0} does not exist!".format(args.exclude_list)
-        
-        args.pipebox_dir,args.pipebox_work=self.pipebox_dir,self.pipebox_work
-        
+       
+        # Setting template path(s) 
         campaign_path = "pipelines/%s/%s/submitwcl" % (args.pipeline,args.campaign)
         if args.template_name:
             args.submit_template_path = os.path.join(campaign_path,args.template_name)
@@ -254,7 +265,7 @@ class SuperNova(PipeLine):
 #            self.args.exposure_list = self.args.cur.get_expnums_from_tag(self.args.exptag)
 #            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         if self.args.nite:
-            self.args.triplet_list = self.args.cur.get_triplets_from_nite(self.args.nite)
+            self.args.triplet_list = self.args.cur.get_triplets_from_nite(self.args.nitelist)
             self.args.dataframe = pd.DataFrame(self.args.triplet_list,columns=['nite','field','band'])
         elif self.args.triplet:
             self.args.triplet_list = np.array(self.args.triplet.split(',')).reshape([-1,3])
@@ -329,15 +340,7 @@ class WideField(PipeLine):
             self.args.exposure_list = self.args.expnum.split(',')
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.nite or self.args.niterange:
-            if self.args.nite and self.args.niterange:
-                print "Warning: Both nite and niterange are specified. Only nite will be used."
-            if self.args.nite:
-                self.args.nite = self.args.nite.strip().split(',')
-            else:
-                self.args.niterange = self.args.niterange[0]
-                self.args.niterange.sort()
-                self.args.nite = pipeutils.create_nitelist(self.args.niterange[0],self.args.niterange[1]) 
-            exposures = self.args.cur.get_expnums_from_nites(self.args.nite,propid=self.args.propid,
+            exposures = self.args.cur.get_expnums_from_nites(self.args.nitelist,propid=self.args.propid,
                                 program=self.args.program,process_all=self.args.process_all)
             if not exposures:
                 print "No exposures found for given nite. Please check nite."
@@ -382,19 +385,19 @@ class NitelyCal(PipeLine):
             self.args.nite = self.args.cur.get_max_nite()[1] 
         
         # Create list of nites
+        if args.nite:
+            pass
         if self.args.niterange:
             self.args.minnite = self.args.niterange[0]
             self.args.maxnite = self.args.niterange[1] 
-        if self.args.nite:
-            self.args.nitelist = self.args.nite.split(',')
-        elif self.args.maxnite and not self.args.minnite:
+        if self.args.maxnite and not self.args.minnite:
             self.args.nitelist = self.args.maxnite.split(',')
         elif self.args.minnite and not self.args.maxnite:
             self.args.nitelist = self.args.minnite.split(',')
         elif self.args.minnite and self.args.maxnite:
-            self.args.nitelist = self.args.minnite.split(',')
+            self.args.nitelist = pipeutils.create_nitelist(self.args.minnite,self.args.maxnite)
         else:
-            print "Please specify --nite or --maxnite or --minnite"
+            print "Please specify --nite or --maxnite or --minnite or --niterange"
             sys.exit(1)
 
         # For each use-case create bias/flat list and dataframe
@@ -419,12 +422,12 @@ class NitelyCal(PipeLine):
             cal_query = self.args.cur.get_cals(self.args.nitelist)
             self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
             if self.args.maxnite and self.args.minnite:
-                self.args.nitelist = pipeutils.create_nitelist(self.args.minnite,self.args.maxnite)
                 cal_query = self.args.cur.get_cals(self.args.nitelist)
                 self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
 
             if self.args.combine:
-                _,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,                                                                                     self.args.bands,
+                _,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,
+                                                                       self.args.bands,
                                                                        k=self.args.max_num)
 
                 if not self.args.maxnite and not self.args.minnite:
@@ -443,11 +446,10 @@ class NitelyCal(PipeLine):
 
                         cal_query = self.args.cur.get_cals(self.args.nitelist)            
                         self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
-                        _,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,                                                                                     self.args.bands,
+                        _,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,
+                                                                               self.args.bands,
                                                                                k=self.args.max_num)
-                    self.args.niterange = str(self.args.nitelist[0]) + 't' + str(self.args.nitelist[-1])[4:]
-                else: 
-                    self.args.niterange = str(self.args.minnite) + 't' + str(self.args.maxnite)[4:]
+                self.args.niterange = str(self.args.nitelist[0]) + 't' + str(self.args.nitelist[-1])[4:]
 
             # Removing bands that are not specified
             self.args.dataframe = self.args.dataframe[self.args.dataframe.band.isin(self.args.bands)\
@@ -492,7 +494,8 @@ class NitelyCal(PipeLine):
                                            min_per_sequence=self.args.min_per_sequence)
        
         if self.args.combine: 
-            self.args.dataframe,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,                                                                                     self.args.bands,
+            self.args.dataframe,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,
+                                                                                     self.args.bands,
                                                                                      k=self.args.max_num,
                                                                                      verbose= True)
         

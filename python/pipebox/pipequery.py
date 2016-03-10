@@ -148,7 +148,7 @@ class SupernovaQuery(PipeQuery):
         if not nite:
             raise Exception("Must specify nite!")
         print "selecting exposures to submit..."
-        query = "select distinct nite, field, band from manifest_exposure where exptime > 30  and nite = '%s' " % (str(nite))
+        query = "select distinct nite, field, band from manifest_exposure where exptime > 30  and nite in (%s) " % (','.join(nite))
         self.cur.execute(query)
 #        triplets = np.ravel(np.array(self.cur.fetchall()))
 #        return string.join(map(str,triplets),',').reshape[-1:3]
