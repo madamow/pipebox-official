@@ -324,7 +324,8 @@ class WideField(PipeLine):
             self.args.exposure_list = self.args.expnum.split(',')
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.nite or self.args.niterange:
-            # if both are specified nite will take override niterange
+            if self.args.nite and self.args.niterange:
+                print "Warning: Both nite and niterange are specified. Only nite will be used."
             if self.args.nite:
                 self.args.nite = self.args.nite.strip().split(',')
             else:
