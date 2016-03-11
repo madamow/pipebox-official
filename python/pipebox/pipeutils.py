@@ -2,6 +2,7 @@ import os
 import sys
 import re
 import time
+import pandas
 from subprocess import Popen,PIPE,STDOUT
 from commands import getstatusoutput
 from datetime import datetime,timedelta
@@ -114,6 +115,14 @@ def rename_file(args):
                                                 add_string + '_' + args.target_site)
     os.rename(args.submitfile,update_submitfile)
     return args.submitfile
+
+def create_nitelist(min,max):
+    min_date = datetime(int(min[:4]),int(min[4:6]),int(min[6:]))
+    max_date = datetime(int(max[:4]),int(max[4:6]),int(max[6:]))
+    daterange = pandas.date_range(min_date,max_date)
+    daterange = [str(d.date()).replace('-','') for d in daterange]
+    return daterange
+    
 # --------------------------------------------------------------
 # These functions were copied/adapted from desdm_eupsinstal.py
 

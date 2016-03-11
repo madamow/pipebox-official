@@ -22,6 +22,12 @@ submit_files_mvmt     = filemgmt.job_mvmt_http.JobArchiveHttp
 
 # DES SERVICES definitions for known comppute sites. We might want to
 # make this more regimented in the DB
+
+# For fermigrid-ce nodes
+request_memory=8000
+request_cpus=1
+request_disk=90000000
+
 <site>
 
     # Optional
@@ -33,6 +39,19 @@ submit_files_mvmt     = filemgmt.job_mvmt_http.JobArchiveHttp
     <fermigrid-sl6-himem>
         target_des_services = /des/des20.b/data/{{ args['FERMI_ID'] }}/.desservices.ini
     </fermigrid-sl6-himem>
+    
+     <fermigrid-ce>
+        batchtype = condor
+        gridhost = gpce02.fnal.gov
+        gridport = 9619
+        gridtype = condor-ce
+        jobroot = $_CONDOR_SCRATCH_DIR
+        name = fermigrid-ce
+        setupeups = /cvmfs/des.opensciencegrid.org/2015_Q2/eeups/SL6/eups/no_home_gridstart.sh
+        condorjobclass = DES
+        condorjobreq = (Target.IsDESNode == True)
+        target_des_services = /des/des20.b/data/{{ args['FERMI_ID'] }}/.desservices.ini
+    </fermigrid-ce>
 
     <iforge>
 	target_des_services = /ui/ncsa/{{ args['USER'] }}/.desservices.ini
@@ -44,13 +63,13 @@ submit_files_mvmt     = filemgmt.job_mvmt_http.JobArchiveHttp
 
     # Blue Water services file for most NCSA BW users
     <bluewaters>
-	target_des_services = /u/staff/{{ args['USER'] }}/.desservices.ini
-        #jobroot = /u/staff/{{ args['USER'] }}/scratch
+	target_des_services = /scratch/sciteam/{{ args['USER'] }}/.desservices.ini
+        #jobroot = /scratch/sciteam/{{ args['USER'] }}/scratch
     </bluewaters>
 
     <bluewaters-dev>
-	target_des_services = /u/staff/{{ args['USER'] }}/.desservices.ini
-        #jobroot = /u/staff/{{ args['USER'] }}/scratch
+	target_des_services = /scratch/sciteam/{{ args['USER'] }}/.desservices.ini
+        #jobroot = /scratch/sciteam/{{ args['USER'] }}/scratch
     </bluewaters-dev>
 
     <campuscluster>
