@@ -70,14 +70,11 @@ class SupernovaQuery(PipeQuery):
         """ Takes a pandas dataframe and for each exposure add column:value
             band and nite. Returns dataframe"""
         for index,row in df.iterrows():
-            print row
-            print row['nite']
-            print row['field']
-            print row['band']
             expnums=self.get_expnums(row['nite'],row['field'],row['band'])
-            df.loc[index,'exp_nums'] = expnums
+            df.loc[index,'expnums'] = expnums
+            print expnums
             firstexp = expnums.split(',')[0]
-            df.loc[index,'first_exp'] = firstexp
+            df.loc[index,'firstexp'] = firstexp
             df.loc[index,'ccdlist'] = '1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,62'
             df.loc[index,'seqnum'] = 1
             if (row['field'] in ['C3','X3']) or (row['band'] == 'z'):
@@ -168,7 +165,7 @@ class SupernovaQuery(PipeQuery):
         if not band:
             raise Exception("Must specify nite!")
         print "selecting exposures to submit..."
-        query = "select distinct expnum from manifest_exposure where exptime > 30  and nite = '%s' and field = 'SN-%s' and band = '%s' " % (str(nite), field, band)
+        query = "select distinct expnum from manifest_exposure where exptime > 30  and nite = '%s' and field = 'SN-%s' and band = '%s' " % (str(nite), field[-2:], band)
         self.cur.execute(query)
         exps = np.ravel(np.array(self.cur.fetchall()))
         return string.join(map(str,exps),',')

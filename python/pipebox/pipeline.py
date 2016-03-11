@@ -89,10 +89,10 @@ class PipeLine(object):
                 self.args.epoch_name = self.args.epoch
             else:
                 if self.args.pipeline == 'widefield':
-                    first_expnum = group['expnum'].unique()[0]
+                    firstexpnum = group['expnum'].unique()[0]
                 else:
-                    first_expnum = group['first_exp'].unique()[0]
-                self.args.epoch_name = self.args.cur.find_epoch(first_expnum)
+                    firstexpnum = group['firstexp'].unique()[0]
+                self.args.epoch_name = self.args.cur.find_epoch(firstexpnum)
             # Adding column values to args
             for c in columns:
                 setattr(self.args,c, group[c].unique()[0])
@@ -280,8 +280,8 @@ class SuperNova(PipeLine):
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.triplet_list = np.array(self.args.dataframe[['nite','field','band']].values)
         nrows=len(self.args.dataframe)
-        self.args.dataframe['exp_nums']=np.zeros(nrows, dtype=str)
-        self.args.dataframe['first_exp']=np.zeros(nrows, dtype=str)
+        self.args.dataframe['expnums']=np.zeros(nrows, dtype=str)
+        self.args.dataframe['firstexp']=np.zeros(nrows, dtype=str)
         self.args.dataframe['single']=np.ones(nrows, dtype=bool)
         self.args.dataframe['fringe']=np.zeros(nrows, dtype=bool)
         self.args.dataframe['ccdlist']=np.zeros(nrows, dtype=str)
@@ -479,12 +479,12 @@ class NitelyCal(PipeLine):
                 # Append bias/flat lists to dataframe
                 self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(group)
 
-            self.args.first_exp = self.args.flat_list[0]
+            self.args.firstexp = self.args.flat_list[0]
             self.args.bias_list = ','.join(str(i) for i in self.args.bias_list)
             self.args.flat_list = ','.join(str(i) for i in self.args.flat_list)
             self.args.dataframe.loc[index,'flat_list'] = self.args.flat_list
             self.args.dataframe.loc[index,'bias_list'] = self.args.bias_list
-            self.args.dataframe.loc[index,'first_exp'] = self.args.first_exp
+            self.args.dataframe.loc[index,'firstexp'] = self.args.firstexp
         
         # Exit if there are not at least 5 exposures per band
         if self.args.auto:
