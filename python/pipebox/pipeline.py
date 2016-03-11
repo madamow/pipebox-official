@@ -511,14 +511,9 @@ class HostName(PipeLine):
     def __init__(self):
         self.args = pipeargs.HostnameArgs().cmdline()
         self.args.pipeline = self.args.desstat_pipeline = "hostname"
-        self.args.pipebox_work,self.args.pipebox_dir = self.pipebox_work,self.pipebox_dir
+        super(HostName,self).update_args(self.args) 
         self.args.submit_template_path = os.path.join("pipelines/{0}".format(self.args.pipeline),
                                                    "{0}_template.des".format(self.args.pipeline)) 
-        if len(self.args.eups_stack[0])>1:
-            self.args.eups_stack = self.args.eups_stack[0]
-        else:
-            self.args.eups_stack = self.args.eups_stack[0][0].split()
-
     def ticket(self):
         # Create JIRA ticket
         new_reqnum,new_jira_parent = jira_utils.create_ticket(self.args.jira_section,
@@ -529,7 +524,7 @@ class HostName(PipeLine):
                                           use_existing=True)
 
         self.args.reqnum,self.args.jira_parent = new_reqnum,new_jira_parent
-    
+
     def make_templates(self):
         req_dir = 'r%s' % self.args.reqnum
         self.args.output_dir = os.path.join(self.args.pipebox_work,req_dir)
