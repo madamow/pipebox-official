@@ -1,23 +1,26 @@
 {% extends "supportwcl/generic_submit.des" %}
 {% block content %}
 <<include ${PIPEBOX_DIR}/templates/pipelines/sne/Y3N/inputcals/Y3N_epoch1_inputfiles.des>>
-
-{% if not args.labels %}
-label= ${nite}{% endif %}
+<<include ${PIPEBOX_DIR}/templates/pipelines/sne/Y3N/modulewcl/sne-pipeline.des>>
 
 expnum = {{ args.expnums }}
 band = {{ args.band }}
 nite = {{ args.nite }}
+
+{% if not args.labels %}
+label= ${nite}{% endif %}
+
 field = {{ args.field }}
 first_expnum = {{ args.firstexp }}
 {% if args.ccdnum %}
 ccdnum = {{ args.ccdnum }}{% endif %}
+unitname = {{ args.unitname }}
 
 {% if args.single %}
 {% if args.fringe %}
-blocklist = sne-exp-fringe, sne-ccd-single 
+blocklist = sne-exp-fringe,sne-ccd-single 
 {% else %}
-blocklist = sne-exp-nofringe, sne-ccd-single 
+blocklist = sne-exp-nofringe,sne-ccd-single 
 {% endif %}
 {% else %}
 {% if args.fringe %}

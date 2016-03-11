@@ -282,6 +282,7 @@ class SuperNova(PipeLine):
         nrows=len(self.args.dataframe)
         self.args.dataframe['expnums']=np.zeros(nrows, dtype=str)
         self.args.dataframe['firstexp']=np.zeros(nrows, dtype=str)
+        self.args.dataframe['unitname']=np.zeros(nrows, dtype=str)
         self.args.dataframe['single']=np.ones(nrows, dtype=bool)
         self.args.dataframe['fringe']=np.zeros(nrows, dtype=bool)
         self.args.dataframe['ccdlist']=np.zeros(nrows, dtype=str)
