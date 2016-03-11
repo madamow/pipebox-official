@@ -168,6 +168,17 @@ class SuperNova(PipeLine):
         super(SuperNova,self).update_args(self.args)         
         self.args.cur = pipequery.SupernovaQuery(self.args.db_section)
         
+        # If auto-submit mode on
+        if self.args.auto:
+            self.args.ignore_processed=True
+            pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
+            
+            self.args.nite = self.args.cur.get_max_nite()
+            if not self.args.calnite:
+                precal = self.args.cur.find_precal(self.args.nite,threshold=7,override=True,
+                                                   tag=self.args.caltag)
+                self.args.calnite,self.args.calrun = precal[0],precal[1]
+        
         # If ngix -- cycle trough server's list
         if self.args.nginx:
             self.args.nginx_server = pipeutils.cycle_list_index(index,['desnginx', 'dessub'])
