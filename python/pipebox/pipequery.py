@@ -92,24 +92,12 @@ class SupernovaQuery(PipeQuery):
         submitted_or_not = self.cur.fetchone()[0]
         return submitted_or_not       
     
-# Copied from widefield (unedited)
-    def get_max(self,ignore_propid=False,ignore_program=False,ignore_all=False,**kwargs):
+# Edited from widefield
+    def get_max_nite(self,ignore_propid=False,ignore_program=False,ignore_all=False,**kwargs):
         """Returns expnum,nite of max(expnum) in the exposure table"""
-        base_query = "select max(expnum) from exposure where obstype='object'"
-        if ignore_program:
-            max_object = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['propid'])
-        elif ignore_propid:
-            max_object = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['program'])
-        elif ignore_all:
-            max_object = base_query
-        else:
-            max_object = base_query + " and program in (%s) and propid in (%s)" % (','.join("'{0}'".format(k) for k in kwargs['program']),','.join("'{0}'".format(k) for k in kwargs['propid']))
-        self.cur.execute(max_object)
-        max_expnum = self.cur.fetchone()[0]
-        fetch_nite = "select distinct nite from exposure where expnum=%s" % (max_expnum)
-        self.cur.execute(fetch_nite)
-        object_nite = self.cur.fetchone()[0]
-        return max_expnum,object_nite
+        query = "select max(nite) from manifest_exposure where exptime > 30"
+        self.cur.execute(query)
+        return self.cur.fetchone()[0]
 
 # Copied from widefield (unedited)
     def get_failed_expnums(self,reqnum):
