@@ -481,6 +481,7 @@ class NitelyCal(PipeLine):
         
         # Remove unwanted exposures
         if self.args.exclude_list:
+            self.args.exclude_list = [int(exp) for exp in self.args.exclude_list]
             self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
 
         # Update dataframe with lists
@@ -506,7 +507,7 @@ class NitelyCal(PipeLine):
         if self.args.auto:
             nitelycal_lib.is_count_by_band(self.args.dataframe,bands_to_process=self.args.bands,
                                            min_per_sequence=self.args.min_per_sequence)
-
+        
         if self.args.combine: 
             self.args.dataframe,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,
                                                                                      self.args.bands,
