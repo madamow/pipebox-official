@@ -29,7 +29,7 @@ class PipeLine(object):
                 pass
             else:
                 args.configfile = os.path.join(os.getcwd(),args.configfile) 
-
+    
         if args.exclude_list:
             exclude_file = os.path.isfile(args.exclude_list)
             if exclude_file:
@@ -443,7 +443,7 @@ class NitelyCal(PipeLine):
                 _,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,                                                                                     self.args.bands,
                                                                        k=self.args.max_num)
 
-                if not self.args.maxnite and self.args.minnite:
+                if not self.args.maxnite and not self.args.minnite:
                     # If not enough exposures per band +/- one day until enough are found
                     while not_enough_exp: 
                         oneday = datetime.timedelta(days=1)
@@ -464,6 +464,7 @@ class NitelyCal(PipeLine):
                     self.args.niterange = str(self.args.nitelist[0]) + 't' + str(self.args.nitelist[-1])[4:]
                 else: 
                     self.args.niterange = str(self.args.minnite) + 't' + str(self.args.maxnite[-1])[4:]
+
             # Removing bands that are not specified
             self.args.dataframe = self.args.dataframe[self.args.dataframe.band.isin(self.args.bands)\
                                                       |self.args.dataframe.obstype.isin(['zero'])]
@@ -481,19 +482,23 @@ class NitelyCal(PipeLine):
                 except:
                     self.args.dataframe.insert(len(self.args.dataframe.columns),'niterange',None)
                     self.args.dataframe.loc[index,('niterange')] = str(row['nite'])
+        
+        # Remove unwanted exposures
+        if self.args.exclude_list:
+            self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
 
         # Exit if there are not at least 5 exposures per band
         if self.args.auto:
             nitelycal_lib.is_count_by_band(self.args.dataframe,bands_to_process=self.args.bands,
                                            min_per_sequence=self.args.min_per_sequence)
-       
+
         if self.args.combine: 
             self.args.dataframe,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,                                                                                     self.args.bands,
                                                                                      k=self.args.max_num,
                                                                                      verbose= True)
         
         self.args.dataframe,self.args.nitelist = nitelycal_lib.find_no_data(self.args.dataframe,self.args.nitelist)
-        
+
         if self.args.count:
             print "Data found in database:"
             self.args.cur.count_by_band(self.args.nitelist)
