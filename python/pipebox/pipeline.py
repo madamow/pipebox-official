@@ -36,8 +36,8 @@ class PipeLine(object):
                 args.exclude_list =  list(pipeutils.read_file(args.exclude_list))
             else:
                 try: 
+                    args.exclude_list = args.exclude_list.split(',')
                     dig = int(args.exclude_list[0])
-                    args.exclude_list = args.exclude_list.strip().split(',')
                 except IOError:
                    print "{0} does not exist!".format(args.exclude_list)
         
@@ -329,6 +329,7 @@ class WideField(PipeLine):
         # Remove unwanted exposures 
         if self.args.exclude_list:
             self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
+        
         # Update dataframe for each exposure and add band,nite if not exists
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
@@ -479,7 +480,7 @@ class NitelyCal(PipeLine):
             # Removing bands that are not specified
             self.args.dataframe = self.args.dataframe[self.args.dataframe.band.isin(self.args.bands)\
                                                       |self.args.dataframe.obstype.isin(['zero'])]
-
+            print self.args.dataframe.columns
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
 
         if self.args.combine:
@@ -496,7 +497,8 @@ class NitelyCal(PipeLine):
         
         # Remove unwanted exposures
         if self.args.exclude_list:
-            self.args.exclude_list = [int(exp) for exp in self.args.exclude_list]
+            self.args.exclude_list = [int(e) for e in self.args.exclude_list]
+
             self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
 
         # Exit if there are not at least 5 exposures per band
