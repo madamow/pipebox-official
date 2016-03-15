@@ -285,7 +285,7 @@ class SuperNova(PipeLine):
         self.args.dataframe['unitname']=np.zeros(nrows, dtype=str)
         self.args.dataframe['single']=np.ones(nrows, dtype=bool)
         self.args.dataframe['fringe']=np.zeros(nrows, dtype=bool)
-        self.args.dataframe['ccdlist']=np.zeros(nrows, dtype=str)
+        self.args.dataframe['ccdnum']=np.zeros(nrows, dtype=str)
         self.args.dataframe['seqnum']=np.ones(nrows, dtype=int)
         # Update dataframe for each exposure and add expnums,firstexp if not exists
 #        try:

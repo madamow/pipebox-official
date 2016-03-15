@@ -13,7 +13,10 @@ label= ${nite}{% endif %}
 field = {{ args.field }}
 first_expnum = {{ args.firstexp }}
 {% if args.ccdnum %}
-ccdnum = {{ args.ccdnum }}{% endif %}
+ccdnum = {{ args.ccdnum }}
+{% else %}
+ccdnum = 
+{% endif %}
 unitname = {{ args.unitname }}
 
 {% if args.single %}
