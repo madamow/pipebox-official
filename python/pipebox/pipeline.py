@@ -46,7 +46,6 @@ class PipeLine(object):
             self.args.nitelist = self.args.nite.strip().split(',')
         if self.args.niterange:
             self.args.nitelist = pipeutils.create_nitelist(self.args.niterange[0],self.args.niterange[1]) 
-
         # If ngix -- cycle trough server's list
         if self.args.nginx:
             self.args.nginx_server = pipeutils.cycle_list_index(index,['desnginx', 'dessub'])
@@ -58,14 +57,15 @@ class PipeLine(object):
                 args.configfile = os.path.join(os.getcwd(),args.configfile) 
 
         # Checking if exclude list is a comma-separated list of line-separated file
+    
         if args.exclude_list:
             exclude_file = os.path.isfile(args.exclude_list)
             if exclude_file:
                 args.exclude_list =  list(pipeutils.read_file(args.exclude_list))
             else:
                 try: 
+                    args.exclude_list = args.exclude_list.split(',')
                     dig = int(args.exclude_list[0])
-                    args.exclude_list = args.exclude_list.strip().split(',')
                 except IOError:
                    print "{0} does not exist!".format(args.exclude_list)
        
@@ -260,6 +260,17 @@ class SuperNova(PipeLine):
         super(SuperNova,self).update_args(self.args)         
         self.args.cur = pipequery.SupernovaQuery(self.args.db_section)
         
+        # If auto-submit mode on
+        if self.args.auto:
+            self.args.ignore_processed=True
+            pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
+            
+            self.args.nite = self.args.cur.get_max_nite()
+            if not self.args.calnite:
+                precal = self.args.cur.find_precal(self.args.nite,threshold=7,override=True,
+                                                   tag=self.args.caltag)
+                self.args.calnite,self.args.calrun = precal[0],precal[1]
+        
         # Creating dataframe from exposures 
 #       I don't think we want this for SN
 #        if self.args.exptag:
@@ -362,6 +373,7 @@ class WideField(PipeLine):
         # Remove unwanted exposures 
         if self.args.exclude_list:
             self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
+        
         # Update dataframe for each exposure and add band,nite if not exists
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
@@ -430,6 +442,7 @@ class NitelyCal(PipeLine):
                     _,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,
                                                                            self.args.bands,
                                                                            k=self.args.max_num)
+
                     # If not enough exposures per band +/- one day until enough are found
                     while not_enough_exp: 
                         oneday = datetime.timedelta(days=1)
@@ -453,6 +466,7 @@ class NitelyCal(PipeLine):
             # Removing bands that are not specified
             self.args.dataframe = self.args.dataframe[self.args.dataframe.band.isin(self.args.bands)\
                                                       |self.args.dataframe.obstype.isin(['zero'])]
+            self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
 
         if self.args.combine:
             self.args.desstat_pipeline = "supercal"
@@ -467,6 +481,12 @@ class NitelyCal(PipeLine):
                 except:
                     self.args.dataframe.insert(len(self.args.dataframe.columns),'niterange',None)
                     self.args.dataframe.loc[index,('niterange')] = str(row['nite'])
+        
+        # Remove unwanted exposures
+        if self.args.exclude_list:
+            self.args.exclude_list = [int(e) for e in self.args.exclude_list]
+
+            self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
 
         # Update dataframe with lists
         try:
@@ -491,7 +511,7 @@ class NitelyCal(PipeLine):
         if self.args.auto:
             nitelycal_lib.is_count_by_band(self.args.dataframe,bands_to_process=self.args.bands,
                                            min_per_sequence=self.args.min_per_sequence)
-       
+        
         if self.args.combine: 
             self.args.dataframe,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,
                                                                                      self.args.bands,
@@ -499,7 +519,7 @@ class NitelyCal(PipeLine):
                                                                                      verbose= True)
         
         self.args.dataframe,self.args.nitelist = nitelycal_lib.find_no_data(self.args.dataframe,self.args.nitelist)
-        
+
         if self.args.count:
             print "Data found in database:"
             self.args.cur.count_by_band(self.args.nitelist)

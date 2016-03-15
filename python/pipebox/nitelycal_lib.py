@@ -3,7 +3,7 @@
 import sys
 from datetime import datetime
 import pandas as pd
-
+import math
 from pipebox import pipequery
 
 def create_dataframe(query_object):
@@ -84,7 +84,7 @@ def final_count_by_band(dataframe):
 
 def is_count_by_band(dataframe,bands_to_process=['g','r','Y','i','z','u','VR'],min_per_sequence=5):
     """ Returns count per band of exposures to be included in processing """
-    grouped_df = df.groupby(by=['obstype','band'])
+    grouped_df = dataframe.groupby(by=['obstype','band'])
     agged = grouped_df.agg(['count'])['expnum']
     is_false = []
     for name,group in grouped_df:
@@ -123,17 +123,35 @@ def trim_excess_exposures(df,bands,k=150,verbose=False):
     df2 = pd.DataFrame()
     set_warning = False 
     for i in range(0,len(bands)):
-        if len(df[df.band.isin([bands[i]])])<k:
+        length_flat = len(df[df.band.isin([bands[i]])])
+        if length_flat<k:
             set_warning = True
             if verbose:
                 print "Warning: less than {k} found for {obstype} {band} band.".format(k=k,obstype='dome flat',band=bands[i])
-        df2 = df2.append(df[df.band.isin([bands[i]])&~df.obstype.isin(['zero'])].head(k))
-    
-    if len(df[df.obstype.isin(['zero'])])<k:
+
+        diff_flat = float(length_flat - k)  
+        if diff_flat > 0:
+            div_flat = int(math.ceil(length_flat/diff_flat))
+            #df2 = df2.append(df[df.band.isin([bands[i]])&~df.obstype.isin(['zero'])].head(k))
+            remove_expnums= df[(df.band.isin([bands[i]])) & (~df.obstype.isin(['zero']))].iloc[::div_flat,:]['expnum'].values
+            df2 = df2.append(df[(df.band.isin([bands[i]])) & (~df.obstype.isin(['zero'])) & (~df.expnum.isin(remove_expnums))])
+        else:
+            df2 = df2.append(df[(df.band.isin([bands[i]])) & (~df.obstype.isin(['zero']))])
+    # Trimming zeros
+    length_zero = len(df[df.obstype.isin(['zero'])])
+    if length_zero<k:
         set_warning = True
         if verbose:
             print "Warning: less than {k} found for {obstype}.".format(k=k,obstype='zero')
-    df_zero = df[df.obstype.isin(['zero'])].head(k)
+
+    diff_zero = float(length_zero - k)
+    if diff_zero >0:
+        div_zero= int(math.ceil(length_zero/diff_zero))
+        #df_zero = df[df.obstype.isin(['zero'])].head(k)
+        remove_zero = df[df.obstype.isin(['zero'])].iloc[::div_zero,:]['expnum'].values
+        df_zero = df[df.obstype.isin(['zero']) & (~df.expnum.isin(remove_zero))]
+    else: 
+        df_zero = df[df.obstype.isin(['zero'])]
     df2 = df2.append(df_zero)
 
     return (df2,set_warning)
