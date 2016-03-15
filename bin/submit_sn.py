@@ -15,4 +15,4 @@ else:
     # write submit files and submit if necessary
     # columns should only be values that change per submit (groupby)
     sn.make_templates(columns=['expnums','nite','field','band','firstexp','single','fringe','seqnum','unitname',
-                               'ccdlist'],groupby=['nite','field','band'])
+                               'ccdnum'],groupby=['nite','field','band'])
