@@ -466,7 +466,6 @@ class NitelyCal(PipeLine):
             # Removing bands that are not specified
             self.args.dataframe = self.args.dataframe[self.args.dataframe.band.isin(self.args.bands)\
                                                       |self.args.dataframe.obstype.isin(['zero'])]
-            self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
 
         if self.args.combine:
             self.args.desstat_pipeline = "supercal"
@@ -487,18 +486,21 @@ class NitelyCal(PipeLine):
             self.args.exclude_list = [int(e) for e in self.args.exclude_list]
 
             self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
-
+        if self.args.combine: 
+            self.args.dataframe,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,
+                                                                                     self.args.bands,
+                                                                                     k=self.args.max_num,
+                                                                                     verbose= True)
         # Update dataframe with lists
         try:
             self.args.dataframe.insert(len(self.args.dataframe),'bias_list',None)
-            self.args.dataframe.insert(len(self.args.dataframe),'bias_list',None)
+            self.args.dataframe.insert(len(self.args.dataframe),'flat_list',None)
         except: pass
 
         for niterange,group in self.args.dataframe.groupby(by=['niterange']):
             index = group.index
-            if not self.args.combine:
-                # Append bias/flat lists to dataframe
-                self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(group)
+            # Append bias/flat lists to dataframe
+            self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(group)
 
             self.args.firstexp = self.args.flat_list[0]
             self.args.bias_list = ','.join(str(i) for i in self.args.bias_list)
@@ -506,20 +508,16 @@ class NitelyCal(PipeLine):
             self.args.dataframe.loc[index,'flat_list'] = self.args.flat_list
             self.args.dataframe.loc[index,'bias_list'] = self.args.bias_list
             self.args.dataframe.loc[index,'firstexp'] = self.args.firstexp
+    
         
         # Exit if there are not at least 5 exposures per band
         if self.args.auto:
             nitelycal_lib.is_count_by_band(self.args.dataframe,bands_to_process=self.args.bands,
                                            min_per_sequence=self.args.min_per_sequence)
         
-        if self.args.combine: 
-            self.args.dataframe,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,
-                                                                                     self.args.bands,
-                                                                                     k=self.args.max_num,
-                                                                                     verbose= True)
         
         self.args.dataframe,self.args.nitelist = nitelycal_lib.find_no_data(self.args.dataframe,self.args.nitelist)
-
+        
         if self.args.count:
             print "Data found in database:"
             self.args.cur.count_by_band(self.args.nitelist)
