@@ -420,3 +420,62 @@ class NitelycalQuery(PipeQuery):
 
         return df
 
+class PrebpmQuery(PipeQuery):
+
+    def update_df(self,df):
+        """ Takes a pandas dataframe and for each exposure add column:value
+            band and nite. Returns dataframe"""
+        for index,row in df.iterrows():
+            expnum_info = "select distinct expnum, band, nite from exposure where expnum='%s'" % row['expnum']
+            self.cur.execute(expnum_info)
+            expnum,band,nite = self.cur.fetchall()[0]
+            df.loc[index,'nite'] = nite
+            df.loc[index,'band'] = band
+
+        return df
+
+    def get_failed_expnums(self,reqnum):
+        """ Queries database to find number of failed attempts without success.
+            Returns expnums for failed, non-null, nonzero attempts."""
+        submitted = "select distinct unitname,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        self.cur.execute(submitted)
+        failed_query = self.cur.fetchall()
+        df = pd.DataFrame(failed_query,columns=['unitname','status'])
+        # Set Null values to -99
+        df = df.fillna(-99)
+        passed_expnums = []
+        for u in df['unitname'].unique():
+            count = df[(df.unitname==u) & (df.status==0)].count()[0]
+            if count ==1:
+                passed_expnums.append(u)
+        try:
+            failed_list = df[(~df.unitname.isin(passed_expnums)) & (~df.status.isin([0,-99]))]['unitname'].values
+        except:
+            print 'No new failed exposures found!'
+            exit()
+        
+        resubmit_list = []
+        for r in failed_list:
+            if -99 not in list(df[(df.unitname==r)]['status'].values):
+                resubmit_list.append(r)
+        expnum_list = [u[3:] for u in resubmit_list]
+        
+        return expnum_list
+
+    def get_expnums_from_tag(self,tag):
+        """ Query database for each exposure with a given exposure tag.
+        Returns a list of expnums."""
+        taglist = tag.split(',')
+        tag_list_of_dict = []
+        for t in taglist:
+            expnum_query = "select distinct expnum from exposuretag where tag='%s'" % t
+            self.cur.execute(expnum_query)
+            results = self.cur.fetchall()
+            expnum_list = [exp[0] for exp in results]
+            for e in expnum_list:
+                tag_dict = {}
+                tag_dict['expnum'] = e
+                tag_dict['tag'] = t
+                tag_list_of_dict.append(tag_dict)
+        return tag_list_of_dict
+

@@ -575,3 +575,48 @@ class HostName(PipeLine):
                 self.args.unitname,self.args.attnum = pipeutils.submit_command(submitfile,wait=float(self.args.wait))
                 # Adding attnum to output_name
                 pipeutils.rename_file(self.args)
+
+class PreBPM(PipeLine):
+
+    def __init__(self):
+        """ Initialize arguments and configure"""
+        # Setting global parameters
+        self.args = pipeargs.PrebpmArgs().cmdline()
+        self.args.pipeline = "prebpm"
+
+        super(PreBPM,self).update_args(self.args)
+        self.args.output_name_keys = ['nite','expnum','band']
+       
+        self.args.cur = pipequery.PrebpmQuery(self.args.db_section)
+        
+        self.args.propid = self.args.propid.strip().split(',')
+        self.args.program = self.args.program.strip().split(',')
+ 
+        # Creating dataframe from exposures 
+        if self.args.resubmit_failed:
+            self.args.ignore_processed=False
+            self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum)
+            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
+        elif self.args.exptag:
+            self.args.exposure_list = self.args.cur.get_expnums_from_tag(self.args.exptag)
+            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum','tag']).sort(columns=['tag','expnum'],ascending=True)
+        elif self.args.expnum:
+            self.args.exposure_list = self.args.expnum.split(',')
+            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
+        elif self.args.list:
+            self.args.exposure_list = list(pipeutils.read_file(self.args.list))
+            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
+        elif self.args.csv:
+            self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
+            self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
+            self.args.exposure_list = list(self.args.dataframe['expnum'].values)
+        # Remove unwanted exposures 
+        if self.args.exclude_list:
+            self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
+        
+        # Update dataframe for each exposure and add band,nite if not exists
+        try:
+            self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
+            self.args.dataframe = self.args.dataframe.fillna(False)
+        except: 
+            pass
