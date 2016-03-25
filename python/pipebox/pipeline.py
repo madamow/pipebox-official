@@ -589,9 +589,6 @@ class PreBPM(PipeLine):
        
         self.args.cur = pipequery.PrebpmQuery(self.args.db_section)
         
-        self.args.propid = self.args.propid.strip().split(',')
-        self.args.program = self.args.program.strip().split(',')
- 
         # Creating dataframe from exposures 
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
@@ -610,6 +607,7 @@ class PreBPM(PipeLine):
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.exposure_list = list(self.args.dataframe['expnum'].values)
+
         # Remove unwanted exposures 
         if self.args.exclude_list:
             self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
@@ -620,3 +618,7 @@ class PreBPM(PipeLine):
             self.args.dataframe = self.args.dataframe.fillna(False)
         except: 
             pass
+
+        self.args.firstexp = self.args.exposure_list[0]
+        #self.args.dataframe.insert(len(self.args.dataframe.columns),'firstexp', None) 
+        self.args.dataframe['firstexp'] = self.args.firstexp
