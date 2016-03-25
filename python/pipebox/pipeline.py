@@ -582,7 +582,7 @@ class PreBPM(PipeLine):
         """ Initialize arguments and configure"""
         # Setting global parameters
         self.args = pipeargs.PrebpmArgs().cmdline()
-        self.args.pipeline = "prebpm"
+        self.args.pipeline = self.args.desstat_pipeline = "prebpm"
 
         super(PreBPM,self).update_args(self.args)
         self.args.output_name_keys = ['nite','expnum','band']
