@@ -57,7 +57,7 @@
                 dirpat = se
                 ops_enddir = red/pixcor
                 rundir = red/pixcor
-                savefiles = false
+                savefiles = true
                 compress_files = true
             </red_pixcor>
             <pixcor_mini_red>

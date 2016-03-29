@@ -33,7 +33,11 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/14-finalcut-assess.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/15-mkpng.wcl>>
 {% if args.epoch_name %}
+{% if args.epoch_name in ['Y2E1','Y2E2'] and args.band in ['u','VR']%}
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/inputcals/{{ args.epoch_name }}_uVR_{{ args.campaign }}_inputs.wcl>>
+{% else %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/inputcals/{{ args.epoch_name }}_{{ args.campaign }}_inputs.wcl>>
+{% endif %}
 {% else %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/inputcals/{{ args.campaign }}_inputs.wcl>>
 {% endif %}
@@ -78,5 +82,26 @@ blocklist = se
         modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit,skysub,starflat,null-weight-bkg,create-bkg-img,immask,rowinterp-nullweight-immask,create-psfex-catalog,run-psfex,create-finalcut-catalog,ingest-se-objects,finalcut-assess,mkpng
     </se>    
 </block>
+
+#####
+{% if args.band in ['u','VR'] %}
+<module>
+    <split-scamp-ahead>
+        <file>
+            <ahead_full>
+                filetype = config
+                {% if args.band in ['u'] %}
+                filename = ${confignite}_decam_pvmodel_${scampupdatenite}_g.ahead
+                {% elif args.band in ['VR'] %}
+                filename = ${confignite}_decam_pvmodel_${scampupdatenite}_r.ahead
+                {% endif %}
+                dirpat = se
+                ops_enddir = aux
+                rundir = config
+            </ahead_full>
+        </file>
+    </split-scamp-ahead>
+</module>
+{% endif %}
 
 {% endblock %}

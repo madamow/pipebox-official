@@ -28,7 +28,7 @@ distortion = ${qa_file_prefix}_distortion
                 rundir = list
                 ops_enddir = list
                 columns = scamp_cat.fullname
-                sortkey = ccdnum
+                sortkey = (ccdnum, True, False)
         
             </ccd_scamp_cat>
         </list>
