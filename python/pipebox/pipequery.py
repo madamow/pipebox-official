@@ -229,6 +229,11 @@ class WidefieldQuery(PipeQuery):
             expnum_info = "select distinct expnum, band, nite from exposure where expnum='%s'" % row['expnum']
             self.cur.execute(expnum_info)
             expnum,band,nite = self.cur.fetchall()[0]
+            try:
+                df.insert(len(df.columns),'nite', None)
+                df.insert(len(df.columns),'band', None)
+            except:
+                pass
             df.loc[index,'nite'] = nite
             df.loc[index,'band'] = band
 
@@ -429,6 +434,12 @@ class PrebpmQuery(PipeQuery):
             expnum_info = "select distinct expnum, band, nite from exposure where expnum='%s'" % row['expnum']
             self.cur.execute(expnum_info)
             expnum,band,nite = self.cur.fetchall()[0]
+            try:
+                df.insert(len(df.columns),'nite', None)
+                df.insert(len(df.columns),'band', None)
+            except:
+                pass
+
             df.loc[index,'nite'] = nite
             df.loc[index,'band'] = band
 

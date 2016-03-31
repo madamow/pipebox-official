@@ -373,7 +373,7 @@ class WideField(PipeLine):
         # Remove unwanted exposures 
         if self.args.exclude_list:
             self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
-        
+
         # Update dataframe for each exposure and add band,nite if not exists
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
