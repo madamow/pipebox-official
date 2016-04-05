@@ -15,11 +15,11 @@ scampupdateheadfile = ${confignite}_updateWCS.config
 hupdatefile = ${confignite}_DES_header_update.20140303
 ### Changes per Epoch ###
 skycampaign = Y2A1
-epochrange = 20141205t0315
-starflatrun = r2132p01
-skypcarun = r2133p01
-bpmnite = 20150105t0115
-bpmreq = 2134
+epochrange = 20150715t0315
+starflatrun = r2360p01
+skypcarun = r2361p01
+bpmnite = 20151113t1123
+bpmreq = 2359
 bpmatt = 1
 calnite = 20151113t1123
 calrun = r2350p02
