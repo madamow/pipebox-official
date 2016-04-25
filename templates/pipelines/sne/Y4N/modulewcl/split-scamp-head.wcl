@@ -1,0 +1,36 @@
+<module> 
+    <split-scamp-head>
+        <exec_1>
+            cmd_hyphen = alldouble
+            <cmdline>
+                in = ${file.scamp_fullhead.fullname}
+                out = ${file.scamp_head.fullname}
+            </cmdline>
+            execname = split_head.py
+            used = file.scamp_fullhead
+            was_generated_by = file.scamp_head
+        </exec_1>
+        <file>
+            <scamp_fullhead>
+                dirpat = sne
+                filepat = sn_exposure
+                filetype = snhead_scamp_full
+                flabel = scampcat
+                fsuffix = head
+                ops_enddir = astrom-scamp/cat
+                rundir = astrom-scamp/cat
+            </scamp_fullhead>
+            <scamp_head>
+                dirpat = sne
+                filepat = sn_ccdnum_band
+                filetype = snhead_scamp
+                flabel = scamp
+                fsuffix = head
+                ops_enddir = astrom-scamp/aux
+                rundir = astrom-scamp/aux
+            </scamp_head>
+        </file>
+        modnamepat = ${modnamepat_expband}
+        wrappername = genwrap.py
+    </split-scamp-head>
+</module>

@@ -1,0 +1,136 @@
+<module> 
+    <run-scamp>
+        wrappername = runScamp.py  
+        wrapperloop = expnum
+        modnamepat = ${modnamepat_field_expband}
+
+        <file>
+            <scamp_fullcat>
+                filetype = sncat_scamp_full 
+                filepat = sn_exposure
+                flabel = scampcat
+                fsuffix = fits
+                dirpat = sne
+                ops_enddir = astrom-scamp/cat
+                rundir = astrom-scamp/cat
+                savefiles = false
+            </scamp_fullcat>
+            <scamp_cat>
+                filetype = sncat_scamp
+                filepat = sn_ccdnum_band
+                flabel = scampcat
+                fsuffix = fits
+                dirpat = sne
+                rundir = astrom-scamp/cat
+            </scamp_cat>
+            <scamp_config>
+                filetype = config
+                filename = ${scamp_config_file}
+                dirpat = se
+                rundir = config
+            </scamp_config>
+            <scamp_ahead>
+                filetype = snhead_scamp
+                filename = ${camera}${expnum:8}_r${reqnum}p${attnum:2}_${band}_scamp.ahead
+                dirpat = sne
+                ops_enddir = astrom-scamp/aux
+                rundir = astrom-scamp/aux
+            </scamp_ahead>
+            <scamp_fullhead>
+                filetype = snhead_scamp_full
+                filepat = sn_exposure
+                flabel = scampcat   # must match flabel for scamp_fullcat
+                fsuffix = head
+                dirpat = sne
+                ops_enddir = astrom-scamp/cat
+                rundir = astrom-scamp/cat  # must match rundir for scamp_fullcat
+            </scamp_fullhead>
+            <scamp_head>
+                filetype = snhead_scamp
+                filepat = sn_ccdnum_band
+                flabel = scamp
+                fsuffix = head
+                dirpat = sne
+                ops_enddir = astrom-scamp/aux
+                rundir = astrom-scamp/aux
+                savefiles = true
+            </scamp_head>
+            <scamp_xml>
+                filetype = snxml_scamp
+                filepat = sn_exposure
+                flabel = scamp
+                fsuffix = xml
+                dirpat = sne
+                ops_enddir = astrom-scamp/qa
+                rundir = astrom-scamp/qa
+                savefiles = false
+            </scamp_xml>
+            <scamp_qa>
+                filetype = snqa_scamp
+                fullname = $RNMLST{${wrapper.qa_file_prefix},${wrapper.qa_file_list}}
+                dirpat = sne
+                ops_enddir = astrom-scamp/qa
+                rundir = astrom-scamp/qa
+                savefiles = true
+            </scamp_qa>
+        </file>
+
+        <exec_1>
+            execname = mergeScampCats()
+            used = file.scamp_cat
+            was_generated_by = file.scamp_fullcat
+            ancestry = file.scamp_cat:file.scamp_fullcat
+            <cmdline>
+                _01_scamp_cat = file.scamp_cat.fullname
+                _02_scamp_fullcat = file.scamp_fullcat.fullname
+            </cmdline>
+        </exec_1>
+        <exec_2>
+            execname = scamp
+            used = file.scamp_fullcat,file.scamp_ahead,file.scamp_config
+            was_generated_by = file.scamp_fullhead,file.scamp_xml,file.scamp_qa
+            <cmdline>
+                _01_scamp_fullcat = ${file.scamp_fullcat.fullname}
+                ASTREF_BAND = DEFAULT
+                MOSAIC_TYPE = SAME_CRVAL
+                AHEADER_GLOBAL = ${file.scamp_ahead.fullname}
+                ASTRINSTRU_KEY = DUMMY
+                AHEADER_SUFFIX = .aheadnoexist
+                #ASTREFMAG_LIMITS = 1,99
+                ASTREFMAG_LIMITS = -99,17
+                #POSITION_MAXERR = 60.0
+                POSITION_MAXERR = 10.0
+                ASTREF_CATALOG = UCAC-4
+                WRITE_XML = Y
+                FULLOUTCAT_TYPE = NONE
+                #astromSigmaTol = 0.5
+                c = ${file.scamp_config.fullname}
+                XML_NAME = ${file.scamp_xml.fullname}
+                NTHREADS = 1
+            </cmdline>
+        </exec_2> 
+        <exec_3>
+            execname = splitScampHead()
+            used = file.scamp_fullhead
+            was_generated_by = file.scamp_head
+            #ancestry = file.scamp_fullhead:file.scamp_head
+            <cmdline>
+                _01_scamp_fullhead = file.scamp_fullhead.fullname
+                _02_scamp_head = file.scamp_head.fullname
+            </cmdline>
+        </exec_3>
+        <wrapper>
+            #maxpv = 10
+            #noretry = 1
+            maxtries = 2
+            match_resol = 2.0
+            astromSigmaTol = 0.5
+            #position_maxerr = 60.0
+            #FOCDISTORT_DEGREE = 2
+            #FWHM_THRESH = 2.,15.
+            position_maxerr = 10.0
+            qa_file_prefix = astrom-scamp/qa/${camera}${expnum:8}_r${reqnum}p${attnum:2}_
+            qa_file_list = astr_pixerror1d_1.ps,astr_referror1d_1.ps,fgroups_1.ps,astr_referror2d_1.ps,astr_refsysmap_1.ps,distortion_1.ps
+        </wrapper>
+    </run-scamp>
+</module>

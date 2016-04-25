@@ -1,0 +1,98 @@
+<module> 
+   <se-scamp>
+        <exec_1>
+            <cmdline>
+                _01_scamp_fullcat = ${file.scamp_fullcat.fullname}
+                ASTREF_BAND = DEFAULT
+                MOSAIC_TYPE = SAME_CRVAL
+                AHEADER_GLOBAL = ${file.scamp_ahead.fullname}
+                ASTRINSTRU_KEY = DUMMY
+                AHEADER_SUFFIX = .aheadnoexist
+                ASTREFMAG_LIMITS = -99,17
+                POSITION_MAXERR = 10.0
+                ASTREF_CATALOG = UCAC-4
+                REF_SERVER = cocat1.u-strasbg.fr,vizier.nao.ac.jp,vizier.cfa.harvard.edu
+                WRITE_XML = Y
+                FULLOUTCAT_TYPE = NONE
+                c = ${file.scamp_config.fullname}
+                XML_NAME = ${file.scamp_xml.fullname}
+                CHECKPLOT_TYPE = astr_pixerror1d,astr_referror1d,fgroups,astr_referror2d,astr_refsysmap,distortion
+                CHECKPLOT_NAME = ${astr_pixerror1d},${astr_referror1d},${fgroups},${astr_referror2d},${astr_refsysmap},${distortion}
+                NTHREADS = 1
+            </cmdline>
+            execname = scamp
+            used = file.scamp_fullcat,file.scamp_ahead,file.scamp_config
+            was_generated_by = file.scamp_fullhead,file.scamp_xml,file.scamp_qa
+        </exec_1>
+        <file>
+            <scamp_ahead>
+                dirpat = sne
+                filename = ${camera}${expnum:8}_r${reqnum}p${attnum:2}_${band}_scamp.ahead
+                filetype = snhead_scamp
+                ops_enddir = astrom-scamp/aux
+                rundir = astrom-scamp/aux
+            </scamp_ahead>
+            <scamp_cat>
+                dirpat = sne
+                filepat = sn_ccdnum_band
+                filetype = sncat_scamp
+                flabel = scampcat
+                fsuffix = fits
+                ops_enddir = astrom-scamp/cat
+                rundir = astrom-scamp/cat
+            </scamp_cat>
+            <scamp_config>
+                dirpat = sne
+                filename = ${scamp_config_file}
+                filetype = config
+                rundir = config
+            </scamp_config>
+            <scamp_fullcat>
+                dirpat = sne
+                filepat = sn_exposure
+                filetype = sncat_scamp_full
+                flabel = scampcat
+                fsuffix = fits
+                ops_enddir = astrom-scamp/cat
+                rundir = astrom-scamp/cat
+                savefiles = false
+            </scamp_fullcat>
+            <scamp_fullhead>
+                dirpat = sne
+                filepat = sn_exposure
+                filetype = snhead_scamp_full
+                flabel = scampcat
+                fsuffix = head
+                ops_enddir = astrom-scamp/cat
+                rundir = astrom-scamp/cat
+            </scamp_fullhead>
+            <scamp_qa>
+                dirpat = sne
+                filetype = snqa_scamp
+                fullname = ${astr_pixerror1d}_1.ps,${astr_referror1d}_1.ps,${fgroups}_1.ps,${astr_referror2d}_1.ps,${astr_refsysmap}_1.ps,${distortion}_1.ps
+                ops_enddir = astrom-scamp/qa
+                rundir = astrom-scamp/qa
+                savefiles = true
+            </scamp_qa>
+            <scamp_xml>
+                dirpat = sne
+                filepat = sn_exposure
+                filetype = snxml_scamp
+                flabel = scamp
+                fsuffix = xml
+                ops_enddir = astrom-scamp/qa
+                rundir = astrom-scamp/qa
+            </scamp_xml>
+        </file>
+        modnamepat = ${modnamepat_field_expband}
+        <wrapper>
+            astromsigmatol = 0.5
+            match_resol = 2.0
+            maxtries = 2
+            position_maxerr = 10.0
+            qa_file_list = astr_pixerror1d_1.ps,astr_referror1d_1.ps,fgroups_1.ps,astr_referror2d_1.ps,astr_refsysmap_1.ps,distortion_1.ps
+        </wrapper>
+        wrapperloop = expnum
+        wrappername = genwrap.py
+    </se-scamp>
+</module>

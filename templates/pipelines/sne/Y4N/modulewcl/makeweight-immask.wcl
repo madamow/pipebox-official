@@ -1,0 +1,62 @@
+<module>
+    <makeweight-immasked>
+        wrappername = genwrap.py
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+        <file>
+            <red_immasked>
+                filetype = snred
+                filepat = sn_ccdnum_band
+                flabel = immasked
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+            </red_immasked>
+            <sci_red>
+                filetype = snsci_red
+                filepat = sn_ccdnum_band
+                flabel = sci
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+            </sci_red>
+            <mask_red>
+                filetype = snmask_red
+                filepat = sn_ccdnum_band
+                flabel = mask
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+            </mask_red>
+            <wgt_red>
+                filetype = snwgt_red
+                filepat = sn_ccdnum_band
+                flabel = wgt
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+            </wgt_red>
+        </file>
+
+        <exec_1>
+            execname = makeWeight
+            used = file.red_immasked
+            was_generated_by = file.sci_red,file.wgt_red,file.mask_red
+            ancestry = file.red_immasked:file.sci_red,file.red_immasked:file.mask_red, file.red_immasked:file.wgt_red
+            <cmdline>
+                inFile_img = ${file.red_immasked.fullname}
+                outFile_sci =  ${file.sci_red.fullname}
+                outFile_mask = ${file.mask_red.fullname}
+                outFile_wgt = ${file.wgt_red.fullname}
+                border = 15
+                w5 = 0.5
+                wmin = 1.e-6
+                intp = 2
+            </cmdline>
+        </exec_1>
+    </makeweight-immasked>
+</module>

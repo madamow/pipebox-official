@@ -1,0 +1,78 @@
+<module> 
+    <create-scamp-catalog>
+        wrappername = genwrap.py 
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+
+        <file>
+            <sex_config>
+                filetype = config
+                filename = ${config}_sexforscamp.config
+                dirpat = se
+                rundir = config 
+            </sex_config>
+            <sex_param>
+                filetype = config 
+                filename = ${config}_sex.param_scamp
+                dirpat = se
+                rundir = config
+            </sex_param>
+            <sex_filter>
+                filetype = config
+                filename = ${config}_sex.conv
+                dirpat = se
+                rundir = config
+            </sex_filter>
+            <sex_nnw>
+                filetype = config
+                filename = ${config}_sex.nnw
+                dirpat = se
+                rundir = config
+            </sex_nnw>
+            <red_detrend>
+                filetype = snred_detrend
+                filepat = sn_ccdnum_band
+                flabel = detrend
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = red
+            </red_detrend>
+            <scamp_cat>
+                filetype = sncat_scamp
+                filepat = sn_ccdnum_band
+                flabel = scampcat
+                fsuffix = fits
+                dirpat = sne
+                ops_enddir = astrom-scamp/cat
+                rundir = astrom-scamp/cat
+                savefiles = true
+            </scamp_cat>
+        </file>
+        <exec_1>
+            execname = sex
+            used = file.red_detrend,file.sex_config,file.sex_param,file.sex_filter,file.sex_nnw
+            was_generated_by = file.scamp_cat
+            ancestry = file.red_detrend:file.scamp_cat
+            <cmdline>
+                _01_red_detrend = ${file.red_detrend.fullname}[0]
+                c = ${file.sex_config.fullname}
+                CATALOG_NAME = ${file.scamp_cat.fullname}
+                CATALOG_TYPE = FITS_LDAC
+                WEIGHT_TYPE = MAP_WEIGHT
+                WEIGHT_IMAGE = ${file.red_detrend.fullname}[2]
+                FLAG_IMAGE = ${file.red_detrend.fullname}[1]
+                PARAMETERS_NAME = ${file.sex_param.fullname}
+                FILTER_NAME = ${file.sex_filter.fullname}
+                STARNNW_NAME = ${file.sex_nnw.fullname}
+                WEIGHT_THRESH = 0.0
+                SATUR_LEVEL = $HEAD{${file.red_detrend.fullname},SATURATE} 
+                DETECT_THRESH = 10.0
+                #MMG scamp = _flag
+                DEBLEND_MINCONT = 0.1
+                INTERP_TYPE = ALL
+                INTERP_MAXXLAG = 4
+                INTERP_MAXYLAG 4
+            </cmdline>
+        </exec_1>
+    </create-scamp-catalog>
+</module>

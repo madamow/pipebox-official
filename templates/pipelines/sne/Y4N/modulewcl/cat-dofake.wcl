@@ -1,0 +1,67 @@
+#DIFFIMG-11
+<module>
+    <cat-dofake>
+        wrappername = genwrap.py
+        wrapperloop = ccdnum
+        modnamepat=${modnamepat_combine_ccdnumband}
+        loopobj = list.in_dofake_list
+        <list>
+            <in_dofake_list>   # could be any name like biasx
+                # how to name list
+                filepat = sn_field_ccdnum_band
+                flabel = fakeobj
+                fsuffix = list
+
+                # where to store list
+                dirpat = sne_ccd
+                ops_enddir = list
+                rundir = list
+
+                # what goes into list (normally is a query code)
+                #
+                output_fields = filename
+                divide_by = ccdnum   # perhaps can default to wrapperloop
+
+                # description of list for wrapper
+                # mef_fakediff is a reference to a section of this file section of this wcl.
+                # columns is defining what files will go into the list
+                columns = objlist_fake.fullname
+                sortkey = expnum
+            </in_dofake_list>
+        </list>
+        <file>
+            <objlist_fake>
+                listonly = True
+                filetype = snlist_fakeobj
+                filepat = sn_ccdnum_band
+                flabel = fakeSN_doFake 
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+            </objlist_fake>
+        </file>
+        <file>
+            <combined_fake_out>
+                filetype = snlist_fakeobj
+                filepat = sn_ccdnum_band_combined
+                flabel = fakeSN_doFake
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+                ops_enddir = red
+                savefiles = true
+            </combined_fake_out>
+        </file>
+    
+        <exec_1>
+            execname = cat_dofake.sh
+            used = list.in_dofake_list.objlist_fake
+            was_generated_by = file.combined_fake_out
+            ancestry = list.in_dofake_list.objlist_fake:file.combined_fake_out
+            <cmdline>
+                _01_inlist = ${list.in_dofake_list.fullname}
+                _02_file = ${file.combined_fake_out.fullname}
+            </cmdline>
+        </exec_1>
+    </cat-dofake>
+</module>
