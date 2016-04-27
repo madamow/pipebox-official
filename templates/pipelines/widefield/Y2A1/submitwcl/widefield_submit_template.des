@@ -33,7 +33,7 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/14-finalcut-assess.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/15-mkpng.wcl>>
 {% if args.epoch_name %}
-{% if args.epoch_name in ['Y2E1','Y2E2'] and args.band in ['u','VR']%}
+{% if args.epoch_name in ['Y2E1','Y2E2','Y3'] and args.band in ['u','VR']%}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/inputcals/{{ args.epoch_name }}_uVR_{{ args.campaign }}_inputs.wcl>>
 {% else %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/inputcals/{{ args.epoch_name }}_{{ args.campaign }}_inputs.wcl>>
