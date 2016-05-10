@@ -27,7 +27,7 @@
 {% endif %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/modulewcl/13-mkpng.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/modulewcl/14-firstcut-assess.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/inputcals/{{ args.campaignlib }}_inputs.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/Y3N/inputcals/{{ args.campaign }}_inputs.wcl>>
 
 {% if not args.labels %}
 label= ${nite} {% endif %}
@@ -89,4 +89,4 @@ GROUP_SUBMIT_ID = 1
 {# {% for key,val in args.iteritems() %} {% if key not in args['poplist'] %} {% if val %} #}
 {#{{key}} = {{val}} {% endif %} {% endif %} {% endfor %} #}
 
-{% endblcok %}
+{% endblock %}
