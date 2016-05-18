@@ -90,10 +90,10 @@ class PipeArgs(object):
         
         return parser
 
-class SupernovaArgs(PipeArgs):
+class SuperNova(PipeArgs):
 
     def cmdline(self):
-        parser = super(SupernovaArgs,self).argument_parser()
+        parser = super(SuperNova,self).argument_parser()
 
         # Science arguments
         parser.add('--triplet',help='A single triplet formated as "nite,field,filter" (e.g. "20160114,C3,g")')
@@ -110,10 +110,10 @@ class SupernovaArgs(PipeArgs):
 
         return args
 
-class WidefieldArgs(PipeArgs):
+class WideField(PipeArgs):
 
     def cmdline(self):
-        parser = super(WidefieldArgs,self).argument_parser()
+        parser = super(WideField,self).argument_parser()
         
         parser.add('--after_merge',action='store_true',help='Run in mode to directly insert\
                             objects into SE_OBJECT table')
@@ -138,7 +138,7 @@ class WidefieldArgs(PipeArgs):
 
         return args
 
-class NitelycalArgs(PipeArgs):
+class NitelyCal(PipeArgs):
 
     def cmdline(self):
         parser = super(NitelycalArgs,self).argument_parser()
@@ -159,7 +159,7 @@ class NitelycalArgs(PipeArgs):
 
         return args
 
-class HostnameArgs(PipeArgs):
+class HostName(PipeArgs):
 
     def cmdline(self):
         parser = super(HostnameArgs,self).argument_parser()
@@ -167,7 +167,7 @@ class HostnameArgs(PipeArgs):
 
         return args
 
-class PrebpmArgs(PipeArgs):
+class PreBPM(PipeArgs):
 
     def cmdline(self):
         parser = super(PrebpmArgs,self).argument_parser()

@@ -54,7 +54,7 @@ class PipeQuery(object):
                 tag_list_of_dict.append(tag_dict)
         return tag_list_of_dict
 
-class SupernovaQuery(PipeQuery):
+class SuperNova(PipeQuery):
 # Copied from widefield (unedited)
     def get_expnum_info(self,exposure_list):
         """ Query database for band and nite for each given exposure.
@@ -202,7 +202,7 @@ class SupernovaQuery(PipeQuery):
         precal_run = 'r%sp0%s' % (precal_reqnum,precal_attnum)
         return precal_nite, precal_run
 
-class WidefieldQuery(PipeQuery):
+class WideField(PipeQuery):
     def get_expnums_from_radec(self, RA, Dec):
 	RA = [float(r) for r in RA[0]]
 	Dec = [float(d) for d in Dec[0]]
@@ -358,7 +358,7 @@ class WidefieldQuery(PipeQuery):
         precal_run = 'r%sp0%s' % (precal_reqnum,precal_attnum)
         return precal_nite, precal_run
 
-class NitelycalQuery(PipeQuery):
+class NitelyCal(PipeQuery):
 
     def check_submitted(self,date):
         """Check to see if a nitelycal has been submitted with given date"""
@@ -425,7 +425,7 @@ class NitelycalQuery(PipeQuery):
 
         return df
 
-class PrebpmQuery(PipeQuery):
+class PreBPM(PipeQuery):
 
     def update_df(self,df):
         """ Takes a pandas dataframe and for each exposure add column:value

@@ -252,13 +252,13 @@ class SuperNova(PipeLine):
         """ Initialize arguments and configure"""
 
         # Setting global parameters
-        self.args = pipeargs.SupernovaArgs().cmdline()
+        self.args = pipeargs.SuperNova().cmdline()
         self.args.pipebox_dir,self.args.pipebox_work=self.pipebox_dir,self.pipebox_work
         self.args.pipeline = self.args.desstat_pipeline = "sne"
         self.args.output_name_keys = ['nite','field','band']
 
         super(SuperNova,self).update_args(self.args)         
-        self.args.cur = pipequery.SupernovaQuery(self.args.db_section)
+        self.args.cur = pipequery.SuperNova(self.args.db_section)
         
         # If auto-submit mode on
         if self.args.auto:
@@ -312,7 +312,7 @@ class WideField(PipeLine):
     def __init__(self):
         """ Initialize arguments and configure"""
         # Setting global parameters
-        self.args = pipeargs.WidefieldArgs().cmdline()
+        self.args = pipeargs.WideField().cmdline()
         self.args.pipeline = "widefield"
         if 'N' in self.args.campaign:
             self.args.desstat_pipeline = "firstcut"
@@ -322,8 +322,7 @@ class WideField(PipeLine):
         super(WideField,self).update_args(self.args)
         self.args.output_name_keys = ['nite','expnum','band']
        
-        self.args.cur = pipequery.WidefieldQuery(self.args.db_section)
-        
+        self.args.cur = pipequery.WideField(self.args.db_section)
         self.args.propid = self.args.propid.strip().split(',')
         self.args.program = self.args.program.strip().split(',')
  
@@ -385,11 +384,11 @@ class NitelyCal(PipeLine):
 
     def __init__(self):
         """ Initialize arguments and configure"""
-        self.args = pipeargs.NitelycalArgs().cmdline()
+        self.args = pipeargs.NitelyCal().cmdline()
         self.args.pipeline = "nitelycal"
 
         super(NitelyCal,self).update_args(self.args)
-        self.args.cur = pipequery.NitelycalQuery(self.args.db_section)
+        self.args.cur = pipequery.NitelyCal(self.args.db_section)
         self.args.bands = self.args.bands.strip().split(',') 
         self.args.output_name_keys = ['niterange']
         # If auto-submit mode on
@@ -528,7 +527,7 @@ class NitelyCal(PipeLine):
 class HostName(PipeLine):
     
     def __init__(self):
-        self.args = pipeargs.HostnameArgs().cmdline()
+        self.args = pipeargs.HostName().cmdline()
         self.args.pipeline = self.args.desstat_pipeline = "hostname"
         super(HostName,self).update_args(self.args) 
         self.args.submit_template_path = os.path.join("pipelines/{0}".format(self.args.pipeline),
@@ -581,13 +580,13 @@ class PreBPM(PipeLine):
     def __init__(self):
         """ Initialize arguments and configure"""
         # Setting global parameters
-        self.args = pipeargs.PrebpmArgs().cmdline()
+        self.args = pipeargs.PreBPM().cmdline()
         self.args.pipeline = self.args.desstat_pipeline = "prebpm"
 
         super(PreBPM,self).update_args(self.args)
         self.args.output_name_keys = ['nite','expnum','band']
        
-        self.args.cur = pipequery.PrebpmQuery(self.args.db_section)
+        self.args.cur = pipequery.PreBPM(self.args.db_section)
         
         # Creating dataframe from exposures 
         if self.args.resubmit_failed:
