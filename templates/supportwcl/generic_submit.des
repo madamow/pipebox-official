@@ -65,4 +65,8 @@ home_archive = prodbeta
 des_http_section = file-http-prodbeta
 {% endif %}
 
+{% if args.ccdnum %}
+ccdnum = {{ args.ccdnum }}
+{% endif %}
+
 {% block content %}{% endblock %}
