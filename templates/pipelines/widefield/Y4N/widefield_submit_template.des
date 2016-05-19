@@ -32,18 +32,20 @@
 {% endif %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/14-finalcut-assess.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/15-mkpng.wcl>>
+
+{% if args.inputcals_file %}
+<<include {{args.inputcals_file}}>>
+{% else %}
 {% if args.epoch_name %}
 {% if args.band in ['u','VR']%}
-<<include {{ args.pipebox_dir }}/templates/inputcals/widefield/{{ args.epoch_name }}_uVR_inputs.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{args.campaign}}/inputcals/{{ args.epoch_name }}_uVR_inputs.wcl>>
 {% else %}
-<<include {{ args.pipebox_dir }}/templates/inputcals/widefield/{{ args.epoch_name }}_inputs.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{args.campaign}}/inputcals/{{ args.epoch_name }}_inputs.wcl>>
 {% endif %}
 {% else %}
-<<include {{ args.pipebox_dir }}/templates/inputcals/widefield/inputs.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{args.campaign}}/inputcals/inputs.wcl>>
 {% endif %}
-
-# Added to run new framework in PROD
-<<include {{ args.pipebox_dir }}/templates/inputcals/widefield/db_config.des>>
+{% endif %}
 
 {% if not args.labels %}
 label = ${nite} {% endif %}

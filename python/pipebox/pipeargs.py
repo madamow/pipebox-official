@@ -80,6 +80,8 @@ class PipeArgs(object):
         parser.add('--Dec','-dec',nargs='+',action='append',help='Dec in deg., in the order of min max')
         parser.add('--epoch',help='Observing epoch. If not specified, will be calculated. E.g.,\
                          SVE1,SVE2,Y1E1,Y1E2,Y2E1,Y2E2...')
+        parser.add('--inputcals_file',help='Key=Var list of calibrations to be used in processing. \
+                         $PIPEBOX_DIR/templates/inputcals for a sample')
 
         # glide in options
         parser.add('--time_to_live',default=None,type=float,help='The amount of time-to-live (in hours)\
