@@ -1,0 +1,45 @@
+{% extends "supportwcl/generic_submit.des" %}
+{% block content %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/modnamepat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/01-crosstalk-bias.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/02-crosstalk-dflat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/03-mkbiascor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/04-mkdflatcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/inputcals/Y3N_nitelycal_inputs.wcl>>
+
+bias_expnum = {{ args.bias_list }}
+dflat_expnum = {{ args.flat_list }}
+
+{% if not args.labels %}
+label= ${nite}{% endif %}
+
+nite = {{ args.niterange }}
+{% if args.ccdnum %}
+ccdnum = {{ args.ccdnum }}{% endif %}
+
+unitname = ${nite}
+ops_run_dir = ${project}/${pipeline}/${nite}-r${reqnum}/p${attnum:2}
+submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
+
+save_run_vals = nite, camera, jira_id
+
+blocklist = xtalk-bias, xtalk-dflat, mkcor
+
+<block>
+    <xtalk-bias>
+        expnum = ${bias_expnum}
+        divide_jobs_by = expnum
+        modulelist = crosstalk-bias
+    </xtalk-bias>
+    <xtalk-dflat>
+        expnum = ${dflat_expnum}
+        divide_jobs_by = expnum
+        modulelist = crosstalk-dflat
+    </xtalk-dflat>
+    <mkcor>
+        divide_jobs_by = ccdnum
+        modulelist = mkbiascor,mkdflatcor
+    </mkcor>
+</block>
+
+{% endblock %}
