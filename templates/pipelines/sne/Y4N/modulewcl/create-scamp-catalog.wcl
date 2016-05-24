@@ -1,77 +1,76 @@
 <module> 
     <create-scamp-catalog>
         wrappername = genwrap.py 
-        wrapperloop = expnum,ccdnum
-        modnamepat=${modnamepat_field_ccdnumband}
+        wrapperloop = ccdnum,band
+        modnamepat=${modnamepat_ccdnumband}
 
         <file>
             <sex_config>
                 filetype = config
-                filename = ${config}_sexforscamp.config
+                filename = ${confignite}_sexforscamp.config
                 dirpat = se
                 rundir = config 
             </sex_config>
             <sex_param>
                 filetype = config 
-                filename = ${config}_sex.param_scamp
+                filename = ${confignite}_sex.param_scamp
                 dirpat = se
                 rundir = config
             </sex_param>
             <sex_filter>
                 filetype = config
-                filename = ${config}_sex.conv
+                filename = ${confignite}_sex.conv
                 dirpat = se
                 rundir = config
             </sex_filter>
             <sex_nnw>
                 filetype = config
-                filename = ${config}_sex.nnw
+                filename = ${confignite}_sex.nnw
                 dirpat = se
                 rundir = config
             </sex_nnw>
-            <red_detrend>
-                filetype = snred_detrend
-                filepat = sn_ccdnum_band
-                flabel = detrend
+            <red_nullweight_pixcor>
+                # what metadata to get
+                filetype = red_pixcor_nullwgt
+
+                # how to name the file
+                filepat = ccdnum_band
+                flabel = nullweight-pixcor
                 fsuffix = fits
-                dirpat = sne_ccd
-                rundir = red
-            </red_detrend>
+
+                # where to put the file
+                dirpat = se
+                rundir = red/pixcor
+            </red_nullweight_pixcor>
             <scamp_cat>
-                filetype = sncat_scamp
-                filepat = sn_ccdnum_band
+                filetype = cat_scamp
+                filepat = ccdnum_band
                 flabel = scampcat
                 fsuffix = fits
-                dirpat = sne
-                ops_enddir = astrom-scamp/cat
-                rundir = astrom-scamp/cat
-                savefiles = true
+                dirpat = se
+                ops_enddir = cat
+                rundir = cat
+                savefiles = false
             </scamp_cat>
         </file>
         <exec_1>
             execname = sex
-            used = file.red_detrend,file.sex_config,file.sex_param,file.sex_filter,file.sex_nnw
+            used = file.red_nullweight_pixcor,file.sex_config,file.sex_param,file.sex_filter,file.sex_nnw
             was_generated_by = file.scamp_cat
-            ancestry = file.red_detrend:file.scamp_cat
+            ancestry = file.red_nullweight_pixcor:file.scamp_cat
             <cmdline>
-                _01_red_detrend = ${file.red_detrend.fullname}[0]
+                _01_red_pixcor = ${file.red_nullweight_pixcor.fullname}[0]
                 c = ${file.sex_config.fullname}
                 CATALOG_NAME = ${file.scamp_cat.fullname}
                 CATALOG_TYPE = FITS_LDAC
                 WEIGHT_TYPE = MAP_WEIGHT
-                WEIGHT_IMAGE = ${file.red_detrend.fullname}[2]
-                FLAG_IMAGE = ${file.red_detrend.fullname}[1]
+                WEIGHT_IMAGE = ${file.red_nullweight_pixcor.fullname}[2]
+                FLAG_IMAGE = ${file.red_nullweight_pixcor.fullname}[1]
                 PARAMETERS_NAME = ${file.sex_param.fullname}
                 FILTER_NAME = ${file.sex_filter.fullname}
                 STARNNW_NAME = ${file.sex_nnw.fullname}
-                WEIGHT_THRESH = 0.0
-                SATUR_LEVEL = $HEAD{${file.red_detrend.fullname},SATURATE} 
+                SATUR_KEY = SATURATE
                 DETECT_THRESH = 10.0
-                #MMG scamp = _flag
-                DEBLEND_MINCONT = 0.1
-                INTERP_TYPE = ALL
-                INTERP_MAXXLAG = 4
-                INTERP_MAXYLAG 4
             </cmdline>
         </exec_1>
     </create-scamp-catalog>

@@ -2,34 +2,33 @@
     <split-scamp-ahead>
         wrappername = genwrap.py 
         wrapperloop = expnum
-        modnamepat = ${modnamepat_field_expband}
+        modnamepat=${modnamepat_expband}
 
         <file>
-            <full_ahead>
+            <ahead_full>
                 filetype = config
-                filename = ${scamp_ahead_file}
+                filename = ${confignite}_decam_pvmodel_${scampaheadnite}_${band}.ahead
                 dirpat = se
-                ops_enddir = astrom-scamp/aux
-                rundir = astrom-scamp/aux
-            </full_ahead>
-            <partial_ahead>
-                filetype = snhead_scamp
-                filename = ${camera}${expnum:8}_r${reqnum}p${attnum:2}_${band}_scamp.ahead
-                dirpat = sne
-                ops_enddir = astrom-scamp/aux
-                rundir = astrom-scamp/aux
-                savefiles = true
-            </partial_ahead>
+        		ops_enddir = aux
+                rundir = config
+            </ahead_full>
+            <ahead_partial>
+                filetype = config 
+		        filename = ${camera}${expnum:8}_${band}_r${reqnum}p${attnum:2}_scamp.ahead
+                dirpat = se
+                ops_enddir = aux
+                rundir = aux
+                savefiles = false
+            </ahead_partial>
         </file>
-
         <exec_1>
             execname = split_ahead_by_ccd.py
-            used = file.full_ahead
-            was_generated_by = file.partial_ahead
-            ancestry = file.full_ahead:file.partial_ahead
+            used = file.ahead_full
+            was_generated_by = file.ahead_partial
+            ancestry = file.ahead_full:file.ahead_partial
             <cmdline>
-                i = ${file.full_ahead.fullname}
-                o = ${file.partial_ahead.fullname}
+        		i = ${file.ahead_full.fullname}
+                o = ${file.ahead_partial.fullname}
                 c = ${ccdnum}
             </cmdline>
         </exec_1>

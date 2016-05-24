@@ -1,4 +1,4 @@
-<<include ${PIPEBOX_DIR}/templates/pipelines/sne/Y3N/modulewcl/modnamepat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/modnamepat.wcl>>
 
 pipeline = sne     # used in desstat output, directory structure, etc
 unitname = ${camera}_${field}_${band}_s${seqnum}   # pipeline specific
@@ -32,71 +32,69 @@ photflagvar = 1    # needed for crosstalk code
     </sne-ccd-combined>
 </block>
 
-<<include ${DESDM_MODULEWCL}/astrom-scamp-list.wcl>>
-<<include ${DESDM_MODULEWCL}/astrom-scamp.wcl>>
-<<include ${DESDM_MODULEWCL}/autoscan-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/autoscan-single.wcl>>
-<<include ${DESDM_MODULEWCL}/cat-dofake.wcl>>
-<<include ${DESDM_MODULEWCL}/combine-scamp-cats.wcl>>
-<<include ${DESDM_MODULEWCL}/create-astrom-sex-scamp.wcl>>
-<<include ${DESDM_MODULEWCL}/create-bkg-img.wcl>>
-<<include ${DESDM_MODULEWCL}/create-diff-cat-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/create-diff-cat-single.wcl>>
-<<include ${DESDM_MODULEWCL}/create-head-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/create-head-distmpl-single.wcl>>
-<<include ${DESDM_MODULEWCL}/create-head-fake-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/create-head-nofake-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/create-psfex-cat-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/create-psfex-cat-distmpl-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/create-psfex-cat-distmpl.wcl>>
-<<include ${DESDM_MODULEWCL}/create-psfex-cat-dofake.wcl>>
-<<include ${DESDM_MODULEWCL}/create-psfex-cat.wcl>>
-<<include ${DESDM_MODULEWCL}/create-scamp-catalog.wcl>>
-<<include ${DESDM_MODULEWCL}/crosstalk-sci.wcl>>
-<<include ${DESDM_MODULEWCL}/detrend-fringe.wcl>>
-<<include ${DESDM_MODULEWCL}/detrend-nofringe.wcl>>
-<<include ${DESDM_MODULEWCL}/distort-template-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/distort-template-single.wcl>>
-<<include ${DESDM_MODULEWCL}/dofake.wcl>>
-<<include ${DESDM_MODULEWCL}/fakeMatch-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/fakeMatch.wcl>>
-<<include ${DESDM_MODULEWCL}/filterobj-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/filterobj-single.wcl>>
-<<include ${DESDM_MODULEWCL}/forcePhoto-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/forcePhoto.wcl>>
-<<include ${DESDM_MODULEWCL}/hotpants-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/hotpants-single.wcl>>
-<<include ${DESDM_MODULEWCL}/immask.wcl>>
-<<include ${DESDM_MODULEWCL}/immerge-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/immerge-diff-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/immerge-diff-single.wcl>>
-#<<include ${DESDM_MODULEWCL}/immerge-diff-single-forcombine.wcl>>
-<<include ${DESDM_MODULEWCL}/immerge-distmpl-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/immerge-distmpl-single.wcl>>
-#<<include ${DESDM_MODULEWCL}/immerge-distmpl-single-forcombine.wcl>>
-<<include ${DESDM_MODULEWCL}/immerge-fake-single.wcl>>
-<<include ${DESDM_MODULEWCL}/ingest-psfex-xml.wcl>>
-<<include ${DESDM_MODULEWCL}/ingest-scamp-xml.wcl>>
-<<include ${DESDM_MODULEWCL}/insert_forceImageTable-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/insert_forceImageTable.wcl>>
-<<include ${DESDM_MODULEWCL}/makecand-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/makecand.wcl>>
-<<include ${DESDM_MODULEWCL}/makeForceList_fakesOnly-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/makeForceList_fakesOnly.wcl>>
-<<include ${DESDM_MODULEWCL}/makestamps-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/makestamps-single.wcl>>
-<<include ${DESDM_MODULEWCL}/makeStarCat.wcl>>
-<<include ${DESDM_MODULEWCL}/makeweight.wcl>>
-<<include ${DESDM_MODULEWCL}/mkbleedmask.wcl>>
-<<include ${DESDM_MODULEWCL}/monzptemplate.wcl>>
-<<include ${DESDM_MODULEWCL}/run-psfex-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/run-psfex-dofake.wcl>>
-<<include ${DESDM_MODULEWCL}/run-psfex.wcl>>
-<<include ${DESDM_MODULEWCL}/se-scamp.wcl>>
-<<include ${DESDM_MODULEWCL}/split-scamp-ahead.wcl>>
-<<include ${DESDM_MODULEWCL}/split-scamp-head.wcl>>
-<<include ${DESDM_MODULEWCL}/strip-pv.wcl>>
-<<include ${DESDM_MODULEWCL}/swarp-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/swarp-nofake-combined.wcl>>
-<<include ${DESDM_MODULEWCL}/update-astrom-scamp-header.wcl>>
-<<include ${DESDM_MODULEWCL}/update-scamp-headers.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/astrom-scamp-list.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/astrom-scamp.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/autoscan-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/autoscan-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/cat-dofake.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/create-astrom-sex-scamp.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/create-bkg-img.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/create-diff-cat-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/create-diff-cat-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/create-head-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/create-head-distmpl-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/create-head-fake-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/create-head-nofake-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/create-psfex-cat-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/create-psfex-cat-distmpl-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/create-psfex-cat-distmpl.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/create-psfex-cat-dofake.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/create-psfex-cat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/create-scamp-catalog.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/crosstalk-sci.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/detrend-fringe.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/detrend-nofringe.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/distort-template-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/distort-template-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/dofake.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/fakeMatch-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/fakeMatch.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/filterobj-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/filterobj-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/forcePhoto-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/forcePhoto.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/hotpants-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/hotpants-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/immask.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/immerge-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/immerge-diff-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/immerge-diff-single.wcl>>
+#<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/immerge-diff-single-forcombine.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/immerge-distmpl-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/immerge-distmpl-single.wcl>>
+#<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/immerge-distmpl-single-forcombine.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/immerge-fake-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/ingest-psfex-xml.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/ingest-scamp-xml.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/insert_forceImageTable-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/insert_forceImageTable.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/makecand-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/makecand.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/makeForceList_fakesOnly-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/makeForceList_fakesOnly.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/makestamps-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/makestamps-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/makeStarCat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/makeweight.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/mkbleedmask.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/monzptemplate.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/run-psfex-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/run-psfex-dofake.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/run-psfex.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/run-scamp.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/split-scamp-ahead.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/strip-pv.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/swarp-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/swarp-nofake-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/update-astrom-scamp-header.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/update-scamp-headers.wcl>>
