@@ -2,8 +2,7 @@ from datetime import datetime
 import pandas
 
 import redis
-
-from despydb import DesDbi
+from numba import jit
 
 def connect_to_redis(host='localhost',port=6379,db=0):
     # Setting up redis object
@@ -33,19 +32,17 @@ def check_passed(cur,reqnum,unitname,attnum):
         return (status,True)
     elif status != 0:
         return (status,False)
-
 def return_tagged_runs(cur,tag):
     query = "select distinct reqnum,unitname,attnum from proctag where tag= '{tag}' order by reqnum,unitname,attnum".format(tag=tag)
-
-    #query = "select distinct p.reqnum,p.unitname,p.attnum,status from proctag p,pfw_attempt a,task t where t.id=a.task_id and p.unitname=a.unitname and p.attnum=a.attnum and p.reqnum=a.reqnum and tag= '{tag}' order by reqnum,unitname,attnum".format(tag=tag)
     cur.execute(query)
     return pandas.DataFrame(cur.fetchall(),columns=['reqnum','unitname','attnum'])
 
+@jit
 def update_queue(df):
     for i,row in runs.iterrows():
         expnum = row.unitname.split('D00')[1]
-        status,passed = check_passed(cur,row.reqnum,row.unitname,row.attnum)
-        if passed:
+        #status,passed = check_passed(cur,row.reqnum,row.unitname,row.attnum)
+        if row.status ==0:
             r.sadd(success,expnum)
             r.srem(tag,expnum)
         else:
@@ -55,7 +52,7 @@ if __name__=='__main__':
 
     start =  datetime.now()
     print(start)
-    cur = connect_to_db()
+    #cur = connect_to_db()
     r = connect_to_redis()
     tag = 'Y3A1_FINALCUT'
     success = tag + '_PASSED'   
