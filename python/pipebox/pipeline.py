@@ -20,7 +20,8 @@ class PipeLine(object):
         """ Update pipeline's arguments with template paths"""
 
         args.pipebox_dir,args.pipebox_work=self.pipebox_dir,self.pipebox_work
-
+        args.submit_time = datetime.datetime.now()
+        
         if self.args.ignore_jira:
             if not self.args.reqnum or not self.args.jira_parent:
                 print "Must specify both --reqnum and --jira_parent to avoid using JIRA!"
@@ -156,7 +157,8 @@ class PipeLine(object):
         except:
             print "Must specify input data!"
             sys.exit(1)
-
+        
+        args.dataframe['user'] = args.jira_user
         group = args.dataframe.groupby(by=[groupby])
         for name,vals in group:
             # create JIRA ticket per nite and add jira_id,reqnum to dataframe
