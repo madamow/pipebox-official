@@ -4,7 +4,8 @@ from pipebox import pipeline
 
 # initialize and get options
 multiepoch = pipeline.MultiEpoch()
-args = multiepochargs
+args = multiepoch.args
+print args.dataframe
 
 # create JIRA ticket per nite found (default)
 if args.exptag:
@@ -17,4 +18,4 @@ else:
 
 # write submit files and submit if necessary
 # columns should only be values that change per submit (groupby)
-multiepoch.make_templates(columns=['tile','band'],groupby='tile')
+multiepoch.make_templates(columns=['tile'],groupby='tile')

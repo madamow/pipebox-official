@@ -203,6 +203,9 @@ class SuperNova(PipeQuery):
         return precal_nite, precal_run
 
 class MultiEpoch(PipeQuery):
+    
+    def update_df(self,df):
+        pass
 
     def check_submitted(self, tile, reqnum):
         pass

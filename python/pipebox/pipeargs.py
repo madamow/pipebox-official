@@ -113,7 +113,7 @@ class SuperNova(PipeArgs):
         return args
 
 
-class MultiEpoch(PipeAgs):
+class MultiEpoch(PipeArgs):
 
     def cmdline(self):
         parser = super(MultiEpoch,self).argument_parser()

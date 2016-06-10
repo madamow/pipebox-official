@@ -91,9 +91,13 @@ class PipeLine(object):
             else:
                 if self.args.pipeline == 'widefield':
                     firstexpnum = group['expnum'].unique()[0]
-                else:
+                    self.args.epoch_name = self.args.cur.find_epoch(firstexpnum)
+                elif self.args.pipeline != 'multiepoch':
                     firstexpnum = group['firstexp'].unique()[0]
-                self.args.epoch_name = self.args.cur.find_epoch(firstexpnum)
+                    self.args.epoch_name = self.args.cur.find_epoch(firstexpnum)
+                else:
+                    self.args.epoch_name = firstexpnum = None
+                
             # Adding column values to args
             for c in columns:
                 setattr(self.args,c, group[c].unique()[0])
@@ -317,8 +321,8 @@ class MultiEpoch(PipeLine):
         self.args = pipeargs.MultiEpoch().cmdline()
         self.args.pipeline = self.args.desstat_pipeline = "multiepoch"
 
-        super(MultiEpoch(),self).update_args(self.args)
-        self.args.output_name_keys = ['tile','band']
+        super(MultiEpoch,self).update_args(self.args)
+        self.args.output_name_keys = ['tile']
        
         self.args.cur = pipequery.MultiEpoch(self.args.db_section)
  
@@ -345,12 +349,13 @@ class MultiEpoch(PipeLine):
             self.args.dataframe = pd.DataFrame(self.args.tile_list, columns=['tile'])
 
         # Update dataframe for each exposure and add band,nite if not exists
+        """
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
             self.args.dataframe = self.args.dataframe.fillna(False)
         except: 
             pass
-
+        """
 class WideField(PipeLine):
 
     def __init__(self):
