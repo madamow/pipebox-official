@@ -202,6 +202,21 @@ class SuperNova(PipeQuery):
         precal_run = 'r%sp0%s' % (precal_reqnum,precal_attnum)
         return precal_nite, precal_run
 
+class MultiEpoch(PipeQuery):
+
+    def check_submitted(self, tile, reqnum):
+        pass
+
+    def get_tiles_from_radec(self,RA, Dec):
+        pass
+
+    def get_failed_tiles(self, reqnum):
+        pass
+
+    def get_tiles_from_tag(self,tag):
+        pass
+
+    
 class WideField(PipeQuery):
     def get_expnums_from_radec(self, RA, Dec):
         RA = [float(r) for r in RA[0]]

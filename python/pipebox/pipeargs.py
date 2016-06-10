@@ -112,6 +112,24 @@ class SuperNova(PipeArgs):
 
         return args
 
+
+class MultiEpoch(PipeAgs):
+
+    def cmdline(self):
+        parser = super(MultiEpoch,self).argument_parser()
+        
+        parser.add('--after_merge',action='store_true',help='Run in mode to directly insert\
+                            objects into SE_OBJECT table')
+        # Science arguments
+        parser.add('--tile',help='A single tile or comma-separated list of tiles')
+        parser.add('--list',help='File of line-separated tiles')
+        parser.add('--exptag',help='Grab all expnums with given tag in exposuretag table')
+        
+        args = parser.parse_args()
+
+        return args
+       
+
 class WideField(PipeArgs):
 
     def cmdline(self):

@@ -309,6 +309,48 @@ class SuperNova(PipeLine):
         self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
         self.args.dataframe = self.args.dataframe.fillna(False)
 
+class MultiEpoch(PipeLine):
+
+    def __init__(self):
+        """ Initialize arguments and configure"""
+        # Setting global parameters
+        self.args = pipeargs.MultiEpoch().cmdline()
+        self.args.pipeline = self.args.desstat_pipeline = "multiepoch"
+
+        super(MultiEpoch(),self).update_args(self.args)
+        self.args.output_name_keys = ['tile','band']
+       
+        self.args.cur = pipequery.MultiEpoch(self.args.db_section)
+ 
+        # Creating dataframe from tiles
+        if self.args.resubmit_failed:
+            self.args.ignore_processed=False
+            self.args.tile_list = self.args.cur.get_failed_tiles(self.args.reqnum)
+            self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
+        elif self.args.exptag:
+            self.args.tile_list = self.args.cur.get_tiles_from_tag(self.args.exptag)
+            self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile','tag']).sort(columns=['tag','tile'],ascending=True)
+        elif self.args.tile:
+            self.args.tile_list = self.args.tile.split(',')
+            self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
+        elif self.args.list:
+            self.args.tile_list = list(pipeutils.read_file(self.args.list))
+            self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
+        elif self.args.csv:
+            self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
+            self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
+            self.args.tile_list = list(self.args.dataframe['tile'].values)
+        elif self.args.RA and self.args.Dec:
+            self.args.tile_list = self.args.cur.get_tiles_from_radec(self.args.RA, self.args.Dec)
+            self.args.dataframe = pd.DataFrame(self.args.tile_list, columns=['tile'])
+
+        # Update dataframe for each exposure and add band,nite if not exists
+        try:
+            self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
+            self.args.dataframe = self.args.dataframe.fillna(False)
+        except: 
+            pass
+
 class WideField(PipeLine):
 
     def __init__(self):
