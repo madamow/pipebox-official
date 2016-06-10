@@ -35,6 +35,7 @@ purge_job_dir = never
 compress_cleanup = False
 
 basket = {{args.tile}} # FIX THIS
+proctag = {{args.proctag}}
 tilename = DES0459-5622
 unitname = ${tilename}
 {% if args.rundir %}
@@ -42,7 +43,6 @@ ops_run_dir = {{ args.rundir }}
 {% else %}
 ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/${unitname}/p${attnum:2}
 {% endif %}
-submit_run_dir = ${unitname}_r${reqnum}p${attnum:2}_${submit_time}
 
 <<inclfunc mepipelineappintg.mepochmisc.get_tile_info(submit_des_services, submit_des_db_section, tilename)>>
 

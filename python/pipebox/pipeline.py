@@ -331,9 +331,6 @@ class MultiEpoch(PipeLine):
             self.args.ignore_processed=False
             self.args.tile_list = self.args.cur.get_failed_tiles(self.args.reqnum)
             self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
-        elif self.args.exptag:
-            self.args.tile_list = self.args.cur.get_tiles_from_tag(self.args.exptag)
-            self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile','tag']).sort(columns=['tag','tile'],ascending=True)
         elif self.args.tile:
             self.args.tile_list = self.args.tile.split(',')
             self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])

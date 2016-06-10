@@ -123,7 +123,7 @@ class MultiEpoch(PipeArgs):
         # Science arguments
         parser.add('--tile',help='A single tile or comma-separated list of tiles')
         parser.add('--list',help='File of line-separated tiles')
-        parser.add('--exptag',help='Grab all expnums with given tag in exposuretag table')
+        parser.add('--proctag',help='Grab all expnums with given tag in proctag table')
         
         args = parser.parse_args()
 
