@@ -1,0 +1,54 @@
+<module>
+    <catalog-ingest>
+        modnamepat = ${modnamepat_tile_generic}
+        wrappername = genwrap.py
+        <exec_1>
+            execname = coadd_ingest.py
+            cmd_hyphen = mixed_gnu
+            used = file.coadd_cat, file.det_cat, file.extinct, file.healpix
+            <cmdline>
+                detcat = ${file.det_cat.fullname}
+                bandcat = ${file.coadd_cat.fullname}
+                extinct = ${file.extinct.fullname}
+                healpix = ${file.healpix.fullname}
+                schema = prodbeta
+            </cmdline>
+        </exec_1>
+        <file>
+            ### inputs
+            <coadd_cat>
+                # how to get file data
+                depends band-coadd-catalog.file.coadd_cat
+                ignore_multiple_error = True
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = cat
+            </coadd_cat>
+            <det_cat>
+                # how to get file data
+                depends det-catalog.file.det_cat
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = cat
+            </det_cat>
+            <extinct>
+                # how to get file data
+                depends extinction.file.extinct
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = cat
+            </extinct>
+            <healpix>
+                # how to get file data
+                depends healpix.file.hpix
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = cat
+            </healpix>
+        </file>
+    </catalog-ingest>
+</module>

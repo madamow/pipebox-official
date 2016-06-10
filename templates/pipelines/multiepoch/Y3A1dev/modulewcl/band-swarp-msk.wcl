@@ -1,0 +1,162 @@
+<module>
+    <band-swarp-msk>
+        <exec_1>
+            <cmdline>
+                _01_sci = @${list.sci.fullname}
+                c = ${file.swarp_config.fullname}
+                WEIGHTOUT_NAME = ${file.coadd_msk.fullname}
+                CENTER = ${ra_cent},${dec_cent}
+                PIXEL_SCALE = ${pixelscale}
+                FSCALE_DEFAULT = @${list.flux.fullname}
+                IMAGE_SIZE = ${naxis1},${naxis2}
+                IMAGEOUT_NAME = ${file.coadd_tmp_sci.fullname}
+                COMBINE_TYPE = WEIGHTED
+                WEIGHT_IMAGE = @${list.msk.fullname}
+                NTHREADS = ${nthreads}
+                COPY_KEYWORDS = BUNIT,FILTER,BAND,TILENAME,TILEID
+            </cmdline>
+            execname = swarp
+            cmd_hyphen = allsingle
+            used = list.sci.nwgint, list.msk.nwgint, list.flux.nwgint, file.swarp_config
+            was_generated_by = file.coadd_tmp_sci, file.coadd_msk
+            ancestry = list.sci.nwgint:file.coadd_msk
+        </exec_1>
+        modnamepat = ${modnamepat_tile_band}
+        wrappername = genwrap.py
+        wrapperloop = band
+        loopobj = list.imgme
+        <list>
+            <imgme>
+                # how to get list data
+                depends null-weight-for-coadd.file.nwgint
+                divide_by = band
+                #sortkey = (expnum, True, False)
+                sortkey = (filename, False, False)
+                <div_list_by_col>
+                    <sci>
+                        filepat = tile_band
+                        flabel = swarp-band-msk-sci
+                        fsuffix = list
+
+                        dirpat = mepoch
+                        ops_enddir = list
+                        rundir = list
+
+                        columns = $FMT{%s[0], nwgint.fullname}
+                    </sci>
+                    <msk>
+                        filepat = tile_band
+                        flabel = swarp-band-msk-wgt
+                        fsuffix = list
+
+                        dirpat = mepoch
+                        ops_enddir = list
+                        rundir = list
+
+                        columns = $FMT{%s[2], nwgint.fullname}
+                    </msk>
+                    <flux>
+                        filepat = tile_band
+                        flabel = swarp-band-msk-flx
+                        fsuffix = list
+
+                        dirpat = mepoch
+                        ops_enddir = list
+                        rundir = list
+
+                        columns = nwgint.fluxscale
+                    </flux>
+                </div_list_by_col>
+            </imgme>
+            <head>
+                # how to get file data
+                depends-newname = band-swarp-msk.list.imgme
+                divide_by = band
+                #sortkey = (expnum, True, False)
+                sortkey = (filename, False, False)
+
+                filepat = tile_band
+                flabel = swarp-band-msk-head
+                fsuffix = list
+
+                dirpat = mepoch
+                ops_enddir = list
+                rundir = list
+
+                columns = head.fullname
+            </head>
+        </list>
+        <file>
+            ##### input files
+            <swarp_config>
+                # what the input files are named
+                filename = ${swarp_config_file}
+
+                # where the input files go in jobroot
+                dirpat = mepoch
+                rundir = config
+            </swarp_config>
+            <nwgint>
+                listonly = True
+
+                # how input files are named
+                filepat = tile_expbandccd
+                flabel = nwgint
+                fsuffix = fits
+
+                # where file will be in jobroot
+                dirpat = mepoch
+                rundir = nwgint
+            </nwgint>
+            <head>
+                listonly = True
+
+                # how input files are named
+                filepat = tile_expbandccd
+                flabel = nwgint
+                fsuffix = head
+
+                # where file will be in jobroot
+                dirpat = mepoch
+                rundir = aux
+            </head>
+            ##### output files
+            <coadd_tmp_sci>
+                # what metadata to save
+                filetype = coadd_tmpsci
+
+                # how to name output file
+                filepat = tile_band
+                flabel = tmp-sci
+                fsuffix = fits
+
+                # whether to save or compress
+                savefiles = false
+                compress_files = false
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                rundir = coadd
+                ops_enddir = coadd
+            </coadd_tmp_sci>
+            <coadd_msk>
+                # what metadata to save
+                filetype = coadd_msk
+
+                # how to name output file
+                filepat = tile_band
+                flabel = msk
+                fsuffix = fits
+
+                # whether to save or compress
+                savefiles = false
+                compress_files = false
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                rundir = coadd
+                ops_enddir = coadd
+            </coadd_msk>
+        </file>
+    </band-swarp-msk>
+</module>

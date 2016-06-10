@@ -1,0 +1,155 @@
+<module>
+    <band-swarp-wgt>
+        <exec_1>
+            <cmdline>
+                _01_sci = @${list.sci.fullname}
+                c = ${file.swarp_config.fullname}
+                WEIGHTOUT_NAME = ${file.coadd_wgt.fullname}
+                CENTER = ${ra_cent},${dec_cent}
+                PIXEL_SCALE = ${pixelscale}
+                FSCALE_DEFAULT = @${list.flux.fullname}
+                IMAGE_SIZE = ${naxis1},${naxis2}
+                IMAGEOUT_NAME = ${file.coadd_sci.fullname}
+                COMBINE_TYPE = WEIGHTED
+                WEIGHT_IMAGE = @${list.wgt.fullname}
+                NTHREADS = ${nthreads}
+                COPY_KEYWORDS = BUNIT,FILTER,BAND,TILENAME,TILEID
+            </cmdline>
+            execname = swarp
+            cmd_hyphen = allsingle
+            used = list.sci.nwgint, list.wgt.nwgint, list.flux.nwgint, file.swarp_config
+            was_generated_by = file.coadd_sci, file.coadd_wgt
+            ancestry = list.sci.nwgint:file.coadd_sci
+        </exec_1>
+        modnamepat = ${modnamepat_tile_band}
+        wrappername = genwrap.py
+        wrapperloop = band
+        loopobj = list.imgme
+       <list>
+            <imgme>
+                # how to get file data
+                depends null-weight-for-coadd.file.nwgint
+                divide_by = band
+                #sortkey = (expnum, True, False)
+                sortkey = (filename, False, False)
+                <div_list_by_col>
+                    <sci>
+                        filepat = tile_band
+                        flabel = swarp-band-wgt-sci
+                        fsuffix = list
+
+                        dirpat = mepoch
+                        ops_enddir = list
+                        rundir = list
+
+                        columns = $FMT{%s[0], nwgint.fullname}
+                    </sci>
+                    <wgt>
+                        filepat = tile_band
+                        flabel = swarp-band-wgt-wgt
+                        fsuffix = list
+
+                        dirpat = mepoch
+                        ops_enddir = list
+                        rundir = list
+
+                        columns = $FMT{%s[1], nwgint.fullname}
+                    </wgt>
+                    <flux>
+                        filepat = tile_band
+                        flabel = swarp-band-wgt-flx
+                        fsuffix = list
+
+                        dirpat = mepoch
+                        ops_enddir = list
+                        rundir = list
+
+                        columns = nwgint.fluxscale
+                    </flux>
+                </div_list_by_col>
+            </imgme>
+            <head>
+                # how to get file data
+                depends-newname = band-swarp-wgt.list.imgme
+                divide_by = band
+                #sortkey = (expnum, True, False)
+                sortkey = (filename, False, False)
+
+                filepat = tile_band
+                flabel = swarp-band-wgt-head
+                fsuffix = list
+
+                dirpat = mepoch
+                ops_enddir = list
+                rundir = list
+
+                columns = head.fullname
+            </head>
+        </list>
+        <file>
+            <swarp_config>
+                # what the input files are named
+                filename = ${swarp_config_file}
+
+                # where the input files go in jobroot
+                dirpat = mepoch
+                rundir = config
+            </swarp_config>
+            <nwgint>
+                listonly = True
+                filepat = tile_expbandccd
+                flabel = nwgint
+                fsuffix = fits
+
+                dirpat = mepoch
+                rundir = nwgint
+                ops_enddir = nwgint
+            </nwgint>
+            <head>
+                listonly = True
+                filepat = tile_expbandccd
+                flabel = scamp
+                fsuffix = head
+
+                dirpat = mepoch
+                rundir = aux
+            </head>
+            <coadd_sci>
+                # what metadata to save
+                filetype = coadd_sci
+
+                # how to name output file
+                filepat = tile_band
+                flabel = sci
+                fsuffix = fits
+
+                # whether to save or compress
+                savefiles = false
+                compress_files = false
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                rundir = coadd
+                ops_enddir = coadd
+            </coadd_sci>
+            <coadd_wgt>
+                # what metadata to save
+                filetype = coadd_wgt
+
+                # how to name output file
+                filepat = tile_band
+                flabel = wgt
+                fsuffix = fits
+
+                # whether to save or compress
+                savefiles = false
+                compress_files = false
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                rundir = coadd
+                ops_enddir = coadd
+            </coadd_wgt>
+        </file>
+    </band-swarp-wgt>
+</module>

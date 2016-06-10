@@ -1,0 +1,101 @@
+{% extends "supportwcl/generic_submit.des" %}
+{% block content %}
+
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/myprodbeta.des>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/inputcals/inputs.des>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/modnamepat.wcl>>
+
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/band-assemble.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/band-coadd-catalog.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/band-create-psfex-catalog.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/band-psfex.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/band-swarp-msk.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/band-swarp-wgt.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/catalog-ingest.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/coadd-astrorefine.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/combine-se-cat.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/det-assemble.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/det-catalog.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/det-create-psfex-catalog.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/det-psfex.wcl>><<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/det-swarp-msk.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/det-swarp-wgt.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/extinction.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/healpix.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/ingest-scamp-xml-exp.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/make-color-img.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/make-ptif.wcl>><<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/mangle.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/null-weight-for-coadd.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/split-scamp-head.wcl>>
+
+### Can we tweak ops_run_dir so that not 9000 tile directories in same directory???
+###         Is there an equivalent bucket to single epoch's nite?
+
+### update copy_keywords in config file and remove from command line for band-swarp calls
+
+master_use_fwthreads = True
+
+# these 2 are for debugging purposes
+purge_job_dir = never
+compress_cleanup = False
+
+basket = {{args.tag}} # FIX THIS
+tilename = DES0459-5622
+unitname = ${tilename}
+{% if args.rundir %}
+ops_run_dir = {{ args.rundir }}
+{% else %}
+ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/${unitname}/p${attnum:2}
+{% endif %}
+submit_run_dir = ${unitname}_r${reqnum}p${attnum:2}_${submit_time}
+
+<<inclfunc mepipelineappintg.mepochmisc.get_tile_info(submit_des_services, submit_des_db_section, tilename)>>
+
+det_bands = i,r,z
+color_r_band = i
+color_g_band = r
+color_b_band = g
+mag_zero = 30
+zsource = GCM 
+zeropoint_table = zeropoint 
+blacklist_table = blacklist 
+assemble_block_size = 10
+ydilate = 3
+psfex_satur_level = 65000
+nthreads = 8
+cat_columns = NUMBER,ALPHAWIN_J2000,DELTAWIN_J2000
+
+scamp_config_file = ${cfgver}_scamp.config
+swarp_config_file = ${cfgver}_swarp.config
+nwgint_config_file = ${cfgver}_coadd_nwgint.config
+psfex_config_file = ${cfgver}_psfex.config
+stiff_config_file = ${cfgver}_stiff.config
+ptif_config_file = ${cfgver}_ptif.config
+sex_psfex_config_file = ${cfgver}_sex.config
+sex_psfex_param_file = ${cfgver}_sex.param_psfex
+sex_psfex_conv_file = ${cfgver}_sex.conv
+sex_psfex_nnw_file = ${cfgver}_sex.nnw
+sex_cat_config_file = ${cfgver}_sex.config
+sex_cat_conv_file = ${cfgver}_gauss_3.0_7x7.conv
+# nomodel sex_cat_param_file is for testing purposes only....runs faster
+#sex_cat_param_file = ${cfgver}_sex.param_diskonly
+sex_cat_param_file = ${cfgver}_sex.param_nomodel
+sex_cat_nnw_file = ${cfgver}_sex.nnw
+
+######################################################################
+blocklist = me
+
+<directory_pattern>
+    <mepoch>
+        name = mepoch
+        ops = ${ops_run_dir}/${ops_enddir}
+        runtime = ${rundir}
+    </mepoch>
+</directory_pattern>
+
+<block>
+    <me>
+        modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, det-swarp-wgt, det-swarp-msk, band-assemble, det-assemble, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, make-color-img, extinction, healpix, catalog-ingest, mangle, make-ptif
+    </me>
+</block>
+
+{% endblock %}

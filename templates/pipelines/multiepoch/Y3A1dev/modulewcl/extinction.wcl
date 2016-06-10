@@ -1,0 +1,49 @@
+<module>
+    <extinction>
+        modnamepat = ${modnamepat_tile_generic}
+        wrappername = genwrap.py
+        <exec_1>
+            execname = compute_SFD98_coadd_catalog
+            cmd_hyphen = mixed_gnu
+            used = file.det_cat
+            was_generated_by = file.extinct
+            ancestry = file.det_cat:file.extinct
+            <cmdline>
+                i = ${file.det_cat.fullname}
+                o = ${file.extinct.fullname}
+                c = ${cat_columns}
+            </cmdline>
+        </exec_1>
+        <file>
+            ### inputs
+            <det_cat>
+                # how to get file data
+                depends det-catalog.file.det_cat
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = cat
+            </det_cat>
+
+            ### outputs
+            <extinct>
+                # what metadata to save
+                filetype = coadd_extinct
+
+                # how to name output file
+                filepat = tile_generic
+                flabel = extinct
+                fsuffix = fits
+
+                # whether to save or compress
+                savefiles = true
+                compress_files = false
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = cat
+                rundir = cat
+            </extinct>
+        </file>
+    </extinction>
+</module>
