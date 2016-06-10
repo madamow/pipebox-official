@@ -5,7 +5,6 @@ from pipebox import pipeline
 # initialize and get options
 multiepoch = pipeline.MultiEpoch()
 args = multiepoch.args
-print args.dataframe
 
 # create JIRA ticket per nite found (default)
 if args.exptag:

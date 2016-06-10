@@ -1,7 +1,6 @@
 {% extends "supportwcl/generic_submit.des" %}
 {% block content %}
 
-<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/myprodbeta.des>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/inputcals/inputs.des>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/modnamepat.wcl>>
 
