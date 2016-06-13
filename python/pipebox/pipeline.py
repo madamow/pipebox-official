@@ -325,6 +325,15 @@ class MultiEpoch(PipeLine):
         self.args.output_name_keys = ['tile']
        
         self.args.cur = pipequery.MultiEpoch(self.args.db_section)
+
+        # Checking processing tag and setting default
+        if not args.proctag:
+            args.proctag = args.campaign.upper() + '_FINALCUT'
+            if self.args.cur.check_proctag(args.proctag):
+                pass
+            else:
+                print "{tag} does not exist! Please specify proper proctag...".format(tag=args.proctag)
+                sys.exit()
  
         # Creating dataframe from tiles
         if self.args.resubmit_failed:

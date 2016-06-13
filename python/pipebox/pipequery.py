@@ -204,17 +204,62 @@ class SuperNova(PipeQuery):
 
 class MultiEpoch(PipeQuery):
     
+
+    def check_proctag(self,tag):
+        """ Check to see if specified processing tag exists in PROCTAG table"""
+        query = "select count(*) from proctag where tag = '{tag}'".format(tag=tag)
+        cur.execute(query)
+        count = cur.fetchone()[0]
+        return count
+
     def update_df(self,df):
         pass
 
     def check_submitted(self, tile, reqnum):
-        pass
+        """ Queries database to find number of attempts submitted for
+            given exposure. Returns count"""
+        was_submitted = "select count(*) from pfw_attempt where unitname= '%s' and reqnum = %s" % (tile,reqnum)
+        self.cur.execute(was_submitted)
+        submitted_or_not = self.cur.fetchone()[0]
+        return submitted_or_not
 
     def get_tiles_from_radec(self,RA, Dec):
-        pass
+        RA = [float(r) for r in RA[0]]
+        Dec = [float(d) for d in Dec[0]]
+        if RA[0]==min(RA):
+            query = "select tilename from coadd where RA_CENT >{minRA} and RA_CENT <{maxRA} and DEC_CENT >{minDec} and DEC_CENT <{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
+        else:
+            query = "select tilename from coadd where (RA_CENT>{minRA} or RA_CENT<{maxRA}) and DEC_CENT>{minDec} and DEC_CENT<{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
+        self.cur.execute(query)
+        return self.cur.fetchall() 
 
     def get_failed_tiles(self, reqnum):
-        pass
+        """ Queries database to find number of failed attempts without success.
+            Returns expnums for failed, non-null, nonzero attempts."""
+        submitted = "select distinct unitname,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        self.cur.execute(submitted)
+        failed_query = self.cur.fetchall()
+        df = pd.DataFrame(failed_query,columns=['unitname','status'])
+        # Set Null values to -99
+        df = df.fillna(-99)
+        passed_tiles = []
+        for u in df['unitname'].unique():
+            count = df[(df.unitname==u) & (df.status==0)].count()[0]
+            if count ==1:
+                passed_tiles.append(u)
+        try:
+            failed_list = df[(~df.unitname.isin(passed_expnums)) & (~df.status.isin([0,-99]))]['unitname'].values
+        except:
+            print 'No new failed tiles found!'
+            exit()
+
+        resubmit_list = []
+        for r in failed_list:
+            if -99 not in list(df[(df.unitname==r)]['status'].values):
+                resubmit_list.append(r)
+        tile_list = [u for u in resubmit_list]
+
+        return tile_list
 
     def get_tiles_from_tag(self,tag):
         pass
