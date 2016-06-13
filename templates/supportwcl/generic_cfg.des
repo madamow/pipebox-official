@@ -23,11 +23,6 @@ submit_files_mvmt     = filemgmt.job_mvmt_http.JobArchiveHttp
 # DES SERVICES definitions for known comppute sites. We might want to
 # make this more regimented in the DB
 
-# For fermigrid-ce nodes
-request_memory=8000
-request_cpus=1
-request_disk=90000000
-
 <site>
 
     # Optional

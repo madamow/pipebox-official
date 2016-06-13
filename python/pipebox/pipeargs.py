@@ -89,6 +89,12 @@ class PipeArgs(object):
         
         # Transfers
         parser.add('--nginx',action='store_true',help='Use nginx?')
+
+        # Condor options
+        parser.add('--request_memory',default=8000,help='Amount of memory (MB) to use for processing')
+        parser.add('--request_disk',default=90000000,help='Amount of disk space (MB) to use for \
+                                                          processing')
+        parser.add('--request_cpus',default=1,help='# of cpus to use for processing')
         
         return parser
 

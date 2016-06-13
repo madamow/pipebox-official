@@ -28,6 +28,11 @@ project = {{ args.project }}
 </archive>
 {% endif %}
 
+# Condor processing parameters
+request_memory = {{args.request_memory}}
+request_cpus = {{args.request_cpus}}
+request_disk = {{args.request_disk}}
+
 {% if args.time_to_live %}
 # Time-to-live in minutes
 glidein_use_wall = True
