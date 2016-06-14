@@ -36,7 +36,7 @@ compress_cleanup = False
 
 basket = {{args.tile}} # FIX THIS
 proctag = {{args.proctag}}
-tilename = DES0459-5622
+tilename = {{args.tile}}
 unitname = ${tilename}
 {% if args.rundir %}
 ops_run_dir = {{ args.rundir }}
@@ -57,7 +57,7 @@ blacklist_table = blacklist
 assemble_block_size = 10
 ydilate = 3
 psfex_satur_level = 65000
-nthreads = 8
+nthreads = {{args.nthreads}}
 cat_columns = NUMBER,ALPHAWIN_J2000,DELTAWIN_J2000
 
 scamp_config_file = ${cfgver}_scamp.config

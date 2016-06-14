@@ -137,7 +137,7 @@ class MultiEpoch(PipeArgs):
         parser.add('--proctag',help='Tag of processed expnums (proctag table) to use for coaddition')
         parser.add('--RA','-ra',nargs='+',action='append',help='RA in deg., in the order of min max')
         parser.add('--Dec','-dec',nargs='+',action='append',help='Dec in deg., in the order of min max')
- 
+        parser.add('--nthreads',default=8,help='Amount of parallelization') 
         args = parser.parse_args()
 
         return args
