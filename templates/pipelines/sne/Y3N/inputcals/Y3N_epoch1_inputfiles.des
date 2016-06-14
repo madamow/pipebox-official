@@ -4,6 +4,7 @@ bpmnite = 20140101t0209v2
 camera = D
 config = 20140709   #config files for scamp and sextractor used on astrometry and bkg_image
 config_version = 20150715  # sne config files
+confignite = 20150715  # sne config files
 fringecornite = 20131115v1
 hupdatefile = 20140709_DES_header_update.20140303
 lintablefile = lin_tbl_v0.4

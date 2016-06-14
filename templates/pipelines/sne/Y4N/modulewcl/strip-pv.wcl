@@ -1,0 +1,40 @@
+#DIFFIM-04
+<module>
+    <strip-pv>
+        wrappername = genwrap.py
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+        <file>
+            <red_immasked>
+                filetype = snred
+                filepat = sn_ccdnum_band
+                flabel = immasked
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+            </red_immasked>
+            <strip_pv>
+                filetype = snred
+                filepat = sn_ccdnum_band
+                flabel = stripPV
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+                savefiles = false
+            </strip_pv>
+        </file>
+
+        <exec_1>
+            execname = strip_pv
+            used = file.red_immasked
+            was_generated_by = file.strip_pv
+            ancestry = file.red_immasked:file.strip_pv
+            <cmdline>
+                inFile_img = ${file.red_immasked.fullname}
+                outFile_img =  ${file.strip_pv.fullname}
+            </cmdline>
+        </exec_1>
+    </strip-pv>
+</module>
