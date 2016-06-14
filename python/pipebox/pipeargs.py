@@ -91,10 +91,15 @@ class PipeArgs(object):
         parser.add('--nginx',action='store_true',help='Use nginx?')
 
         # Condor options
-        parser.add('--request_memory',default=8000,help='Amount of memory (MB) to use for processing')
+        parser.add('--request_memory',default=8000,help='Amount of memory (MB) to use for processing.\
+                                        Default (8000) is set for finalcut on fermigrid-ce nodes. For \
+                                        supercal on fermigrid-ce nodes try 32000.')
         parser.add('--request_disk',default=90000000,help='Amount of disk space (MB) to use for \
-                                                          processing')
-        parser.add('--request_cpus',default=1,help='# of cpus to use for processing')
+                                        processing. Default (90000000) is set for finalcut on \
+                                        fermigrid-ce nodes. For supercal on fermigrid-ce nodes try \
+                                        200000000.')
+        parser.add('--request_cpus',default=1,help='# of cpus to use for processing. Default (1) is \
+                                        set for finalcut on fermigrid-ce nodes.')
         
         return parser
 
