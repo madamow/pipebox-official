@@ -42,7 +42,7 @@
 #<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/immerge-distmpl-single-forcombine.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/immerge-fake-single.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/ingest-psfex-xml.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/ingest-scamp-xml.wcl>>
+#<<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/ingest-scamp-xml.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/insert_forceImageTable-combined.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/insert_forceImageTable.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/makecand-combined.wcl>>
@@ -125,12 +125,12 @@ photflagvar = 1    # needed for crosstalk code
 <block>
     <sne-exp-fringe>
         divide_jobs_by = expnum
-        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,ingest-scamp-xml
+        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head
     </sne-exp-fringe>
 
     <sne-exp-nofringe>
         divide_jobs_by = expnum
-        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,ingest-scamp-xml
+        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head
     </sne-exp-nofringe>
 
     <sne-ccd-single>

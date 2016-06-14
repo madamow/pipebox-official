@@ -6,7 +6,7 @@
 
         <file>
             <raw>
-	            filetype = raw
+                filetype = raw
                 filename = DECam_${expnum:8}.fits.fz
                 dirpat = raw
                 rundir = raw

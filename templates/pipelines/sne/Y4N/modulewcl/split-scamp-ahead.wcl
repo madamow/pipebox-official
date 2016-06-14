@@ -9,7 +9,7 @@
                 filetype = config
                 filename = ${confignite}_decam_pvmodel_${scampaheadnite}_${band}.ahead
                 dirpat = se
-        		ops_enddir = aux
+       		ops_enddir = aux
                 rundir = config
             </ahead_full>
             <ahead_partial>
@@ -27,7 +27,7 @@
             was_generated_by = file.ahead_partial
             ancestry = file.ahead_full:file.ahead_partial
             <cmdline>
-        		i = ${file.ahead_full.fullname}
+       		i = ${file.ahead_full.fullname}
                 o = ${file.ahead_partial.fullname}
                 c = ${ccdnum}
             </cmdline>
