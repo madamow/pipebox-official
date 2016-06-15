@@ -13,7 +13,6 @@
                 COMBINE_TYPE = WEIGHTED
                 WEIGHT_IMAGE = @${list.wgt.fullname}
                 NTHREADS = ${nthreads}
-                COPY_KEYWORDS = BUNIT,FILTER,BAND,TILENAME,TILEID
             </cmdline>
             execname = swarp
             cmd_hyphen = allsingle
@@ -53,7 +52,7 @@
                         ops_enddir = list
                         rundir = list
 
-                        columns = $FMT{%s[1], nwgint.fullname}
+                        columns = $FMT{%s[2], nwgint.fullname}
                     </wgt>
                     <flux>
                         filepat = tile_band
