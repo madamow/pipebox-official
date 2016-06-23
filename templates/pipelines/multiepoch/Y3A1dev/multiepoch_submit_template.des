@@ -27,7 +27,9 @@
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/mangle.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/null-weight-for-coadd.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/split-scamp-head.wcl>>
-
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/bigquery.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/run-desmeds.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/wavg.wcl>>
 master_use_fwthreads = True
 
 # these 2 are for debugging purposes
@@ -56,8 +58,12 @@ mag_zero = 30
 zsource = GCM 
 zeropoint_table = zeropoint 
 blacklist_table = blacklist 
-assemble_block_size = 10
-ydilate = 3
+assemble_xblock = 10
+assemble_xblock = 10
+assemble_yblock = 3
+assemble_maxcols = 10
+assemble_mincols = 10
+assemble_ydilate = 3
 psfex_satur_level = 65000
 nthreads = {{args.nthreads}}
 cat_columns = NUMBER,ALPHAWIN_J2000,DELTAWIN_J2000
@@ -78,7 +84,7 @@ sex_cat_conv_file = ${cfgver}_gauss_3.0_7x7.conv
 #sex_cat_param_file = ${cfgver}_sex.param_diskonly
 sex_cat_param_file = ${cfgver}_sex.param_nomodel
 sex_cat_nnw_file = ${cfgver}_sex.nnw
-
+meds_config_ver = Y3A1v01
 ######################################################################
 blocklist = me
 
@@ -92,8 +98,87 @@ blocklist = me
 
 <block>
     <me>
-        modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, det-swarp-wgt, det-swarp-msk, band-assemble, det-assemble, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, make-color-img, extinction, healpix, catalog-ingest, mangle, make-ptif
+        modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, det-swarp-wgt, det-swarp-msk, band-assemble, det-assemble, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, catalog-ingest, mangle, make-color-img, make-ptif, wavg, run-desmeds
     </me>
 </block>
+
+<filetype_metadata>
+    <coadd_meds>
+        <hdus>
+            <primary>
+                <r>
+                    <w>
+                        filename = filename
+                        filetype = filetype
+                        pfw_attempt_id = pfw_attempt_id
+                    </w>
+                </r>
+            </primary>
+        </hdus>
+        metadata_table = desfile
+        filetype_mgmt = filemgmt.ftmgmt_genfits.FtMgmtGenFits
+    </coadd_meds>
+    <coadd_meds_yaml>
+        <hdus>
+            <primary>
+                <r>
+                    <w>
+                        filename = filename
+                        filetype = filetype
+                        pfw_attempt_id = pfw_attempt_id
+                    </w>
+                </r>
+            </primary>
+        </hdus>
+        metadata_table = desfile
+        filetype_mgmt = filemgmt.ftmgmt_generic.FtMgmtGeneric
+    </coadd_meds_yaml>
+    <coadd_wavg>
+        <hdus>
+            <primary>
+                <r>
+                    <w>
+                        filename = filename
+                        filetype = filetype
+                        tilename = tilename
+                        pfw_attempt_id = pfw_attempt_id
+                    </w>
+                </r>
+            </primary>
+#            <objects>
+#                <o>
+#                    <c>
+#                        objects = objects
+#                    </c>
+#                </o>
+#            </objects>
+        </hdus>
+        metadata_table = catalog
+        filetype_mgmt = filemgmt.ftmgmt_genfits.FtMgmtGenFits
+    </coadd_wavg>
+    <coadd_wavg_oclink>
+        <hdus>
+            <primary>
+                <r>
+                    <w>
+                        filename = filename
+                        filetype = filetype
+                        tilename = tilename
+                        pfw_attempt_id = pfw_attempt_id
+                    </w>
+                </r>
+            </primary>
+#            <objects>
+#                <o>
+#                    <c>
+#                        objects = objects
+#                    </c>
+#                </o>
+#            </objects>
+        </hdus>
+        metadata_table = catalog
+        filetype_mgmt = filemgmt.ftmgmt_genfits.FtMgmtGenFits
+    </coadd_wavg_oclink>
+</filetype_metadata>
 
 {% endblock %}

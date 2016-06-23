@@ -15,11 +15,15 @@
                 band = det
                 outname = ${file.coadd_det.fullname}
                 xblock = ${assemble_block_size}
+                yblock = ${assemble_yblock}
+                maxcols = ${assemble_maxcols}
+                mincols = ${assemble_mincols}
+                no-keep_sci_zeros = _flag
                 magzero = ${mag_zero}
                 tilename = ${tilename}
                 tileid = ${tileid}
                 interp_image = MSK
-                ydilate = ${ydilate}
+                ydilate = ${assemble_ydilate}
             </cmdline>
         </exec_1>
         <file>
