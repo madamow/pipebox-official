@@ -14,7 +14,7 @@
                 msk_file = ${file.coadd_det_msk.fullname}
                 band = det
                 outname = ${file.coadd_det.fullname}
-                xblock = ${assemble_block_size}
+                xblock = ${assemble_xblock}
                 yblock = ${assemble_yblock}
                 maxcols = ${assemble_maxcols}
                 mincols = ${assemble_mincols}
