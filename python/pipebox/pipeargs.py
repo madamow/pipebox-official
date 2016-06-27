@@ -193,7 +193,7 @@ class NitelyCal(PipeArgs):
 class HostName(PipeArgs):
 
     def cmdline(self):
-        parser = super(Hostname,self).argument_parser()
+        parser = super(HostName,self).argument_parser()
         args = parser.parse_args()
 
         return args
@@ -201,7 +201,7 @@ class HostName(PipeArgs):
 class PreBPM(PipeArgs):
 
     def cmdline(self):
-        parser = super(Prebpm,self).argument_parser()
+        parser = super(PreBPM,self).argument_parser()
         
         # Science arguments
         parser.add('--expnum',help='A single expnum or comma-separated list of expnums')
