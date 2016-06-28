@@ -39,7 +39,7 @@ molys_suffix = MAX, MEAN, MEDIAN, MIN, SUM, WMEAN
             </cmdline>
             execname = mangle_one_tile
             cmd_hyphen = mixed_gnu
-            used = list.red.red_immask,list.nwgint.nwgint,file.poltiles,file.poltolys,file.mangle_config
+            used = list.red.red_immask,list.nwgint.nwgint,file.poltiles,file.poltolys,file.mangle_config,file.coadd
             was_generated_by = file.polygons, file.molys_1, file.molys_2, file.cmpplot1, file.cmpplot2
             #ancestry = file.red_immask:file.nwgint
         </exec_1>
