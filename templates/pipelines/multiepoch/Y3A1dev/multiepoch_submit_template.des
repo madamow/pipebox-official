@@ -81,8 +81,8 @@ sex_psfex_nnw_file = ${cfgver}_sex.nnw
 sex_cat_config_file = ${cfgver}_sex.config
 sex_cat_conv_file = ${cfgver}_gauss_3.0_7x7.conv
 # nomodel sex_cat_param_file is for testing purposes only....runs faster
-#sex_cat_param_file = ${cfgver}_sex.param_diskonly
-sex_cat_param_file = ${cfgver}_sex.param_nomodel
+sex_cat_param_file = ${cfgver}_sex.param_diskonly
+#sex_cat_param_file = ${cfgver}_sex.param_nomodel
 sex_cat_nnw_file = ${cfgver}_sex.nnw
 meds_config_ver = Y3A1v01
 ######################################################################
