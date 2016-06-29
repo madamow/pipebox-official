@@ -4,7 +4,7 @@
         wrappername = genwrap.py
         wrapperloop = band
         loopobj = list.nwgint
-        #PFW ISSUES: max_fwthreads = ${nthreads}
+        max_fwthreads = ${nthreads}
 
         <exec_1>
             <cmdline>
@@ -21,7 +21,7 @@
             </cmdline>
             execname = run_desmeds
             cmd_hyphen =  mixed_gnu
-            used = list.nwgint.nwgint,list.redbkg.red_bkg,list.redseg.red_segmap,file.medsconf,file.coadd,file.coadd_cat,file.coadd_segmap
+            used = list.nwgint.nwgint,list.redbkg.bkg,list.redseg.seg,file.medsconf,file.coadd,file.coadd_cat,file.coadd_segmap
             was_generated_by = file.tileconf,file.meds
             #ancestry =
         </exec_1>
@@ -63,7 +63,7 @@
                 rundir = list
 
                 # what to put in list
-                columns = red_bkg.fullname
+                columns = bkg.fullname
             </redbkg>
             <redseg>
                 depends bigquery.list.allfiles.seg
@@ -83,7 +83,7 @@
                 rundir = list
 
                 # what to put in list
-                columns = red_segmap.fullname
+                columns = seg.fullname
             </redseg>
         </list>
         <file>
@@ -126,20 +126,20 @@
                 dirpat = mepoch
                 rundir = nwgint
             </nwgint>
-            <red_bkg>
+            <bkg>
                 listonly = True
 
                 # where input file lives in jobroot
                 dirpat = mepoch
                 rundir = bkg
-            </red_bkg>
-            <red_segmap>
+            </bkg>
+            <seg>
                 listonly = True
 
                 # where input file lives in jobroot
                 dirpat = mepoch
                 rundir = seg
-            </red_segmap>
+            </seg>
 
             ### output files
             <meds>
