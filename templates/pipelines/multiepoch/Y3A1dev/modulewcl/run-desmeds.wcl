@@ -21,7 +21,7 @@
             </cmdline>
             execname = run_desmeds
             cmd_hyphen =  mixed_gnu
-            used = list.nwgint.nwgint,list.redbkg.red_bkg,list.redseg.segmap,file.medsconf,file.coadd,file.coadd_cat,file.coadd_segmap
+            used = list.nwgint.nwgint,list.redbkg.red_bkg,list.redseg.red_segmap,file.medsconf,file.coadd,file.coadd_cat,file.coadd_segmap
             was_generated_by = file.tileconf,file.meds
             #ancestry =
         </exec_1>
