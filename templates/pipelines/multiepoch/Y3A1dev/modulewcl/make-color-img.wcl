@@ -5,12 +5,11 @@
         <exec_1>
             execname = stiff
             cmd_hyphen = allsingle
-            used = file.coadd_red, file.coadd_green, file.coadd_blue
+            used = file.coadd_red, file.coadd_green, file.coadd_blue,file.stiff_config
             was_generated_by = file.coadd_graphimg
             ancestry = file.coadd_red:file.coadd_graphimg, file.coadd_green:file.coadd_graphimg, file.coadd_blue:file.coadd_graphimg
             <cmdline>
                 # space separated fullnames name1.fits[0] name2.fits[0] name3.fits[0] ?????
-                # not all bands?
                 _01_coadd_r = ${file.coadd_red.fullname}
                 _02_coadd_g = ${file.coadd_green.fullname}
                 _03_coadd_b = ${file.coadd_blue.fullname}
@@ -19,8 +18,6 @@
                 VERBOSE_TYPE = FULL
                 # do we need quotes here?
                 DESCRIPTION = 'Pseudo Color of coadded image for DES tile ${tilename} (${color_r_band}, ${color_g_band}, ${color_b_band})'
-                #COPYRIGHT = NCSA/DESDM
-                WRITE_XML = N
                 NTHREADS = ${nthreads}
             </cmdline>
         </exec_1>
