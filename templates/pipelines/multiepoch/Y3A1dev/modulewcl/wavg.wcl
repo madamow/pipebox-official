@@ -1,6 +1,6 @@
 <module>
     <wavg>
-        #PFW ISSUES:  max_fwthreads = ${nthreads}
+        max_fwthreads = ${nthreads}
         modnamepat = ${modnamepat_tile_band}
         wrappername = genwrap.py
         wrapperloop = band
@@ -11,6 +11,10 @@
                 _02_list_cat = ${list.secat.fullname}
                 _03_outwavgcat = ${file.cat_wavg.fullname}
                 _04_outwavgcat = ${file.cat_wavg_oclink.fullname}
+                urall = ${uramin}
+                uraur = ${uramax}
+                udecll = ${udecmin}
+                udecur = ${udecmax}
             </cmdline>
             execname = computewavg.py
             cmd_hyphen = mixed_gnu

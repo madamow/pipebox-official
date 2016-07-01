@@ -4,7 +4,7 @@
         wrappername = genwrap.py
         wrapperloop = band
         loopobj = list.nwgint
-        #max_fwthreads = ${nthreads}
+        max_fwthreads = ${nthreads}
 
         <exec_1>
             <cmdline>
@@ -12,7 +12,7 @@
                 coadd_image = ${file.coadd.fullname}
                 coadd_cat = ${file.coadd_cat.fullname}
                 coadd_seg = ${file.coadd_segmap.fullname}
-                nwgint_flist = ${list.nwgint.fullname}
+                nwg_flist = ${list.nwgint.fullname}
                 bkg_flist = ${list.redbkg.fullname}
                 seg_flist = ${list.redseg.fullname}
                 meds_output = ${file.meds.fullname}

@@ -15,7 +15,6 @@
                 _03_coadd_b = ${file.coadd_blue.fullname}
                 c = ${file.stiff_config.fullname}   # default.stiff
                 OUTFILE_NAME = ${file.coadd_graphimg.fullname}  # coadd/DES0002+0001.tiff
-                VERBOSE_TYPE = FULL
                 # do we need quotes here?
                 DESCRIPTION = 'Pseudo Color of coadded image for DES tile ${tilename} (${color_r_band}, ${color_g_band}, ${color_b_band})'
                 NTHREADS = ${nthreads}
