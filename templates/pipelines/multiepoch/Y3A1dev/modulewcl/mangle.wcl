@@ -10,7 +10,7 @@ molys_suffix = MAX, MEAN, MEDIAN, MIN, SUM, WMEAN
 
 <module>
     <mangle>
-        #max_fwthreads = ${nthreads}
+        max_fwthreads = ${nthreads}
         modnamepat = ${modnamepat_tile_band}
         wrappername = genwrap.py
         wrapperloop = band
