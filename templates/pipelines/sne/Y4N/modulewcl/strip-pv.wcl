@@ -6,13 +6,13 @@
         modnamepat=${modnamepat_field_ccdnumband}
         <file>
             <red_immasked>
-                filetype = snred
+                filetype = snred_immask
                 filepat = sn_ccdnum_band
                 flabel = immasked
                 fsuffix = fits
                 dirpat = sne_ccd
-                ops_enddir = red
-                rundir = red
+                ops_enddir = red/immask
+                rundir = red/immask
             </red_immasked>
             <strip_pv>
                 filetype = snred
@@ -22,7 +22,7 @@
                 dirpat = sne_ccd
                 ops_enddir = red
                 rundir = red
-                savefiles = false
+                savefiles = true
             </strip_pv>
         </file>
 

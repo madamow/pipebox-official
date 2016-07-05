@@ -20,11 +20,11 @@ distortion = ${qa_file_prefix}_distortion
                 divide_by = expnum
 
                 # name and location of list file
-                filepat = sn_exposure
+                filepat = exposure
                 flabel = ccd-scamp-cat
                 fsuffix = list
 
-                dirpat = sne
+                dirpat = se
                 rundir = list
                 ops_enddir = list
                 columns = scamp_cat.fullname
@@ -34,20 +34,20 @@ distortion = ${qa_file_prefix}_distortion
         </list>
         <file>
             <scamp_fullcat>
-                filetype = sncat_scamp_full
-                filepat = sn_exposure
+                filetype = cat_scamp_full
+                filepat = exposure
                 flabel = scampcat
                 fsuffix = fits
-                dirpat = sne
+                dirpat = se
                 ops_enddir = cat
                 rundir = cat
             </scamp_fullcat>
             <scamp_cat>
-                filetype = sncat_scamp
-                filepat = sn_ccdnum_band
+                filetype = cat_scamp
+                filepat = ccdnum_band
                 flabel = scampcat
                 fsuffix = fits
-                dirpat = sne
+                dirpat = se
                 ops_enddir = cat
                 rundir = cat
             </scamp_cat>
@@ -71,26 +71,26 @@ distortion = ${qa_file_prefix}_distortion
 
         <file>
             <scamp_fullcat>
-                filetype = sncat_scamp_full 
-                filepat = sn_exposure
+                filetype = cat_scamp_full 
+                filepat = exposure
                 flabel = scampcat
                 fsuffix = fits
-                dirpat = sne
+                dirpat = se
                 ops_enddir = cat
                 rundir = cat
             </scamp_fullcat>
             <scamp_cat>
-                filetype = sncat_scamp
-                filepat = sn_ccdnum_band
+                filetype = cat_scamp
+                filepat = ccdnum_band
                 flabel = scampcat
                 fsuffix = fits
-                dirpat = sne
+                dirpat = se
                 ops_enddir = cat
                 rundir = cat
             </scamp_cat>
             <scamp_config>
                 filetype = config
-                filename = ${scamp_config_file} 
+                filename = ${scampconfigfile} 
                 dirpat = se
                 rundir = config
             </scamp_config>
@@ -102,27 +102,27 @@ distortion = ${qa_file_prefix}_distortion
                 rundir = aux
             </scamp_ahead>
             <scamp_fullhead>
-                filetype = snhead_scamp_full
-                filepat = sn_exposure
+                filetype = head_scamp_full
+                filepat = exposure
                 flabel = scampcat   # must match flabel for scamp_fullcat
                 fsuffix = head
-                dirpat = sne
+                dirpat = se
                 ops_enddir = cat
                 rundir = cat  # must match rundir for scamp_fullcat
             </scamp_fullhead>
             <scamp_xml>
-                filetype = snxml_scamp
-                filepat = sn_exposure
+                filetype = xml_scamp
+                filepat = exposure
                 flabel = scamp
                 fsuffix = xml
-                dirpat = sne
+                dirpat = se
                 ops_enddir = qa
                 rundir = qa
             </scamp_xml>
             <scamp_qa>
-                filetype = snqa_scamp
+                filetype = qa_scamp
                 fullname = ${astr_pixerror1d}_1.ps,${astr_referror1d}_1.ps,${fgroups}_1.ps,${astr_referror2d}_1.ps,${astr_refsysmap}_1.ps,${distortion}_1.ps
-                dirpat = sne
+                dirpat = se
                 rundir = qa
                 ops_enddir = qa
             </scamp_qa>
@@ -159,20 +159,20 @@ distortion = ${qa_file_prefix}_distortion
 
         <file>
             <scamp_fullhead>
-                filetype = snhead_scamp_full
-                filepat = sn_exposure
+                filetype = head_scamp_full
+                filepat = exposure
                 flabel = scampcat   # must match flabel for scamp_fullcat
                 fsuffix = head
-                dirpat = sne
+                dirpat = se
                 ops_enddir = cat
                 rundir = cat  # must match rundir for scamp_fullcat
             </scamp_fullhead>
             <scamp_head>
-                filetype = snhead_scamp
-                filepat = sn_ccdnum_band
+                filetype = head_scamp
+                filepat = ccdnum_band
                 flabel = scamp
                 fsuffix = head
-                dirpat = sne
+                dirpat = se
                 ops_enddir = aux
                 rundir = aux
             </scamp_head>

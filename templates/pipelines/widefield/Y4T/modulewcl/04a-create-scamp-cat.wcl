@@ -31,26 +31,26 @@
             </sex_nnw>
             <red_nullweight_pixcor>
                 # what metadata to get
-                filetype = snred_pixcor_nullwgt
+                filetype = red_pixcor_nullwgt
 
                 # how to name the file
-                filepat = sn_ccdnum_band
-                flabel = sn_nullweight-pixcor
+                filepat = ccdnum_band
+                flabel = nullweight-pixcor
                 fsuffix = fits
 
                 # where to put the file
-                dirpat = sne_ccd
+                dirpat = se
                 rundir = red/pixcor
             </red_nullweight_pixcor>
             <scamp_cat>
-                filetype = sncat_scamp
-                filepat = sn_ccdnum_band
+                filetype = cat_scamp
+                filepat = ccdnum_band
                 flabel = scampcat
                 fsuffix = fits
-                dirpat = sne
+                dirpat = se
                 ops_enddir = cat
                 rundir = cat
-                savefiles = true
+                savefiles = false
             </scamp_cat>
         </file>
         <exec_1>

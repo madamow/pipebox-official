@@ -1,3 +1,4 @@
+
 <module>
     <update-scamp-headers>
         <exec_1>
@@ -17,45 +18,40 @@
             was_generated_by = file.red_wcs
         </exec_1>
         <file>
-             <red_pixcor>
-                filetype = snred_pixcor
-
-                filepat = sn_ccdnum_band
-                flabel = sn_pixcor
+            <red_pixcor>
+                dirpat = se
+                filepat = ccdnum_band
+                filetype = red_pixcor
+                flabel = pixcor
                 fsuffix = fits
-
-                dirpat = sne
                 ops_enddir = red/pixcor
                 rundir = red/pixcor
             </red_pixcor>
-
             <red_wcs>
-                dirpat = sne_ccd
-                filepat = sn_ccdnum_band
-                filetype = snred_wcs
+                dirpat = se
+                filepat = ccdnum_band
+                filetype = red_wcs
                 flabel = wcs
                 fsuffix = fits
-#                <hdrupd_flag>
-#                    scampflg = 1
-#                </hdrupd_flag>
-                ops_enddir = red
-                rundir = red
-                savefiles = False
+                ops_enddir = red/wcs
+                rundir = red/wcs
+                savefiles = false
             </red_wcs>
             <scamp_cat>
-                dirpat = sne
-                filepat = sn_ccdnum_band
-                filetype = sncat_scamp
+                dirpat = se
+                filepat = ccdnum_band
+                filetype = cat_scamp
                 flabel = scampcat
                 fsuffix = fits
+                ops_enddir = cat
                 rundir = cat
             </scamp_cat>
             <scamp_head>
-                filetype = snhead_scamp
-                filepat = sn_ccdnum_band
+                dirpat = se
+                filepat = ccdnum_band
+                filetype = head_scamp
                 flabel = scamp
                 fsuffix = head
-                dirpat = sne
                 ops_enddir = aux
                 rundir = aux
             </scamp_head>
@@ -67,17 +63,16 @@
                 rundir = config
             </scamp_update_head>
             <scamp_xml>
-                filetype = snxml_scamp
-                filepat = sn_exposure
+                dirpat = se
+                filepat = exposure
+                filetype = xml_scamp
                 flabel = scamp
                 fsuffix = xml
-                dirpat = sne
-                ops_enddir = qa
                 rundir = qa
             </scamp_xml>
         </file>
-        modnamepat = ${modnamepat_field_ccdnumband}
-        wrapperloop = expnum,ccdnum
+        modnamepat = ${modnamepat_ccdnumband}
+        wrapperloop = ccdnum
         wrappername = genwrap.py
     </update-scamp-headers>
 </module>

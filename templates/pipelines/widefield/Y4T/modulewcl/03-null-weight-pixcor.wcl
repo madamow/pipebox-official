@@ -6,28 +6,28 @@
         <file>
             <red_pixcor>
                 # what metadata to get
-                filetype = snred_pixcor
+                filetype = red_pixcor
 
                 # how to name the file
-                filepat = sn_ccdnum_band
-                flabel = sn_pixcor
+                filepat = ccdnum_band
+                flabel = pixcor
                 fsuffix = fits
 
                 # where to put the file
-                dirpat = sne
+                dirpat = se
                 rundir = red/pixcor
             </red_pixcor>
             <red_nullweight_pixcor>
                 # what metadata to get
-                filetype = snred_pixcor_nullwgt
+                filetype = red_pixcor_nullwgt
 
                 # how to name the file
-                filepat = sn_ccdnum_band
-                flabel = sn_nullweight-pixcor
+                filepat = ccdnum_band
+                flabel = nullweight-pixcor
                 fsuffix = fits
 
                 # where to put the file
-                dirpat = sne_ccd
+                dirpat = se
                 ops_enddir = red/pixcor
                 rundir = red/pixcor
                 savefiles = false

@@ -1,49 +1,49 @@
 <module>
     <mkbleedmask>
         wrappername = genwrap.py
-        wrapperloop = expnum,ccdnum
-        modnamepat=${modnamepat_field_ccdnumband}
+        wrapperloop = ccdnum
+        modnamepat=${modnamepat_ccdnumband}
 
         <file>
             <red_wcs>
-                filetype = snred_wcs
-                filepat = sn_ccdnum_band
+                filetype = red_wcs
+                filepat = ccdnum_band
                 flabel = wcs
                 fsuffix = fits
-                dirpat = sne_ccd
-                rundir = red
+                dirpat = se
+                ops_enddir = red/wcs
+                rundir = red/wcs
             </red_wcs>
             <cat_satstar>
-                filetype = sncat_satstar
-                filepat = sn_ccdnum_band
+                filetype = cat_satstar
+                filepat = ccdnum_band
                 flabel = satstar
                 fsuffix = fits
-                dirpat = sne_ccd
-                optional = true
+                dirpat = se
+		        optional = true
                 ops_enddir = aux
                 rundir = aux
-                savefiles = false
             </cat_satstar>
             <cat_trailbox>
-                filetype = sncat_trailbox
-                filepat = sn_ccdnum_band
+                filetype = cat_trailbox
+                filepat = ccdnum_band
                 flabel = trailbox
                 fsuffix = fits
-                dirpat = sne_ccd
-                optional = true
+                dirpat = se
+        		optional = true
                 ops_enddir = aux
                 rundir = aux
-                savefiles = false
             </cat_trailbox>
             <red_bleedmasked>
-                filetype = snred_mkbleedmask
-                filepat = sn_ccdnum_band
+                filetype = red_mkbleedmask
+                filepat = ccdnum_band
                 flabel = bleedmasked    
                 fsuffix = fits
-                dirpat = sne_ccd
-                ops_enddir = red
-                rundir = red
-                savefiles = False
+                dirpat = se
+                ops_enddir = red/bleedmask
+                rundir = red/bleedmask
+                savefiles = false
+                compress_files = true
             </red_bleedmasked>
         </file>
 
@@ -55,19 +55,19 @@
             <cmdline>
                 _01_red_wcs = ${file.red_wcs.fullname}
                 _02_red_bleedmasked = ${file.red_bleedmasked.fullname}
-                m = _flag
-                b = 5
-                f = 1.0
-                l = 7
-                n = 7
-                r = 5
+		        m = _flag
+        		b = 5
+		        f = 1.0
+        		l = 7
+		        n = 7
+        		r = 5
                 s = 100
                 t = 20
                 v = 3
-                w = 2
-                y = 1.0
-                E = 6
-                L = 30
+		        w = 2
+        		y = 1.0
+		        E = 6
+        		L = 30
                 o = ${file.cat_satstar.fullname}
                 x = ${file.cat_trailbox.fullname}
             </cmdline>

@@ -8,7 +8,7 @@
         <file>
             <xtalked_sci>   
                 depends crosstalk-sci.file.red_xtalked
-                dirpat = sne
+                dirpat = se
                 rundir = red/xtalk
                 match = ccdnum,band
             </xtalked_sci>
@@ -46,15 +46,15 @@
             </lintable>
             <red_pixcor>
                 # what metadata to get
-                filetype = snred_pixcor
+                filetype = red_pixcor
 
                 # how to name the file
-                filepat = sn_ccdnum_band
-                flabel = sn_pixcor
+                filepat = ccdnum_band
+                flabel = pixcor
                 fsuffix = fits
 
                 # where to put the file
-                dirpat = sne
+                dirpat = se
                 ops_enddir = red/pixcor
                 rundir = red/pixcor
                 savefiles = false
@@ -62,15 +62,15 @@
             </red_pixcor>
             <pixcor_mini_red>
                 # what metadata to get
-                filetype = snpixcor_mini_red
+                filetype = pixcor_mini_red
 
                 # how to name the file
-                filepat = sn_ccdnum_band
+                filepat = ccdnum_band
                 flabel = pixcor-mini-red
                 fsuffix = fits
 
                 # where to put the file
-                dirpat = sne
+                dirpat = se
                 ops_enddir = mini
                 rundir = mini
 

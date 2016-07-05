@@ -11,8 +11,8 @@
                 flabel = scamp
                 fsuffix = xml
                 dirpat = sne
-                ops_enddir = astrom-scamp/qa
-                rundir = astrom-scamp/qa
+                ops_enddir = qa
+                rundir = qa
             </scamp_xml>
         </file>
 

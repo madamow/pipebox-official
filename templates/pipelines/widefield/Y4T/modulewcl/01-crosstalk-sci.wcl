@@ -1,13 +1,12 @@
 <module>
     <crosstalk-sci>
         wrappername = genwrap.py
-        wrapperloop = expnum
-        modnamepat=${modnamepat_field_expband}
+        modnamepat=${modnamepat_expband}
         loopobj = file.raw
 
         <file>
             <raw>
-                filetype = raw
+	            filetype = raw
                 filename = DECam_${expnum:8}.fits.fz
                 dirpat = raw
                 rundir = raw
@@ -15,25 +14,25 @@
             <xtalkcoeff>
                 filetype = config
                 filename = ${xtalkcoefffile}
-                dirpat = sne
+                dirpat = se
                 rundir = config
             </xtalkcoeff>
             <red_xtalked>
-                filetype = snxtalked_sci
-                filepat = sn_ccdnum_band
-        	flabel = scix
+                filetype = xtalked_sci
+                filepat = ccdnum_band
+        		flabel = scix
                 fsuffix = fits
-                dirpat = sne
+                dirpat = se
                 ops_enddir = red/xtalk
                 rundir = red/xtalk
                 savefiles = false
             </red_xtalked>
-	    <hupdate>
-        	filetype = config
+	        <hupdate>
+        		filetype = config
                 filename = ${hupdatefile}
-                dirpat = sne
+                dirpat = se
                 rundir = config
-	    </hupdate>
+	        </hupdate>
         </file>
         <exec_1>
             execname = DECam_crosstalk
@@ -42,16 +41,15 @@
             ancestry = file.raw:file.red_xtalked, file.xtalkcoeff:file.red_xtalked,file.hupdate:file.red_xtalked
             <cmdline>
                 _01_raw = ${file.raw.fullname}
-                _02_red_xtalked = red/xtalk/${camera}${expnum:8}_${field}_${band}_c%02d_r${reqnum}p${attnum:2}_scix.fits
+                _02_red_xtalked = red/xtalk/${camera}${expnum:8}_${band}_c%02d_r${reqnum}p${attnum:2}_scix.fits 
                 crosstalk = ${file.xtalkcoeff.fullname}
-                postsatmask = _flag
                 overscansample = 1
                 overscanfunction = 0
                 overscantrim = 5
-	        replace = ${file.hupdate.fullname}
+		        replace = ${file.hupdate.fullname}
                 verbose = 3
                 photflag = ${photflagvar}
-	        ccdlist = ${ccdnum}
+		        ccdlist = ${ccdnum}
             </cmdline>
         </exec_1>
     </crosstalk-sci>

@@ -4,66 +4,64 @@
         wrapperloop = expnum,ccdnum
         modnamepat=${modnamepat_field_ccdnumband}
         <file>
-            <red_bleedmasked>
+            <red_starflat>
                 filetype = snred_mkbleedmask
                 filepat = sn_ccdnum_band
-                flabel = bleedmasked    
+                flabel = bleedmasked
                 fsuffix = fits
                 dirpat = sne_ccd
+                ops_enddir = red
                 rundir = red
-            </red_bleedmasked>
-            <red_bkg>
-                filetype = snbkg_red
+            </red_starflat>
+            <red_immask_bkg>
+                filetype = snred_bkg_immask
                 filepat = sn_ccdnum_band
-                flabel = bkg
+                flabel = immask-bkg
                 fsuffix = fits
-                dirpat = sne_ccd
-                rundir = bkg
-            </red_bkg>
+                dirpat = sne
+                ops_enddir = bkg/immask
+                rundir = bkg/immask
+            </red_immask_bkg>
             <red_immasked>
                 filetype = snred_immask
                 filepat = sn_ccdnum_band
                 flabel = immasked
                 fsuffix = fits
                 dirpat = sne_ccd
-                ops_enddir = red
-                rundir = red
-                savefiles = true                
+                ops_enddir = red/immask
+                rundir = red/immask
+                savefiles = true
+                compress_files = true
             </red_immasked>
-            #<red_streaks>
-            #    optional = true
-            #    filetype = snstreaks_red
-            #    filepat = sn_ccdnum_band
-            #    flabel = streaks
-            #    fsuffix = fits
-            #    dirpat = sne_ccd
-            #    ops_enddir = aux
-            #    rundir = aux
-            #    savefiles = false                
-            #</red_streaks>
+            <cat_streak>
+                filetype = sncat_streak
+                filename = D${expnum:8}_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}_streak.fits
+                filepat = sn_ccdnum_band
+                dirpat = sne_ccd
+                ops_enddir = aux
+                optional = true
+                rundir = aux
+            </cat_streak>
         </file>
 
         <exec_1>
             execname = immask
             cmd_hyphen = alldouble
-            used = file.red_bleedmasked,file.red_bkg
-            #was_generated_by = file.red_immasked,file.red_streaks
-            was_generated_by = file.red_immasked
-            #ancestry = file.red_bleedmasked:file.red_immasked, file.red_bkg:file.red_immasked, file.red_bleedmasked:file.red_streaks
-            was_generated_by = file.red_immasked
-            ancestry = file.red_bleedmasked:file.red_immasked, file.red_bkg:file.red_immasked
+            used = file.red_starflat,file.red_immask_bkg
+            was_generated_by = file.red_immasked,file.cat_streak
+            ancestry = file.red_starflat:file.red_immasked, file.red_immask_bkg:file.red_immasked, file.red_starflat:file.cat_streak
             <cmdline>
                 _01_immask_type = all
-                _02_red_bleedmasked = ${file.red_bleedmasked.fullname}
+                _02_red_starflat = ${file.red_starflat.fullname}
                 _03_red_immasked = ${file.red_immasked.fullname}
-                #streaksfile = ${file.red_streaks.fullname}
+                #streaksfile = ${file.cat_streak.fullname}
                 #write_streaks = _flag
                 nsig_mask = 10
                 nsig_merge = 10
                 max_angle = 25
                 minSigma = 7.0
                 nsig_detect = 18
-                bkgfile = ${file.red_bkg.fullname}
+                bkgfile = ${file.red_immask_bkg.fullname}
             </cmdline>
         </exec_1>
     </immask>
