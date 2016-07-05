@@ -13,12 +13,16 @@
                 wgt_file = ${file.coadd_wgt.fullname}
                 msk_file = ${file.coadd_msk.fullname}
                 outname = ${file.coadd.fullname}
-                xblock = ${assemble_block_size}
+                xblock = ${assemble_xblock}
+                yblock = ${assemble_yblock}
+                maxcols = ${assemble_maxcols}
+                mincols = ${assemble_mincols}
+                no-keep_sci_zeros = _flag
                 magzero = ${mag_zero}
                 tilename = ${tilename}
                 tileid = ${tileid}
                 interp_image = MSK
-                ydilate = ${ydilate}
+                ydilate = ${assemble_ydilate}
             </cmdline>
             used = file.coadd_sci, file.coadd_wgt, file.coadd_msk
             was_generated_by = file.coadd

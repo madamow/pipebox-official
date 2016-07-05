@@ -47,8 +47,9 @@
                 rundir = aux
             </coadd_head_scamp>
             <red_immask>
-                exec = query_coadd_img_for_nullwgt.py
-                args = --proctag ${proctag} --tile ${tilename} --magbase=${mag_zero} --zeropoint ${zeropoint_table} --zsource ${zsource} --zversion ${zversion} --blacklist ${blacklist_table} --outfile ${qoutfile} --verbose 1
+                depends bigquery.list.allfiles.red
+                #exec = query_coadd_img_for_nullwgt.py
+                #args = --proctag ${proctag} --tile ${tilename} --magbase=${mag_zero} --zeropoint ${zeropoint_table} --zsource ${zsource} --zversion ${zversion} --blacklist ${blacklist_table} --outfile ${qoutfile} --verbose 1
                 match = expnum, band, ccdnum
 
                 # where input file lives in jobroot

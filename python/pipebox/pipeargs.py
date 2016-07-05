@@ -135,9 +135,7 @@ class MultiEpoch(PipeArgs):
         parser.add('--tile',help='A single tile or comma-separated list of tiles')
         parser.add('--list',help='File of line-separated tiles')
         parser.add('--proctag',help='Tag of processed expnums (proctag table) to use for coaddition')
-        parser.add('--RA','-ra',nargs='+',action='append',help='RA in deg., in the order of min max')
-        parser.add('--Dec','-dec',nargs='+',action='append',help='Dec in deg., in the order of min max')
- 
+        parser.add('--nthreads',default=8,help='Amount of parallelization') 
         args = parser.parse_args()
 
         return args
@@ -195,7 +193,7 @@ class NitelyCal(PipeArgs):
 class HostName(PipeArgs):
 
     def cmdline(self):
-        parser = super(HostnameArgs,self).argument_parser()
+        parser = super(HostName,self).argument_parser()
         args = parser.parse_args()
 
         return args
@@ -203,7 +201,7 @@ class HostName(PipeArgs):
 class PreBPM(PipeArgs):
 
     def cmdline(self):
-        parser = super(PrebpmArgs,self).argument_parser()
+        parser = super(PreBPM,self).argument_parser()
         
         # Science arguments
         parser.add('--expnum',help='A single expnum or comma-separated list of expnums')

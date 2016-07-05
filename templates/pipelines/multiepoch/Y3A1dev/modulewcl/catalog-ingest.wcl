@@ -11,7 +11,6 @@
                 bandcat = ${file.coadd_cat.fullname}
                 extinct = ${file.extinct.fullname}
                 healpix = ${file.healpix.fullname}
-                schema = prodbeta
             </cmdline>
         </exec_1>
         <file>
