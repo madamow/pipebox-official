@@ -54,7 +54,7 @@
                  filetype = cal_skypca_tmpl
 
                 # how to name the file
-                filename = ${skycampaign}_${epochrange}_${band}_c${ccdnum:2}_${skypcarun}_skypca-tmpl.fits
+                filename = ${skypcacampaign}_${skypcarange}_${band}_c${ccdnum:2}_${skypcarun}_skypca-tmpl.fits
 
                 # where to put the file
                 dirpat = se

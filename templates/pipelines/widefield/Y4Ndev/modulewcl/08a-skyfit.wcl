@@ -38,7 +38,7 @@
                 filetype = cal_skypca_binned_fp
 
                 # how to name the file
-                filename = ${skycampaign}_${epochrange}_${band}_${skypcarun}_skypca-binned-fp.fits
+                filename = ${skypcacampaign}_${skypcarange}_${band}_${skypcarun}_skypca-binned-fp.fits
 
                 # where to put the file
                 dirpat = se

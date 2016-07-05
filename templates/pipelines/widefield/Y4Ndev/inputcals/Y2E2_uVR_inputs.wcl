@@ -14,9 +14,11 @@ scampconfigfile = ${confignite}_default.scamp.20140423
 scampupdateheadfile = ${confignite}_updateWCS.config
 hupdatefile = ${confignite}_DES_header_update.20140303
 ### Changes per Epoch ###
-skycampaign = Y2A1
-epochrange = 20140801t1130
+starflatcampaign = Y2A1
+starflatrange = 20140801t1130
 starflatrun = r1637p02
+skypcacampaign = Y2A1
+skypcarange = 20140801t1130
 skypcarun = r1635p02
 bpmnite = 20150105t0115
 bpmreq = 2134
