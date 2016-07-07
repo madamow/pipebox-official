@@ -42,12 +42,12 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{args.campaign}}/inputcals/{{ args.epoch_name }}_inputs.wcl>>
 {% endif %}
 {% else %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{args.campaign}}/inputcalsinputs.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{args.campaign}}/inputcals/inputs.wcl>>
 {% endif %}
 {% endif %}
 
 # Added to run new framework in PROD
-<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{args.campaign}}/inputclas/db_config.des>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{args.campaign}}/inputcals/db_config.des>>
 
 {% if not args.labels %}
 label = ${nite} {% endif %}
