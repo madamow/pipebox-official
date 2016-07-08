@@ -22,6 +22,7 @@
                 STARNNW_NAME = ${file.sex_nnw.fullname}
                 WEIGHT_IMAGE = ${file.coadd_det.fullname}[2],${file.coadd_det.fullname}[2]
                 DEBLEND_MINCONT = 0.001
+                DETECT_THRESH = 1.5
             </cmdline>
         </exec_1>
         <file>
