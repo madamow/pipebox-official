@@ -7,7 +7,8 @@ color_g_band = r
 color_b_band = g
 mag_zero = 30
 
-zsource = GCM
+#zsource = GCM
+zsource = CONSTANT
 #zversion = SVA1_gruendlhack
 zversion = ver31.5
 zeropoint_table = zeropoint
