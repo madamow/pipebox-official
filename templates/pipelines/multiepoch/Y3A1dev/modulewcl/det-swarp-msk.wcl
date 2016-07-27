@@ -22,6 +22,7 @@
                 COMBINE_TYPE = CHI-MEAN
                 WEIGHT_IMAGE = ${file.band_msk.fullname}
                 NTHREADS = ${nthreads}
+                BLANK_BADPIXELS = Y
             </cmdline>
         </exec_1>
         <file>

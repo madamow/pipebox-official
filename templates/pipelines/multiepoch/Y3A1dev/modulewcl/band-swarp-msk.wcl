@@ -13,6 +13,7 @@
                 COMBINE_TYPE = WEIGHTED
                 WEIGHT_IMAGE = @${list.msk.fullname}
                 NTHREADS = ${nthreads}
+                BLANK_BADPIXELS = Y
             </cmdline>
             execname = swarp
             cmd_hyphen = allsingle
