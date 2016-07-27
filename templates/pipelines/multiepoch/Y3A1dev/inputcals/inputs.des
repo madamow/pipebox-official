@@ -21,7 +21,6 @@ assemble_mincols = 1
 assemble_ydilate = 3
 
 psfex_satur_level = 65000
-nthreads = {{args.nthreads}}
 cat_columns = NUMBER,ALPHAWIN_J2000,DELTAWIN_J2000
 
 scamp_config_file = ${cfgver}_scamp.config
