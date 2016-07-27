@@ -47,8 +47,10 @@ unitname = ${tilename}
 {% if args.rundir %}
 ops_run_dir = {{ args.rundir }}
 {% else %}
-ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/${unitname}/p${attnum:2}
+ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/p${attnum:2}
 {% endif %}
+submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
+
 nthreads = {{ args.nthreads }}
 
 save_run_vals = tilename, jira_id
