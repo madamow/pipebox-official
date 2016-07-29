@@ -6,7 +6,7 @@
         loopobj = file.red_bleedmasked       
         <file>
             <red_bleedmasked>
-                filetype = red
+                filetype = red_mkbleedmask
                 filepat = ccdnum_band
                 flabel = bleedmasked
                 fsuffix = fits
