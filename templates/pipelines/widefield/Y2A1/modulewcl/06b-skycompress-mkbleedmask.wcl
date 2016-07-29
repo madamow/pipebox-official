@@ -6,12 +6,10 @@
         loopobj = file.red_bleedmasked       
         <file>
             <red_bleedmasked>
-                filetype = red_mkbleedmask
                 filepat = ccdnum_band
                 flabel = bleedmasked
                 fsuffix = fits
                 dirpat = se
-                ops_enddir = red/bleedmask
                 rundir = red/bleedmask
             </red_bleedmasked>
             <bleedmask_mini>
