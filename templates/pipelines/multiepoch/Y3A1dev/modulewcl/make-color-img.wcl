@@ -6,15 +6,15 @@
             execname = stiff
             cmd_hyphen = allsingle
             used = file.coadd_red, file.coadd_green, file.coadd_blue,file.stiff_config
-            was_generated_by = file.coadd_graphimg
-            ancestry = file.coadd_red:file.coadd_graphimg, file.coadd_green:file.coadd_graphimg, file.coadd_blue:file.coadd_graphimg
+            was_generated_by = file.coadd_tiff
+            ancestry = file.coadd_red:file.coadd_tiff, file.coadd_green:file.coadd_tiff, file.coadd_blue:file.coadd_tiff
             <cmdline>
                 # space separated fullnames name1.fits[0] name2.fits[0] name3.fits[0] ?????
                 _01_coadd_r = ${file.coadd_red.fullname}
                 _02_coadd_g = ${file.coadd_green.fullname}
                 _03_coadd_b = ${file.coadd_blue.fullname}
                 c = ${file.stiff_config.fullname}   # default.stiff
-                OUTFILE_NAME = ${file.coadd_graphimg.fullname}  # coadd/DES0002+0001.tiff
+                OUTFILE_NAME = ${file.coadd_tiff.fullname}  # coadd/DES0002+0001.tiff
                 # do we need quotes here?
                 DESCRIPTION = 'Pseudo Color of coadded image for DES tile ${tilename} (${color_r_band}, ${color_g_band}, ${color_b_band})'
                 NTHREADS = ${nthreads}
@@ -62,10 +62,10 @@
             </coadd_blue>
 
             ### outputs
-            <coadd_graphimg>   # graphical image
+            <coadd_tiff>   # graphical image
 
                 # what metadata to save
-                filetype = coadd_graphimg
+                filetype = coadd_tiff
                 # how to name output file
                 filepat = tile_generic
                 flabel = ${color_r_band}${color_g_band}${color_b_band}
@@ -79,7 +79,7 @@
                 dirpat = mepoch
                 rundir = qa
                 ops_enddir = qa
-            </coadd_graphimg>
+            </coadd_tiff>
         </file>
     </make-color-img>
 </module>

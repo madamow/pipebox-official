@@ -6,13 +6,13 @@
             execname = stiff
             cmd_hyphen = allsingle
             used = file.ptif_config, file.coadd, file.coadd_det
-            was_generated_by = file.coadd_graphimg
-            ancestry = file.coadd:file.coadd_graphimg, file.coadd_det:file.coadd_graphimg
+            was_generated_by = file.coadd_ptiff
+            ancestry = file.coadd:file.coadd_ptiff, file.coadd_det:file.coadd_ptiff
             <cmdline>
                 _01_coadd = ${file.coadd.fullname}
                 _02_det = ${file.coadd_det.fullname}
                 c = ${file.ptif_config.fullname}   # default.stiff
-                OUTFILE_NAME = ${file.coadd_graphimg.fullname}  # coadd/DES0002+0001.tiff
+                OUTFILE_NAME = ${file.coadd_ptiff.fullname}  # coadd/DES0002+0001.tiff
                 # do we need quotes here?
                 DESCRIPTION = 'PTIF file for DES tile ${tilename}'
                 COPYRIGHT = NCSA/DESDM
@@ -48,9 +48,9 @@
             </coadd_det>
 
             ### outputs
-            <coadd_graphimg>   # graphical image
+            <coadd_ptiff>   # graphical image
                 # what metadata to save
-                filetype = coadd_graphimg
+                filetype = coadd_ptiff
 
                 # how to name output file
                 filepat = tile_generic_nolabel
@@ -64,7 +64,7 @@
                 dirpat = mepoch
                 rundir = qa
                 ops_enddir = qa
-            </coadd_graphimg>
+            </coadd_ptiff>
         </file>
     </make-ptif>
 </module>
