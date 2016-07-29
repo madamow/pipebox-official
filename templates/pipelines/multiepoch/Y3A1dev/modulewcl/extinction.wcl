@@ -28,7 +28,7 @@
             ### outputs
             <extinct>
                 # what metadata to save
-                filetype = coadd_extinct
+                filetype = coadd_extinct_ebv
 
                 # how to name output file
                 filepat = tile_generic
