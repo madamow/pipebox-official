@@ -2,5 +2,5 @@
 
 {% for file in args['rendered_template_path'] %}
 dessubmit {{ file }} 
-sleep 5 
+sleep {{args['wait']}}
 {% endfor %}
