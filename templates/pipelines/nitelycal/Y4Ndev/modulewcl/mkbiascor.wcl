@@ -40,10 +40,10 @@
                 filetype = xtalked_bias
                 flabel = biasx
                 fsuffix = list
-                join = calibration.filename=wgb.filename
+                pfw_attempt_id=${pfw_attempt_id}
                 ops_enddir = biascor
                 output_fields = filename, ccdnum
-                query_fields = filetype,wgb.reqnum,wgb.attnum
+                query_fields = filetype,pfw_attempt_id
                 query_table = calibration
                 rundir = biascor
             </inlist>
