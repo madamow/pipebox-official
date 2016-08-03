@@ -172,7 +172,7 @@ class WideField(PipeArgs):
 class NitelyCal(PipeArgs):
 
     def cmdline(self):
-        parser = super(NitelycalArgs,self).argument_parser()
+        parser = super(NitelyCal,self).argument_parser()
 
         # Science arguments
         parser.add('--biaslist',help='list of line-separated bias expnums')
