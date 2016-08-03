@@ -55,14 +55,14 @@
             </pixcor_mini_dflat>
             <xtalked_dflat>
                 depends = crosstalk-dflat.file.xtalked
-                match = expnum, ccdnum
+                match = expnum, band, ccdnum
                 dirpat = precal
                 rundir = xtalked-dflat
             </xtalked_dflat>
         </file>
         loopobj = file.xtalked_dflat
         modnamepat = ${modnamepat_ccdnumband}
-        wrapperloop = expnum,ccdnum
+        wrapperloop = expnum,band,ccdnum
         wrappername = genwrap.py
     </pixcorrect-dflat>
 </module>
