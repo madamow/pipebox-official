@@ -24,7 +24,7 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/skycompress-norm-dflatcor.wcl>>
 
 {% if args.inputcals_file %}
-<<include {{args.inputcals_file %}>>
+<<include {{args.inputcals_file }}>>
 {% else %}
 {% if args.epoch_name %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/inputcals/{{ args.epoch_name }}_inputs.wcl>>
