@@ -30,7 +30,7 @@
                 filetype = compare_dflat_binned_fp
                 flabel = compare-dflat-binned-fp
                 fsuffix = fits
-                ops_enddir = binned-fp/${camera}${expnum:8}
+                ops_enddir = binned-fp/${camsym}${expnum:8}
                 rundir = binned-fp
                 savefiles = True
             </compare_dflat_binned_fp>

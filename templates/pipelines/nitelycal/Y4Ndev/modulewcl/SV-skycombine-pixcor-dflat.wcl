@@ -20,7 +20,7 @@
                 filetype = pixcor_dflat_binned_fp
                 flabel = pixcor-dflat-binned-fp
                 fsuffix = fits
-                ops_enddir = binned-fp/${camera}${expnum:8}
+                ops_enddir = binned-fp/${camsym}${expnum:8}
                 rundir = binned-fp
                 savefiles = True
             </binned_fp>
@@ -40,7 +40,7 @@
                 fsuffix = list
 
                 dirpat = precal
-                ops_enddir = pixcor-mini-dflat/${camera}${expnum:8}
+                ops_enddir = pixcor-mini-dflat/${camsym}${expnum:8}
                 rundir = pixcor-mini-dflat
                 columns = pixcor_mini_dflat.fullname
             </minilist>
