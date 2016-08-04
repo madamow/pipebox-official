@@ -1,5 +1,5 @@
 ### Mostly Constant ###
-camera = D 
+camsym = D 
 photflagvar = 1    
 bfnite = 20150305
 bfreq = 1428

@@ -1,5 +1,5 @@
 # vars for se-scamp module
-qa_file_prefix = qa/${camera}${expnum:8}_r${reqnum}p${attnum:2}
+qa_file_prefix = qa/${camsym}${expnum:8}_r${reqnum}p${attnum:2}
 astr_pixerror1d = ${qa_file_prefix}_astr_pixerror1d
 astr_referror1d = ${qa_file_prefix}_astr_referror1d
 astr_referror2d = ${qa_file_prefix}_astr_referror2d
@@ -96,7 +96,7 @@ distortion = ${qa_file_prefix}_distortion
             </scamp_config>
             <scamp_ahead>
                 filetype = config
-                filename = ${camera}${expnum:8}_${band}_r${reqnum}p${attnum:2}_scamp.ahead
+                filename = ${camsym}${expnum:8}_${band}_r${reqnum}p${attnum:2}_scamp.ahead
                 dirpat = se
                 ops_enddir = aux
                 rundir = aux

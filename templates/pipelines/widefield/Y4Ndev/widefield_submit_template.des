@@ -61,11 +61,10 @@ calnite = {{ args.calnite }}
 calrun = {{ args.calrun }} {% endif %}
 
 basket = ${nite}
-camsym = ${camera}
 {% if args.ccdnum %}
 ccdnum = {{ args.ccdnum }}
 {% endif %}
-unitname = ${camera}${expnum:8}
+unitname = ${camsym}${expnum:8}
 {% if args.rundir %}
 ops_run_dir = {{ args.rundir }}
 {% else %}
@@ -73,7 +72,7 @@ ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/${unitname
 {% endif %}
 submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
 
-save_run_vals = nite, camera, band, expnum, jira_id
+save_run_vals = nite, camsym, band, expnum, jira_id
 
 GROUP_SUBMIT_ID = 1
 
