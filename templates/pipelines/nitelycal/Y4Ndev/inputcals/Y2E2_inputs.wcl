@@ -1,5 +1,5 @@
 ### Mostly Constant ###
-camera = D 
+camsym = D
 photflagvar = 1    
 confignite = 20140709
 xtalkcoefffile = DECam_20130606.xtalk 
