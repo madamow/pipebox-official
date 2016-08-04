@@ -54,10 +54,10 @@ ops_run_dir = ${project}/${pipeline}/${nite}-r${reqnum}/p${attnum:2}
 {% endif %}
 submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
 
-save_run_vals = nite, camera, jira_id
+save_run_vals = nite, camsym, jira_id
 
 <filename_pattern>
-    nite_band = ${camera}_n${nite}_${band}_r${reqnum}p${attnum:2}_${flabel}.${fsuffix}
+    nite_band = ${camsym}_n${nite}_${band}_r${reqnum}p${attnum:2}_${flabel}.${fsuffix}
 </filename_pattern>
 
 blocklist = bias-exp, bias-ccd, dflat-exp, dflat-band

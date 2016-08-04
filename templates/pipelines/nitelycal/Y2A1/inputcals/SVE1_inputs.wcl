@@ -1,5 +1,5 @@
 ### Mostly Constant ###
-camera = D 
+camsym = D 
 photflagvar = 1    
 xtalkcoefffile = DECam_20130606.xtalk 
 lintablefile = lin_tbl_v0.4

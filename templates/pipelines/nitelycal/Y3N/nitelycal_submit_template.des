@@ -21,7 +21,8 @@ unitname = ${nite}
 ops_run_dir = ${project}/${pipeline}/${nite}-r${reqnum}/p${attnum:2}
 submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
 
-save_run_vals = nite, camera, jira_id
+camsym = ${camera}
+save_run_vals = nite, camsym, jira_id
 
 blocklist = xtalk-bias, xtalk-dflat, mkcor
 

@@ -39,7 +39,7 @@
                 filetype = pixcor_dflat
                 flabel = pixcor-dflat
                 fsuffix = fits
-                ops_enddir = pixcor-dflat/${camera}${expnum:8}
+                ops_enddir = pixcor-dflat/${camsym}${expnum:8}
                 rundir = pixcor-dflat
                 savefiles = True
             </pixcor_dflat>
@@ -49,7 +49,7 @@
                 filetype = pixcor_mini_dflat
                 flabel = pixcor-mini-dflat
                 fsuffix = fits
-                ops_enddir = pixcor-mini-dflat/${camera}${expnum:8}
+                ops_enddir = pixcor-mini-dflat/${camsym}${expnum:8}
                 rundir = pixcor-mini-dflat
                 savefiles = True
             </pixcor_mini_dflat>

@@ -4,7 +4,7 @@
             ancestry = file.raw:file.xtalked, file.xtalkcoeff:file.xtalked, file.hupdate:file.xtalked
             <cmdline>
                 _01_raw = ${file.raw.fullname}
-                _02_xtalked = xtalked-bias/${camera}${expnum:8}_c%02d_r${reqnum}p${attnum:2}_bias.fits
+                _02_xtalked = xtalked-bias/${camsym}${expnum:8}_c%02d_r${reqnum}p${attnum:2}_bias.fits
                 ccdlist = ${ccdnum}
                 crosstalk = ${file.xtalkcoeff.fullname}
                 overscanfunction = 0
@@ -51,7 +51,7 @@
                 filetype = xtalked_bias
                 flabel = bias
                 fsuffix = fits
-                ops_enddir = xtalked-bias/${camera}${expnum:8}
+                ops_enddir = xtalked-bias/${camsym}${expnum:8}
                 rundir = xtalked-bias
                 savefiles = True
             </xtalked>
