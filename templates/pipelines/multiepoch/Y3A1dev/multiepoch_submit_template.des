@@ -74,7 +74,8 @@ blocklist = me
 
 <block>
     <me>
-        modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, det-swarp-wgt, det-swarp-msk, band-assemble, det-assemble, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, mepoch-ingest, mangle, make-color-img, make-ptif, wavg, run-desmeds
+        modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, det-swarp-wgt, det-swarp-msk, band-assemble, det-assemble, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, wavg, mangle, mepoch-ingest, make-color-img, make-ptif, run-desmeds
+       extinction, healpix, wavg, mangle, mepoch-ingest
     </me>
 </block>
 
