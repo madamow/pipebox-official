@@ -1,3 +1,4 @@
+band = g,r,i,z,Y
 <module>
     <extinction>
         modnamepat = ${modnamepat_tile_generic}
@@ -6,12 +7,12 @@
             execname = compute_SFD98_coadd_catalog
             cmd_hyphen = mixed_gnu
             used = file.det_cat
-            was_generated_by = file.extinct
-            ancestry = file.det_cat:file.extinct
+            was_generated_by = file.ebv,file.xcorr
+            ancestry = file.det_cat:file.ebv, file.det_cat:file.xcorr
             <cmdline>
                 i = ${file.det_cat.fullname}
-                o = ${file.extinct.fullname}
                 c = ${cat_columns}
+                prefix = cat/${tilename}_r${reqnum}p${attnum:2}
             </cmdline>
         </exec_1>
         <file>
@@ -26,24 +27,42 @@
             </det_cat>
 
             ### outputs
-            <extinct>
+            <ebv>
                 # what metadata to save
                 filetype = coadd_extinct_ebv
 
                 # how to name output file
                 filepat = tile_generic
-                flabel = extinct
+                flabel = ebv-cat
                 fsuffix = fits
 
                 # whether to save or compress
-                savefiles = true
+                savefiles = false
                 compress_files = false
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
                 ops_enddir = cat
                 rundir = cat
-            </extinct>
+            </ebv>
+            <xcorr>
+                # what metadata to save
+                filetype = coadd_extinct_band
+
+                # how to name output file
+                filepat = tile_band
+                flabel = xcorr-cat
+                fsuffix = fits
+
+                # whether to save or compress
+                savefiles = false
+                compress_files = false
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = cat
+                rundir = cat
+            </xcorr>
         </file>
     </extinction>
 </module>

@@ -2,6 +2,7 @@
     <det-psfex>
         modnamepat = ${modnamepat_tile_generic}
         wrappername = genwrap.py
+        band = det
         <exec_1>
             execname = psfex
             cmd_hyphen = allsingle

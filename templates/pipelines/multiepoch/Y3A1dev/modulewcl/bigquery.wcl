@@ -5,7 +5,7 @@
         <list>
             <allfiles>
                 exec = query_coadd_img_for_nullwgt.py
-                args = --proctag ${proctag} --tile ${tilename} --magbase=${mag_zero} --zeropoint ${zeropoint_table} --zsource ${zsource} --zversion ${zversion} --blacklist ${blacklist_table} --outfile ${qoutfile} --verbose 1  --archive ${home_archive}
+                args = --proctag ${proctag} --tile ${tilename} --magbase=${mag_zero} --zeropoint ${zeropoint_table} --zsource ${zsource} --zversion ${zversion} --blacklist ${blacklist_table} --outfile ${qoutfile} --verbose 1  --archive ${home_archive} --bandlist ${band} --detbands ${det_bands}
                 columns = red.mag_zero
             </allfiles>
         </list>

@@ -7,6 +7,7 @@ molys_prefix = ${unitname}_r${reqnum}p${attnum:2}_${band}_molys
 molys_suffix_only = area, count, maglims, red, time, weight
 molys_qalabel = AIRMASS, EXPTIME, FWHM, SKYBRITE, SKYSIGMA
 molys_suffix = MAX, MEAN, MEDIAN, MIN, SUM, WMEAN
+png_label = comp1, comp2,Object-not-in-tolygon,Objects-not-in-geometry-masks,Objects-in-star-mask,Objects-in-bleed-mask
 
 <module>
     <mangle>
@@ -30,17 +31,20 @@ molys_suffix = MAX, MEAN, MEDIAN, MIN, SUM, WMEAN
                 tilename = ${tilename}
                 tileid = ${tileid}
                 coadd = ${file.coadd.fullname}
-                outputdir = mangle/${band}
-                molysprefix = ${molys_prefix}
-                polprefix = ${pol_prefix}
-                compare_plot1 = ${file.cmpplot1.fullname}
-                compare_plot2 = ${file.cmpplot2.fullname}
+                coadd_cat = ${file.coadd_cat.fullname}
+                molysprefix = mangle/${band}/${molys_prefix}
+                polprefix = mangle/${band}/${pol_prefix}
+                dbprefix = mangle/csv/${pol_prefix}
+                pltprefix = mangle/qa/${pol_prefix}_mangle
                 cleanup = Y
+                ra_column = ${ra_col}
+                dec_column = ${dec_col}
+
             </cmdline>
             execname = mangle_one_tile
             cmd_hyphen = mixed_gnu
-            used = list.red.red_immask,list.nwgint.nwgint,file.poltiles,file.poltolys,file.mangle_config,file.coadd
-            was_generated_by = file.polygons, file.molys_1, file.molys_2, file.cmpplot1, file.cmpplot2
+            used = list.red.red_immask,list.nwgint.nwgint,file.poltiles,file.poltolys,file.mangle_config,file.coadd,file.coadd_cat
+            was_generated_by = file.polygons, file.molys_1, file.molys_2, file.png, file.csv_ccdgon, file.csv_molygon, file.csv_molyccd, file.csv_cobjmoly
             #ancestry = file.red_immask:file.nwgint
         </exec_1>
         <list>
@@ -119,6 +123,15 @@ molys_suffix = MAX, MEAN, MEDIAN, MIN, SUM, WMEAN
                 dirpat = mepoch
                 rundir = coadd
             </coadd>
+            <coadd_cat>
+                # how to get file data
+                depends band-coadd-catalog.file.coadd_cat
+                match = band
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = cat
+            </coadd_cat>
             <red_immask>
                 listonly = True
 
@@ -136,12 +149,12 @@ molys_suffix = MAX, MEAN, MEDIAN, MIN, SUM, WMEAN
 
 
             ### output files
-            <cmpplot1>
+            <png>
                 # what metadata to save
                 filetype = mangle_qa
 
                 # how to name output file
-                filename = ${unitname}_r${reqnum}p${attnum:2}_${band}_mangle-1.png
+                filename = ${pol_prefix}_mangle_${png_label}.png
 
                 # whether to save or compress
                 savefiles = true
@@ -149,25 +162,9 @@ molys_suffix = MAX, MEAN, MEDIAN, MIN, SUM, WMEAN
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
-                ops_enddir = qa/mangle
-                rundir = qa/mangle
-            </cmpplot1>
-            <cmpplot2>
-                # what metadata to save
-                filetype = mangle_qa
-
-                # how to name output file
-                filename = ${unitname}_r${reqnum}p${attnum:2}_${band}_mangle-2.png
-
-                # whether to save or compress
-                savefiles = true
-                compress_files = false
-
-                # where to put it (jobroot=rundir, archive=ops_enddir)
-                dirpat = mepoch
-                ops_enddir = qa/mangle
-                rundir = qa/mangle
-            </cmpplot2>
+                ops_enddir = mangle/qa
+                rundir = mangle/qa
+            </png>
             <molys_1>
                 # what metadata to save
                 filetype = mangle_molys
@@ -216,6 +213,70 @@ molys_suffix = MAX, MEAN, MEDIAN, MIN, SUM, WMEAN
                 ops_enddir = mangle/${band}
                 rundir = mangle/${band}
             </polygons>
+            <csv_ccdgon>
+                # what metadata to save
+                filetype = mangle_csv_ccdgon
+
+                # how to name output file
+                filename = ${pol_prefix}_ccdgon.csv
+
+                # whether to save or compress
+                savefiles = true
+                compress_files = false
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = mangle/csv
+                rundir = mangle/csv
+            </csv_ccdgon>
+            <csv_molygon>
+                # what metadata to save
+                filetype = mangle_csv_molygon
+
+                # how to name output file
+                filename = ${pol_prefix}_molygon.csv
+
+                # whether to save or compress
+                savefiles = true
+                compress_files = false
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = mangle/csv
+                rundir = mangle/csv
+            </csv_molygon>
+            <csv_molyccd>
+                # what metadata to save
+                filetype = mangle_csv_molyccd
+
+                # how to name output file
+                filename = ${pol_prefix}_molygon_ccdgon.csv
+
+                # whether to save or compress
+                savefiles = true
+                compress_files = false
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = mangle/csv
+                rundir = mangle/csv
+            </csv_molyccd>
+            <csv_cobjmoly>
+                # what metadata to save
+                filetype = mangle_csv_cobjmoly
+
+                # how to name output file
+                filename = ${pol_prefix}_coadd_object_molygon.csv
+
+                # whether to save or compress
+                savefiles = true
+                compress_files = false
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = mangle/csv
+                rundir = mangle/csv
+            </csv_cobjmoly>
         </file>
     </mangle>
 </module>

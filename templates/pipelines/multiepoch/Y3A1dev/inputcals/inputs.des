@@ -22,7 +22,9 @@ assemble_mincols = 1
 assemble_ydilate = 3
 
 psfex_satur_level = 65000
-cat_columns = NUMBER,ALPHAWIN_J2000,DELTAWIN_J2000
+ra_col = ALPHAWIN_J2000
+dec_col = DELTAWIN_J2000
+cat_columns = NUMBER,${ra_col},${dec_col}
 
 scamp_config_file = ${cfgver}_scamp.config
 swarp_config_file = ${cfgver}_swarp.config
