@@ -135,7 +135,9 @@ class MultiEpoch(PipeArgs):
         parser.add('--tile',help='A single tile or comma-separated list of tiles')
         parser.add('--list',help='File of line-separated tiles')
         parser.add('--proctag',help='Tag of processed expnums (proctag table) to use for coaddition')
-        parser.add('--nthreads',default=8,help='Amount of parallelization') 
+        parser.add('--nthreads',default=8,help='Amount of parallelization')
+        parser.add('--bands',default='g,r,i,z,Y')
+        parser.add('--det_bands',default='r,i,z')
         args = parser.parse_args()
 
         return args
