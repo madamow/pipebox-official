@@ -1,4 +1,4 @@
-band = g,r,i,z,Y
+band = ${bands}
 <module>
     <extinction>
         modnamepat = ${modnamepat_tile_generic}

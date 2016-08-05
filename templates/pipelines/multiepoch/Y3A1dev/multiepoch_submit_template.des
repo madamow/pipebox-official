@@ -44,6 +44,10 @@ basket = {{args.tile}} # FIX THIS
 proctag = {{args.proctag}}
 tilename = {{args.tile}}
 unitname = ${tilename}
+
+bands = {{ args.bands }}
+det_bands = {{args.det_bands}}
+
 {% if args.rundir %}
 ops_run_dir = {{ args.rundir }}
 {% else %}

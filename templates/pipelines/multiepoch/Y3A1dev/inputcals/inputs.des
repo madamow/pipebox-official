@@ -1,7 +1,6 @@
 camsym = D
 cfgver = Y3A1dev_v1
 
-det_bands = i,r,z
 color_r_band = i
 color_g_band = r
 color_b_band = g
