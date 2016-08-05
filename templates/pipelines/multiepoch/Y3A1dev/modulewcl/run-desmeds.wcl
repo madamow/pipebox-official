@@ -23,7 +23,7 @@
             cmd_hyphen =  mixed_gnu
             used = list.nwgint.nwgint,list.redbkg.bkg,list.redseg.seg,file.medsconf,file.coadd,file.coadd_cat,file.coadd_segmap
             was_generated_by = file.tileconf,file.meds
-            #ancestry =
+            #ancestry = file.coadd_cat:file.meds,file.,file.coadd:file.meds,file.coadd_cat:file.tileconf,file.coadd:file.tileconf
         </exec_1>
         <list>
             <nwgint>
