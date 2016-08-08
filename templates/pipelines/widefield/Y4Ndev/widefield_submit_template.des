@@ -24,13 +24,13 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/11-rowinterp-nullweight-immask.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/12a-create-psfex-cat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/12b-run-psfex.wcl>>
-<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/13a-create-finalcut-catalog.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/13a-create-firstcut-catalog.wcl>>
 {% if args.after_merge %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/13b-ingest-se-objects-after-merge.wcl>>
 {% else %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/13b-ingest-se-objects.wcl>>
 {% endif %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/14-finalcut-assess.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/14-firstcut-assess.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/15-mkpng.wcl>>
 
 {% if args.inputcals_file %}
@@ -80,7 +80,7 @@ blocklist = se
 
 <block>
    <se>
-        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit,skysub,starflat,null-weight-bkg,create-bkg-img,immask,rowinterp-nullweight-immask,create-psfex-catalog,run-psfex,create-finalcut-catalog,ingest-se-objects,finalcut-assess,mkpng
+        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit,skysub,starflat,null-weight-bkg,create-bkg-img,immask,rowinterp-nullweight-immask,create-psfex-catalog,run-psfex,create-firstcut-catalog,ingest-se-objects,firstcut-assess,mkpng
     </se>    
 </block>
 
