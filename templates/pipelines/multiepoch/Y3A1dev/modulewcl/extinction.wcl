@@ -4,7 +4,7 @@ band = ${bands}
         modnamepat = ${modnamepat_tile_generic}
         wrappername = genwrap.py
         <exec_1>
-            execname = compute_SFD98_coadd_catalog
+            execname = compute_SFD98_coadd_bands
             cmd_hyphen = mixed_gnu
             used = file.det_cat
             was_generated_by = file.ebv,file.xcorr
