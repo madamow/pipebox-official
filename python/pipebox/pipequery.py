@@ -134,7 +134,8 @@ class SuperNova(PipeQuery):
         if not nite:
             raise Exception("Must specify nite!")
         print "selecting exposures to submit..."
-        query = "select distinct nite, field, band from manifest_exposure where exptime > 30  and nite in (%s) " % (','.join(nite))
+        query = "select distinct nite, field, band from manifest_exposure where exptime > 30 \
+                and nite in (%s) " % (','.join(nite))
         self.cur.execute(query)
 #        triplets = np.ravel(np.array(self.cur.fetchall()))
 #        return string.join(map(str,triplets),',').reshape[-1:3]
@@ -422,6 +423,14 @@ class WideField(PipeQuery):
         return precal_nite, precal_run
 
 class NitelyCal(PipeQuery):
+
+    def get_nites(self,expnum_list):
+        explist = ','.join(str(n) for n in expnum_list)
+        nite_query = "select distinct nite from exposure where expnum in ({explist}) \
+                     order by nite".format(explist=explist)
+        self.cur.execute(nite_query)
+
+        return [n[0] for n in self.cur.fetchall()]
 
     def check_submitted(self,date):
         """Check to see if a nitelycal has been submitted with given date"""

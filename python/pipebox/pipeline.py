@@ -483,7 +483,11 @@ class NitelyCal(PipeLine):
             self.args.dataframe = pd.concat([self.args.flat_df,self.args.bias_df],ignore_index=True)
             self.args.cur.update_df(self.args.dataframe)
 
-        if self.args.csv:
+            # Querying nites available within bias/flat lists
+            expnum_list = self.args.flat_list + self.args.bias_list
+            self.args.nitelist = self.args.cur.get_nites(expnum_list)
+
+        elif self.args.csv:
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.cur.update_df(self.args.dataframe)
