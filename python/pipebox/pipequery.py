@@ -313,7 +313,7 @@ class WideField(PipeQuery):
     
     def get_max_nite(self,propid=None,program=None,process_all=False):
         """Returns expnum,nite of max(expnum) in the exposure table"""
-        base_query = "select max(expnum) from exposure where obstype='object'"
+        base_query = "select max(expnum) from exposure where obstype in ('object','standard')"
         if propid:
             max_object = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['propid'])
         if program:
@@ -360,7 +360,9 @@ class WideField(PipeQuery):
         if not nites:
             raise Exception("Must specify nite!")
         print "selecting exposures to submit..."
-        base_query = "select distinct expnum,nite from exposure where obstype='object' and object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' and object not like '%%test%%' and object not like '%%junk%%' and nite in (%s)" % ','.join(nites)
+        base_query = "select distinct expnum,nite from exposure where obstype in ('object','standard') and \
+                      object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' \
+                      and object not like '%%test%%' and object not like '%%junk%%' and nite in (%s)" % ','.join(nites)
         if program:
             get_expnum = base_query + " program in (%s)" % ','.join("'{0}'".format(k) for k in program)
         if propid:
