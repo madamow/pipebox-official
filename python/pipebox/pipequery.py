@@ -366,7 +366,7 @@ class WideField(PipeQuery):
                       object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' \
                       and object not like '%%test%%' and object not like '%%junk%%' and nite in (%s)" % ','.join(nites)
         if program:
-           base_query = base_query + " program in (%s)" % ','.join("'{0}'".format(k) for k in program)
+           base_query = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in program)
         if propid:
             base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
         if process_all:
