@@ -125,7 +125,7 @@ class PipeLine(object):
             self.args.submitfile = output_path 
             # Writing template
             if self.args.ignore_processed:
-                if self.args.cur.check_submitted(self.args.expnum,self.args.reqnum):
+                if self.args.cur.check_submitted(self.args.unitname,self.args.reqnum):
                     continue
                 else:
                     pipeutils.write_template(self.args.submit_template_path,output_path,self.args)
@@ -389,11 +389,13 @@ class WideField(PipeLine):
             self.args.nite = self.args.cur.get_max_nite(propid=self.args.propid,
                                                         program=self.args.program,
                                                         process_all=self.args.process_all)[1]
+            self.args.nitelist = self.args.nite.split(',')
+            """
             if not self.args.calnite:
                 precal = self.args.cur.find_precal(self.args.nite,threshold=7,override=True,
                                                    tag=self.args.caltag)
                 self.args.calnite,self.args.calrun = precal[0],precal[1]
-        
+            """
         
         # Creating dataframe from exposures 
         if self.args.resubmit_failed:
