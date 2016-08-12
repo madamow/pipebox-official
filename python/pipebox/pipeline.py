@@ -391,11 +391,13 @@ class WideField(PipeLine):
             self.args.nite = self.args.cur.get_max_nite(propid=self.args.propid,
                                                         program=self.args.program,
                                                         process_all=self.args.process_all)[1]
+            self.args.nitelist = self.args.nite.split(',')
+            """
             if not self.args.calnite:
                 precal = self.args.cur.find_precal(self.args.nite,threshold=7,override=True,
                                                    tag=self.args.caltag)
                 self.args.calnite,self.args.calrun = precal[0],precal[1]
-        
+            """
         
         # Creating dataframe from exposures 
         if self.args.resubmit_failed:

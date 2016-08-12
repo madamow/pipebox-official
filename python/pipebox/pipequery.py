@@ -296,17 +296,19 @@ class WideField(PipeQuery):
             try:
                 df.insert(len(df.columns),'nite', None)
                 df.insert(len(df.columns),'band', None)
+                df.insert(len(df.columns),'unitname',None)
             except:
                 pass
             df.loc[index,'nite'] = nite
             df.loc[index,'band'] = band
+            df.loc[index,'unitname'] = 'D00' + str(expnum)
 
         return df
 
-    def check_submitted(self,expnum,reqnum):
+    def check_submitted(self,unitname,reqnum):
         """ Queries database to find number of attempts submitted for
             given exposure. Returns count"""
-        was_submitted = "select count(*) from pfw_attempt where unitname= 'D00%s' and reqnum = '%s'" % (expnum,reqnum)
+        was_submitted = "select count(*) from pfw_attempt where unitname= '%s' and reqnum = '%s'" % (unitname,reqnum)
         self.cur.execute(was_submitted)
         submitted_or_not = self.cur.fetchone()[0]
         return submitted_or_not       
