@@ -317,12 +317,12 @@ class WideField(PipeQuery):
         """Returns expnum,nite of max(expnum) in the exposure table"""
         base_query = "select max(expnum) from exposure where obstype in ('object','standard')"
         if propid:
-            max_object = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['propid'])
+            base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
         if program:
-            max_object = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['program'])
+            base_query = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in program)
         if process_all:
-            max_object = base_query
-        self.cur.execute(max_object)
+            base_query = base_query
+        self.cur.execute(base_query)
         max_expnum = self.cur.fetchone()[0]
         fetch_nite = "select distinct nite from exposure where expnum=%s" % (max_expnum)
         self.cur.execute(fetch_nite)
