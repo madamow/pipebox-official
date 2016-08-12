@@ -84,11 +84,11 @@ class SuperNova(PipeQuery):
             df.loc[index,'unitname']='D_SN-'+row['field'][-2:]+'_'+row['band']+'_s1'
         return df
 
-# Copied from widefield (unedited)
-    def check_submitted(self,expnum,reqnum):
+# Edited from widefield (changed expnum to unitname)
+    def check_submitted(self,unitname,reqnum):
         """ Queries database to find number of attempts submitted for
             given exposure. Returns count"""
-        was_submitted = "select count(*) from pfw_attempt where unitname= 'D00%s' and reqnum = '%s'" % (expnum,reqnum)
+        was_submitted = "select count(*) from pfw_attempt where unitname= '%s' and reqnum = '%s'" % (unitname,reqnum)
         self.cur.execute(was_submitted)
         submitted_or_not = self.cur.fetchone()[0]
         return submitted_or_not       

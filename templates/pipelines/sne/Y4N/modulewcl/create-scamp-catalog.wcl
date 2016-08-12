@@ -1,7 +1,7 @@
 <module> 
     <create-scamp-catalog>
         wrappername = genwrap.py 
-        wrapperloop = ccdnum,band
+        wrapperloop = expnum,ccdnum,band
         modnamepat=${modnamepat_ccdnumband}
 
         <file>
@@ -50,7 +50,7 @@
                 dirpat = sne
                 ops_enddir = cat
                 rundir = cat
-                savefiles = true
+                savefiles = false
             </scamp_cat>
         </file>
         <exec_1>

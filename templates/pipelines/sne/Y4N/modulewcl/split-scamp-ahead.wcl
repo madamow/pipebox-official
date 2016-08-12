@@ -14,7 +14,7 @@
             </ahead_full>
             <ahead_partial>
                 filetype = config 
-		filename = ${camera}${expnum:8}_${band}_r${reqnum}p${attnum:2}_scamp.ahead
+		filename = ${camsym}${expnum:8}_${band}_r${reqnum}p${attnum:2}_scamp.ahead
                 dirpat = sne
                 ops_enddir = aux
                 rundir = aux

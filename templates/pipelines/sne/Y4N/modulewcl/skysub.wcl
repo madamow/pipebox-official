@@ -1,7 +1,7 @@
 <module>
     <skysub>
         wrappername = genwrap.py
-        wrapperloop = ccdnum,band
+        wrapperloop = expnum,ccdnum,band
         modnamepat = ${modnamepat_ccdnumband}
 
         <file>
@@ -42,7 +42,7 @@
                 # metadata info
                 #filetype = cal_norm_dflatcor
                 filetype = cal_dflatcor
-                filename = ${camera}_n${calnite}_${band}_c${ccdnum:2}_${calrun}_norm-dflatcor.fits
+                filename = ${camsym}_n${calnite}_${band}_c${ccdnum:2}_${calrun}_norm-dflatcor.fits
 
                 # where to store file
                 dirpat = precal

@@ -18,29 +18,26 @@
         </exec_1>
         <file>
              <red_pixcor>
-                filetype = snred_pixcor
-
+                dirpat = sne
                 filepat = sn_ccdnum_band
+                filetype = snred_pixcor
                 flabel = sn_pixcor
                 fsuffix = fits
-
-                dirpat = sne
                 ops_enddir = red/pixcor
                 rundir = red/pixcor
             </red_pixcor>
-
             <red_wcs>
                 dirpat = sne_ccd
                 filepat = sn_ccdnum_band
                 filetype = snred_wcs
                 flabel = wcs
                 fsuffix = fits
-#                <hdrupd_flag>
-#                    scampflg = 1
-#                </hdrupd_flag>
                 ops_enddir = red
                 rundir = red
                 savefiles = False
+                <hdrupd_flag>
+                    scampflg = 1
+                </hdrupd_flag>
             </red_wcs>
             <scamp_cat>
                 dirpat = sne
@@ -48,14 +45,15 @@
                 filetype = sncat_scamp
                 flabel = scampcat
                 fsuffix = fits
+                ops_enddir = cat
                 rundir = cat
             </scamp_cat>
             <scamp_head>
-                filetype = snhead_scamp
+                dirpat = sne
                 filepat = sn_ccdnum_band
+                filetype = snhead_scamp
                 flabel = scamp
                 fsuffix = head
-                dirpat = sne
                 ops_enddir = aux
                 rundir = aux
             </scamp_head>
@@ -67,12 +65,11 @@
                 rundir = config
             </scamp_update_head>
             <scamp_xml>
-                filetype = snxml_scamp
+                dirpat = sne
                 filepat = sn_exposure
+                filetype = snxml_scamp
                 flabel = scamp
                 fsuffix = xml
-                dirpat = sne
-                ops_enddir = qa
                 rundir = qa
             </scamp_xml>
         </file>

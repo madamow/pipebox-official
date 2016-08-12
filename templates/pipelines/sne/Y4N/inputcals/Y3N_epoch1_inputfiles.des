@@ -1,7 +1,7 @@
 autoscan_mltrain_date = 20150618
 autoscan_mltrain_version = ml3.2
 bpmnite = 20140101t0209v2
-camera = D
+camsym = D
 config = 20150715   #config files for scamp and sextractor used on astrometry and bkg_image
 config_version = 20150715  # sne config files
 fringecornite = 20131115v1
