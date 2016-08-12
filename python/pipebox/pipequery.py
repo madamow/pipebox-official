@@ -366,12 +366,12 @@ class WideField(PipeQuery):
                       object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' \
                       and object not like '%%test%%' and object not like '%%junk%%' and nite in (%s)" % ','.join(nites)
         if program:
-            get_expnum = base_query + " program in (%s)" % ','.join("'{0}'".format(k) for k in program)
+           base_query = base_query + " program in (%s)" % ','.join("'{0}'".format(k) for k in program)
         if propid:
-            get_expnum = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
+            base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
         if process_all:
-            get_expnum = base_query
-        self.cur.execute(get_expnum)
+            base_query = base_query
+        self.cur.execute(base_query)
         results = self.cur.fetchall()
         try:
             [expnums,nites_from_query] = map(list, zip(*results))
