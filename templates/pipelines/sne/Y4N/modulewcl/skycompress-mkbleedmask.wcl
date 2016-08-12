@@ -1,7 +1,7 @@
 <module>
     <skycompress-mkbleedmask>
         wrappername = genwrap.py
-        wrapperloop = ccdnum, band
+        wrapperloop = expnum,ccdnum, band
         modnamepat = ${modnamepat_ccdnumband}
         loopobj = file.red_bleedmasked       
         <file>

@@ -1,7 +1,7 @@
 <module>
     <null-weight-bkg>
         wrappername = genwrap.py
-        wrapperloop = ccdnum,band
+        wrapperloop = expnum,ccdnum,band
         modnamepat = ${modnamepat_ccdnumband}
         <file>
             <red_starflat>

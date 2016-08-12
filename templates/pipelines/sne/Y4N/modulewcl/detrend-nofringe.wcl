@@ -8,13 +8,13 @@
         <file>
             <biascor>
                 filetype = cal_biascor
-                filename = ${camera}_n${precalnite}_c${ccdnum:2}_${precalrun}_biascor.fits
+                filename = ${camsym}_n${precalnite}_c${ccdnum:2}_${precalrun}_biascor.fits
                 dirpat = se
                 rundir = biascor
             </biascor>
             <flatcor>
                 filetype = cal_dflatcor
-                filename = ${camera}_n${precalnite}_${band}_c${ccdnum:2}_${precalrun}_dflatcor.fits
+                filename = ${camsym}_n${precalnite}_${band}_c${ccdnum:2}_${precalrun}_dflatcor.fits
                 dirpat = se
                 rundir = dflatcor
             </flatcor>
@@ -24,7 +24,7 @@
                 rundir = bpm
                 filename = ${bpmnite}_bpm_${ccdnum:2}.fits #old format of bpms
                 #New format of bpms
-                #filename = ${camera}_n${bpmnite}_c${ccdnum:2}_${bpmrun}_bpm.fits
+                #filename = ${camsym}_n${bpmnite}_c${ccdnum:2}_${bpmrun}_bpm.fits
             </bpm>
             <photflatcor>
                 filetype = cal_photflatcor
@@ -38,7 +38,7 @@
                 rundir = pupil
                 #filename = ${pupilnite}_pupil_${band}_${ccdnum:2}.fits
                 #New format of pupils
-                filename = ${camera}_n${pupilnite}_${band}_c${ccdnum:2}_${pupilrun}_pupil.fits
+                filename = ${camsym}_n${pupilnite}_${band}_c${ccdnum:2}_${pupilrun}_pupil.fits
             </pupil>
             <red_xtalked>
                 match = ccdnum,band
@@ -71,7 +71,7 @@
                 rundir = illumcor
                 #filename = ${illumcornite}_illumcor_${band}_${ccdnum:2}.fits
                 #New format of illumcors
-                filename = ${camera}_n${illumcornite}_${band}_c${ccdnum:2}_${illumcorrun}_illumcor.fits
+                filename = ${camsym}_n${illumcornite}_${band}_c${ccdnum:2}_${illumcorrun}_illumcor.fits
             </illumcor>
         </file>
 

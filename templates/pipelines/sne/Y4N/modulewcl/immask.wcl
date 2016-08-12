@@ -5,13 +5,13 @@
         modnamepat=${modnamepat_field_ccdnumband}
         <file>
             <red_starflat>
-                filetype = snred_mkbleedmask
+                filetype = snred_starflat
                 filepat = sn_ccdnum_band
-                flabel = bleedmasked
+                flabel = starflat
                 fsuffix = fits
-                dirpat = sne_ccd
-                ops_enddir = red
-                rundir = red
+                dirpat = sne
+                ops_enddir = red/starflat
+                rundir = red/starflat
             </red_starflat>
             <red_immask_bkg>
                 filetype = snred_bkg_immask
@@ -31,7 +31,7 @@
                 ops_enddir = red/immask
                 rundir = red/immask
                 savefiles = true
-                compress_files = true
+                compress_files = false
             </red_immasked>
             <cat_streak>
                 filetype = sncat_streak
@@ -51,17 +51,22 @@
             was_generated_by = file.red_immasked,file.cat_streak
             ancestry = file.red_starflat:file.red_immasked, file.red_immask_bkg:file.red_immasked, file.red_starflat:file.cat_streak
             <cmdline>
-                _01_immask_type = all
+                _01_immask_mode = all
                 _02_red_starflat = ${file.red_starflat.fullname}
                 _03_red_immasked = ${file.red_immasked.fullname}
-                #streaksfile = ${file.cat_streak.fullname}
-                #write_streaks = _flag
-                nsig_mask = 10
-                nsig_merge = 10
-                max_angle = 25
-                minSigma = 7.0
-                nsig_detect = 18
+                streaksfile = ${file.cat_streak.fullname}
+                write_streaks = _flag
                 bkgfile = ${file.red_immask_bkg.fullname}
+                minSigma = 6.0
+                nsig_mask = 12
+                nsig_merge = 12
+                nsig_sky = 1.5
+                max_angle = 75
+                max_width = 300
+                nsig_detect = 18
+                min_fill = 0.33
+                min_DN = 600
+                nGrowCR = 1
             </cmdline>
         </exec_1>
     </immask>

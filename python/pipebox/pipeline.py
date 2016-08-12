@@ -273,10 +273,12 @@ class SuperNova(PipeLine):
             pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
             
             self.args.nite = self.args.cur.get_max_nite()
-            if not self.args.calnite:
-                precal = self.args.cur.find_precal(self.args.nite,threshold=7,override=True,
-                                                   tag=self.args.caltag)
-                self.args.calnite,self.args.calrun = precal[0],precal[1]
+            self.args.nitelist = self.args.nite.split(',')
+#           Calibration specified in input file
+#            if not self.args.calnite:
+#                precal = self.args.cur.find_precal(self.args.nite,threshold=7,override=True,
+#                                                   tag=self.args.caltag)
+#                self.args.calnite,self.args.calrun = precal[0],precal[1]
         
         # Creating dataframe from exposures 
 #       I don't think we want this for SN

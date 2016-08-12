@@ -1,13 +1,13 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/modnamepat.wcl>>
 
 pipeline = sne     # used in desstat output, directory structure, etc
-unitname = ${camera}_${field}_${band}_s${seqnum}   # pipeline specific
+unitname = ${camsym}_${field}_${band}_s${seqnum}   # pipeline specific
 basket = ${nite}
-save_run_vals = nite, camera, field, band, first_expnum, seqnum
+save_run_vals = nite, camsym, field, band, first_expnum, seqnum
 ops_run_dir = ${project}/${pipeline}/${campaign}/${nite}-r${reqnum}/${unitname}/p${attnum:2}
 
 autoscan_mltrain_indir=${autoscan_mltrain_version}
-stamps_dir = stamps_${camera}${first_expnum}_c${ccdnum:2}
+stamps_dir = stamps_${camsym}${first_expnum}_c${ccdnum:2}
 photflagvar = 1    # needed for crosstalk code
 
 <block>

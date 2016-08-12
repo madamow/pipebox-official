@@ -1,7 +1,8 @@
 <module create-bkg-img>
     wrappername = genwrap.py
-    wrapperloop = ccdnum
+    wrapperloop = expnum,ccdnum
     modnamepat=${modnamepat_ccdnumband}
+    loopobj = file.red_nullweight_bkg    
 
     <file>
         <sex_config>
@@ -33,7 +34,7 @@
             rundir = red/bkg
         </red_nullweight_bkg>
         <red_immask_bkg>
-            filetype = snbkg_red
+            filetype = snred_bkg_immask
             filepat = sn_ccdnum_band
             flabel = immask-bkg
             fsuffix = fits

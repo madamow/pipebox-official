@@ -1,24 +1,24 @@
-modnamepat_expband=${camera}${expnum:8}_${band}_r${reqnum}p${attnum:2}_${modulename}
-#DUP? modnamepat_exp_band=${camera}${expnum:8}_${band}_r${reqnum}p${attnum:2}_${modulename}
-modnamepat_expnoband=${camera}${expnum:8}_r${reqnum}p${attnum:2}_${modulename}
-#DUP? modnamepat_exp_noband=${camera}${expnum:8}_r${reqnum}p${attnum:2}_${modulename}
-modnamepat_ccdnumband=${camera}${expnum:8}_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
-#DUP? modnamepat_ccdnum_band=${camera}${expnum:8}_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
-modnamepat_ccdnumnoband=${camera}${expnum:8}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
-#DUP? modnamepat_ccdnum_noband=${camera}${expnum:8}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
-modnamepat_nite_band=${camera}_${nite}_${band}_r${reqnum}p${attnum:2}_${modulename}
-modnamepat_nite_noband=${camera}_${nite}_r${reqnum}p${attnum:2}_${modulename}
-modnamepat_nite_ccdnum_band=${camera}_${nite}_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
-modnamepat_nite_ccdnum_noband=${camera}_${nite}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_expband=${camsym}${expnum:8}_${band}_r${reqnum}p${attnum:2}_${modulename}
+#DUP? modnamepat_exp_band=${camsym}${expnum:8}_${band}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_expnoband=${camsym}${expnum:8}_r${reqnum}p${attnum:2}_${modulename}
+#DUP? modnamepat_exp_noband=${camsym}${expnum:8}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_ccdnumband=${camsym}${expnum:8}_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
+#DUP? modnamepat_ccdnum_band=${camsym}${expnum:8}_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_ccdnumnoband=${camsym}${expnum:8}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
+#DUP? modnamepat_ccdnum_noband=${camsym}${expnum:8}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_nite_band=${camsym}_${nite}_${band}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_nite_noband=${camsym}_${nite}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_nite_ccdnum_band=${camsym}_${nite}_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_nite_ccdnum_noband=${camsym}_${nite}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
 
 
-modnamepat_field_expband=${field}_${camera}${expnum:8}_${band}_r${reqnum}p${attnum:2}_${modulename}
-modnamepat_field_expnoband=${field}_${camera}${expnum:8}_r${reqnum}p${attnum:2}_${modulename}
-modnamepat_field_ccdnumband=${field}_${camera}${expnum:8}_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
-modnamepat_field_ccdnumnoband=${field}_${camera}${expnum:8}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
-modnamepat_field_nite_band=${field}_${camera}_${nite}_${band}_r${reqnum}p${attnum:2}_${modulename}
-modnamepat_field_nite_noband=${field}_${camera}_${nite}_r${reqnum}p${attnum:2}_${modulename}
-modnamepat_field_nite_ccdnum_band=${field}_${camera}_${nite}_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
-modnamepat_field_nite_ccdnum_noband=${field}_${camera}_${nite}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_field_expband=${field}_${camsym}${expnum:8}_${band}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_field_expnoband=${field}_${camsym}${expnum:8}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_field_ccdnumband=${field}_${camsym}${expnum:8}_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_field_ccdnumnoband=${field}_${camsym}${expnum:8}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_field_nite_band=${field}_${camsym}_${nite}_${band}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_field_nite_noband=${field}_${camsym}_${nite}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_field_nite_ccdnum_band=${field}_${camsym}_${nite}_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_field_nite_ccdnum_noband=${field}_${camsym}_${nite}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
 
-modnamepat_combine_ccdnumband=${camera}${field}_combined_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}
+modnamepat_combine_ccdnumband=${camsym}${field}_combined_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}_${modulename}

@@ -1,7 +1,7 @@
 autoscan_mltrain_date = 20150618
 autoscan_mltrain_version = ml3.2
 bpmnite = 20140101t0209v2
-camera = D
+camsym = D
 config = 20150715   #config files for scamp and sextractor used on astrometry and bkg_image
 config_version = 20150715  # sne config files
 fringecornite = 20131115v1
@@ -9,8 +9,10 @@ illumcornite = 20130829
 illumcorrun = r1473p01
 #precalnite = 20150828t0904
 #precalrun = r1675p04
-precalnite = 20150905t0915
-precalrun = r1753p01
+precalnite = 20151113t1123
+precalrun = r2350p02
+#precalnite = 20150905t0915
+#precalrun = r1753p01
 pupilnite = 20130829
 pupilrun = r1473p01
 scamp_ahead_file = ${config}_decam_pvmodel_20131115_${band}.ahead
@@ -48,4 +50,3 @@ bpmatt = 1
 calnite = 20141020t1030
 calrun = r1471p01
 ccdnum=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62
-

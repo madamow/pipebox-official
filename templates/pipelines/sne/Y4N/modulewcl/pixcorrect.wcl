@@ -1,7 +1,7 @@
 <module>
     <pixcorrect>
         wrappername = genwrap.py
-        wrapperloop = ccdnum,band
+        wrapperloop = expnum,ccdnum,band
         modnamepat = ${modnamepat_ccdnumband}
         loopobj = file.xtalked_sci
 
@@ -10,11 +10,11 @@
                 depends crosstalk-sci.file.red_xtalked
                 dirpat = sne
                 rundir = red/xtalk
-                match = ccdnum,band
+                match = expnum,ccdnum,band
             </xtalked_sci>
             <biascor>
                 filetype = cal_biascor
-                filename = ${camera}_n${calnite}_c${ccdnum:2}_${calrun}_biascor.fits
+                filename = ${camsym}_n${calnite}_c${ccdnum:2}_${calrun}_biascor.fits
                 dirpat = se
                 rundir = biascor
             </biascor>
@@ -22,7 +22,7 @@
                 band = ${band}
                 #filetype = cal_norm_dflatcor
                 filetype = cal_dflatcor
-                filename = ${camera}_n${calnite}_${band}_c${ccdnum:2}_${calrun}_norm-dflatcor.fits
+                filename = ${camsym}_n${calnite}_${band}_c${ccdnum:2}_${calrun}_norm-dflatcor.fits
                 dirpat = se
                 rundir = norm-dflatcor
             </norm_dflatcor>

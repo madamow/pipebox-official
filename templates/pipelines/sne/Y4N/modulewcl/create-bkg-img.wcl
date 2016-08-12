@@ -2,6 +2,7 @@
     wrappername = genwrap.py
     wrapperloop = expnum,ccdnum
     modnamepat=${modnamepat_field_ccdnumband}
+    loopobj = file.red_bleedmasked    
 
     <file>
         <sex_config>
