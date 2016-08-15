@@ -358,13 +358,12 @@ class MultiEpoch(PipeLine):
             self.args.dataframe = pd.DataFrame(self.args.tile_list, columns=['tile'])
 
         # Update dataframe for each exposure and add band,nite if not exists
-        """
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
             self.args.dataframe = self.args.dataframe.fillna(False)
         except: 
             pass
-        """
+
 class WideField(PipeLine):
 
     def __init__(self):

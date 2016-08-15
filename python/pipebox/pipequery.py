@@ -214,7 +214,17 @@ class MultiEpoch(PipeQuery):
         return count
 
     def update_df(self,df):
-        pass
+        """ Takes a pandas dataframe and for each exposure add column:value
+        band and nite. Returns dataframe"""
+        try:
+            df.insert(len(df.columns), 'unitname', None)
+        except:
+            pass
+        for index, row in df.iterrows():
+            df.loc[index, 'unitname'] =  str(row['tile'])
+
+        return df
+
 
     def check_submitted(self, tile, reqnum):
         """ Queries database to find number of attempts submitted for
