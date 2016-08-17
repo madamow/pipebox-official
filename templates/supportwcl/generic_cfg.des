@@ -44,10 +44,10 @@ submit_files_mvmt     = filemgmt.job_mvmt_http.JobArchiveHttp
         #jobroot = /scratch/sciteam/{{ args['USER'] }}/scratch
     </bluewaters>
 
-    <campuscluster>
+    <descampuscluster>
 	    target_des_services = /scratch.local/desdm/ini/.desservices.{{ args['USER'] }}.ini
         #jobroot = /home/{{ args['USER'] }}/scratch
-    </campuscluster>
+    </descampuscluster>
 
     <descmp2>
         target_des_services = /home/{{ args['USER'] }}/.desservices.ini
