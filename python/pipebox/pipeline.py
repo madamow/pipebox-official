@@ -286,10 +286,12 @@ class SuperNova(PipeLine):
 #            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         if self.args.nite:
             self.args.triplet_list = self.args.cur.get_triplets_from_nite(self.args.nitelist)
+            print self.args.triplet_list
             self.args.dataframe = pd.DataFrame(self.args.triplet_list,columns=['nite','field','band'])
         elif self.args.triplet:
             self.args.triplet_list = np.array(self.args.triplet.split(',')).reshape([-1,3])
             self.args.dataframe = pd.DataFrame(self.args.triplet_list,columns=['nite','field','band'])
+            
         elif self.args.list:
             self.args.triplet_list = np.array(string.join(pipeutils.read_file(self.args.list)).split(' ')).reshape([-1,3])
             print self.args.triplet_list
@@ -298,6 +300,12 @@ class SuperNova(PipeLine):
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.triplet_list = np.array(self.args.dataframe[['nite','field','band']].values)
+
+
+# Making sure field name are formatted correctly
+        for num in range(self.args.dataframe['field'].size):
+          self.args.dataframe['field'][num] ='SN-'+self.args.dataframe['field'][num][-2:]
+
         nrows=len(self.args.dataframe)
         self.args.dataframe['expnums']=np.zeros(nrows, dtype=str)
         self.args.dataframe['firstexp']=np.zeros(nrows, dtype=str)
