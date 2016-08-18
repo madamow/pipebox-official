@@ -85,6 +85,7 @@ class PipeLine(object):
         for name, group in self.args.dataframe.groupby(by=groupby):
             # Setting jira parameters
             self.args.reqnum, self.args.jira_parent= group['reqnum'].unique()[0],group['jira_parent'].unique()[0]
+            self.args.unitname = group['unitname'].unique()[0]
             # Finding epoch of given data
             if self.args.epoch:
                 self.args.epoch_name = self.args.epoch
@@ -365,13 +366,12 @@ class MultiEpoch(PipeLine):
             self.args.dataframe = pd.DataFrame(self.args.tile_list, columns=['tile'])
 
         # Update dataframe for each exposure and add band,nite if not exists
-        """
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
             self.args.dataframe = self.args.dataframe.fillna(False)
         except: 
             pass
-        """
+
 class WideField(PipeLine):
 
     def __init__(self):

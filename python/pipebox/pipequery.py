@@ -214,7 +214,17 @@ class MultiEpoch(PipeQuery):
         return count
 
     def update_df(self,df):
-        pass
+        """ Takes a pandas dataframe and for each exposure add column:value
+        band and nite. Returns dataframe"""
+        try:
+            df.insert(len(df.columns), 'unitname', None)
+        except:
+            pass
+        for index, row in df.iterrows():
+            df.loc[index, 'unitname'] =  str(row['tile'])
+
+        return df
+
 
     def check_submitted(self, tile, reqnum):
         """ Queries database to find number of attempts submitted for
@@ -317,12 +327,12 @@ class WideField(PipeQuery):
         """Returns expnum,nite of max(expnum) in the exposure table"""
         base_query = "select max(expnum) from exposure where obstype in ('object','standard')"
         if propid:
-            max_object = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['propid'])
+            base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
         if program:
-            max_object = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in kwargs['program'])
+            base_query = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in program)
         if process_all:
-            max_object = base_query
-        self.cur.execute(max_object)
+            base_query = base_query
+        self.cur.execute(base_query)
         max_expnum = self.cur.fetchone()[0]
         fetch_nite = "select distinct nite from exposure where expnum=%s" % (max_expnum)
         self.cur.execute(fetch_nite)
@@ -366,12 +376,12 @@ class WideField(PipeQuery):
                       object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' \
                       and object not like '%%test%%' and object not like '%%junk%%' and nite in (%s)" % ','.join(nites)
         if program:
-            get_expnum = base_query + " program in (%s)" % ','.join("'{0}'".format(k) for k in program)
+           base_query = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in program)
         if propid:
-            get_expnum = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
+            base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
         if process_all:
-            get_expnum = base_query
-        self.cur.execute(get_expnum)
+            base_query = base_query
+        self.cur.execute(base_query)
         results = self.cur.fetchall()
         try:
             [expnums,nites_from_query] = map(list, zip(*results))
