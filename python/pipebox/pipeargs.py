@@ -36,6 +36,7 @@ class PipeArgs(object):
         parser.add('--out',help='Output directory for submit files')
         parser.add('--auto',action='store_true',help='Will run autosubmit mode if specified')
         parser.add('--resubmit_failed',action='store_true',help='Will ressubmit failed runs')
+        parser.add('--resubmit_max',default=99,help='Set max attempt number for resubmit-failed.')
         parser.add('--ignore_processed',action='store_true',help='Will skip any expnum \
                              that has been attempted to process, pass/fail.')
         parser.add('--wait',default=30,help='Wait time (seconds) between dessubmits. \

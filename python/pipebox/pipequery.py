@@ -100,33 +100,34 @@ class SuperNova(PipeQuery):
         self.cur.execute(query)
         return self.cur.fetchone()[0]
 
-# Copied from widefield (unedited)
-    def get_failed_expnums(self,reqnum):
+# Edited from widefield
+    def get_failed_triplets(self,nitelist,resubmit_max):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
-        submitted = "select distinct unitname,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        submitted = "select distinct s.nite, s.field, s.band, p.unitname, t.status from pfw_attempt p, task t, snsubmit s where t.id=p.task_id and s.nite in (%s) and p.task_id = s.task_id  and p.unitname like 'D_SN-%%'" % (','.join(map(str,nitelist)))
+        print submitted
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
-        df = pd.DataFrame(failed_query,columns=['unitname','status'])
+        df = pd.DataFrame(failed_query,columns=['nite','field','band','unitname','status'])
         # Set Null values to -99
         df = df.fillna(-99)
-        passed_expnums = []
+        passed_unitnames = []
         for u in df['unitname'].unique():
+            nattempts = df[(df.unitname==u)].count()[0]
             count = df[(df.unitname==u) & (df.status==0)].count()[0]
-            if count ==1:
-                passed_expnums.append(u)
+            if count ==1 and nattempts < resubmit_max:
+                passed_unitnames.append(u)
         try:
-            failed_list = df[(~df.unitname.isin(passed_expnums)) & (~df.status.isin([0,-99]))]['unitname'].values
+            failed_list = df[(~df.unitname.isin(passed_unitnames)) & (~df.status.isin([0,-99]))][['nite','field','band']].values
         except:
             print 'No new failed exposures found!'
             exit()
-        
-        for r in failed_list:
-            if -99 not in list(df[(df.unitname==r)]['status'].values):
-                resubmit_list.append(r)
-        expnum_list = [u[3:] for u in resubmit_list]
-        
-        return expnum_list
+        try: 
+            resubmit_list = pd.DataFrame(np.vstack({tuple(row) for row in failed_list}),columns=['nite','field','band']) 
+        except:
+            print 'No new failed exposures found!'
+            exit()
+        return resubmit_list
 
 # SN only code
     def get_triplets_from_nite(self,nite=None,**kwargs):
@@ -244,7 +245,7 @@ class MultiEpoch(PipeQuery):
         self.cur.execute(query)
         return self.cur.fetchall() 
 
-    def get_failed_tiles(self, reqnum):
+    def get_failed_tiles(self, reqnum,resubmit_max):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
         submitted = "select distinct unitname,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
@@ -255,8 +256,9 @@ class MultiEpoch(PipeQuery):
         df = df.fillna(-99)
         passed_tiles = []
         for u in df['unitname'].unique():
+            nattempts = df[(df.unitname==u)].count()[0]
             count = df[(df.unitname==u) & (df.status==0)].count()[0]
-            if count ==1:
+            if count ==1 and nattempts < resubmit_max:
                 passed_tiles.append(u)
         try:
             failed_list = df[(~df.unitname.isin(passed_expnums)) & (~df.status.isin([0,-99]))]['unitname'].values
@@ -339,7 +341,7 @@ class WideField(PipeQuery):
         object_nite = self.cur.fetchone()[0]
         return max_expnum,object_nite
 
-    def get_failed_expnums(self,reqnum):
+    def get_failed_expnums(self,reqnum,resubmit_max):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
         submitted = "select distinct unitname,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
@@ -351,7 +353,8 @@ class WideField(PipeQuery):
         passed_expnums = []
         for u in df['unitname'].unique():
             count = df[(df.unitname==u) & (df.status==0)].count()[0]
-            if count ==1:
+            nattempts = df[(df.unitname==u)].count()[0]
+            if count ==1 and nattempts < resubmit_max:
                 passed_expnums.append(u)
         try:
             failed_list = df[(~df.unitname.isin(passed_expnums)) & (~df.status.isin([0,-99]))]['unitname'].values
@@ -531,7 +534,7 @@ class PreBPM(PipeQuery):
 
         return df
 
-    def get_failed_expnums(self,reqnum):
+    def get_failed_expnums(self,reqnum,resubmit_max):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
         submitted = "select distinct unitname,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
@@ -543,7 +546,8 @@ class PreBPM(PipeQuery):
         passed_expnums = []
         for u in df['unitname'].unique():
             count = df[(df.unitname==u) & (df.status==0)].count()[0]
-            if count ==1:
+            nattempts = df[(df.unitname==u)].count()[0]
+            if count ==1 and nattempts < resubmit_max:
                 passed_expnums.append(u)
         try:
             failed_list = df[(~df.unitname.isin(passed_expnums)) & (~df.status.isin([0,-99]))]['unitname'].values

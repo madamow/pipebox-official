@@ -271,23 +271,15 @@ class SuperNova(PipeLine):
         if self.args.auto:
             self.args.ignore_processed=True
             pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
-            
             self.args.nite = self.args.cur.get_max_nite()
+            print self.args.nite
             self.args.nitelist = self.args.nite.split(',')
-#           Calibration specified in input file
-#            if not self.args.calnite:
-#                precal = self.args.cur.find_precal(self.args.nite,threshold=7,override=True,
-#                                                   tag=self.args.caltag)
-#                self.args.calnite,self.args.calrun = precal[0],precal[1]
-        
-        # Creating dataframe from exposures 
-#       I don't think we want this for SN
-#        if self.args.exptag:
-#            self.args.exposure_list = self.args.cur.get_expnums_from_tag(self.args.exptag)
-#            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
-        if self.args.nite:
+        if self.args.resubmit_failed:
+            self.args.ignore_processed=False
+            self.args.triplet_list = self.args.cur.get_failed_triplets(self.args.nitelist,self.args.resubmit_max)
+            self.args.dataframe = pd.DataFrame(self.args.triplet_list,columns=['nite','field','band'])
+        elif self.args.nite:
             self.args.triplet_list = self.args.cur.get_triplets_from_nite(self.args.nitelist)
-            print self.args.triplet_list
             self.args.dataframe = pd.DataFrame(self.args.triplet_list,columns=['nite','field','band'])
         elif self.args.triplet:
             self.args.triplet_list = np.array(self.args.triplet.split(',')).reshape([-1,3])
@@ -295,7 +287,6 @@ class SuperNova(PipeLine):
             
         elif self.args.list:
             self.args.triplet_list = np.array(string.join(pipeutils.read_file(self.args.list)).split(' ')).reshape([-1,3])
-            print self.args.triplet_list
             self.args.dataframe = pd.DataFrame(self.args.triplet_list,columns=['nite','field','band'])
         elif self.args.csv:
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
@@ -303,7 +294,7 @@ class SuperNova(PipeLine):
             self.args.triplet_list = np.array(self.args.dataframe[['nite','field','band']].values)
 
 
-# Making sure field name are formatted correctly
+# Making sure field name are formatted correctly C2 -> SN-C2
         for num in range(self.args.dataframe['field'].size):
           self.args.dataframe['field'][num] ='SN-'+self.args.dataframe['field'][num][-2:]
 
@@ -315,12 +306,6 @@ class SuperNova(PipeLine):
         self.args.dataframe['fringe']=np.zeros(nrows, dtype=bool)
         self.args.dataframe['ccdnum']=np.zeros(nrows, dtype=str)
         self.args.dataframe['seqnum']=np.ones(nrows, dtype=int)
-        # Update dataframe for each exposure and add expnums,firstexp if not exists
-#        try:
-#            self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
-#            self.args.dataframe = self.args.dataframe.fillna(False)
-#        except: 
-#            pass
         self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
         self.args.dataframe = self.args.dataframe.fillna(False)
 
@@ -349,7 +334,7 @@ class MultiEpoch(PipeLine):
         # Creating dataframe from tiles
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
-            self.args.tile_list = self.args.cur.get_failed_tiles(self.args.reqnum)
+            self.args.tile_list = self.args.cur.get_failed_tiles(self.args.reqnum,self.args.resubmit_max)
             self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
         elif self.args.tile:
             self.args.tile_list = self.args.tile.split(',')
@@ -410,7 +395,7 @@ class WideField(PipeLine):
         # Creating dataframe from exposures 
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
-            self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum)
+            self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum,self.args.resubmit_max)
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.exptag:
             self.args.exposure_list = self.args.cur.get_expnums_from_tag(self.args.exptag)
@@ -662,7 +647,7 @@ class PreBPM(PipeLine):
         # Creating dataframe from exposures 
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
-            self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum)
+            self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum,self.args.resubmit_max)
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.exptag:
             self.args.exposure_list = self.args.cur.get_expnums_from_tag(self.args.exptag)
