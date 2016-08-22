@@ -30,7 +30,7 @@
                 filetype = cal_starflat
 
                 # how to name file
-                filename = ${skycampaign}_${epochrange}_${band}_c${ccdnum:2}_${starflatrun}_starflat.fits
+                filename = ${starflatcampaign}_${starflatrange}_${band}_c${ccdnum:2}_${starflatrun}_starflat.fits
 
                 # where to store file
                 dirpat = se
