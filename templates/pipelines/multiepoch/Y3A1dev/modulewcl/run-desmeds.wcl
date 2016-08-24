@@ -113,7 +113,7 @@
             </coadd_segmap>
             <medsconf>
                 # what input file is named
-                filename = meds-desdm-${meds_config_ver}.yaml
+                filename = ${cfgver}_meds-desdm-${meds_config_ver}.yaml
 
                 # where input file lives in jobroot
                 dirpat = mepoch
