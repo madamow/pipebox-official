@@ -112,24 +112,6 @@
                 dirpat = mepoch
                 rundir = seg
             </coadd_segmap>
-            <objmap>
-                # what metadata to save
-                filetype = coadd_meds
-
-                # how to name output file
-                filepat = tile_band
-                flabel = meds-coadd-object-map
-                fsuffix = fits
-
-                # whether to save or compress
-                savefiles = false
-                compress_files = true
-
-                # where to put it (jobroot=rundir, archive=ops_enddir)
-                dirpat = mepoch
-                ops_enddir = meds
-                rundir = meds
-            </objmap>
             <medsconf>
                 # what input file is named
                 filename = ${cfgver}_meds-desdm-${meds_config_ver}.yaml
@@ -161,6 +143,24 @@
             </seg>
 
             ### output files
+            <objmap>
+                # what metadata to save
+                filetype = coadd_meds_objmap
+
+                # how to name output file
+                filepat = tile_band
+                flabel = meds-coadd-object-map
+                fsuffix = fits
+
+                # whether to save or compress
+                savefiles = false
+                compress_files = true
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = meds
+                rundir = meds
+            </objmap>
             <meds>
                 # what metadata to save
                 filetype = coadd_meds
