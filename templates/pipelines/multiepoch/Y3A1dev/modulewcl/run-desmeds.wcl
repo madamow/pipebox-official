@@ -18,11 +18,12 @@
                 meds_output = ${file.meds.fullname}
                 medsconf = ${file.medsconf.fullname}
                 tileconf = ${file.tileconf.fullname}
+                coadd_object_map = ${file.objmap.fullname}
             </cmdline>
             execname = run_desmeds
             cmd_hyphen =  mixed_gnu
             used = list.nwgint.nwgint,list.redbkg.bkg,list.redseg.seg,file.medsconf,file.coadd,file.coadd_cat,file.coadd_segmap
-            was_generated_by = file.tileconf,file.meds
+            was_generated_by = file.tileconf,file.meds,file.objmap
             #ancestry = file.coadd_cat:file.meds,file.,file.coadd:file.meds,file.coadd_cat:file.tileconf,file.coadd:file.tileconf
         </exec_1>
         <list>
@@ -111,6 +112,24 @@
                 dirpat = mepoch
                 rundir = seg
             </coadd_segmap>
+            <objmap>
+                # what metadata to save
+                filetype = coadd_meds
+
+                # how to name output file
+                filepat = tile_band
+                flabel = meds-coadd-object-map
+                fsuffix = fits
+
+                # whether to save or compress
+                savefiles = false
+                compress_files = true
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = meds
+                rundir = meds
+            </objmap>
             <medsconf>
                 # what input file is named
                 filename = ${cfgver}_meds-desdm-${meds_config_ver}.yaml
