@@ -6,13 +6,12 @@ color_g_band = r
 color_b_band = g
 mag_zero = 30
 
-#zsource = GCM
-zsource = CONSTANT
-#zversion = SVA1_gruendlhack
-zversion = ver31.5
+zsource = FGCM
+zversion = v2.0
 zeropoint_table = zeropoint
+zflag = 32
 
-blacklist_table = blacklist
+blacklist_table = Y3A1_BLACKLIST
 
 assemble_xblock = 10
 assemble_yblock = 3
