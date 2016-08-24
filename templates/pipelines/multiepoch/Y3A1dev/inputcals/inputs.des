@@ -41,4 +41,4 @@ sex_cat_conv_file = ${cfgver}_gauss_3.0_7x7.conv
 sex_cat_param_file = ${cfgver}_sex.param_diskonly
 #sex_cat_param_file = ${cfgver}_sex.param_nomodel
 sex_cat_nnw_file = ${cfgver}_sex.nnw
-meds_config_ver = Y3A1v01
+meds_config_ver = Y3A1v1
