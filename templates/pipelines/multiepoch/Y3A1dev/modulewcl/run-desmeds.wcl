@@ -149,7 +149,7 @@
 
                 # how to name output file
                 filepat = tile_band
-                flabel = meds-coadd-object-map
+                flabel = meds-objmap
                 fsuffix = fits
 
                 # whether to save or compress
