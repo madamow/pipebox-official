@@ -261,7 +261,7 @@ class MultiEpoch(PipeQuery):
             if (count >=1) or (nattempts >= resubmit_max):
                 passed_tiles.append(u)
         try:
-            failed_list = df[(~df.unitname.isin(passed_expnums)) & (~df.status.isin([0,-99]))]['unitname'].values
+            failed_list = df[(~df.unitname.isin(passed_tiles)) & (~df.status.isin([0,-99]))]['unitname'].values
         except:
             print 'No new failed tiles found!'
             exit()
