@@ -9,7 +9,7 @@ mag_zero = 30
 zsource = FGCM
 zversion = v2.0
 zeropoint_table = zeropoint
-zflag = 32
+zflag = 16
 
 blacklist_table = Y3A1_BLACKLIST
 
