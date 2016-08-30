@@ -7,7 +7,7 @@ molys_prefix = ${unitname}_r${reqnum}p${attnum:2}_${band}_molys
 molys_suffix_only = area, count, maglims, red, time, weight
 molys_qalabel = AIRMASS, EXPTIME, FWHM, SKYBRITE, SKYSIGMA
 molys_suffix = MAX, MEAN, MEDIAN, MIN, SUM, WMEAN
-png_label = comp1, comp2,Object-not-in-tolygon,Objects-not-in-geometry-masks,Objects-in-star-mask,Objects-in-bleed-mask
+png_label = comp1, comp2,Obj-not-in-tolygon,Objs-not-in-geom-masks,Objs-in-star-mask,Objs-in-bleed-mask
 
 <module>
     <mangle>
