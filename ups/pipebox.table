@@ -1,9 +1,9 @@
-SetupRequired(despydb 2.0.0+4)
+SetupRequired(despydb 2.0.2+1)
 SetupRequired(pandas 0.15.2+1)
 SetupRequired(jinja2 2.6+8)
-SetupRequired(jirapython 0.16+3)
+SetupRequired(jirapython 0.16+4)
 SetupRequired(configargparse,0.10.0+0)
-SetupRequired(opstoolkit 0.1.0+0)
+SetupRequired(opstoolkit 0.2.0+1)
 
 envAppend(PYTHONPATH, ${PRODUCT_DIR}/python)
 envAppend(PATH, ${PRODUCT_DIR}/bin)
