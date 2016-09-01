@@ -15,7 +15,7 @@ class PipeQuery(object):
     def find_epoch(self,exposure):
         """ Return correct epoch name for exposure in order to use
             appropriate calibrations file"""
-        epoch_query = "select name,minexpnum,maxexpnum from mjohns44.epoch"
+        epoch_query = "select name,minexpnum,maxexpnum from ops_epoch"
         self.cur.execute(epoch_query)
         epochs = self.cur.fetchall()
 
