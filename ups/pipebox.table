@@ -1,7 +1,7 @@
 SetupRequired(despydb 2.0.2+1)
 SetupRequired(pandas 0.15.2+1)
 SetupRequired(jinja2 2.6+8)
-SetupRequired(jirapython 0.16+4)
+SetupRequired(jirapython 0.16+5)
 SetupRequired(configargparse,0.10.0+0)
 SetupRequired(opstoolkit 0.2.0+1)
 
