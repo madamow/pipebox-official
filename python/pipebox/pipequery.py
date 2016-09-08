@@ -511,6 +511,7 @@ class NitelyCal(PipeQuery):
                     df.loc[index,'obstype'] = obstype
             except:
                 df.loc[index,'obstype'] = obstype
+        df['unitname'] = df['nite']
 
         return df
 
