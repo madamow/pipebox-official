@@ -3,6 +3,7 @@
 from pipebox import pipeline
 
 # initialize and get options
+print "Collecting data..."
 widefield = pipeline.WideField()
 args = widefield.args
 

@@ -3,6 +3,7 @@
 from pipebox import pipebox_utils, pipeline
 
 # initialize and get options
+print "Collecting data..."
 sn = pipeline.SuperNova()
 args = sn.args
 
