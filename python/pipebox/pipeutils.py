@@ -28,8 +28,12 @@ def submit_command(submitfile,wait=30,logfile=None):
     commandline = ['dessubmit',submitfile]
     command = Popen(commandline,stdout = PIPE, stderr = STDOUT, shell = False)
     output,error = output,error = command.communicate()
+    print "Submitting {sfile}".format(sfile = submitfile)
+
     if logfile:
         for line in output: logfile.write(line)
+
+    print "Sleeping for {sleep} seconds...".format(sleep=wait)
     time.sleep(wait)
 
     try:
