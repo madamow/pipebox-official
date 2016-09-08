@@ -11,6 +11,7 @@ from pipebox import env
 def write_template(template,outfile,args):
     """ Takes template (relative to jinja2 template dir), output name of 
         rendered template, and args namespace and writes rendered template"""
+    print "Rendering template: {ofile}".format(ofile = outfile)
     config_template = env.get_template(template)
 
     try: args.submittime = datetime.now()
