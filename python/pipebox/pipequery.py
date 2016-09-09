@@ -379,12 +379,13 @@ class WideField(PipeQuery):
         base_query = "select distinct expnum,nite from exposure where obstype in ('object','standard') and \
                       object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' \
                       and object not like '%%test%%' and object not like '%%junk%%' and nite in (%s)" % ','.join(nites)
-        if program:
-           base_query = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in program)
-        if propid:
-            base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
         if process_all:
             base_query = base_query
+        else:
+            if program:
+                base_query = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in program)
+            if propid:
+                base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
         self.cur.execute(base_query)
         results = self.cur.fetchall()
         try:
