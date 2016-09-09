@@ -164,7 +164,7 @@ class WideField(PipeArgs):
         # Exposure query for args.nite
         parser.add('--propid',default='2012B-0001',help="Propid in exposure table to filter expnums \
                         on by nite")
-        parser.add('--program',default='supernova,survey,photom-std-field',help="Programs in \
+        parser.add('--program',default='CalSpec,supernova,survey,photom-std-field',help="Programs in \
                         exposure table to filter expnums on by nite")
         parser.add('--process_all',action='store_true',help="Ignore propid and program when processing \
                         by nite.")
