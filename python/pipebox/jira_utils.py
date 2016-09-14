@@ -36,7 +36,7 @@ def get_jira_user(section='jira-desdm',services_file=None):
     except:
         return os.environ['USER']
 
-def get_reqnum_from_nite(con,parent,nite):
+def get_reqnum_from_nite(parent,nite):
     """Used for auto-submit for firstcut. If nite exists under parent, grab the reqnum to be used in resubmit_failed."""
     con = get_con('jira-desdm')
     parent = 'DESOPS-' + str(parent)
