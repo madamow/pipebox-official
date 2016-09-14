@@ -661,7 +661,6 @@ class PreBPM(PipeLine):
             if not len(self.args.exposure_list):
                 self.args.dataframe = pd.DataFrame(columns=['expnum'])
                 print "No failed exposures found!"
-                sys.exit()
             else:
                 self.args.dataframe = pd.DataFrame(self.args.exposure_list, columns=['expnum'])
         elif self.args.exptag:
