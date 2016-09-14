@@ -36,6 +36,17 @@ def get_jira_user(section='jira-desdm',services_file=None):
     except:
         return os.environ['USER']
 
+def get_reqnum_from_nite(con,parent,nite):
+    """Used for auto-submit for firstcut. If nite exists under parent, grab the reqnum to be used in resubmit_failed."""
+    parent = 'DESOPS-' + str(parent)
+    issues, count = con.search_for_issue(parent, nite)
+    if count != 0:
+        reqnum = str(issues[0].key).split('-')[1]
+        jira_id = issues[0].fields.parent.key
+        return reqnum
+    else:
+        return None
+
 def use_existing_ticket(con,dict):
     """Looks to see if JIRA ticket exists. If it does it will use it instead
        of creating a new subticket.Returns reqnum,jira_id"""
