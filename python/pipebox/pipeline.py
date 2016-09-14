@@ -399,7 +399,11 @@ class WideField(PipeLine):
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
             self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum,self.args.resubmit_max)
-            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
+            if not len(self.args.exposure_list):
+                print "No failed exposures found!"
+
+            else:
+                self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.exptag:
             self.args.exposure_list = self.args.cur.get_expnums_from_tag(self.args.exptag)
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum','tag']).sort(columns=['tag','expnum'],ascending=True)
@@ -652,10 +656,13 @@ class PreBPM(PipeLine):
         # Creating dataframe from exposures 
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
-            self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum,self.args.resubmit_max)
-            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
+            self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum,
+                                                                       self.args.resubmit_max)
             if not len(self.args.exposure_list):
                 print "No failed exposures found!"
+                sys.exit()
+            else:
+                self.args.dataframe = pd.DataFrame(self.args.exposure_list, columns=['expnum'])
         elif self.args.exptag:
             self.args.exposure_list = self.args.cur.get_expnums_from_tag(self.args.exptag)
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum','tag']).sort(columns=['tag','expnum'],ascending=True)
