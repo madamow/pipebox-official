@@ -38,6 +38,7 @@ def get_jira_user(section='jira-desdm',services_file=None):
 
 def get_reqnum_from_nite(con,parent,nite):
     """Used for auto-submit for firstcut. If nite exists under parent, grab the reqnum to be used in resubmit_failed."""
+    con = get_con('jira-desdm')
     parent = 'DESOPS-' + str(parent)
     issues, count = con.search_for_issue(parent, nite)
     if count != 0:
