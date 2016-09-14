@@ -400,7 +400,7 @@ class WideField(PipeLine):
             self.args.ignore_processed=False
             self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum,self.args.resubmit_max)
             if not len(self.args.exposure_list):
-                self.args.dataframe = pd.DataFrame(columns=['expnum'])
+                self.args.dataframe = pd.DataFrame(columns=['expnum','nite'])
                 print "No failed exposures found!".format(time=datetime.datetime.now())
             else:
                 self.args.dataframe = pd.DataFrame(self.args.exposure_list, columns=['expnum'])
