@@ -248,7 +248,7 @@ class MultiEpoch(PipeQuery):
     def get_failed_tiles(self, reqnum,resubmit_max):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
-        submitted = "select distinct unitname,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        submitted = "select distinct unitname,attnum,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
         df = pd.DataFrame(failed_query,columns=['unitname','status'])
@@ -345,10 +345,10 @@ class WideField(PipeQuery):
     def get_failed_expnums(self,reqnum,resubmit_max):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
-        submitted = "select distinct unitname,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        submitted = "select distinct unitname,attnum,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
-        df = pd.DataFrame(failed_query,columns=['unitname','status'])
+        df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
         # Set Null values to -99
         df = df.fillna(-99)
         passed_expnums = []
@@ -540,7 +540,7 @@ class PreBPM(PipeQuery):
     def get_failed_expnums(self,reqnum,resubmit_max):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
-        submitted = "select distinct unitname,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        submitted = "select distinct unitname,attnum,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
         df = pd.DataFrame(failed_query,columns=['unitname','status'])
