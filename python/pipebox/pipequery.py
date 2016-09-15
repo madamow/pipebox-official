@@ -251,7 +251,7 @@ class MultiEpoch(PipeQuery):
         submitted = "select distinct unitname,attnum,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
-        df = pd.DataFrame(failed_query,columns=['unitname','status'])
+        df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
         # Set Null values to -99
         df = df.fillna(-99)
         passed_tiles = []
@@ -543,7 +543,7 @@ class PreBPM(PipeQuery):
         submitted = "select distinct unitname,attnum,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
-        df = pd.DataFrame(failed_query,columns=['unitname','status'])
+        df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
         # Set Null values to -99
         df = df.fillna(-99)
         passed_expnums = []
