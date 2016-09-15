@@ -254,23 +254,18 @@ class MultiEpoch(PipeQuery):
         df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
         # Set Null values to -99
         df = df.fillna(-99)
-        passed_tiles = []
-        for u in df['unitname'].unique():
-            nattempts = df[(df.unitname==u)].count()[0]
-            count = df[(df.unitname==u) & (df.status==0)].count()[0]
-            if (count >=1) or (nattempts >= resubmit_max):
-                passed_tiles.append(u)
-        try:
-            failed_list = df[(~df.unitname.isin(passed_tiles)) & (~df.status.isin([0,-99]))]['unitname'].values
-        except:
-            print 'No new failed tiles found!'
-            exit()
 
         resubmit_list = []
-        for r in failed_list:
-            if -99 not in list(df[(df.unitname==r)]['status'].values):
-                resubmit_list.append(r)
-        tile_list = [u for u in resubmit_list]
+
+        for u in df['unitname'].unique():
+            count = df[(df.unitname == u) & (df.status == 0)].count()[0]
+            statuses = list(df[(df.unitname == u)]['status'].values)
+            if -99 in statuses or 0 in statuses:
+                pass
+            else:
+                if (len(statuses) <= int(resubmit_max)):
+                    resubmit_list.append(u)
+        tile_list = [u[3:] for u in resubmit_list]
 
         return tile_list
 
@@ -351,22 +346,17 @@ class WideField(PipeQuery):
         df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
         # Set Null values to -99
         df = df.fillna(-99)
-        passed_expnums = []
-        for u in df['unitname'].unique():
-            count = df[(df.unitname==u) & (df.status==0)].count()[0]
-            nattempts = df[(df.unitname==u)].count()[0]
-            if (count >=1) or (nattempts >= resubmit_max):
-                passed_expnums.append(u)
-        try:
-            failed_list = df[(~df.unitname.isin(passed_expnums)) & (~df.status.isin([0,-99]))]['unitname'].values
-        except:
-            print 'No new failed exposures found!'
-            exit()
-        
+
         resubmit_list = []
-        for r in failed_list:
-            if -99 not in list(df[(df.unitname==r)]['status'].values):
-                resubmit_list.append(r)
+        for u in df['unitname'].unique():
+            count = df[(df.unitname == u) & (df.status == 0)].count()[0]
+            statuses = list(df[(df.unitname == u)]['status'].values)
+            if -99 in statuses or 0 in statuses:
+                pass
+            else:
+                if (len(statuses) <= int(resubmit_max)):
+                    resubmit_list.append(u)
+
         expnum_list = [u[3:] for u in resubmit_list]
         
         return expnum_list
@@ -546,22 +536,16 @@ class PreBPM(PipeQuery):
         df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
         # Set Null values to -99
         df = df.fillna(-99)
-        passed_expnums = []
-        for u in df['unitname'].unique():
-            count = df[(df.unitname==u) & (df.status==0)].count()[0]
-            nattempts = df[(df.unitname==u)].count()[0]
-            if (count >=1) or (nattempts >= resubmit_max):
-                passed_expnums.append(u)
-        try:
-            failed_list = df[(~df.unitname.isin(passed_expnums)) & (~df.status.isin([0,-99]))]['unitname'].values
-        except:
-            print 'No new failed exposures found!'
-            exit()
-        
+
         resubmit_list = []
-        for r in failed_list:
-            if -99 not in list(df[(df.unitname==r)]['status'].values):
-                resubmit_list.append(r)
+        for u in df['unitname'].unique():
+            count = df[(df.unitname == u) & (df.status == 0)].count()[0]
+            statuses = list(df[(df.unitname == u)]['status'].values)
+            if -99 in statuses or 0 in statuses:
+                pass
+            else:
+                if (len(statuses) <= int(resubmit_max)):
+                    resubmit_list.append(u)
         expnum_list = [u[3:] for u in resubmit_list]
         
         return expnum_list
