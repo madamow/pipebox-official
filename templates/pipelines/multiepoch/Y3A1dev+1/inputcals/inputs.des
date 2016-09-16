@@ -35,7 +35,7 @@ sex_psfex_param_file = ${cfgver}_sex.param_psfex
 sex_psfex_conv_file = ${cfgver}_sex.conv
 sex_psfex_nnw_file = ${cfgver}_sex.nnw
 sex_cat_config_file = ${cfgver}_sex.config
-sex_cat_conv_file = Y3A1dev_v1_sex.conv
+sex_cat_conv_file = ${cfgver}_sex.conv
 # nomodel sex_cat_param_file is for testing purposes only....runs faster
 sex_cat_param_file = ${cfgver}_sex.param_diskonly
 #sex_cat_param_file = ${cfgver}_sex.param_nomodel
