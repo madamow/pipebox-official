@@ -265,7 +265,7 @@ class MultiEpoch(PipeQuery):
             else:
                 if (len(statuses) <= int(resubmit_max)):
                     resubmit_list.append(u)
-        tile_list = [u[3:] for u in resubmit_list]
+        tile_list = [u for u in resubmit_list]
 
         return tile_list
 
