@@ -43,7 +43,7 @@
                 dirpat = sne_ccd
                 ops_enddir = red
                 rundir = red
-                savefiles = False
+                savefiles = True
             </red_bleedmasked>
         </file>
 

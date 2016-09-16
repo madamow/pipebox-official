@@ -131,22 +131,22 @@ photflagvar = 1    # needed for crosstalk code
 <block>
     <sne-exp-fringe>
         divide_jobs_by = expnum
-        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit,skysub,starflat,null-weight-bkg,create-bkg-img,immask
+        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit
     </sne-exp-fringe>
 
     <sne-exp-nofringe>
         divide_jobs_by = expnum
-        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit,skysub,starflat,null-weight-bkg,create-bkg-img,immask
+        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit
     </sne-exp-nofringe>
 
     <sne-ccd-single>
         divide_jobs_by = ccdnum
-        modulelist = makeStarCat,strip-pv,makeweight,create-astrom-sex-scamp,astrom-scamp,update-astrom-scamp-header,create-psfex-cat,run-psfex,dofake,create-psfex-cat-dofake,run-psfex-dofake,create-head-distmpl-single,distort-template-single,create-psfex-cat-distmpl,hotpants-single,create-diff-cat-single,immerge-fake-single,immerge-distmpl-single,immerge-diff-single,filterobj-single,makestamps-single,autoscan-single,makecand,monzptemplate,makeForceList_fakesOnly,forcePhoto,fakeMatch,insert-forceImageTable
+        modulelist = skysub,starflat,null-weight-bkg,create-bkg-img,immask,makeStarCat,strip-pv,makeweight,create-astrom-sex-scamp,astrom-scamp,update-astrom-scamp-header,create-psfex-cat,run-psfex,dofake,create-psfex-cat-dofake,run-psfex-dofake,create-head-distmpl-single,distort-template-single,create-psfex-cat-distmpl,hotpants-single,create-diff-cat-single,immerge-fake-single,immerge-distmpl-single,immerge-diff-single,filterobj-single,makestamps-single,autoscan-single,makecand,monzptemplate,makeForceList_fakesOnly,forcePhoto,fakeMatch,insert-forceImageTable
     </sne-ccd-single>
 
     <sne-ccd-combined>
         divide_jobs_by = ccdnum
-        modulelist = makeStarCat,strip-pv,makeweight,create-astrom-sex-scamp,astrom-scamp-list,update-astrom-scamp-header,create-head-nofake-combined,swarp-nofake-combined,create-psfex-cat,run-psfex,dofake,cat-dofake,create-head-fake-combined,swarp-combined,create-psfex-cat-combined,run-psfex-combined,immerge-combined,create-head-distmpl-single,distort-template-single,create-head-combined,distort-template-combined,create-psfex-cat-distmpl,create-psfex-cat-distmpl-combined,hotpants-single,hotpants-combined,create-diff-cat-combined,immerge-distmpl-single,immerge-diff-single,immerge-distmpl-combined,immerge-diff-combined,filterobj-combined,makestamps-combined,autoscan-combined,makecand-combined,monzptemplate,makeForceList_fakesOnly-combined,forcePhoto-combined,fakeMatch-combined,insert-forceImageTable-combined
+        modulelist = skysub,starflat,null-weight-bkg,create-bkg-img,immask,makeStarCat,strip-pv,makeweight,create-astrom-sex-scamp,astrom-scamp-list,update-astrom-scamp-header,create-head-nofake-combined,swarp-nofake-combined,create-psfex-cat,run-psfex,dofake,cat-dofake,create-head-fake-combined,swarp-combined,create-psfex-cat-combined,run-psfex-combined,immerge-combined,create-head-distmpl-single,distort-template-single,create-head-combined,distort-template-combined,create-psfex-cat-distmpl,create-psfex-cat-distmpl-combined,hotpants-single,hotpants-combined,create-diff-cat-combined,immerge-distmpl-single,immerge-diff-single,immerge-distmpl-combined,immerge-diff-combined,filterobj-combined,makestamps-combined,autoscan-combined,makecand-combined,monzptemplate,makeForceList_fakesOnly-combined,forcePhoto-combined,fakeMatch-combined,insert-forceImageTable-combined
     </sne-ccd-combined>
 </block>
 {% endblock %}

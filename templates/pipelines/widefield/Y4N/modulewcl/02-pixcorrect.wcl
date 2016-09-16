@@ -8,7 +8,7 @@
         <file>
             <xtalked_sci>   
                 depends crosstalk-sci.file.red_xtalked
-                dirpat = se
+                dirpat = s
                 rundir = red/xtalk
                 match = ccdnum,band
             </xtalked_sci>

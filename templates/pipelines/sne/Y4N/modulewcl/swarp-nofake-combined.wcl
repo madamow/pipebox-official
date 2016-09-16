@@ -104,7 +104,7 @@
                 dirpat = sne_ccd
                 ops_enddir = red
                 rundir = red
-                savefiles = false
+                savefiles = True
             </sci_combined_out>
             <wgt_combined_out>
                 filetype = snwgt_red
@@ -114,7 +114,7 @@
                 dirpat = sne_ccd
                 ops_enddir = red
                 rundir =  red
-                savefiles = false
+                savefiles = True
             </wgt_combined_out>
         </file>
     
