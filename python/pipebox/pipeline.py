@@ -439,6 +439,16 @@ class WideField(PipeLine):
         except: 
             pass
 
+        if self.args.count:
+            print "Data found in database:"
+         
+            self.args.cur.count_by_obstype(self.args.nitelist)
+            print "\nData to be processed: %s" % ','.join(self.args.nitelist)
+            grouped = self.args.dataframe.groupby(by=['obstype','band']).agg(['count'])['expnum']
+            print grouped
+            sys.exit(0)
+
+
 class NitelyCal(PipeLine):
 
     def __init__(self):

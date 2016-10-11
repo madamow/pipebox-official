@@ -274,6 +274,15 @@ class MultiEpoch(PipeQuery):
 
     
 class WideField(PipeQuery):
+  
+    def count_by_obstype(self,niteslist):
+        """  return count per obstype, band """
+        count_query="select obstype,band,count(expnum) from exposure where nite in ({nites}) and obstype not in ('dome flat', 'zero','dark') group by obstype,band".format(nites=','.join(niteslist))
+        self.cur.execute(count_query)
+        count_info = self.cur.fetchall()
+        print " Obstype         Band      Count"
+        for row in count_info:
+            print "%09s  %09s  %09s" % (row[0], row[1], row[2])
     def get_expnums_from_radec(self, RA, Dec):
         RA = [float(r) for r in RA[0]]
         Dec = [float(d) for d in Dec[0]]
@@ -297,19 +306,20 @@ class WideField(PipeQuery):
         """ Takes a pandas dataframe and for each exposure add column:value
             band and nite. Returns dataframe"""
         for index,row in df.iterrows():
-            expnum_info = "select distinct expnum, band, nite from exposure where expnum='%s'" % row['expnum']
+            expnum_info = "select distinct expnum, band, nite, obstype from exposure where expnum='%s'" % row['expnum']
             self.cur.execute(expnum_info)
-            expnum,band,nite = self.cur.fetchall()[0]
+            expnum,band,nite,obstype = self.cur.fetchall()[0]
             try:
                 df.insert(len(df.columns),'nite', None)
                 df.insert(len(df.columns),'band', None)
                 df.insert(len(df.columns),'unitname',None)
+                df.insert(len(df.columns),'obstype',None)
             except:
                 pass
             df.loc[index,'nite'] = nite
             df.loc[index,'band'] = band
             df.loc[index,'unitname'] = 'D00' + str(expnum)
-
+            df.loc[index,'obstype'] = obstype
         return df
 
     def check_submitted(self,unitname,reqnum):
@@ -478,7 +488,7 @@ class NitelyCal(PipeQuery):
         for row in cal_info:
             print "%09s  %09s  %09s" % (row[2], row[1], row[0])
 
-    def update_df(self,df):
+    def udpdate_df(self,df):
         """ Takes a pandas dataframe and for each exposure add column:value
             band, nite, obstype. Returns dataframe"""
         for index,row in df.iterrows():

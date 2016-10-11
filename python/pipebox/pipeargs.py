@@ -151,7 +151,8 @@ class WideField(PipeArgs):
         
         parser.add('--after_merge',action='store_true',help='Run in mode to directly insert\
                             objects into SE_OBJECT table')
-        # Science arguments
+        parser.add('--count',action='store_true',help='print number exposures found') 
+       # Science arguments
         parser.add('--expnum',help='A single expnum or comma-separated list of expnums')
         parser.add('--list',help='File of line-separated expnums')
         parser.add('--exptag',help='Grab all expnums with given tag in exposuretag table')
