@@ -549,9 +549,13 @@ class NitelyCal(PipeLine):
             for index,row in self.args.dataframe.iterrows():
                 try:
                     self.args.dataframe.loc[index,('niterange')] = str(row['nite'])
+                    self.args.dataframe.loc[index, ('unitname')] = str(row['nite'])
                 except:
                     self.args.dataframe.insert(len(self.args.dataframe.columns),'niterange',None)
                     self.args.dataframe.loc[index,('niterange')] = str(row['nite'])
+
+                    self.args.dataframe.insert(len(self.args.dataframe.columns), 'unitname', None)
+                    self.args.dataframe.loc[index, ('unitname')] = str(row['nite'])
         
         # Remove unwanted exposures
         if self.args.exclude_list:
