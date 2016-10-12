@@ -573,8 +573,10 @@ class NitelyCal(PipeLine):
             index = group.index
             # Append bias/flat lists to dataframe
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(group)
-
-            self.args.firstexp = self.args.flat_list[0]
+            try:
+                self.args.firstexp = self.args.flat_list[0]
+            except:
+                self.args.firstexp = None
             self.args.bias_list = ','.join(str(i) for i in self.args.bias_list)
             self.args.flat_list = ','.join(str(i) for i in self.args.flat_list)
             self.args.dataframe.loc[index,'flat_list'] = self.args.flat_list
@@ -582,7 +584,10 @@ class NitelyCal(PipeLine):
             self.args.dataframe.loc[index,'firstexp'] = self.args.firstexp
     
         # Update dataframe
-        self.args.cur.update_df(self.args.dataframe)
+        try:
+            self.args.cur.update_df(self.args.dataframe)
+        except:
+            pass
 
         # Exit if there are not at least 5 exposures per band
         if self.args.auto:

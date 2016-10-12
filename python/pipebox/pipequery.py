@@ -7,7 +7,7 @@ import numpy as np, string
 class PipeQuery(object):
     def __init__(self,section):
         """ Connect to database using user's .desservices file"""
-        dbh = DesDbi(None,section,retry = True)
+        dbh = DesDbi(None,section)
         cur = dbh.cursor()
         self.section = section
         self.cur = cur 
