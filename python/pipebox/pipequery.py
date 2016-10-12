@@ -491,6 +491,7 @@ class NitelyCal(PipeQuery):
     def udpdate_df(self,df):
         """ Takes a pandas dataframe and for each exposure add column:value
             band, nite, obstype. Returns dataframe"""
+        df.insert(len(df.columns), 'unitname', None)
         for index,row in df.iterrows():
             expnum_info = "select distinct expnum, band, nite, obstype from exposure where expnum='%s'" % row['expnum']
             self.cur.execute(expnum_info)
