@@ -516,9 +516,9 @@ class NitelyCal(PipeQuery):
             try:
                 is_unitname = row['unitname']
                 if is_unitname is None:
-                    df.loc[index, 'unitname'] = unitname
+                    df.loc[index, 'unitname'] = nite
             except:
-                df.loc[index,'unitname'] = unitname
+                df.loc[index,'unitname'] = nite
 
         return df
 
