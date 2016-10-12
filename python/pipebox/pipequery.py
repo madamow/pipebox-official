@@ -513,7 +513,12 @@ class NitelyCal(PipeQuery):
                     df.loc[index,'obstype'] = obstype
             except:
                 df.loc[index,'obstype'] = obstype
-        df['unitname'] = df['nite']
+            try:
+                is_unitname = row['unitname']
+                if is_unitname is None:
+                    df.loc[index, 'unitname'] = unitname
+            except:
+                df.loc[index,'unitname'] = unitname
 
         return df
 
