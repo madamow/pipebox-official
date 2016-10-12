@@ -324,7 +324,7 @@ class MultiEpoch(PipeLine):
 
         # Checking processing tag and setting default
         if not self.args.proctag:
-            self.args.proctag = args.campaign.upper() + '_FINALCUT'
+            self.args.proctag = self.args.campaign.upper() + '_FINALCUT'
             if self.args.cur.check_proctag(self.args.proctag):
                 pass
             else:
