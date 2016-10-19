@@ -451,9 +451,9 @@ class NitelyCal(PipeQuery):
 
         return [n[0] for n in self.cur.fetchall()]
 
-    def check_submitted(self,date):
+    def check_submitted(self,date,reqnum):
         """Check to see if a nitelycal has been submitted with given date"""
-        was_submitted = "select count(*) from pfw_attempt where unitname= '%s'" % (date)
+        was_submitted = "select count(*) from pfw_attempt where unitname= '%s' and reqnum = '%s'" % (date,reqnum)
         self.cur.execute(was_submitted)
         count = self.cur.fetchone()[0]
         return count
