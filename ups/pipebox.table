@@ -3,7 +3,7 @@ SetupRequired(pandas 0.15.2+1)
 SetupRequired(jinja2 2.6+8)
 SetupRequired(jirapython 0.16+5)
 SetupRequired(configargparse,0.10.0+0)
-SetupRequired(opstoolkit 0.2.1+0)
+SetupRequired(opstoolkit 0.2.2+0)
 
 envAppend(PYTHONPATH, ${PRODUCT_DIR}/python)
 envAppend(PATH, ${PRODUCT_DIR}/bin)
