@@ -21,7 +21,7 @@
             <se-ccd-cat>
                 # how to get list data
                 exec = query_coadd_astrorefine.py
-                args = --proctag ${proctag} --tile ${tilename} --outfile ${qoutfile} --cattype CAT_FINALCUT --verbose 1
+                args = --bandlist ${band} --proctag ${proctag} --tile ${tilename} --outfile ${qoutfile} --cattype CAT_FINALCUT --verbose 1
 
                 # how to create lists
                 divide_by = expnum,band
