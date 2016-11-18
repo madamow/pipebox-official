@@ -13,6 +13,7 @@ band = ${bands}
                 i = ${file.det_cat.fullname}
                 c = ${cat_columns}
                 prefix = cat/${tilename}_r${reqnum}p${attnum:2}
+                bands = ${band}
             </cmdline>
         </exec_1>
         <file>
