@@ -28,6 +28,36 @@ project = {{ args.project }}
 </archive>
 {% endif %}
 
+{% if args.http == 'desar2' %}
+<archive>
+    <desar2home>
+        input_transfer_semname_home = y2a1-desar2-input-40
+        output_transfer_semname_home = y2a1-desar2-output
+        root_http = http://desar2.cosmology.illinois.edu/desarchive
+    </desar2home>
+</archive>
+{% endif %}
+
+{% if args.http == 'desar1' %}
+<archive>
+    <desar2home>
+        input_transfer_semname_home = y2a1-desar1-input-40
+        output_transfer_semname_home = y2a1-desar1-output
+        root_http = http://desar1.cosmology.illinois.edu/desarchive
+    </desar2home>
+</archive>
+{% endif %}
+
+{if args.http == 'desar0' %}
+<archive>
+    <desar2home>
+        input_transfer_semname_home = y2a1--input-40
+        output_transfer_semname_home = y2a1-output
+        root_http = http://desar0.cosmology.illinois.edu/desarchive
+    </desar2home>
+</archive>
+{% endif %}
+
 # Condor processing parameters
 request_memory = {{args.request_memory}}
 request_cpus = {{args.request_cpus}}

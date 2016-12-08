@@ -50,7 +50,7 @@ class PipeArgs(object):
         parser.add('--project',default='ACT',help='Archive directory where runs are \
                              stored, e.g., $ARCHIVE/-->ACT<--/finalcut/')
         parser.add('--rundir',help='Archive directory structure')
-      
+        parser.add('--http',default='desar2',help='The machine to copy files through: desar0, desar1,desar2')
         # JIRA arguments
         parser.add('--jira_parent',help='JIRA parent ticket under which\
                              new ticket will be created.')
