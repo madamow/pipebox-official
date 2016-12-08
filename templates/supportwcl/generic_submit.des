@@ -48,7 +48,7 @@ project = {{ args.project }}
 </archive>
 {% endif %}
 
-{if args.http == 'desar0' %}
+{%if args.http == 'desar0' %}
 <archive>
     <desar2home>
         input_transfer_semname_home = y2a1-input-40
