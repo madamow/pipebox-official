@@ -51,7 +51,7 @@ project = {{ args.project }}
 {if args.http == 'desar0' %}
 <archive>
     <desar2home>
-        input_transfer_semname_home = y2a1--input-40
+        input_transfer_semname_home = y2a1-input-40
         output_transfer_semname_home = y2a1-output
         root_http = http://desar0.cosmology.illinois.edu/desarchive
     </desar2home>
