@@ -1,7 +1,7 @@
 mof_band = g
 
 <module>
-    <mof>
+    <query-coadd-for-mof>
         modnamepat = ${modnamepat_tile_generic}
         wrappername = genwrap.py
         max_fwthreads = ${nthreads}
@@ -71,5 +71,5 @@ mof_band = g
              </fof>
 
         </file>
-    </mof>
+    </query-coadd-for-mof>
 </module>

@@ -1,5 +1,5 @@
 <module>
-    <mof>
+    <collate-mof>
         modnamepat = ${modnamepat_tile_generic}
         wrappername = genwrap.py
         wrapperloop = tilename
@@ -53,5 +53,5 @@
             </mof>
 
         </file>
-    </mof>
+    </collate-mof>
 </module>
