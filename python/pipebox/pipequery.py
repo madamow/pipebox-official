@@ -210,8 +210,8 @@ class MultiEpoch(PipeQuery):
     def check_proctag(self,tag):
         """ Check to see if specified processing tag exists in PROCTAG table"""
         query = "select count(*) from proctag where tag = '{tag}'".format(tag=tag)
-        cur.execute(query)
-        count = cur.fetchone()[0]
+        self.cur.execute(query)
+        count = self.cur.fetchone()[0]
         return count
 
     def update_df(self,df):
