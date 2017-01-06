@@ -22,7 +22,7 @@
 
         <file>
             <chunks>
-                depends on mof.file.mofchunk
+                depends mof.file.mofchunk
 
                 # where input file lives in jobroot
                 dirpat = mepoch

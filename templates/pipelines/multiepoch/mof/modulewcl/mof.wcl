@@ -62,14 +62,14 @@ wrange = 20
                 rundir = config
              </mofconf>
              <nbrs>
-                depends on query-coadd-for-mof.file.nbrs
+                depends query-coadd-for-mof.file.nbrs
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
                 rundir = mof
              </nbrs>
              <fof>
-                depends on query-coadd-for-mof.file.fof
+                depends query-coadd-for-mof.file.fof
                 # what metadata to save
                 filetype = coadd_mof_fof
 
