@@ -24,6 +24,7 @@ mof_band = g
             <mofconf>
                 # what input file is named
                 filename = run-Y3A1-mof.yaml
+                filetype = config
 
                 # where input file lives in jobroot
                 dirpat = mepoch
