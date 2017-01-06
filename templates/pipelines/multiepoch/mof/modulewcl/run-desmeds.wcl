@@ -167,7 +167,7 @@
 
                 # how to name output file
                 filepat = tile_band
-                flabel = meds-${campaign}
+                flabel = meds-${query_campaign}
                 fsuffix = fits
 
                 # whether to save or compress
@@ -185,7 +185,7 @@
 
                 # how to name output file
                 filepat = tile_band
-                flabel = meds-${campaign}
+                flabel = meds-${query_campaign}
                 fsuffix = config
 
                 # whether to save or compress

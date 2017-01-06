@@ -32,7 +32,7 @@ mof_band = g
             <meds>
                 # what metadata to save
                 filetype = coadd_meds
-                filename =  ${tilename}_r${reqnum}p${attnum:2}_${mof_band}_meds-${campaign}.fits
+                filename =  ${tilename}_r${reqnum}p${attnum:2}_${mof_band}_meds-${query_campaign}.fits
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch

@@ -1,5 +1,6 @@
 camsym = D
 cfgver = Y3A1_v1
+query_campaign = Y3A1
 
 color_r_band = i
 color_g_band = r
