@@ -1,0 +1,105 @@
+chunks = 1:20
+num_ranges = 20
+wrange = 20
+
+<module>
+    <mof>
+        modnamepat = ${modnamepat_tile_chunk}
+        wrappername = genwrap.py
+        wrapperloop = chunks
+        max_fwthreads = ${nthreads}
+
+        <exec_1>
+            <cmdline>
+                nranges = ${num_ranges}
+                wrange = ${wrange}
+                fof-file = ${file.fof.fullname}
+                psf-map = ${list.psf_list.fullname}
+                seed = 723193110
+                nbrs-file = ${file.nbrs.fullname}
+                _07_mofconf = ${file.mofconf.fullname}
+                _08_mofchunk = ${file.mofchunk.fullname}
+            </cmdline>
+            execname = run_ngmixit
+            cmd_hyphen =  mixed_gnu
+            used = file.nbrs,file.fof,list.psf_list.psfmodel,file.mofconf,file.meds
+            was_generated_by = file.nbrs:file.mofchunk,file.fof:file.mofchunk,file.meds:file.mofchunk
+            #ancestry =
+        </exec_1>
+        <list>
+            <psf_list>
+                exec = query_coadd_for_mof.py
+                args = --tile ${tilename} --se_proctag ${se_proctag} --me_proctag ${proctag} -s ${submit_des_db_section} -S prod -v 3 -o ${qoutfile} --psfmodel
+                columns = psfmodel.fullname
+            </psf_list>
+            <meds_list>
+                exec = query_coadd_for_mof.py
+                args = --tile ${tilename} --me_proctag ${proctag} -s ${submit_des_db_section} -S prod -v 3 -o ${qoutfile} --meds
+                columns = meds.fullname
+            </meds_list>
+        </list>
+        <file>
+             <psf>
+                listonly = True
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = psf
+             </psf>
+             <meds>
+                listonly = True
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = meds
+             </meds>
+             <mofconf>
+                # what input file is named
+                filename = run-Y3A1-mof.yaml
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = config
+             </mofconf>
+             <nbrs>
+                depends on query-coadd-for-mof.file.nbrs
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                rundir = mof
+             </nbrs>
+             <fof>
+                depends on query-coadd-for-mof.file.fof
+                # what metadata to save
+                filetype = coadd_mof_fof
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                rundir = mof
+             </fof>
+             <psfmodel>
+                listonly = true
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = psf
+            </psfmodel>
+
+            ### output files
+
+             <mofchunk>
+                filetype = coadd_mof_chunk
+
+                # how to name output file
+                filepat = tile_generic
+                flabel = mof-${chunks}
+                fsuffix = fits
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = mof
+                rundir = mof
+            </mofchunk>
+        </file>
+    </mof>
+</module>
