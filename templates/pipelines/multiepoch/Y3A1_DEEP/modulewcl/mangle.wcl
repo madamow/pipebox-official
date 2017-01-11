@@ -1,6 +1,6 @@
 # mangle vars
-mangle_config_file = ${cfgver}_mangle_${mangle_version}.params
-mangle_version = Y3A1v2
+mangle_config_file = ${cfgver}_mangle_Y3A1v2.params
+mangle_version = Y3A1v1
 pol_prefix = ${unitname}_r${reqnum}p${attnum:2}_${band}
 pol_label = bleedmask, ccdgons_weight, ccdmolys_weight, maglims, starmask, molys_weight
 molys_prefix = ${unitname}_r${reqnum}p${attnum:2}_${band}_molys

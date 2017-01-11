@@ -23,8 +23,8 @@ wrange = 20
             execname = run_ngmixit
             cmd_hyphen =  mixed_gnu
             used = file.nbrs,file.fof,list.psf_list.psfmodel,file.mofconf,file.meds
-            was_generated_by = file.nbrs:file.mofchunk,file.fof:file.mofchunk,file.meds:file.mofchunk
-            #ancestry =
+            was_generated_by = file.mofchunk
+            ancestry = file.nbrs:file.mofchunk,file.fof:file.mofchunk,file.meds:file.mofchunk
         </exec_1>
         <list>
             <psf_list>
@@ -39,15 +39,10 @@ wrange = 20
             </meds_list>
         </list>
         <file>
-             <psf>
-                listonly = True
-
-                # where input file lives in jobroot
-                dirpat = mepoch
-                rundir = psf
-             </psf>
              <meds>
                 listonly = True
+                filetype = coadd_meds
+                filepat = tile_generic
 
                 # where input file lives in jobroot
                 dirpat = mepoch
@@ -65,6 +60,7 @@ wrange = 20
              <nbrs>
                 depends query-coadd-for-mof.file.nbrs
                 filetype = coadd_mof_nbrs
+                filepat = tile_generic
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
@@ -74,16 +70,19 @@ wrange = 20
                 depends query-coadd-for-mof.file.fof
                 # what metadata to save
                 filetype = coadd_mof_fof
+                filepat = tile_generic
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
                 rundir = mof
              </fof>
              <psfmodel>
+                filetype = psfex_model
+                filepat = ccdnum_band
                 listonly = true
-
+                
                 # where input file lives in jobroot
-                dirpat = mepoch
+                dirpat = se
                 rundir = psf
             </psfmodel>
 
@@ -94,7 +93,7 @@ wrange = 20
 
                 # how to name output file
                 filepat = tile_generic
-                flabel = mof-${chunks}
+                flabel = mof-${chunks:2}
                 fsuffix = fits
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)

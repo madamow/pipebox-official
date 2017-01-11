@@ -3,21 +3,20 @@
         modnamepat = ${modnamepat_tile_generic}
         wrappername = genwrap.py
         wrapperloop = tilename
-        loopobj = list.chunklist
         max_fwthreads = ${nthreads}
 
         <exec_1>
             <cmdline>
                _flag = noblind
                _02_mofconf = ${file.mofconf.fullname}
-               _03_chunklist = ${list.chunklist.fullname}
+               _03_chunklist = ${file.chunks.fullname}
                _04_mof = ${file.mof.fullname}
             </cmdline>
             execname = megamix-meds-collate-desdm
             cmd_hyphen =  mixed_gnu
-            used = file.mofconf, list.chunklist.mofchunk
+            used = file.mofconf, file.chunks
             was_generated_by = file.mof
-            ancestry = list.chunklist.mofchunk:file.mof
+            ancestry = file.chunks:file.mof
         </exec_1>
 
         <file>

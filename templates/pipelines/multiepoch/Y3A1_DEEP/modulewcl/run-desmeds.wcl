@@ -10,7 +10,7 @@
             <cmdline>
                 band = ${band}
                 coadd_image = ${file.coadd.fullname}
-                coadd_cat = cat/${tilename}_r{reqnum}p{attnum:2}_i_cat.fits
+                coadd_cat = ${file.coadd_cat.fullname} 
                 coadd_seg = ${file.coadd_segmap.fullname}
                 nwg_flist = ${list.nwgint.fullname}
                 bkg_flist = ${list.redbkg.fullname}
@@ -97,8 +97,8 @@
                 rundir = coadd
             </coadd>
             <coadd_cat>
-                depends band-coadd-catalog.file.coadd_cat
-                match = band
+               filepat = tilename_band
+               filename = ${tilename}_r${reqnum}p${attnum:2}_i_cat.fits 
 
                 # where input file lives in jobroot
                 dirpat = mepoch
