@@ -1,0 +1,55 @@
+#DIFFIMG-14
+<module run-psfex-combined>
+    wrappername = genwrap.py  
+    wrapperloop = ccdnum
+    modnamepat=${modnamepat_combine_ccdnumband}
+
+    <file>
+        <psfex_cat>
+            filetype = sncat_psfex
+            filepat = sn_ccdnum_band_combined
+            flabel = psfexcat
+            fsuffix = cat
+            dirpat = sne_ccd
+            rundir = cat
+        </psfex_cat>
+        <psfex_config>
+            filetype = config
+            filename = ${config_version}_SN_image.psfex
+            dirpat = se
+            rundir = config
+        </psfex_config>
+        <psfex_xml>
+            filetype = snxml_psfex
+            filepat = sn_ccdnum_band_combined
+            flabel = psfex
+            fsuffix = xml
+            dirpat = sne_ccd
+            ops_enddir = qa
+            rundir = qa
+        </psfex_xml>
+        <psfex_model>
+            filetype = snpsfex_model
+            filepat = sn_ccdnum_band_combined
+            flabel = psfexcat
+            fsuffix = psf
+            dirpat = sne_ccd
+            ops_enddir = psf
+            rundir = psf
+        </psfex_model>
+    </file>
+
+    <exec_1>
+        execname = psfex
+        used = file.psfex_cat,file.psfex_config
+        was_generated_by = file.psfex_xml,file.psfex_model
+        ancestry = file.psfex_cat:file.psfex_model
+        <cmdline>
+            _01_psfex_cat = ${file.psfex_cat.fullname}
+            c = ${file.psfex_config.fullname}
+            WRITE_XML = Y
+            XML_NAME = ${file.psfex_xml.fullname}
+            PSF_DIR = ccd${ccdnum:2}/psf
+        </cmdline>
+    </exec_1>
+</module>

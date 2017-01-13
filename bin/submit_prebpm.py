@@ -3,6 +3,7 @@
 from pipebox import pipeline
 
 # initialize and get options
+print "Collecting data..."
 prebpm = pipeline.PreBPM()
 args = prebpm.args
 

@@ -385,6 +385,9 @@ class WideField(PipeLine):
                                                         program=self.args.program,
                                                         process_all=self.args.process_all)[1]
             self.args.nitelist = self.args.nite.split(',')
+            if self.args.resubmit_failed:
+                self.args.reqnum = jira_utils.get_reqnum_from_nite(self.args.jira_parent,
+                                                                   self.args.nite)
             """
             if not self.args.calnite:
                 precal = self.args.cur.find_precal(self.args.nite,threshold=7,override=True,
@@ -564,7 +567,9 @@ class NitelyCal(PipeLine):
             self.args.dataframe.loc[index,'bias_list'] = self.args.bias_list
             self.args.dataframe.loc[index,'firstexp'] = self.args.firstexp
     
-        
+        # Update dataframe
+        self.args.cur.update_df(self.args.dataframe)
+
         # Exit if there are not at least 5 exposures per band
         if self.args.auto:
             nitelycal_lib.is_count_by_band(self.args.dataframe,bands_to_process=self.args.bands,

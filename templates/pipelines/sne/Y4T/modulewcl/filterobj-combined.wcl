@@ -1,0 +1,121 @@
+#DIFFIMG-22
+<module>
+    <filterobj-combined>
+        wrappername = genwrap.py
+        wrapperloop = ccdnum
+        modnamepat=${modnamepat_combine_ccdnumband}
+        loopobj = list.in_fakediff_single_list
+
+        <list>
+            <in_fakediff_single_list>   # could be any name like biasx
+                # how to name list
+                filepat = sn_ccdnum_band_combined
+                flabel = fakediff_single
+                fsuffix = list
+
+                # where to store list
+                dirpat = sn_exp
+                ops_enddir = list
+                rundir = list
+
+                # what goes into list
+                output_fields = filename
+                divide_by = ccdnum   # perhaps can default to wrapperloop
+
+                # description of list for wrapper
+                columns = mef_fakediff_single.fullname
+                sortkey = expnum
+
+            </in_fakediff_single_list>
+        </list>
+        <file>
+            <config_cuts>
+                filetype = config
+                filename = ${config_version}_SN_cuts.filterObj
+                dirpat = se
+                rundir = config
+            </config_cuts>
+            <fake_diff_cat>
+                filetype = sncat_fakediff
+                filepat = sn_ccdnum_band_combined
+                flabel = fakeSN_diff
+                fsuffix = cat
+                dirpat = sne_ccd
+                ops_enddir = cat
+                rundir = cat
+            </fake_diff_cat>
+            <psfex_model>
+                filetype = snpsfex_model
+                filepat = sn_ccdnum_band_combined
+                flabel = psfexcat
+                fsuffix = psf
+                dirpat = sne_ccd
+                rundir = psf
+            </psfex_model>
+            <mef_distmpl>
+                filetype = snred
+                filepat = sn_ccdnum_band_combined
+                flabel = distmpl_mh
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = red
+            </mef_distmpl>
+            <mef_fakediff>
+                filetype = snred
+                filepat = sn_ccdnum_band_combined
+                flabel = fakeSN_diff_mh
+                fsuffix = fits
+                dirpat = sne_ccd
+                #ops_enddir = fakediff
+                rundir = fakediff
+            </mef_fakediff>
+            <mef_fakediff_single>
+                listonly = True
+                filetype = snred
+                filepat = sn_ccdnum_band
+                flabel = fakeSN_diff_mh
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = fakediff
+            </mef_fakediff_single>
+            <combined_fake_out>
+                filetype = snlist_fakeobj
+                filepat = sn_ccdnum_band_combined
+                flabel = fakeSN_doFake
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+                ops_enddir = red
+            </combined_fake_out>
+            <objlist_out>
+                filetype = snlist_filterobj
+                filepat = sn_ccdnum_band_combined
+                flabel = fakeSN_filterObj
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+                ops_enddir = red
+                savefiles = true
+            </objlist_out>
+        </file>
+
+        <exec_1>
+            execname = filterObj
+            used = file.fake_diff_cat,file.psfex_model,file.mef_distmpl,file.mef_fakediff,file.combined_fake_out,list.in_fakediff_single_list.mef_fakediff_single,file.combined_fake_out,file.config_cuts
+            was_generated_by = file.objlist_out
+            ancestry = file.fake_diff_cat:file.objlist_out,file.psfex_model:file.objlist_out,file.mef_distmpl:file.objlist_out,file.mef_fakediff:file.objlist_out,file.combined_fake_out:file.objlist_out,file.config_cuts:file.objlist_out
+
+            <cmdline>
+                inFile_sexCat = ${file.fake_diff_cat.fullname}
+                inFile_psf = ${file.psfex_model.fullname}
+                inFile_tImg = ${file.mef_distmpl.fullname}
+                inFile_diffList = ${list.in_fakediff_single_list.fullname}
+                inFile_diffCoadd = ${file.mef_fakediff.fullname}
+                inFile_param = ${file.config_cuts.fullname}
+                inFile_fakeList = ${file.combined_fake_out.fullname}
+                outFile_objList = ${file.objlist_out.fullname}
+                writeDB = _flag
+            </cmdline>
+        </exec_1>
+    </filterobj-combined>
+</module>

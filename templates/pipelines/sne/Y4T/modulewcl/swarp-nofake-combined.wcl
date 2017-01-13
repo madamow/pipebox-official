@@ -1,0 +1,138 @@
+#DIFFIMG-12
+#swarp 
+# /projects/des/Archive/OPS/cal/SNTemplate//SNTemplate_SN-E2/V130801/SNTemplate_SN-E2_V130801_r_2.fits 
+# -WEIGHT_IMAGE /projects/des/Archive/OPS/cal/SNTemplate//SNTemplate_SN-E2/V130801/SNTemplate_SN-E2_V130801_r_2.weight.fits
+# -XML_NAME SN_253351_SN-E2_tile20_r_02_temp_RUN12_swarp.xml  
+# -c SN_distemp.swarp 
+# -IMAGEOUT_NAME SN_253351_SN-E2_tile20_r_02_temp.fits 
+# -WEIGHTOUT_NAME  SN_253351_SN-E2_tile20_r_02_temp.weight.fits  
+# > WARNING: FITS header data read in SN_253351_SN-E2_tile20_r_02_temp.head
+<module>
+    <swarp-nofake-combined>
+        wrappername = genwrap.py  
+        wrapperloop = ccdnum
+        loopobj = list.in_sci_list
+        modnamepat=${modnamepat_combine_ccdnumband}
+        <list>
+            <in_sci_list>   # could be any name like biasx
+                # how to name list 
+                filepat = sn_ccdnum_band_combined
+                flabel = scired
+                fsuffix = list
+
+                # where to store list
+                dirpat = sne_ccd
+                ops_enddir = list
+                rundir = list
+
+                # what goes into list (normally is a query code)
+                #
+                output_fields = filename
+                divide_by = ccdnum   # perhaps can default to wrapperloop
+
+                # description of list for wrapper
+                # mef_fakediff is a reference to a section of this file section of this wcl.
+                # columns is defining what files will go into the list
+                columns = sci_red.fullname
+                sortkey = expnum
+            </in_sci_list>
+            <in_wgt_list>   # could be any name like biasx
+                # how to name list 
+                filepat = sn_ccdnum_band_combined
+                flabel = wgtred
+                fsuffix = list
+
+                # where to store list
+                dirpat = sne_ccd
+                ops_enddir = list
+                rundir = list
+
+                # what goes into list (normally is a query code)
+                #
+                output_fields = filename
+                divide_by = ccdnum   # perhaps can default to wrapperloop
+
+                # description of list for wrapper
+                # mef_fakediff is a reference to a section of this file section of this wcl.
+                # columns is defining what files will go into the list
+                columns = wgt_red.fullname
+                #columns = wgt_fake.expnum,wgt_fake.band
+                sortkey = expnum
+            </in_wgt_list>
+        </list>
+
+
+        <file>
+            <config_combined>
+                filetype = config
+                filename = ${config_version}_SN_nitecmb.swarp
+                dirpat = se
+                rundir = config
+            </config_combined>
+            <head_swarp>
+                filetype = snhead_swarp
+                filepat = sn_ccdnum_band_combined
+                flabel = hupdate_sci
+                fsuffix = head
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+            </head_swarp>
+            <sci_red>
+                listonly = True
+                filetype = snsci_red
+                filepat = sn_ccdnum_band
+                flabel = hupdate_sci
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = red
+            </sci_red>
+            <wgt_red>
+                listonly = True
+                filetype = snwgt_red
+                filepat = sn_ccdnum_band
+                flabel = weight
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = red
+            </wgt_red>
+            <sci_combined_out>
+                filetype = snsci_red
+                filepat = sn_ccdnum_band_combined
+                flabel = hupdate_sci
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+                savefiles = True
+            </sci_combined_out>
+            <wgt_combined_out>
+                filetype = snwgt_red
+                filepat = sn_ccdnum_band_combined
+                flabel = hupdate_weight
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir =  red
+                savefiles = True
+            </wgt_combined_out>
+        </file>
+    
+        <exec_1>
+            execname = swarp
+            used = file.config_combined,list.in_sci_list.sci_red,list.in_wgt_list.wgt_red,file.head_swarp
+            was_generated_by = file.sci_combined_out,file.wgt_combined_out
+            ancestry = file.config_combined:file.sci_combined_out,list.in_sci_list.sci_red:file.sci_combined_out,list.in_wgt_list.wgt_red:file.sci_combined_out,file.head_swarp:file.sci_combined_out,list.in_sci_list.sci_red:file.sci_combined_out,list.in_sci_list.sci_red:file.wgt_combined_out,list.in_wgt_list.wgt_red:file.sci_combined_out,list.in_wgt_list.wgt_red:file.wgt_combined_out,file.head_swarp:file.sci_combined_out
+            <cmdline>
+                _01_listcmb = @${list.in_sci_list.fullname}                
+                WEIGHT_IMAGE = @${list.in_wgt_list.fullname}                
+                WRITE_XML = N
+                #XML_NAME = ${file.xml_combined_out.fullname} 
+                IMAGEOUT_NAME = ${file.sci_combined_out.fullname}
+                WEIGHTOUT_NAME = ${file.wgt_combined_out.fullname}
+                c = ${file.config_combined.fullname}
+                NTHREADS = 1
+            </cmdline>
+        </exec_1>
+    </swarp-nofake-combined>
+</module>

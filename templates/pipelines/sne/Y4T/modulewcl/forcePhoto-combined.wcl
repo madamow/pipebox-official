@@ -1,0 +1,39 @@
+#DIFFIMG-27
+<module>
+    <forcePhoto-combined>
+        wrappername = genwrap.py
+        wrapperloop = ccdnum
+        modnamepat=${modnamepat_combine_ccdnumband}
+        <file>
+            <forcephoto_input>
+                filetype = snlist_fakeobj
+                filepat = sn_ccdnum_band_combined
+                flabel = forcePhoto_fakeSNonly
+                fsuffix = input
+                dirpat = sne_ccd
+                rundir = red
+            </forcephoto_input>
+            <forcephoto_out>
+                filetype = snlist_fakeobj
+                filepat = sn_ccdnum_band_combined
+                flabel = fakeforcePhoto
+                fsuffix = out
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+                savefiles = true
+            </forcephoto_out>
+        </file>
+    
+        <exec_1>
+            execname = forcePhoto
+            used = file.forcephoto_input
+            was_generated_by = file.forcephoto_out
+            ancestry = file.forcephoto_input:file.forcephoto_out
+            <cmdline>
+                inFile_forceList =  ${file.forcephoto_input.fullname}
+                outFile_results = ${file.forcephoto_out.fullname}
+            </cmdline>
+        </exec_1>
+    </forcePhoto-combined>
+</module>

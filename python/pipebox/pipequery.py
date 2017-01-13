@@ -15,7 +15,7 @@ class PipeQuery(object):
     def find_epoch(self,exposure):
         """ Return correct epoch name for exposure in order to use
             appropriate calibrations file"""
-        epoch_query = "select name,minexpnum,maxexpnum from mjohns44.epoch"
+        epoch_query = "select name,minexpnum,maxexpnum from ops_epoch"
         self.cur.execute(epoch_query)
         epochs = self.cur.fetchall()
 
@@ -115,16 +115,18 @@ class SuperNova(PipeQuery):
         for u in df['unitname'].unique():
             nattempts = df[(df.unitname==u)].count()[0]
             count = df[(df.unitname==u) & (df.status==0)].count()[0]
-#            print str(u)+' has '+str(count)+' good processings. '+str(nattempts)+' total processings. Max is '+str(resubmit_max)
+            print str(u)+' has '+str(count)+' good processings. '+str(nattempts)+' total processings. Max is '+str(resubmit_max)
             if (count >= 1) or (nattempts >= int(resubmit_max)):
                 passed_unitnames.append(u)
         try:
-            failed_list = df[(~df.unitname.isin(passed_unitnames)) & (~df.status.isin([0,-99]))][['nite','field','band']].values
+            failed_list = df[(~df.unitname.isin(passed_unitnames)) & (~df.status.isin([0,-99]))][['nite','field','band']]
         except:
             print 'No new failed exposures found!'
             exit()
         try: 
-            resubmit_list = pd.DataFrame(np.vstack({tuple(row) for row in failed_list}),columns=['nite','field','band']) 
+            print failed_list
+            resubmit_list = (failed_list.drop_duplicates(subset=['nite','field','band'])).values
+            print resubmit_list
         except:
             print 'No new failed exposures found!'
             exit()
@@ -252,28 +254,23 @@ class MultiEpoch(PipeQuery):
     def get_failed_tiles(self, reqnum,resubmit_max):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
-        submitted = "select distinct unitname,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        submitted = "select distinct unitname,attnum,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
-        df = pd.DataFrame(failed_query,columns=['unitname','status'])
+        df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
         # Set Null values to -99
         df = df.fillna(-99)
-        passed_tiles = []
-        for u in df['unitname'].unique():
-            nattempts = df[(df.unitname==u)].count()[0]
-            count = df[(df.unitname==u) & (df.status==0)].count()[0]
-            if (count >=1) or (nattempts >= resubmit_max):
-                passed_tiles.append(u)
-        try:
-            failed_list = df[(~df.unitname.isin(passed_expnums)) & (~df.status.isin([0,-99]))]['unitname'].values
-        except:
-            print 'No new failed tiles found!'
-            exit()
 
         resubmit_list = []
-        for r in failed_list:
-            if -99 not in list(df[(df.unitname==r)]['status'].values):
-                resubmit_list.append(r)
+
+        for u in df['unitname'].unique():
+            count = df[(df.unitname == u) & (df.status == 0)].count()[0]
+            statuses = list(df[(df.unitname == u)]['status'].values)
+            if -99 in statuses or 0 in statuses:
+                pass
+            else:
+                if (len(statuses) <= int(resubmit_max)):
+                    resubmit_list.append(u)
         tile_list = [u for u in resubmit_list]
 
         return tile_list
@@ -332,12 +329,13 @@ class WideField(PipeQuery):
     def get_max_nite(self,propid=None,program=None,process_all=False):
         """Returns expnum,nite of max(expnum) in the exposure table"""
         base_query = "select max(expnum) from exposure where obstype in ('object','standard')"
-        if propid:
-            base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
-        if program:
-            base_query = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in program)
         if process_all:
             base_query = base_query
+        else:
+            if propid:
+                base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
+            if program:
+                base_query = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in program)
         self.cur.execute(base_query)
         max_expnum = self.cur.fetchone()[0]
         fetch_nite = "select distinct nite from exposure where expnum=%s" % (max_expnum)
@@ -348,28 +346,23 @@ class WideField(PipeQuery):
     def get_failed_expnums(self,reqnum,resubmit_max):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
-        submitted = "select distinct unitname,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        submitted = "select distinct unitname,attnum,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
-        df = pd.DataFrame(failed_query,columns=['unitname','status'])
+        df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
         # Set Null values to -99
         df = df.fillna(-99)
-        passed_expnums = []
-        for u in df['unitname'].unique():
-            count = df[(df.unitname==u) & (df.status==0)].count()[0]
-            nattempts = df[(df.unitname==u)].count()[0]
-            if (count >=1) or (nattempts >= resubmit_max):
-                passed_expnums.append(u)
-        try:
-            failed_list = df[(~df.unitname.isin(passed_expnums)) & (~df.status.isin([0,-99]))]['unitname'].values
-        except:
-            print 'No new failed exposures found!'
-            exit()
-        
+
         resubmit_list = []
-        for r in failed_list:
-            if -99 not in list(df[(df.unitname==r)]['status'].values):
-                resubmit_list.append(r)
+        for u in df['unitname'].unique():
+            count = df[(df.unitname == u) & (df.status == 0)].count()[0]
+            statuses = list(df[(df.unitname == u)]['status'].values)
+            if -99 in statuses or 0 in statuses:
+                pass
+            else:
+                if (len(statuses) <= int(resubmit_max)):
+                    resubmit_list.append(u)
+
         expnum_list = [u[3:] for u in resubmit_list]
         
         return expnum_list
@@ -382,12 +375,13 @@ class WideField(PipeQuery):
         base_query = "select distinct expnum,nite from exposure where obstype in ('object','standard') and \
                       object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' \
                       and object not like '%%test%%' and object not like '%%junk%%' and nite in (%s)" % ','.join(nites)
-        if program:
-           base_query = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in program)
-        if propid:
-            base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
         if process_all:
             base_query = base_query
+        else:
+            if program:
+                base_query = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in program)
+            if propid:
+                base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
         self.cur.execute(base_query)
         results = self.cur.fetchall()
         try:
@@ -515,6 +509,7 @@ class NitelyCal(PipeQuery):
                     df.loc[index,'obstype'] = obstype
             except:
                 df.loc[index,'obstype'] = obstype
+        df['unitname'] = df['nite']
 
         return df
 
@@ -541,28 +536,22 @@ class PreBPM(PipeQuery):
     def get_failed_expnums(self,reqnum,resubmit_max):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
-        submitted = "select distinct unitname,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        submitted = "select distinct unitname,attnum,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
-        df = pd.DataFrame(failed_query,columns=['unitname','status'])
+        df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
         # Set Null values to -99
         df = df.fillna(-99)
-        passed_expnums = []
-        for u in df['unitname'].unique():
-            count = df[(df.unitname==u) & (df.status==0)].count()[0]
-            nattempts = df[(df.unitname==u)].count()[0]
-            if (count >=1) or (nattempts >= resubmit_max):
-                passed_expnums.append(u)
-        try:
-            failed_list = df[(~df.unitname.isin(passed_expnums)) & (~df.status.isin([0,-99]))]['unitname'].values
-        except:
-            print 'No new failed exposures found!'
-            exit()
-        
+
         resubmit_list = []
-        for r in failed_list:
-            if -99 not in list(df[(df.unitname==r)]['status'].values):
-                resubmit_list.append(r)
+        for u in df['unitname'].unique():
+            count = df[(df.unitname == u) & (df.status == 0)].count()[0]
+            statuses = list(df[(df.unitname == u)]['status'].values)
+            if -99 in statuses or 0 in statuses:
+                pass
+            else:
+                if (len(statuses) <= int(resubmit_max)):
+                    resubmit_list.append(u)
         expnum_list = [u[3:] for u in resubmit_list]
         
         return expnum_list

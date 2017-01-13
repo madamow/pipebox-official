@@ -1,0 +1,47 @@
+#DIFFIMG-21
+<module>
+    <immerge-distmpl-combined>
+        wrappername = genwrap.py
+        wrapperloop = ccdnum
+        modnamepat=${modnamepat_combine_ccdnumband}
+        <file>
+            <sci_distmpl>
+                filetype = snsci_distmpl
+                filepat = sn_ccdnum_band_combined
+                flabel = tmpl.sci
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = distmpl
+            </sci_distmpl>
+            <wgt_distmpl>
+                filetype = snwgt_distmpl
+                filepat = sn_ccdnum_band_combined
+                flabel = tmpl.weight
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir =  distmpl
+            </wgt_distmpl>
+            <mef_distmpl>
+                filetype = snred
+                filepat = sn_ccdnum_band_combined
+                flabel = distmpl_mh
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+                savefiles = false
+            </mef_distmpl>
+        </file>
+
+        <exec_1>
+            execname = immerge
+            used = file.sci_distmpl, file.wgt_distmpl
+            was_generated_by =  file.mef_distmpl
+            ancestry = file.sci_distmpl:file.mef_distmpl,file.wgt_distmpl:file.mef_distmpl
+            <cmdline>
+                outFile_img =  ${file.mef_distmpl.fullname}
+                inList_merge = ${file.sci_distmpl.fullname} ${file.wgt_distmpl.fullname}
+            </cmdline>
+        </exec_1>
+    </immerge-distmpl-combined>
+</module>

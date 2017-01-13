@@ -1,6 +1,11 @@
 {% extends "supportwcl/generic_submit.des" %}
 {% block content %}
+
+{% if args.inputcals_file %}
+<<include {{args.inputcals_file}}>>
+{% else %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/inputcals/Y4N_epoch1_inputfiles.des>>
+{% endif %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/astrom-scamp-list.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/astrom-scamp.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/autoscan-combined.wcl>>
