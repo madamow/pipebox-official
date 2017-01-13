@@ -324,7 +324,7 @@ class MultiEpoch(PipeLine):
 
         # Checking processing tag and setting default
         if not self.args.proctag:
-            self.args.proctag = args.campaign.upper() + '_FINALCUT'
+            self.args.proctag = self.args.campaign.upper() + '_FINALCUT'
             if self.args.cur.check_proctag(self.args.proctag):
                 pass
             else:
@@ -435,6 +435,16 @@ class WideField(PipeLine):
         except: 
             pass
 
+        if self.args.count:
+            print "Data found in database:"
+         
+            self.args.cur.count_by_obstype(self.args.nitelist)
+            print "\nData to be processed: %s" % ','.join(self.args.nitelist)
+            grouped = self.args.dataframe.groupby(by=['obstype','band']).agg(['count'])['expnum']
+            print grouped
+            sys.exit(0)
+
+
 class NitelyCal(PipeLine):
 
     def __init__(self):
@@ -535,9 +545,13 @@ class NitelyCal(PipeLine):
             for index,row in self.args.dataframe.iterrows():
                 try:
                     self.args.dataframe.loc[index,('niterange')] = str(row['nite'])
+                    self.args.dataframe.loc[index, ('unitname')] = str(row['nite'])
                 except:
                     self.args.dataframe.insert(len(self.args.dataframe.columns),'niterange',None)
                     self.args.dataframe.loc[index,('niterange')] = str(row['nite'])
+
+                    self.args.dataframe.insert(len(self.args.dataframe.columns), 'unitname', None)
+                    self.args.dataframe.loc[index, ('unitname')] = str(row['nite'])
         
         # Remove unwanted exposures
         if self.args.exclude_list:
@@ -559,8 +573,10 @@ class NitelyCal(PipeLine):
             index = group.index
             # Append bias/flat lists to dataframe
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(group)
-
-            self.args.firstexp = self.args.flat_list[0]
+            try:
+                self.args.firstexp = self.args.flat_list[0]
+            except:
+                self.args.firstexp = None
             self.args.bias_list = ','.join(str(i) for i in self.args.bias_list)
             self.args.flat_list = ','.join(str(i) for i in self.args.flat_list)
             self.args.dataframe.loc[index,'flat_list'] = self.args.flat_list
@@ -568,7 +584,10 @@ class NitelyCal(PipeLine):
             self.args.dataframe.loc[index,'firstexp'] = self.args.firstexp
     
         # Update dataframe
-        self.args.cur.update_df(self.args.dataframe)
+        try:
+            self.args.cur.update_df(self.args.dataframe)
+        except:
+            pass
 
         # Exit if there are not at least 5 exposures per band
         if self.args.auto:

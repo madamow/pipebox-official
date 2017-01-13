@@ -7,7 +7,7 @@ import numpy as np, string
 class PipeQuery(object):
     def __init__(self,section):
         """ Connect to database using user's .desservices file"""
-        dbh = DesDbi(None,section)
+        dbh = DesDbi(None,section, retry = True)
         cur = dbh.cursor()
         self.section = section
         self.cur = cur 
@@ -216,8 +216,8 @@ class MultiEpoch(PipeQuery):
     def check_proctag(self,tag):
         """ Check to see if specified processing tag exists in PROCTAG table"""
         query = "select count(*) from proctag where tag = '{tag}'".format(tag=tag)
-        cur.execute(query)
-        count = cur.fetchone()[0]
+        self.cur.execute(query)
+        count = self.cur.fetchone()[0]
         return count
 
     def update_df(self,df):
@@ -280,6 +280,15 @@ class MultiEpoch(PipeQuery):
 
     
 class WideField(PipeQuery):
+  
+    def count_by_obstype(self,niteslist):
+        """  return count per obstype, band """
+        count_query="select obstype,band,count(expnum) from exposure where nite in ({nites}) and obstype not in ('dome flat', 'zero','dark') group by obstype,band".format(nites=','.join(niteslist))
+        self.cur.execute(count_query)
+        count_info = self.cur.fetchall()
+        print " Obstype         Band      Count"
+        for row in count_info:
+            print "%09s  %09s  %09s" % (row[0], row[1], row[2])
     def get_expnums_from_radec(self, RA, Dec):
         RA = [float(r) for r in RA[0]]
         Dec = [float(d) for d in Dec[0]]
@@ -303,19 +312,20 @@ class WideField(PipeQuery):
         """ Takes a pandas dataframe and for each exposure add column:value
             band and nite. Returns dataframe"""
         for index,row in df.iterrows():
-            expnum_info = "select distinct expnum, band, nite from exposure where expnum='%s'" % row['expnum']
+            expnum_info = "select distinct expnum, band, nite, obstype from exposure where expnum='%s'" % row['expnum']
             self.cur.execute(expnum_info)
-            expnum,band,nite = self.cur.fetchall()[0]
+            expnum,band,nite,obstype = self.cur.fetchall()[0]
             try:
                 df.insert(len(df.columns),'nite', None)
                 df.insert(len(df.columns),'band', None)
                 df.insert(len(df.columns),'unitname',None)
+                df.insert(len(df.columns),'obstype',None)
             except:
                 pass
             df.loc[index,'nite'] = nite
             df.loc[index,'band'] = band
             df.loc[index,'unitname'] = 'D00' + str(expnum)
-
+            df.loc[index,'obstype'] = obstype
         return df
 
     def check_submitted(self,unitname,reqnum):
@@ -447,9 +457,9 @@ class NitelyCal(PipeQuery):
 
         return [n[0] for n in self.cur.fetchall()]
 
-    def check_submitted(self,date):
+    def check_submitted(self,date,reqnum):
         """Check to see if a nitelycal has been submitted with given date"""
-        was_submitted = "select count(*) from pfw_attempt where unitname= '%s'" % (date)
+        was_submitted = "select count(*) from pfw_attempt where unitname= '%s' and reqnum = '%s'" % (date,reqnum)
         self.cur.execute(was_submitted)
         count = self.cur.fetchone()[0]
         return count
@@ -484,9 +494,10 @@ class NitelyCal(PipeQuery):
         for row in cal_info:
             print "%09s  %09s  %09s" % (row[2], row[1], row[0])
 
-    def update_df(self,df):
+    def udpdate_df(self,df):
         """ Takes a pandas dataframe and for each exposure add column:value
             band, nite, obstype. Returns dataframe"""
+
         for index,row in df.iterrows():
             expnum_info = "select distinct expnum, band, nite, obstype from exposure where expnum='%s'" % row['expnum']
             self.cur.execute(expnum_info)
@@ -509,7 +520,12 @@ class NitelyCal(PipeQuery):
                     df.loc[index,'obstype'] = obstype
             except:
                 df.loc[index,'obstype'] = obstype
-        df['unitname'] = df['nite']
+            try:
+                is_unitname = row['unitname']
+                if is_unitname is None:
+                    df.loc[index, 'unitname'] = nite
+            except:
+                df.loc[index,'unitname'] = nite
 
         return df
 
