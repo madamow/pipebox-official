@@ -3,33 +3,46 @@
         modnamepat = ${modnamepat_tile_generic}
         wrappername = genwrap.py
         wrapperloop = tilename
+        loopobj = list.inlist
         max_fwthreads = ${nthreads}
 
         <exec_1>
             <cmdline>
                _flag = noblind
                _02_mofconf = ${file.mofconf.fullname}
-               _03_chunklist = ${file.chunks.fullname}
+               _03_chunklist = ${list.inlist.fullname}
                _04_mof = ${file.mof.fullname}
             </cmdline>
             execname = megamix-meds-collate-desdm
             cmd_hyphen =  mixed_gnu
-            used = file.mofconf, file.chunks
+            used = file.mofconf, list.inlist.chunks
             was_generated_by = file.mof
-            ancestry = file.chunks:file.mof
+            ancestry = list.inlist.chunks:file.mof
         </exec_1>
+        <list>
+            <inlist>
+                columns = chunks.fullname
+                depends = mof.file.mofchunk
+                dirpat = mepoch
+                #sortkey = (chunks, True, False)
 
+                filepat = tile_generic
+                filetype = list
+                flabel = mof-chunk
+                fsuffix = list
+                ops_enddir = list/mof
+                rundir = list/mof
+            </inlist>
+        </list>
         <file>
             <chunks>
-                depends mof.file.mofchunk
-
-                # where input file lives in jobroot
                 dirpat = mepoch
+                listonly = True
                 rundir = mof
             </chunks>
             <mofconf>
                 # what input file is named
-                filename = run-Y3A1-mof.yaml
+                filename = run-Y3A1dev-v2-mof.yaml
                 filetype = config
 
                 # where input file lives in jobroot

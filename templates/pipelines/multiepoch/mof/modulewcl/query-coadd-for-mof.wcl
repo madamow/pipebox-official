@@ -1,5 +1,3 @@
-mof_band = g
-
 <module>
     <query-coadd-for-mof>
         modnamepat = ${modnamepat_tile_generic}
@@ -9,21 +7,34 @@ mof_band = g
         <exec_1>
             <cmdline>
                 _01_medsconf = ${file.mofconf.fullname}
-                _02_meds = ${file.meds.fullname}
                 nbrs-file = ${file.nbrs.fullname}
                 fof-file = ${file.fof.fullname}
+                meds_list = ${list.meds_list.fullname}
+                bands = i
             </cmdline>
-            execname = ngmixer-meds-make-nbrs-data
+            execname = run_ngmixer-meds-make-nbrs-data
             cmd_hyphen =  mixed_gnu
-            used = file.mofconf,file.meds
+            used = file.mofconf,list.meds_list.meds
             was_generated_by = file.nbrs, file.fof
-            ancestry = file.meds:file.nbrs, file.meds:file.fof
+            ancestry = list.meds_list.meds:file.nbrs, list.meds_list.meds:file.fof
         </exec_1>
-
+        <list>
+            <meds_list>
+                exec = query_coadd_for_mof.py
+                args = --tile ${tilename} --me_proctag ${proctag} -s ${submit_des_db_section} -S prod -v 3 -o ${qoutfile} --meds
+                columns = meds.fullname, band
+                filepat = tile_generic
+                flabel = meds-list
+                fsuffix = list
+                dirpat = mepoch
+                rundir = list/mof
+                ops_enddir = list/mof
+            </meds_list>
+        </list>
         <file>
             <mofconf>
                 # what input file is named
-                filename = run-Y3A1-mof.yaml
+                filename = run-Y3A1dev-v2-mof.yaml
                 filetype = config
 
                 # where input file lives in jobroot
@@ -31,15 +42,13 @@ mof_band = g
                 rundir = config
             </mofconf>
             <meds>
-                # what metadata to save
+                listonly = True
                 filetype = coadd_meds
-                filename =  ${tilename}_r${reqnum}p${attnum:2}_${mof_band}_meds-${query_campaign}.fits
 
-                # where to put it (jobroot=rundir, archive=ops_enddir)
+                # where input file lives in jobroot
                 dirpat = mepoch
-                ops_enddir = meds
                 rundir = meds
-            </meds>
+             </meds>
 
             ### output files
              <nbrs>
