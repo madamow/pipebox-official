@@ -8,7 +8,7 @@
 # -WEIGHTOUT_NAME  SN_253351_SN-E2_tile20_r_02_temp.weight.fits  
 # > WARNING: FITS header data read in SN_253351_SN-E2_tile20_r_02_temp.head
 <module>
-    <swarp-nofake-combined>
+    <swarp-combined>
         wrappername = genwrap.py  
         wrapperloop = ccdnum
         loopobj = list.in_sci_list
@@ -17,7 +17,7 @@
             <in_sci_list>   # could be any name like biasx
                 # how to name list 
                 filepat = sn_ccdnum_band_combined
-                flabel = scired
+                flabel = scifake
                 fsuffix = list
 
                 # where to store list
@@ -33,13 +33,13 @@
                 # description of list for wrapper
                 # mef_fakediff is a reference to a section of this file section of this wcl.
                 # columns is defining what files will go into the list
-                columns = sci_red.fullname
+                columns = sci_fake.fullname
                 sortkey = expnum
             </in_sci_list>
             <in_wgt_list>   # could be any name like biasx
                 # how to name list 
                 filepat = sn_ccdnum_band_combined
-                flabel = wgtred
+                flabel = wgtfake
                 fsuffix = list
 
                 # where to store list
@@ -55,7 +55,7 @@
                 # description of list for wrapper
                 # mef_fakediff is a reference to a section of this file section of this wcl.
                 # columns is defining what files will go into the list
-                columns = wgt_red.fullname
+                columns = wgt_fake.fullname
                 #columns = wgt_fake.expnum,wgt_fake.band
                 sortkey = expnum
             </in_wgt_list>
@@ -72,67 +72,82 @@
             <head_swarp>
                 filetype = snhead_swarp
                 filepat = sn_ccdnum_band_combined
-                flabel = hupdate_sci
+                flabel = fakeSN.sci
                 fsuffix = head
                 dirpat = sne_ccd
-                ops_enddir = red
+                ops_enddir = red_combined
                 rundir = red
             </head_swarp>
-            <sci_red>
+            <sci_fake>
                 listonly = True
                 filetype = snsci_red
                 filepat = sn_ccdnum_band
-                flabel = hupdate_sci
+                flabel = fakeSN.sci
                 fsuffix = fits
                 dirpat = sne_ccd
                 rundir = red
-            </sci_red>
-            <wgt_red>
+            </sci_fake>
+            <wgt_fake>
                 listonly = True
                 filetype = snwgt_red
                 filepat = sn_ccdnum_band
-                flabel = weight
+                flabel = fakeSN.weight
                 fsuffix = fits
                 dirpat = sne_ccd
                 rundir = red
-            </wgt_red>
+            </wgt_fake>
             <sci_combined_out>
                 filetype = snsci_red
                 filepat = sn_ccdnum_band_combined
-                flabel = hupdate_sci
+                flabel = fakeSN.sci
                 fsuffix = fits
                 dirpat = sne_ccd
                 ops_enddir = red
                 rundir = red
-                savefiles = True
+                savefiles = false
             </sci_combined_out>
             <wgt_combined_out>
                 filetype = snwgt_red
                 filepat = sn_ccdnum_band_combined
-                flabel = hupdate_weight
+                flabel = fakeSN.weight
                 fsuffix = fits
                 dirpat = sne_ccd
                 ops_enddir = red
                 rundir =  red
-                savefiles = True
+                savefiles = false
             </wgt_combined_out>
+            #<xml_combined_out>
+            #    filetype = snxml_swarp
+            #    filepat = sn_ccdnum_band_combined
+            #    flabel = fakeSN
+            #    fsuffix = xml
+            #    dirpat = sne_ccd
+            #    ops_enddir = qa
+            #    rundir = qa
+            #    savefiles = false
+            #</xml_combined_out>
         </file>
     
         <exec_1>
             execname = swarp
-            used = file.config_combined,list.in_sci_list.sci_red,list.in_wgt_list.wgt_red,file.head_swarp
+            used = file.config_combined,list.in_sci_list.sci_fake,list.in_wgt_list.wgt_fake,file.head_swarp
+            #was_generated_by = file.sci_combined_out,file.wgt_combined_out,file.xml_combined_out
             was_generated_by = file.sci_combined_out,file.wgt_combined_out
-            ancestry = file.config_combined:file.sci_combined_out,list.in_sci_list.sci_red:file.sci_combined_out,list.in_wgt_list.wgt_red:file.sci_combined_out,file.head_swarp:file.sci_combined_out,list.in_sci_list.sci_red:file.sci_combined_out,list.in_sci_list.sci_red:file.wgt_combined_out,list.in_wgt_list.wgt_red:file.sci_combined_out,list.in_wgt_list.wgt_red:file.wgt_combined_out,file.head_swarp:file.sci_combined_out
+            #ancestry = file.config_combined:file.sci_combined_out,list.in_sci_list.sci_fake:file.sci_combined_out,list.in_wgt_list.wgt_fake:file.sci_combined_out,file.head_swarp:file.sci_combined_out,list.in_sci_list.sci_fake:file.sci_combined_out,list.in_sci_list.sci_fake:file.wgt_combined_out,list.in_sci_list.sci_fake:file.xml_combined_out,list.in_wgt_list.wgt_fake:file.sci_combined_out,list.in_wgt_list.wgt_fake:file.wgt_combined_out,list.in_wgt_list.wgt_fake:file.xml_combined_out,file.head_swarp:file.sci_combined_out,file.head_swarp:file.wgt_combined_out,file.head_swarp:file.xml_combined_out
+            ancestry = file.config_combined:file.sci_combined_out,list.in_sci_list.sci_fake:file.sci_combined_out,list.in_wgt_list.wgt_fake:file.sci_combined_out,file.head_swarp:file.sci_combined_out,list.in_sci_list.sci_fake:file.sci_combined_out,list.in_sci_list.sci_fake:file.wgt_combined_out,list.in_wgt_list.wgt_fake:file.sci_combined_out,list.in_wgt_list.wgt_fake:file.wgt_combined_out,file.head_swarp:file.sci_combined_out,file.head_swarp:file.wgt_combined_out
+            #ancestry = list.in_sci_list.sci_fake:file.sci_combined_out,list.in_sci_list.sci_fake:file.wgt_combined_out,file.head_swarp:file.sci_combined_out
             <cmdline>
+                c = ${file.config_combined.fullname}
                 _01_listcmb = @${list.in_sci_list.fullname}                
                 WEIGHT_IMAGE = @${list.in_wgt_list.fullname}                
                 WRITE_XML = N
                 #XML_NAME = ${file.xml_combined_out.fullname} 
                 IMAGEOUT_NAME = ${file.sci_combined_out.fullname}
                 WEIGHTOUT_NAME = ${file.wgt_combined_out.fullname}
-                c = ${file.config_combined.fullname}
                 NTHREADS = 1
+                #ASTREF_CATALOG = FILE
+                #ASTREFCAT_NAME = ${file.sn_usnob_cat.fullname}
             </cmdline>
         </exec_1>
-    </swarp-nofake-combined>
+    </swarp-combined>
 </module>

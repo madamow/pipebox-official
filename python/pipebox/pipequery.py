@@ -115,18 +115,23 @@ class SuperNova(PipeQuery):
         for u in df['unitname'].unique():
             nattempts = df[(df.unitname==u)].count()[0]
             count = df[(df.unitname==u) & (df.status==0)].count()[0]
-            if (count >= 1) or (nattempts >= resubmit_max):
+            print str(u)+' has '+str(count)+' good processings. '+str(nattempts)+' total processings. Max is '+str(resubmit_max)
+            if (count >= 1) or (nattempts >= int(resubmit_max)):
                 passed_unitnames.append(u)
         try:
-            failed_list = df[(~df.unitname.isin(passed_unitnames)) & (~df.status.isin([0,-99]))][['nite','field','band']].values
+            failed_list = df[(~df.unitname.isin(passed_unitnames)) & (~df.status.isin([0,-99]))][['nite','field','band']]
         except:
             print 'No new failed exposures found!'
             exit()
         try: 
-            resubmit_list = pd.DataFrame(np.vstack({tuple(row) for row in failed_list}),columns=['nite','field','band']) 
+            print failed_list
+            resubmit_list = (failed_list.drop_duplicates(subset=['nite','field','band'])).values
+            print resubmit_list
         except:
             print 'No new failed exposures found!'
             exit()
+ #       print 'get_failed_triplets disabled'
+ #       exit()
         return resubmit_list
 
 # SN only code
@@ -137,6 +142,7 @@ class SuperNova(PipeQuery):
         print "selecting exposures to submit..."
         query = "select distinct nite, field, band from manifest_exposure where exptime > 30 \
                 and nite in (%s) " % (','.join(nite))
+        print query
         self.cur.execute(query)
 #        triplets = np.ravel(np.array(self.cur.fetchall()))
 #        return string.join(map(str,triplets),',').reshape[-1:3]

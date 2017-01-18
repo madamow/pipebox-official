@@ -276,7 +276,7 @@ class SuperNova(PipeLine):
             self.args.nitelist = self.args.nite.split(',')
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
-            self.args.triplet_list = self.args.cur.get_failed_triplets(self.args.nitelist,self.args.resubmit_max)
+            self.args.triplet_list = self.args.cur.get_failed_triplets(self.args.nitelist,int(self.args.resubmit_max))
             self.args.dataframe = pd.DataFrame(self.args.triplet_list,columns=['nite','field','band'])
         elif self.args.nite:
             self.args.triplet_list = self.args.cur.get_triplets_from_nite(self.args.nitelist)
@@ -334,7 +334,7 @@ class MultiEpoch(PipeLine):
         # Creating dataframe from tiles
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
-            self.args.tile_list = self.args.cur.get_failed_tiles(self.args.reqnum,self.args.resubmit_max)
+            self.args.tile_list = self.args.cur.get_failed_tiles(self.args.reqnum,int(self.args.resubmit_max))
             self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
         elif self.args.tile:
             self.args.tile_list = self.args.tile.split(',')
@@ -398,12 +398,8 @@ class WideField(PipeLine):
         # Creating dataframe from exposures 
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
-            self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum,self.args.resubmit_max)
-            if not len(self.args.exposure_list):
-                self.args.dataframe = pd.DataFrame(columns=['expnum','nite'])
-                print "No failed exposures found for reqnum: {req}!".format(req=self.args.reqnum)
-            else:
-                self.args.dataframe = pd.DataFrame(self.args.exposure_list, columns=['expnum'])
+            self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum,int(self.args.resubmit_max))
+            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.exptag:
             self.args.exposure_list = self.args.cur.get_expnums_from_tag(self.args.exptag)
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum','tag']).sort(columns=['tag','expnum'],ascending=True)
@@ -675,13 +671,8 @@ class PreBPM(PipeLine):
         # Creating dataframe from exposures 
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
-            self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum,
-                                                                       self.args.resubmit_max)
-            if not len(self.args.exposure_list):
-                self.args.dataframe = pd.DataFrame(columns=['expnum','nite'])
-                print "No failed exposures found for reqnum: {req}!".format(req=self.args.reqnum)
-            else:
-                self.args.dataframe = pd.DataFrame(self.args.exposure_list, columns=['expnum'])
+            self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum,int(self.args.resubmit_max))
+            self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.exptag:
             self.args.exposure_list = self.args.cur.get_expnums_from_tag(self.args.exptag)
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum','tag']).sort(columns=['tag','expnum'],ascending=True)

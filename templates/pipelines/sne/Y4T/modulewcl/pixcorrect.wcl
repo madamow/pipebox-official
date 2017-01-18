@@ -1,16 +1,16 @@
 <module>
     <pixcorrect>
         wrappername = genwrap.py
-        wrapperloop = ccdnum,band
+        wrapperloop = expnum,ccdnum,band
         modnamepat = ${modnamepat_ccdnumband}
         loopobj = file.xtalked_sci
 
         <file>
             <xtalked_sci>   
                 depends crosstalk-sci.file.red_xtalked
-                dirpat = s
+                dirpat = sne
                 rundir = red/xtalk
-                match = ccdnum,band
+                match = expnum,ccdnum,band
             </xtalked_sci>
             <biascor>
                 filetype = cal_biascor
@@ -46,15 +46,15 @@
             </lintable>
             <red_pixcor>
                 # what metadata to get
-                filetype = red_pixcor
+                filetype = snred_pixcor
 
                 # how to name the file
-                filepat = ccdnum_band
-                flabel = pixcor
+                filepat = sn_ccdnum_band
+                flabel = sn_pixcor
                 fsuffix = fits
 
                 # where to put the file
-                dirpat = se
+                dirpat = sne
                 ops_enddir = red/pixcor
                 rundir = red/pixcor
                 savefiles = false
@@ -62,15 +62,15 @@
             </red_pixcor>
             <pixcor_mini_red>
                 # what metadata to get
-                filetype = pixcor_mini_red
+                filetype = snpixcor_mini_red
 
                 # how to name the file
-                filepat = ccdnum_band
+                filepat = sn_ccdnum_band
                 flabel = pixcor-mini-red
                 fsuffix = fits
 
                 # where to put the file
-                dirpat = se
+                dirpat = sne
                 ops_enddir = mini
                 rundir = mini
 

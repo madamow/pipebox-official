@@ -1,0 +1,71 @@
+#DIFFIMG-23
+<module>
+    <makestamps-single>
+        wrappername = runMakeStamps.py
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+        <file>
+            <mef_fake>
+                filetype = snred
+                filepat = sn_ccdnum_band
+                flabel = fakeSN_mh
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = red
+            </mef_fake>
+            <mef_distmpl>
+                filetype = snred
+                filepat = sn_ccdnum_band
+                flabel = distmpl_mh
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = red
+            </mef_distmpl>
+            <mef_fakediff>
+                filetype = snred
+                filepat = sn_ccdnum_band
+                flabel = fakeSN_diff_mh
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = fakediff
+            </mef_fakediff>
+            <objlist_filter>
+                filetype = snlist_filterobj
+                filepat = sn_ccdnum_band
+                flabel = filterObj
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+            </objlist_filter>
+            <tarfile_stamps>
+                filetype = sntar_stamps
+                filepat = sn_ccdnum_band
+                flabel = stamps
+                fsuffix = tar.gz
+                dirpat = sne_ccd
+                rundir = stamps
+                ops_enddir = stamps
+                savefiles = true
+            </tarfile_stamps>
+        </file>
+        <wrapper>
+            wrapper_stamps_outdir = ${stamps_dir}
+            wrapper_delete_stamps_outdir = False
+            wrapper_stamps_tarfile = ${file.tarfile_stamps.fullname}
+        </wrapper>
+        <exec_1>
+            execname = makeStamps
+            used = file.mef_fake, file.mef_distmpl, file.mef_fakediff, file.objlist_filter
+            was_generated_by = file.tarfile_stamps
+            ancestry = file.mef_fake:file.tarfile_stamps, file.mef_distmpl:file.tarfile_stamps, file.mef_fakediff:file.tarfile_stamps, file.objlist_filter:file.tarfile_stamps
+            <cmdline>
+                inFile_search = ${file.mef_fake.fullname}
+                inFile_template = ${file.mef_distmpl.fullname}
+                inFile_diff = ${file.mef_fakediff.fullname}
+                inFile_objList = ${file.objlist_filter.fullname}
+                outDir = ${wrapper.wrapper_stamps_outdir}
+                outFile_stampList = STAMPS.LIST
+            </cmdline>
+        </exec_1>
+    </makestamps-single>
+</module>
