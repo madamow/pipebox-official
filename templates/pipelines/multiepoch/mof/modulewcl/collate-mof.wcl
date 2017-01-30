@@ -8,7 +8,7 @@
 
         <exec_1>
             <cmdline>
-               _flag = noblind
+               noblind =  _flag
                _02_mofconf = ${file.mofconf.fullname}
                _03_chunklist = ${list.inlist.fullname}
                _04_mof = ${file.mof.fullname}
@@ -24,7 +24,7 @@
                 columns = chunks.fullname
                 depends = mof.file.mofchunk
                 dirpat = mepoch
-                #sortkey = (chunks, True, False)
+                sortkey = (chunks, True, False)
 
                 filepat = tile_generic
                 filetype = list

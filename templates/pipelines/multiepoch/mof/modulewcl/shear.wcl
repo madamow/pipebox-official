@@ -3,7 +3,7 @@ num_ranges = 20
 wrange = 20
 
 <module>
-    <mof>
+    <shear>
         modnamepat = ${modnamepat_tile_chunk}
         wrappername = genwrap.py
         wrapperloop = chunks
@@ -15,18 +15,19 @@ wrange = 20
                 wrange = ${wrange}
                 tilename = ${tilename}
                 meds_list = ${list.meds_list.fullname}
-                bands = g,r,i,z
+                bands = r,i,z
+                seed_shift = 69
                 fof-file = ${file.fof.fullname}
+                mof-file = ${file.mof.fullname}
                 psf-map = ${list.psf_list.fullname}
-                nbrs-file = ${file.nbrs.fullname}
-                _09_mofconf = ${file.mofconf.fullname}
-                _10_mofchunk = ${file.mofchunk.fullname}
+                _10_shearconf = ${file.shearconf.fullname}
+                _11_shearchunk = ${file.shearchunk.fullname}
             </cmdline>
             execname = run_ngmixit
             cmd_hyphen =  mixed_gnu
-            used = file.nbrs,file.fof,list.psf_list.psfmodel,file.mofconf, list.meds_list.meds
-            was_generated_by = file.mofchunk
-            ancestry = file.nbrs:file.mofchunk,file.fof:file.mofchunk,list.meds_list.meds:file.mofchunk
+            used = file.nbrs,file.fof,list.psf_list.psfmodel,file.shearconf, list.meds_list.meds
+            was_generated_by = file.shearchunk
+            ancestry = file.nbrs:file.shearchunk,file.fof:file.shearchunk,list.meds_list.meds:file.shearchunk
         </exec_1>
         <list>
             <psf_list>
@@ -69,24 +70,25 @@ wrange = 20
                 dirpat = mepoch
                 rundir = meds
             </meds>
-             <mofconf>
+             <shearconf>
                 # what input file is named
-                filename = run-Y3A1dev-v2-mof.yaml
+                filename = run-Y3A1dev-v2-shear.yaml
                 filetype = config
 
                 # where input file lives in jobroot
                 dirpat = mepoch
                 rundir = config
-             </mofconf>
-             <nbrs>
-                depends query-coadd-for-mof.file.nbrs
-                filetype = coadd_mof_nbrs
+             </shearconf>
+             <mof>
+                depends collate-mof.file.fof
+                # what metadata to save
+                filetype = coadd_mof
                 filepat = tile_generic
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
                 rundir = mof
-             </nbrs>
+             </mof>
              <fof>
                 depends query-coadd-for-mof.file.fof
                 # what metadata to save
@@ -107,20 +109,21 @@ wrange = 20
 
             ### output files
 
-             <mofchunk>
-                filetype = coadd_mof_chunk
+             <shearchunk>
+                
+                filetype = coadd_shear_chunk
 
                 # how to name output file
                 filepat = tile_generic
-                flabel = mof-chunk-${chunks:02}
+                flabel = shear-chunk-${chunks:02}
                 fsuffix = fits
                 match = chunks
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
-                ops_enddir = mof
-                rundir = mof
-            </mofchunk>
+                ops_enddir = shear
+                rundir = shear
+            </shearchunk>
         </file>
-    </mof>
+    </shear>
 </module>

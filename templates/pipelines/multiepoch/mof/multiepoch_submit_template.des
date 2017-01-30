@@ -37,6 +37,7 @@
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/query-coadd-for-mof.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/mof.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/collate-mof.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/shear.wcl>>
 
 master_use_fwthreads = True
 
@@ -71,7 +72,7 @@ blocklist = me
 <block>
     <me>
         #modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, det-swarp-wgt, det-swarp-msk, band-assemble, det-assemble, make-color-img, make-ptif, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, wavg, mangle, mepoch-ingest, run-desmeds
-        modulelist = query-coadd-for-mof,mof, collate-mof
+        modulelist = query-coadd-for-mof,mof, collate-mof,shear
     </me>
 </block>
 
