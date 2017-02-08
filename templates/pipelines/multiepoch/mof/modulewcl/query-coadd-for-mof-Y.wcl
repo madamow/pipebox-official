@@ -1,5 +1,5 @@
 <module>
-    <query-coadd-for-mof>
+    <query-coadd-for-mof-Y>
         modnamepat = ${modnamepat_tile_generic}
         wrappername = genwrap.py
         max_fwthreads = ${nthreads}
@@ -10,7 +10,7 @@
                 nbrs-file = ${file.nbrs.fullname}
                 fof-file = ${file.fof.fullname}
                 meds_list = ${list.meds_list.fullname}
-                bands = i
+                bands = Y
             </cmdline>
             execname = run_ngmixer-meds-make-nbrs-data
             cmd_hyphen =  mixed_gnu
@@ -20,35 +20,41 @@
         </exec_1>
         <list>
             <meds_list>
-                exec = query_coadd_for_mof.py
-                args = --tile ${tilename} --me_proctag ${proctag} -s ${submit_des_db_section} -S prod -v 3 -o ${qoutfile} --meds
+                # how to get list data
+                depends query-coadd-for-mof.list.meds_list
+
+                # how to create lists
                 columns = meds.fullname, band
+                sortkey = fullname
+
+                # what to name the list
                 filepat = tile_generic
-                flabel = meds-list
+                flabel = Y-mof
                 fsuffix = list
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
-                rundir = list/mof
                 ops_enddir = list/mof
+                rundir = list/mof
             </meds_list>
         </list>
         <file>
+            <meds>
+                listonly = True
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = meds
+            </meds>
             <mofconf>
                 # what input file is named
-                filename = run-Y3A1dev-v4-mof.yaml
+                filename = run-Y3A1dev-v4-mof-Y.yaml
                 filetype = config
 
                 # where input file lives in jobroot
                 dirpat = mepoch
                 rundir = config
             </mofconf>
-            <meds>
-                listonly = True
-                filetype = coadd_meds
-
-                # where input file lives in jobroot
-                dirpat = mepoch
-                rundir = meds
-             </meds>
 
             ### output files
              <nbrs>
@@ -56,7 +62,8 @@
                 filetype = coadd_mof_nbrs
 
                 # how to name output file
-                filepat = tile_generic
+                filepat = tile_band
+                band = Y
                 flabel = nbrslist
                 fsuffix = fits
 
@@ -70,7 +77,8 @@
                 filetype = coadd_mof_fof
 
                 # how to name output file
-                filepat = tile_generic
+                filepat = tile_band
+                band = Y
                 flabel = fofslist
                 fsuffix = fits
 
@@ -79,7 +87,6 @@
                 ops_enddir = mof
                 rundir = mof
              </fof>
-
         </file>
-    </query-coadd-for-mof>
+    </query-coadd-for-mof-Y>
 </module>

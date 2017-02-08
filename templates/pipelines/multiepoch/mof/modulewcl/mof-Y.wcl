@@ -2,7 +2,7 @@ chunks = 1:20
 num_ranges = 20
 
 <module>
-    <mof>
+    <mof-Y>
         modnamepat = ${modnamepat_tile_chunk}
         wrappername = genwrap.py
         wrapperloop = chunks
@@ -14,7 +14,7 @@ num_ranges = 20
                 wrange = ${chunks}
                 tilename = ${tilename}
                 meds_list = ${list.meds_list.fullname}
-                bands = g,r,i,z
+                bands = Y
                 fof-file = ${file.fof.fullname}
                 psf-map = ${list.psf_list.fullname}
                 nbrs-file = ${file.nbrs.fullname}
@@ -29,18 +29,25 @@ num_ranges = 20
         </exec_1>
         <list>
             <psf_list>
-                exec = query_coadd_for_mof.py
-                args = --tile ${tilename} --se_proctag ${se_proctag} --me_proctag ${proctag} -s ${submit_des_db_section} -S prod -v 3 -o ${qoutfile} --psfmodel
+                # how to get list data
+                depends mof.list.psf_list
+
+                # how to create lists
                 columns = psfmodel.expnum, psfmodel.ccdnum, psfmodel.fullname
-                filepat = tile_generic
+                sortkey = fullname
+
+                # what to name the list
+                filepat = tile_band
+                band = Y
                 flabel = psf
                 fsuffix = list
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
-                rundir = list/mof
                 ops_enddir = list/mof
+                rundir = list/mof
+
             </psf_list>
-        </list>
-        <list>
             <meds_list>
                 # how to get list data
                 depends query-coadd-for-mof.list.meds_list
@@ -50,7 +57,8 @@ num_ranges = 20
                 sortkey = fullname
 
                 # what to name the list
-                filepat = tile_generic
+                filepat = tile_band
+                band = Y
                 flabel = meds-mof
                 fsuffix = list
 
@@ -70,7 +78,7 @@ num_ranges = 20
             </meds>
              <mofconf>
                 # what input file is named
-                filename = run-Y3A1dev-v4-mof.yaml
+                filename = run-Y3A1dev-v4-mof-Y.yaml
                 filetype = config
 
                 # where input file lives in jobroot
@@ -80,7 +88,8 @@ num_ranges = 20
              <nbrs>
                 depends query-coadd-for-mof.file.nbrs
                 filetype = coadd_mof_nbrs
-                filepat = tile_generic
+                filepat = tile_band
+                band = Y
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
@@ -90,7 +99,8 @@ num_ranges = 20
                 depends query-coadd-for-mof.file.fof
                 # what metadata to save
                 filetype = coadd_mof_fof
-                filepat = tile_generic
+                band = Y
+                filepat = tile_band
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
@@ -110,7 +120,8 @@ num_ranges = 20
                 filetype = coadd_mof_chunk
 
                 # how to name output file
-                filepat = tile_generic
+                filepat = tile_band
+                band = Y
                 flabel = mof-chunk-${chunks:02}
                 fsuffix = fits
                 match = chunks
@@ -121,5 +132,5 @@ num_ranges = 20
                 rundir = mof
             </mofchunk>
         </file>
-    </mof>
+    </mof-Y>
 </module>

@@ -1,5 +1,5 @@
 <module>
-    <collate-mof>
+    <collate-shear>
         modnamepat = ${modnamepat_tile_generic}
         wrappername = genwrap.py
         wrapperloop = tilename
@@ -8,63 +8,62 @@
 
         <exec_1>
             <cmdline>
-               noblind =  _flag
-               _02_mofconf = ${file.mofconf.fullname}
-               _03_chunklist = ${list.inlist.fullname}
-               _04_mof = ${file.mof.fullname}
+               _01_shearconf = ${file.shearconf.fullname}
+               _02_chunklist = ${list.inlist.fullname}
+               _03_shear= ${file.shear.fullname}
             </cmdline>
             execname = megamix-meds-collate-desdm
             cmd_hyphen =  mixed_gnu
-            used = file.mofconf, list.inlist.chunks
-            was_generated_by = file.mof
-            ancestry = list.inlist.chunks:file.mof
+            used = file.shearconf, list.inlist.chunks
+            was_generated_by = file.shear
+            ancestry = list.inlist.chunks:file.shear
         </exec_1>
         <list>
             <inlist>
                 columns = chunks.fullname
-                depends = mof.file.mofchunk
+                depends = shear.file.shearchunk
                 dirpat = mepoch
                 sortkey = (chunks, True, False)
 
                 filepat = tile_generic
                 filetype = list
-                flabel = mof-chunk
+                flabel = shear-chunk
                 fsuffix = list
-                ops_enddir = list/mof
-                rundir = list/mof
+                ops_enddir = list/shear
+                rundir = list/shear
             </inlist>
         </list>
         <file>
             <chunks>
                 dirpat = mepoch
                 listonly = True
-                rundir = mof
+                rundir = shear
             </chunks>
-            <mofconf>
+            <shearconf>
                 # what input file is named
-                filename = run-Y3A1dev-v4-mof.yaml
+                filename = run-Y3A1dev-v4-mcal.yaml
                 filetype = config
 
                 # where input file lives in jobroot
                 dirpat = mepoch
                 rundir = config
-            </mofconf>
+            </shearconf>
 
             ### output files
-            <mof>
-                filetype = coadd_mof
+            <shear>
+                filetype = coadd_shear
 
                 # how to name output file
                 filepat = tile_generic
-                flabel = mof
+                flabel = mcal
                 fsuffix = fits
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
-                ops_enddir = mof
-                rundir = mof
-            </mof>
+                ops_enddir = shear
+                rundir = shear
+            </shear>
 
         </file>
-    </collate-mof>
+    </collate-shear>
 </module>

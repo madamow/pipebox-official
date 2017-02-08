@@ -1,5 +1,5 @@
 <module>
-    <collate-mof>
+    <collate-mof-Y>
         modnamepat = ${modnamepat_tile_generic}
         wrappername = genwrap.py
         wrapperloop = tilename
@@ -22,11 +22,12 @@
         <list>
             <inlist>
                 columns = chunks.fullname
-                depends = mof.file.mofchunk
+                depends = mof-y.file.mofchunk
                 dirpat = mepoch
                 sortkey = (chunks, True, False)
 
-                filepat = tile_generic
+                filepat = tile_band
+                band = Y
                 filetype = list
                 flabel = mof-chunk
                 fsuffix = list
@@ -42,7 +43,7 @@
             </chunks>
             <mofconf>
                 # what input file is named
-                filename = run-Y3A1dev-v4-mof.yaml
+                filename = run-Y3A1dev-v4-mof-Y.yaml
                 filetype = config
 
                 # where input file lives in jobroot
@@ -55,7 +56,8 @@
                 filetype = coadd_mof
 
                 # how to name output file
-                filepat = tile_generic
+                filepat = tile_band
+                band = Y
                 flabel = mof
                 fsuffix = fits
 
@@ -66,5 +68,5 @@
             </mof>
 
         </file>
-    </collate-mof>
+    </collate-mof-Y>
 </module>

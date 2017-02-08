@@ -1,6 +1,5 @@
 chunks = 1:20
 num_ranges = 20
-wrange = 20
 
 <module>
     <shear>
@@ -12,7 +11,7 @@ wrange = 20
         <exec_1>
             <cmdline>
                 nranges = ${num_ranges}
-                wrange = ${wrange}
+                wrange = ${chunks}
                 tilename = ${tilename}
                 meds_list = ${list.meds_list.fullname}
                 bands = r,i,z
@@ -25,9 +24,9 @@ wrange = 20
             </cmdline>
             execname = run_ngmixit
             cmd_hyphen =  mixed_gnu
-            used = file.nbrs,file.fof,list.psf_list.psfmodel,file.shearconf, list.meds_list.meds
+            used = file.mof,file.fof,list.psf_list.psfmodel,file.shearconf, list.meds_list.meds
             was_generated_by = file.shearchunk
-            ancestry = file.nbrs:file.shearchunk,file.fof:file.shearchunk,list.meds_list.meds:file.shearchunk
+            ancestry = file.mof:file.shearchunk, file.fof:file.shearchunk,list.meds_list.meds:file.shearchunk
         </exec_1>
         <list>
             <psf_list>
@@ -35,14 +34,12 @@ wrange = 20
                 args = --tile ${tilename} --se_proctag ${se_proctag} --me_proctag ${proctag} -s ${submit_des_db_section} -S prod -v 3 -o ${qoutfile} --psfmodel
                 columns = psfmodel.expnum, psfmodel.ccdnum, psfmodel.fullname
                 filepat = tile_generic
-                flabel = psf
+                flabel = psf-for-shear
                 fsuffix = list
                 dirpat = mepoch
                 rundir = list/mof
                 ops_enddir = list/mof
             </psf_list>
-        </list>
-        <list>
             <meds_list>
                 # how to get list data
                 depends query-coadd-for-mof.list.meds_list
@@ -53,7 +50,7 @@ wrange = 20
 
                 # what to name the list
                 filepat = tile_generic
-                flabel = meds-mof
+                flabel = meds-shear
                 fsuffix = list
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
@@ -72,7 +69,7 @@ wrange = 20
             </meds>
              <shearconf>
                 # what input file is named
-                filename = run-Y3A1dev-v2-shear.yaml
+                filename = run-Y3A1dev-v4-mcal.yaml
                 filetype = config
 
                 # where input file lives in jobroot
@@ -80,7 +77,7 @@ wrange = 20
                 rundir = config
              </shearconf>
              <mof>
-                depends collate-mof.file.fof
+                depends collate-mof.file.mof
                 # what metadata to save
                 filetype = coadd_mof
                 filepat = tile_generic
@@ -115,7 +112,7 @@ wrange = 20
 
                 # how to name output file
                 filepat = tile_generic
-                flabel = shear-chunk-${chunks:02}
+                flabel = mcal-chunk-${chunks:02}
                 fsuffix = fits
                 match = chunks
 
