@@ -538,6 +538,8 @@ class NitelyCal(PipeLine):
         if self.args.combine:
             self.args.desstat_pipeline = "supercal"
             self.args.dataframe['niterange'] = self.args.niterange
+            self.args.dataframe['unitname'] = self.args.niterange
+
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
 
         else:
