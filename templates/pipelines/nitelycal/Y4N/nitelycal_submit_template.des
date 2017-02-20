@@ -40,8 +40,13 @@ dflat_expnum = {{ args.flat_list }}
 label = {{ args.campaign }}_{{ args.niterange }}
 {% endif %}
 
+{% if args.desstat_pipeline == 'supercal' %}
+unitname = {{ args.niterange }}
+
+{% else %}
 nite = {{ args.niterange }}
 unitname = ${nite}
+{% endif %}
 
 {% if args.ccdnum %}
 ccdnum = {{ args.ccdnum }}{% endif %}
@@ -49,14 +54,14 @@ ccdnum = {{ args.ccdnum }}{% endif %}
 {% if args.rundir %}
 ops_run_dir = {{ args.rundir }}
 {% else %}
-ops_run_dir = ${project}/{{args.campaign}}/${pipeline}/${nite}-r${reqnum}/p${attnum:2}
+ops_run_dir = ${project}/{{args.campaign}}/${pipeline}/${unitname}-r${reqnum}/p${attnum:2}
 {% endif %}
 submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
 
 save_run_vals = nite, camsym, jira_id
 
 <filename_pattern>
-    nite_band = ${camsym}_n${nite}_${band}_r${reqnum}p${attnum:2}_${flabel}.${fsuffix}
+    nite_band = ${camsym}_n${unitname}_${band}_r${reqnum}p${attnum:2}_${flabel}.${fsuffix}
 </filename_pattern>
 
 blocklist = bias-exp, bias-ccd, dflat-exp, dflat-band

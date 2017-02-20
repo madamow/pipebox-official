@@ -31,7 +31,7 @@
             </norm_dflatcor>
         </file>
         loopobj = file.norm_dflatcor
-        modnamepat = ${modnamepat_nite_ccdnum_band}
+        modnamepat = ${modnamepat_unitname_ccdnum_band}
         wrapperloop = ccdnum, band
         wrappername = genwrap.py
     </skycompress-norm-dflatcor>

@@ -49,7 +49,7 @@
             </mini-norm-dflat-list>
         </list>
         loopobj = list.mini-norm-dflat-list
-        modnamepat = ${modnamepat_nite_band}
+        modnamepat = ${modnamepat_unitname_band}
         wrapperloop = band
         wrappername = genwrap.py
     </skycombine-norm-dflatcor>

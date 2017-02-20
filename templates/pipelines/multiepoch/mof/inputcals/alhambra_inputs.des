@@ -12,6 +12,7 @@ zeropoint_table = zeropoint
 zflag = 2000
 
 blacklist_table = Y3A1_BLACKLIST
+se_proctag = Y3A1_FINALCUT_ALHAMBRA
 
 assemble_xblock = 10
 assemble_yblock = 3
