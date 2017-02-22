@@ -1,0 +1,55 @@
+{% extends "supportwcl/generic_submit.des" %}
+{% block content %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/prebpm/{{ args.campaign }}/modulewcl/modnamepat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/prebpm/{{ args.campaign }}/modulewcl/01-crosstalk-sci.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/prebpm/{{ args.campaign }}/modulewcl/02-pixcorrect.wcl>>
+
+{% if args.inputcals_file %}
+<<include {{args.inputcals_file %}>>
+{% else %}
+{% if args.epoch_name %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/prebpm/{{ args.campaign }}/inputcals/{{ args.epoch_name }}_inputs.wcl>>
+{% else %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/prebpm/{{ args.campaign }}/inputcals/inputs.wcl>>
+{% endif %}
+{% endif %}
+
+{% if not args.labels %}
+label = ${nite} {% endif %}
+
+expnum = {{ args.expnum }}
+band = {{ args.band }}
+nite = {{ args.nite }}
+
+{% if args.calnite %}
+calnite = {{ args.calnite }} 
+{% endif %}
+{% if args.calrun %}
+calrun = {{ args.calrun }} {% endif %}
+
+basket = ${band}
+camsym = ${camera}
+{% if args.ccdnum %}
+ccdnum = {{ args.ccdnum }}
+{% endif %}
+unitname = ${camera}${expnum:8}
+{% if args.rundir %}
+ops_run_dir = {{ args.rundir }}
+{% else %}
+ops_run_dir = ${project}/${pipeline}/${campaign}-r${reqnum}/${basket}/${unitname}/p${attnum:2} 
+{% endif %}
+submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
+
+save_run_vals = nite, camera, band, expnum, jira_id
+
+GROUP_SUBMIT_ID = 1
+
+blocklist = se
+
+<block>
+   <se>
+        modulelist = crosstalk-sci,pixcorrect
+    </se>    
+</block>
+
+{% endblock %}
