@@ -161,7 +161,7 @@ class WideField(PipeArgs):
         parser.add('--calrun',help='bias/flat calibration run, i.e., r1948p03')
         parser.add('--caltag',help='Tag in OPS_PROCTAG to use if you \
                          calnite/calrun not specified')
-       
+      
         # Exposure query for args.nite
         parser.add('--propid',default='2012B-0001',help="Propid in exposure table to filter expnums \
                         on by nite")

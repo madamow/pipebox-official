@@ -2,7 +2,7 @@
     <query-coadd-for-mof>
         modnamepat = ${modnamepat_tile_generic}
         wrappername = genwrap.py
-        max_fwthreads = ${nthreads}
+        #max_fwthreads = ${nthreads}
 
         <exec_1>
             <cmdline>

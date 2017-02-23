@@ -699,7 +699,7 @@ class PreBPM(PipeLine):
             self.args.dataframe = self.args.dataframe.fillna(False)
         except: 
             pass
-
         self.args.firstexp = self.args.exposure_list[0]
         #self.args.dataframe.insert(len(self.args.dataframe.columns),'firstexp', None) 
         self.args.dataframe['firstexp'] = self.args.firstexp
+

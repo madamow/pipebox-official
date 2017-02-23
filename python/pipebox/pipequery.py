@@ -539,11 +539,12 @@ class PreBPM(PipeQuery):
             self.cur.execute(expnum_info)
             expnum,band,nite = self.cur.fetchall()[0]
             try:
+                df.insert(len(df.columns),'unitname',None)
                 df.insert(len(df.columns),'nite', None)
                 df.insert(len(df.columns),'band', None)
             except:
                 pass
-
+            df.loc[index,'unitname'] = 'D00' + str(expnum)
             df.loc[index,'nite'] = nite
             df.loc[index,'band'] = band
 

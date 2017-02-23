@@ -6,7 +6,7 @@ num_ranges = 20
         modnamepat = ${modnamepat_tile_chunk}
         wrappername = genwrap.py
         wrapperloop = chunks
-        max_fwthreads = ${nthreads}
+        #max_fwthreads = ${nthreads}
 
         <exec_1>
             <cmdline>
