@@ -87,7 +87,6 @@
                 resaturate = _flag
                 addweight = _flag
                 gain = _flag
-                fixcols = _flag
                 v = _flag
                 out = ${file.red_pixcor.fullname} 
             </cmdline>
