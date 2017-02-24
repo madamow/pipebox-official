@@ -26,12 +26,6 @@
                 dirpat = se
                 rundir = norm-dflatcor
             </norm_dflatcor>
-            <bpm>
-                filetype = cal_bpm
-                dirpat = se
-                rundir = bpm/${bpmnite}-r${bpmreq}/p${bpmatt:2}
-                filename = D_n${bpmnite}_c${ccdnum:2}_r${bpmreq}p${bpmatt:2}_bpm.fits
-            </bpm>
             <bf>
                 filetype = cal_bf
                 dirpat = se
@@ -80,16 +74,15 @@
         </file>
         <exec_1>
             execname = pixcorrect_im
-            used = file.xtalked_sci, file.biascor, file.lintable, file.norm_dflatcor,file.bpm,file.bf
+            used = file.xtalked_sci, file.biascor, file.lintable, file.norm_dflatcor,file.bf
             was_generated_by = file.red_pixcor
-            ancestry = file.xtalked_sci:file.red_pixcor, file.biascor:file.red_pixcor, file.lintable:file.red_pixcor,file.norm_dflatcor:file.red_pixcor,file.bpm:file.red_pixcor
+            ancestry = file.xtalked_sci:file.red_pixcor, file.biascor:file.red_pixcor, file.lintable:file.red_pixcor,file.norm_dflatcor:file.red_pixcor
             cmd_hyphen = mixed_gnu
             <cmdline>
                 in = ${file.xtalked_sci.fullname}
                 bias = ${file.biascor.fullname}
                 flat = ${file.norm_dflatcor.fullname}
                 lincor = ${file.lintable.fullname}
-                bpm = ${file.bpm.fullname}
                 bf = ${file.bf.fullname}
                 resaturate = _flag
                 addweight = _flag
