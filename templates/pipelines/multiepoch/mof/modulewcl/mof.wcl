@@ -70,7 +70,7 @@ num_ranges = 20
             </meds>
              <mofconf>
                 # what input file is named
-                filename = run-Y3A1dev-v4-mof.yaml
+                filename = run-Y3A1dev-v5-mof.yaml
                 filetype = config
 
                 # where input file lives in jobroot
