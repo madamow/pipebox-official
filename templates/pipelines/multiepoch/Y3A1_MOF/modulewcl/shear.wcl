@@ -1,0 +1,126 @@
+chunks = 1:20
+num_ranges = 20
+
+<module>
+    <shear>
+        modnamepat = ${modnamepat_tile_chunk}
+        wrappername = genwrap.py
+        wrapperloop = chunks
+        max_fwthreads = ${request_cpus}
+
+        <exec_1>
+            <cmdline>
+                nranges = ${num_ranges}
+                wrange = ${chunks}
+                tilename = ${tilename}
+                meds_list = ${list.meds_list.fullname}
+                bands = r,i,z
+                seed_shift = 69
+                fof-file = ${file.fof.fullname}
+                mof-file = ${file.mof.fullname}
+                psf-map = ${list.psf_list.fullname}
+                _10_shearconf = ${file.shearconf.fullname}
+                _11_shearchunk = ${file.shearchunk.fullname}
+            </cmdline>
+            execname = run_ngmixit
+            cmd_hyphen =  mixed_gnu
+            used = file.mof,file.fof,list.psf_list.psfmodel,file.shearconf, list.meds_list.meds
+            was_generated_by = file.shearchunk
+            ancestry = file.mof:file.shearchunk, file.fof:file.shearchunk,list.meds_list.meds:file.shearchunk
+        </exec_1>
+        <list>
+            <psf_list>
+                exec = query_coadd_for_mof.py
+                args = --tile ${tilename} --se_proctag ${se_proctag} --me_proctag ${proctag} -s ${submit_des_db_section} -S prod -v 3 -o ${qoutfile} --psfmodel
+                columns = psfmodel.expnum, psfmodel.ccdnum, psfmodel.fullname
+                filepat = tile_generic
+                flabel = psf-for-shear
+                fsuffix = list
+                dirpat = mepoch
+                rundir = list/mof
+                ops_enddir = list/mof
+            </psf_list>
+            <meds_list>
+                # how to get list data
+                depends query-coadd-for-mof.list.meds_list
+
+                # how to create lists
+                columns = meds.fullname, band
+                sortkey = fullname
+
+                # what to name the list
+                filepat = tile_generic
+                flabel = meds-shear
+                fsuffix = list
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = list/mof
+                rundir = list/mof
+            </meds_list>
+        </list>
+        <file>
+            <meds>
+                listonly = True
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = meds
+            </meds>
+             <shearconf>
+                # what input file is named
+                filename = run-Y3A1dev-${mof_config_ver}-mcal.yaml
+                filetype = config
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = config
+             </shearconf>
+             <mof>
+                depends collate-mof.file.mof
+                # what metadata to save
+                filetype = coadd_mof
+                filepat = tile_generic
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                rundir = mof
+             </mof>
+             <fof>
+                depends query-coadd-for-mof.file.fof
+                # what metadata to save
+                filetype = coadd_mof_fof
+                filepat = tile_generic
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                rundir = mof
+             </fof>
+             <psfmodel>
+                filetype = psfex_model
+                listonly = true
+               
+                dirpat = se
+                rundir = psf 
+            </psfmodel>
+
+            ### output files
+
+             <shearchunk>
+                
+                filetype = coadd_shear_chunk
+
+                # how to name output file
+                filepat = tile_generic
+                flabel = mcal-chunk-${chunks:02}
+                fsuffix = fits
+                match = chunks
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = shear
+                rundir = shear
+            </shearchunk>
+        </file>
+    </shear>
+</module>
