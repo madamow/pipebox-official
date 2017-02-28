@@ -43,7 +43,7 @@
             </chunks>
             <mofconf>
                 # what input file is named
-                filename = run-Y3A1dev-${mof_config_ver}-mof-Y.yaml
+                filename = run-${mof_config_ver}-mof-Y.yaml
                 filetype = config
 
                 # where input file lives in jobroot

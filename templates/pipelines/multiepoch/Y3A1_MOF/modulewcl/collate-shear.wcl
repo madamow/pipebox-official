@@ -41,7 +41,7 @@
             </chunks>
             <shearconf>
                 # what input file is named
-                filename = run-Y3A1dev-${mof_config_ver}-mcal.yaml
+                filename = run-${mof_config_ver}-mcal.yaml
                 filetype = config
 
                 # where input file lives in jobroot
