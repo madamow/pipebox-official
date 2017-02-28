@@ -57,7 +57,7 @@
                 dirpat = se
                 ops_enddir = red/pixcor
                 rundir = red/pixcor
-                compress_files = true
+                compress_files = false
             </red_pixcor>
             <pixcor_mini_red>
                 # what metadata to get
