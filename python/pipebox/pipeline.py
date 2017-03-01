@@ -373,8 +373,7 @@ class WideField(PipeLine):
         self.args.output_name_keys = ['nite','expnum','band']
        
         self.args.cur = pipequery.WideField(self.args.db_section)
-        self.args.propid = self.args.propid.strip().split(',')
-        self.args.program = self.args.program.strip().split(',')
+        self.args.propid,self.args.program = self.args.cur.get_propids_programs()
  
         # If auto-submit mode on
         if self.args.auto:
@@ -538,8 +537,6 @@ class NitelyCal(PipeLine):
         if self.args.combine:
             self.args.desstat_pipeline = "supercal"
             self.args.dataframe['niterange'] = self.args.niterange
-            self.args.dataframe['unitname'] = self.args.niterange
-
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
 
         else:
@@ -699,7 +696,7 @@ class PreBPM(PipeLine):
             self.args.dataframe = self.args.dataframe.fillna(False)
         except: 
             pass
+
         self.args.firstexp = self.args.exposure_list[0]
         #self.args.dataframe.insert(len(self.args.dataframe.columns),'firstexp', None) 
         self.args.dataframe['firstexp'] = self.args.firstexp
-

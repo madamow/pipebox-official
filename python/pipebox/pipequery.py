@@ -54,6 +54,19 @@ class PipeQuery(object):
                 tag_list_of_dict.append(tag_dict)
         return tag_list_of_dict
 
+    def get_propids_programs(self):
+        """ get the accepted propids and programs """
+        get_all_propid = "select distinct propid from OPS_PROPID" 
+        self.cur.execute(get_all_propid)
+        propid = self.cur.fetchall()
+        propid = [i[0] for i in propid]
+        get_all_program = "select distinct program from OPS_PROPID"
+        self.cur.execute(get_all_program)
+        program = self.cur.fetchall()
+        program = [i[0] for i in program]
+        return propid,program
+
+
 class SuperNova(PipeQuery):
 # Copied from widefield (unedited)
     def get_expnum_info(self,exposure_list):
@@ -539,12 +552,11 @@ class PreBPM(PipeQuery):
             self.cur.execute(expnum_info)
             expnum,band,nite = self.cur.fetchall()[0]
             try:
-                df.insert(len(df.columns),'unitname',None)
                 df.insert(len(df.columns),'nite', None)
                 df.insert(len(df.columns),'band', None)
             except:
                 pass
-            df.loc[index,'unitname'] = 'D00' + str(expnum)
+
             df.loc[index,'nite'] = nite
             df.loc[index,'band'] = band
 
