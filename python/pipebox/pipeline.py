@@ -26,6 +26,9 @@ class PipeLine(object):
             if not self.args.reqnum or not self.args.jira_parent:
                 print "Must specify both --reqnum and --jira_parent to avoid using JIRA!"
                 sys.exit(1)
+        else:
+            if not self.args.jira_user:
+                self.args.jira_user = jira_utils.get_jira_user()
         
         # Format RA and Dec if given
         if self.args.RA or self.args.Dec:

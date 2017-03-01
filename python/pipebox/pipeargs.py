@@ -1,6 +1,5 @@
 import os
 from configargparse import ArgParser
-from pipebox import jira_utils
 
 class PipeArgs(object):
 
@@ -60,7 +59,7 @@ class PipeArgs(object):
                              ticket will be created, e.g., DESOPS')
         parser.add('--jira_summary',help='Title of JIRA ticket. To submit multiple \
                              exposures under same ticket you can specify jira_summary')
-        parser.add('--jira_user',default = jira_utils.get_jira_user(),help='JIRA username')
+        parser.add('--jira_user',help='JIRA username')
         parser.add('--jira_section',default='jira-desdm',help='JIRA section \
                              in .desservices.ini file')
         parser.add('--ignore_jira',default=False,action='store_true',help="If specified will not \
