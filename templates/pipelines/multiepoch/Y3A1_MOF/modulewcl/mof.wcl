@@ -1,5 +1,5 @@
-chunks = 1:20
-num_ranges = 20
+chunks = 1:${request_cpus}
+num_ranges = ${request_cpus}
 
 <module>
     <mof>

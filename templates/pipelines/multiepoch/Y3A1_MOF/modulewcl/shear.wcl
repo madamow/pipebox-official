@@ -1,5 +1,5 @@
-chunks = 1:20
-num_ranges = 20
+chunks = 1:${request_cpus}
+num_ranges = ${request_cpus}
 
 <module>
     <shear>
@@ -16,7 +16,6 @@ num_ranges = 20
                 meds_list = ${list.meds_list.fullname}
                 bands = r,i,z
                 seed_shift = 69
-                fof-file = ${file.fof.fullname}
                 mof-file = ${file.mof.fullname}
                 psf-map = ${list.psf_list.fullname}
                 _10_shearconf = ${file.shearconf.fullname}
@@ -24,9 +23,9 @@ num_ranges = 20
             </cmdline>
             execname = run_ngmixit
             cmd_hyphen =  mixed_gnu
-            used = file.mof,file.fof,list.psf_list.psfmodel,file.shearconf, list.meds_list.meds
+            used = file.mof,list.psf_list.psfmodel,file.shearconf, list.meds_list.meds
             was_generated_by = file.shearchunk
-            ancestry = file.mof:file.shearchunk, file.fof:file.shearchunk,list.meds_list.meds:file.shearchunk
+            ancestry = file.mof:file.shearchunk, list.meds_list.meds:file.shearchunk
         </exec_1>
         <list>
             <psf_list>
@@ -86,16 +85,6 @@ num_ranges = 20
                 dirpat = mepoch
                 rundir = mof
              </mof>
-             <fof>
-                depends query-coadd-for-mof.file.fof
-                # what metadata to save
-                filetype = coadd_mof_fof
-                filepat = tile_generic
-
-                # where to put it (jobroot=rundir, archive=ops_enddir)
-                dirpat = mepoch
-                rundir = mof
-             </fof>
              <psfmodel>
                 filetype = psfex_model
                 listonly = true

@@ -167,6 +167,7 @@ class PipeLine(object):
             sys.exit(1)
         
         args.dataframe['user'] = args.jira_user
+        
         group = args.dataframe.groupby(by=[groupby])
         for name,vals in group:
             # create JIRA ticket per nite and add jira_id,reqnum to dataframe
@@ -184,8 +185,13 @@ class PipeLine(object):
                 jira_parent = args.jira_parent
             else:
                 jira_parent = None
-            # Create JIRA ticket
-            new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
+
+            if args.ignore_jira:
+                new_reqnum = reqnum
+                new_jira_parent = jira_parent
+            else:
+                # Create JIRA ticket
+                new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
                                               description=args.jira_description,
                                               summary=jira_summary,
                                               ticket=reqnum,parent=jira_parent,
@@ -193,15 +199,15 @@ class PipeLine(object):
             # Update dataframe with reqnum, jira_id
             # If row exists replace value, if not insert new column/value
             try:
-                args.dataframe.loc[index,('reqnum')] = new_reqnum
+               args.dataframe.loc[index,('reqnum')] = new_reqnum
             except:
-                args.dataframe.insert(len(args.dataframe.columns),'reqnum',None)
-                args.dataframe.loc[index,'reqnum'] = new_reqnum
+               args.dataframe.insert(len(args.dataframe.columns),'reqnum',None)
+               args.dataframe.loc[index,'reqnum'] = new_reqnum
             try:
-                args.dataframe.loc[index,('jira_parent')] = new_jira_parent
+               args.dataframe.loc[index,('jira_parent')] = new_jira_parent
             except:
-                args.dataframe.insert(len(args.dataframe.columns),'jira_parent',None)
-                args.dataframe.loc[index,'jira_parent'] = new_jira_parent
+               args.dataframe.insert(len(args.dataframe.columns),'jira_parent',None)
+               args.dataframe.loc[index,'jira_parent'] = new_jira_parent
 
         return args.dataframe
 
@@ -338,7 +344,11 @@ class MultiEpoch(PipeLine):
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
             self.args.tile_list = self.args.cur.get_failed_tiles(self.args.reqnum,int(self.args.resubmit_max))
-            self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
+            if self.args.tile_list:
+                self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
+            else:
+                print 'No tiles left to submit...'
+                sys.exit()
         elif self.args.tile:
             self.args.tile_list = self.args.tile.split(',')
             self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
@@ -359,6 +369,7 @@ class MultiEpoch(PipeLine):
             self.args.dataframe = self.args.dataframe.fillna(False)
         except: 
             pass
+
 
 class WideField(PipeLine):
 
