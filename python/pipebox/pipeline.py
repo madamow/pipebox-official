@@ -552,7 +552,6 @@ class NitelyCal(PipeLine):
             self.args.desstat_pipeline = "supercal"
             self.args.dataframe['niterange'] = self.args.niterange
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
-
         else:
             self.args.desstat_pipeline = "precal"
             for index,row in self.args.dataframe.iterrows():
@@ -595,6 +594,7 @@ class NitelyCal(PipeLine):
             self.args.dataframe.loc[index,'flat_list'] = self.args.flat_list
             self.args.dataframe.loc[index,'bias_list'] = self.args.bias_list
             self.args.dataframe.loc[index,'firstexp'] = self.args.firstexp
+            self.args.dataframe.loc[index,'unitname'] = self.args.niterange
     
         # Update dataframe
         try:
