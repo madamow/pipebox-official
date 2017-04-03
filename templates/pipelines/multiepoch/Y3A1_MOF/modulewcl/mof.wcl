@@ -120,6 +120,7 @@ num_ranges = ${max_chunk}
                 dirpat = mepoch
                 ops_enddir = mof
                 rundir = mof
+                savefiles = False
             </mofchunk>
         </file>
     </mof>

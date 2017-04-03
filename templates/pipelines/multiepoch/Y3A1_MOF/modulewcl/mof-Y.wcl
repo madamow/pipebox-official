@@ -130,6 +130,7 @@ num_ranges = 20
                 dirpat = mepoch
                 ops_enddir = mof
                 rundir = mof
+                savefiles = False
             </mofchunk>
         </file>
     </mof-Y>
