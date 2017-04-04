@@ -36,6 +36,32 @@ class PipeQuery(object):
             min_of_min_diff = min([diff for name,diff in diff_list])
             name = [name for name,diff in diff_list if diff == min_of_min_diff][0]
             return name
+
+    def get_cals_from_epoch(self, epoch=None,band = None,campaign= None):
+        """ Query to return the unitname,reqnum,attnum of epoch-based calibrations."""
+        count_for_campaign = "select count(*) from epoch_inputs where name='{epoch}'".format(epoch=epoch)
+        self.cur.execute(count_for_campaign)
+        count = self.cur.fetchall()[0][0]
+        if int(count) == 0:
+            campaign_query = "select max(campaign) from epoch_inputs"
+            self.cur.execute(campaign_query)
+            campaign = cur.fetchall()[0]
+
+        query = "select * from epoch_inputs where name='{epoch}' \
+                 and campaign = '{c}'".format(epoch=epoch,c=campaign)
+        self.cur.execute(query) 
+        data = pd.DataFrame(self.cur.fetchall(),
+               columns=['name','filetype','reqnum','unitname','attnum','uband','campaign','filename',
+                        'filepat','ccdnum'])
+       
+        if band in ['u','VR']:
+            cals = data[(data.uband == 1)]
+            cals = cals.append(data[data.filetype=='cal_lintable']) 
+            cals = cals.append(data[(data.filetype=='config')])
+            cals = cals.append(data[(data.filetype=='None')])
+        else:
+            cals = data[(data.uband.isnull())]
+        return cals     
     
     def get_expnums_from_tag(self,tag):
         """ Query database for each exposure with a given exposure tag.

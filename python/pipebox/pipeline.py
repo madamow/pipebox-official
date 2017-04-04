@@ -89,6 +89,7 @@ class PipeLine(object):
             # Setting jira parameters
             self.args.reqnum, self.args.jira_parent= group['reqnum'].unique()[0],group['jira_parent'].unique()[0]
             self.args.unitname = group['unitname'].unique()[0]
+            self.args.band = group['band'].unique()[0]
             # Finding epoch of given data
             if self.args.epoch:
                 self.args.epoch_name = self.args.epoch
@@ -99,9 +100,16 @@ class PipeLine(object):
                 elif self.args.pipeline != 'multiepoch':
                     firstexpnum = group['firstexp'].unique()[0]
                     self.args.epoch_name = self.args.cur.find_epoch(firstexpnum)
+                elif self.args.pipeline == 'prebpm':
+                    firstexpnum = group['expnum'].unique()[0]
+                    self.args.epoch_name = self.args.cur.find_epoch(firstexpnum)
                 else:
                     self.args.epoch_name = firstexpnum = None
-                
+            if self.args.epoch_name:
+                self.args.cal_df = self.args.cur.get_cals_from_epoch(self.args.epoch_name,
+                                                                         self.args.band,
+                                                                         self.args.campaign)
+
             # Adding column values to args
             for c in columns:
                 setattr(self.args,c, group[c].unique()[0])
@@ -385,7 +393,6 @@ class WideField(PipeLine):
 
         super(WideField,self).update_args(self.args)
         self.args.output_name_keys = ['nite','expnum','band']
-       
         self.args.cur = pipequery.WideField(self.args.db_section)
         self.args.propid,self.args.program = self.args.cur.get_propids_programs()
  
