@@ -257,11 +257,11 @@ class PipeLine(object):
             desstat_user = None
         else:
             desstat_user = args.jira_user
-        if pipeutils.less_than_queue(pipeline=args.desstat_pipeline,
+        if pipeutils.less_than_queue(pipeline=args.desstat_pipeline,reqnum=args.reqnum,
                                      user=desstat_user,queue_size=args.queue_size):
             args.unitname,args.attnum = pipeutils.submit_command(args.submitfile,wait=float(args.wait))
         else:
-            while not pipeutils.less_than_queue(pipeline=args.desstat_pipeline,
+            while not pipeutils.less_than_queue(pipeline=args.desstat_pipeline, reqnum=args.reqnum,
                                                 user=desstat_user,queue_size=args.queue_size):
                 time.sleep(30)
             else:
@@ -559,7 +559,6 @@ class NitelyCal(PipeLine):
             self.args.desstat_pipeline = "supercal"
             self.args.dataframe['niterange'] = self.args.niterange
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
-
         else:
             self.args.desstat_pipeline = "precal"
             for index,row in self.args.dataframe.iterrows():
@@ -602,6 +601,7 @@ class NitelyCal(PipeLine):
             self.args.dataframe.loc[index,'flat_list'] = self.args.flat_list
             self.args.dataframe.loc[index,'bias_list'] = self.args.bias_list
             self.args.dataframe.loc[index,'firstexp'] = self.args.firstexp
+            self.args.dataframe.loc[index,'unitname'] = self.args.niterange
     
         # Update dataframe
         try:

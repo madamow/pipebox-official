@@ -47,9 +47,37 @@ def submit_command(submitfile,wait=30,logfile=None):
         print 'Error in submission!'
         pass
 
-def less_than_queue(pipeline=None,user=None,queue_size=1000):
+def less_than_queue(pipeline=None,user=None,reqnum=None,queue_size=1000):
     """ Returns True if desstat count is less than specified queue_size,
         false if not"""
+    if not pipeline:
+        print "Must specify pipeline!"
+        sys.exit(1)
+    # Grepping pipeline out of desstat
+    desstat_cmd = Popen(('desstat'),stdout=PIPE)
+    grep_cmd = Popen(('grep',pipeline),stdin=desstat_cmd.stdout,stdout=PIPE)
+    desstat_cmd.stdout.close()
+    # Grepping user out of desstat
+    if user:
+        grep_user_cmd = Popen(('grep',user),stdin=grep_cmd.stdout,stdout=PIPE)
+        grep_cmd.stdout.close()
+    else:
+        grep_user_cmd = grep_cmd
+    # Grepping for reqnum out of desstat
+    grep_reqnum_cmd = Popen(('grep',reqnum),stdin=grep_user_cmd.stdout,stdout=PIPE)
+    if not user: grep_cmd.stdout.close()
+    grep_user_cmd.stdout.close()
+    # Counting remaining runs
+    count_cmd = Popen(('wc','-l'),stdin=grep_reqnum_cmd.stdout,stdout=PIPE)
+    grep_reqnum_cmd.stdout.close()
+
+    output,error = count_cmd.communicate()
+    if int(output) < int(queue_size):
+        return True
+    else:
+        return False
+"""
+def less_than_queue(pipeline=None,user=None,queue_size=1000):
     if not pipeline:
         print "Must specify pipeline!"
         sys.exit(1)
@@ -69,7 +97,7 @@ def less_than_queue(pipeline=None,user=None,queue_size=1000):
         return True
     else:
         return False
-
+"""
 def read_file(file):
     """Read file as generator"""
     with open(file) as listfile:

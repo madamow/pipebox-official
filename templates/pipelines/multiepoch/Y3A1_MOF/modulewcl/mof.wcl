@@ -1,5 +1,6 @@
-chunks = 1:${request_cpus}
-num_ranges = ${request_cpus}
+#chunks = 1:${request_cpus}
+#num_ranges = ${request_cpus}
+num_ranges = ${max_chunk}
 
 <module>
     <mof>
@@ -119,6 +120,7 @@ num_ranges = ${request_cpus}
                 dirpat = mepoch
                 ops_enddir = mof
                 rundir = mof
+                savefiles = False
             </mofchunk>
         </file>
     </mof>

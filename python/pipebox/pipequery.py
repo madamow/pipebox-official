@@ -580,11 +580,13 @@ class PreBPM(PipeQuery):
             try:
                 df.insert(len(df.columns),'nite', None)
                 df.insert(len(df.columns),'band', None)
+                df.insert(len(df.columns),'unitname', None)
             except:
                 pass
 
             df.loc[index,'nite'] = nite
             df.loc[index,'band'] = band
+            df.loc[index,'unitname'] = 'D00{expnum}'.format(expnum=expnum)
 
         return df
 
