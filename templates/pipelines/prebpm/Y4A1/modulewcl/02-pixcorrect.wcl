@@ -28,9 +28,22 @@
             </norm_dflatcor>
             <bpm>
                 filetype = cal_bpm
+
+                # how to name the file
+
+                filename = %${bpmnite}_c${ccdnum:2}_r${bpmreq}p${bpmatt:2}_bpm.fits
+
+                # what goes into list?
+                query_table = calibration
+                query_fields = filename, filetype,ccdnum
+                output_fields = ccdnum,filename
+                match = ccdnum
+                # description of list for wrapper
+                columns = bpm.fullname
+
+                # where to put the file
                 dirpat = se
                 rundir = bpm/${bpmnite}
-                filename = ${bpmnite}_c${ccdnum:2}_r${bpmreq}p${bpmatt:2}_bpm.fits
             </bpm>
             <bf>
                 filetype = cal_bf
