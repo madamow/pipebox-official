@@ -39,15 +39,15 @@ class PipeQuery(object):
 
     def get_cals_from_epoch(self, epoch=None,band = None,campaign= None):
         """ Query to return the unitname,reqnum,attnum of epoch-based calibrations."""
-        count_for_campaign = "select count(*) from epoch_inputs where name='{epoch}'".format(epoch=epoch)
+        count_for_campaign = "select count(*) from mjohns44.epoch_inputs where name='{epoch}'".format(epoch=epoch)
         self.cur.execute(count_for_campaign)
         count = self.cur.fetchall()[0][0]
         if int(count) == 0:
-            campaign_query = "select max(campaign) from epoch_inputs"
+            campaign_query = "select max(campaign) from mjohns44.epoch_inputs"
             self.cur.execute(campaign_query)
             campaign = cur.fetchall()[0]
 
-        query = "select * from epoch_inputs where name='{epoch}' \
+        query = "select * from mjohns44.epoch_inputs where name='{epoch}' \
                  and campaign = '{c}'".format(epoch=epoch,c=campaign)
         self.cur.execute(query) 
         data = pd.DataFrame(self.cur.fetchall(),
