@@ -4,7 +4,7 @@
 {% if args.inputcals_file %}
 <<include {{args.inputcals_file}}>>
 {% else %}
-<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/inputcals/inputs.des>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/inputcals/mangle_inputs.des>>
 {% endif %}
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/modnamepat.wcl>>
 
@@ -34,6 +34,16 @@
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/bigquery.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/run-desmeds.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/wavg.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/query-coadd-for-mof.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/mof.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/collate-mof.wcl>>
+#<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/query-coadd-for-mof-Y.wcl>>
+#<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/mof-Y.wcl>>
+#<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/collate-mof-Y.wcl>>
+
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/shear.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/collate-shear.wcl>>
+
 master_use_fwthreads = True
 
 # these 2 are for debugging purposes
@@ -66,9 +76,9 @@ blocklist = me
 
 <block>
     <me>
-        #modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, det-swarp-wgt, det-swarp-msk, band-assemble, det-assemble, make-color-img, make-ptif, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, wavg, mangle, mepoch-ingest, run-desmeds
-        modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, det-swarp-wgt, det-swarp-msk, band-assemble, det-assemble, make-color-img, make-ptif, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, wavg, mepoch-ingest, run-desmeds
+       # modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, det-swarp-wgt, det-swarp-msk, band-assemble, det-assemble, make-color-img, make-ptif, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, wavg, mangle, mepoch-ingest, run-desmeds,query-coadd-for-mof,mof, collate-mof ,shear, collate-shear
 
+       modulelist = mangle,mepoch-ingest
     </me>
 </block>
 

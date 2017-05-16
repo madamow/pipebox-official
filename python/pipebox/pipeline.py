@@ -89,7 +89,8 @@ class PipeLine(object):
             # Setting jira parameters
             self.args.reqnum, self.args.jira_parent= group['reqnum'].unique()[0],group['jira_parent'].unique()[0]
             self.args.unitname = group['unitname'].unique()[0]
-            self.args.band = group['band'].unique()[0]
+            if self.args.pipeline != 'multiepoch':
+                self.args.band = group['band'].unique()[0]
             # Finding epoch of given data
             if self.args.epoch:
                 self.args.epoch_name = self.args.epoch
