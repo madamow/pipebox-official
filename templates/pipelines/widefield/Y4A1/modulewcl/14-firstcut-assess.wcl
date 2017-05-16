@@ -5,7 +5,7 @@
         loopobj = list.cat_list
         <list>
             <cat_list>
-                depends create-firstcut-catalog.file.cat_firstcut
+                depends create-firstcut-catalog.file.cat_finalcut
 
                 filepat = exposure
                 flabel = cat-firstcut
@@ -19,21 +19,21 @@
                 # what goes into list (normally is a query code)
                 #output_fields = filename
                 divide_by = expnum   # perhaps can default to wrapperloop
-                columns = cat_firstcut.fullname
+                columns = cat_finalcut.fullname
                 sortkey = (ccdnum,True,False)
             </cat_list>
         </list>
         <file>
-            <cat_firstcut>
+            <cat_finalcut>
                 listonly = True
-                filetype = cat_firstcut
+                filetype = cat_finalcut
                 filepat = ccdnum_band
                 flabel = red-fullcat
                 fsuffix = fits
                 dirpat = se
                 rundir = cat
                 ops_enddir = cat
-            </cat_firstcut>
+            </cat_finalcut>
             <qa_assess_nomad>
                 filetype = qa_assess
                 filepat = exposure
@@ -66,9 +66,9 @@
         <exec_1>
             execname = assess_SE_products.py
 	 	    cmd_hyphen = alldouble
-            used = list.cat_list.cat_firstcut
+            used = list.cat_list.cat_finalcut
             was_generated_by = file.qa_assess_nomad,file.qa_assess_magplot,file.qa_assess_apass
-            ancestry = list.cat_list.cat_firstcut:file.qa_assess_nomad,list.cat_list.cat_firstcut:file.qa_assess_apass,list.cat_list.cat_firstcut:file.qa_assess_magplot
+            ancestry = list.cat_list.cat_finalcut:file.qa_assess_nomad,list.cat_list.cat_finalcut:file.qa_assess_apass,list.cat_list.cat_finalcut:file.qa_assess_magplot
             <cmdline>
                 attid = ${pfw_attempt_id}
                 qaplot = _flag

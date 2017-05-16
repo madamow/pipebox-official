@@ -5,24 +5,24 @@
         modnamepat=${modnamepat_ccdnumband}
 
         <file>
-            <cat_firstcut>
-                filetype = cat_firstcut
+            <cat_finalcut>
+                filetype = cat_finalcut
                 filepat = ccdnum_band
                 flabel = red-fullcat
                 fsuffix = fits
                 dirpat = se
                 rundir = cat
                 ops_enddir = cat
-            </cat_firstcut>
+            </cat_finalcut>
         </file>
 
         <exec_1>
             execname = catalog_ingest.py
-            used = file.cat_firstcut
+            used = file.cat_finalcut
             <cmdline>
                 request = ${reqnum}
-                filename = ${file.cat_firstcut.fullname}
-                filetype = ${file.cat_firstcut.filetype}
+                filename = ${file.cat_finalcut.fullname}
+                filetype = ${file.cat_finalcut.filetype}
                 targettable = ${se_object_table}
             </cmdline>
         </exec_1>
