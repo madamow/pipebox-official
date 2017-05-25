@@ -1,7 +1,6 @@
 ### Mostly Constant ###
 camsym = D 
 photflagvar = 1    
-bfnite = 20170406
 bfreq = 2959
 bfatt = 1
 confignite = 20170406

@@ -82,6 +82,7 @@ blocklist = se
 ### Input Calibrations ###
 hupdatefile = ${confignite}_{{args.cal_df[(args.cal_df.filetype=='config')].filepat.values[0]}}
 lintablefile = {{args.cal_df[(args.cal_df.filetype=='cal_lintable')].filename.values[0]}}
+bffile = {{args.cal_df[(args.cal_df.filetype=='cal_bf')].filename.values[0]}}
 starflatrange = {{args.cal_df[(args.cal_df.filetype=='cal_starflat')].unitname.values[0]}}
 starflatreq = {{args.cal_df[(args.cal_df.filetype=='cal_starflat')].reqnum.values[0]}}
 starflatatt = {{args.cal_df[(args.cal_df.filetype=='cal_starflat')].attnum.values[0]}}
