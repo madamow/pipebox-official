@@ -10,6 +10,7 @@
                 fwhm = ${file.scamp_cat.fullname}
                 xml = ${file.scamp_xml.fullname}
                 v = _flag
+                desepoch = ${desepoch}
             </cmdline>
             execname = updateWCS
             cmd_hyphen = mixed_gnu

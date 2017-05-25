@@ -10,7 +10,7 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/05b-update-scamp-headers.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/06a-mkbleedmask.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/06b-skycompress-mkbleedmask.wcl>>
-{% if args.epoch_name in ['SVE1','SVE2','Y1E1'] and args.band not in ['u','VR'] %}
+{% if args.epoch_name in ['SVE1','SVE2','Y1E1','Y4E2'] and args.band not in ['u','VR'] %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/07-N30-skycombine-mkbleedmask.wcl>> 
 {% else %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/07-skycombine-mkbleedmask.wcl>> 
@@ -45,6 +45,7 @@ label = ${nite} {% endif %}
 expnum = {{ args.expnum }}
 band = {{ args.band }}
 nite = {{ args.nite }}
+desepoch = {{args.epoch_name}}
 
 {% if args.calnite %}
 calnite = {{ args.calnite }} 
@@ -102,9 +103,9 @@ calatt = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].attnum.values[0]}}
             <ahead_full>
                 filetype = config
                 {% if args.band in ['u'] %}
-                filename = ${confignite}_decam_pvmodel_${scampaheadnite}_g.ahead
+                filename = ${confignite}_decam_pvmodel_${desepoch}_g.ahead
                 {% elif args.band in ['VR'] %}
-                filename = ${confignite}_decam_pvmodel_${scampaheadnite}_r.ahead
+                filename = ${confignite}_decam_pvmodel_${desepoch}_r.ahead
                 {% endif %}
                 dirpat = se
                 ops_enddir = aux
@@ -116,5 +117,3 @@ calatt = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].attnum.values[0]}}
 {% endif %}
 
 {% endblock %}
-
-
