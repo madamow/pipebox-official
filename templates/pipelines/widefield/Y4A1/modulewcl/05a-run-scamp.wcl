@@ -134,6 +134,7 @@ distortion = ${qa_file_prefix}_distortion
             was_generated_by = file.scamp_fullhead,file.scamp_xml,file.scamp_qa
             <cmdline>
                 _01_scamp_fullcat = ${file.scamp_fullcat.fullname}
+                c = ${file.scamp_config.fullname}
                 ASTREF_BAND = DEFAULT
                 MOSAIC_TYPE = SAME_CRVAL
                 AHEADER_GLOBAL = ${file.scamp_ahead.fullname}
@@ -145,7 +146,6 @@ distortion = ${qa_file_prefix}_distortion
                 REF_SERVER = vizier.u-strasbg.fr,vizier.nao.ac.jp,vizier.cfa.harvard.edu
                 WRITE_XML = Y
                 FULLOUTCAT_TYPE = NONE
-                c = ${file.scamp_config.fullname}
                 XML_NAME = ${file.scamp_xml.fullname}
                 CHECKPLOT_TYPE = astr_pixerror1d,astr_referror1d,fgroups,astr_referror2d,astr_refsysmap,distortion
                 CHECKPLOT_NAME = ${astr_pixerror1d},${astr_referror1d},${fgroups},${astr_referror2d},${astr_refsysmap},${distortion}
