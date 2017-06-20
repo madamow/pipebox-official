@@ -1,5 +1,5 @@
 <module>
-    <firstcut-assess>
+    <finalcut-assess>
         wrappername = genwrap.py
         modnamepat=${modnamepat_expband}
         loopobj = list.cat_list
@@ -79,5 +79,5 @@
                 verbose = _flag
             </cmdline>
         </exec_1>
-    </firstcut-assess>
+    </finalcut-assess>
 </module>
