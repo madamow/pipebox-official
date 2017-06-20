@@ -5,10 +5,10 @@
         loopobj = list.cat_list
         <list>
             <cat_list>
-                depends create-firstcut-catalog.file.cat_finalcut
+                depends create-finalcut-catalog.file.cat_finalcut
 
                 filepat = exposure
-                flabel = cat-firstcut
+                flabel = cat-finalcut
                 fsuffix = list
 
                 # where to store list
