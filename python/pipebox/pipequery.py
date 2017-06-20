@@ -280,7 +280,7 @@ class MultiEpoch(PipeQuery):
         submitted_or_not = self.cur.fetchone()[0]
         return submitted_or_not
 
-    def get_tiles_from_radec(self,RA, Dec):
+    def get_tiles_from_radec(self,RA, Dec,radius=None):
         RA = [float(r) for r in RA[0]]
         Dec = [float(d) for d in Dec[0]]
         if RA[0]==min(RA):
@@ -328,7 +328,7 @@ class WideField(PipeQuery):
         print " Obstype         Band      Count"
         for row in count_info:
             print "%09s  %09s  %09s" % (row[0], row[1], row[2])
-    def get_expnums_from_radec(self, RA, Dec):
+    def get_expnums_from_radec(self, RA, Dec,radius=None):
         RA = [float(r) for r in RA[0]]
         Dec = [float(d) for d in Dec[0]]
         if RA[0]==min(RA):

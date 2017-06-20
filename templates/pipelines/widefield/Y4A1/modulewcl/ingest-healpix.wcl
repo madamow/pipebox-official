@@ -1,0 +1,26 @@
+<module>
+<ingest-healpix>
+        modnamepat = ${modnamepat_expnoband}
+        wrappername = genwrap.py
+        <exec_1>
+            cmd_hyphen = mixed_gnu
+            execname = datafile_ingest.py
+            used = file.red_hpix
+            <cmdline>
+                filename = ${file.red_hpix.fullname}
+                filetype = red_hpix
+            </cmdline>
+        </exec_1>
+        <file>
+            ### inputs
+            <red_hpix>
+                # how to get file data
+                depends healpix.file.red_hpix
+
+                # where it lives in jobroot
+                dirpat = se
+                rundir = cat
+            </red_hpix>
+        </file>
+    </ingest-healpix>
+</module>

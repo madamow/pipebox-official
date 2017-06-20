@@ -1,0 +1,49 @@
+<module>
+    <healpix>
+        modnamepat = ${modnamepat_expnoband}
+        wrappername = genwrap.py
+        <exec_1>
+            execname = hpixDB
+            cmd_hyphen = mixed_gnu
+            used = file.cat_finalcut
+            was_generated_by = file.hpix
+            ancestry = file.cat_finalcut:file.hpix
+            <cmdline>
+                input = ${file.cat_finalcut.fullname}
+                output = ${file.hpix.fullname}
+                c = ${cat_columns}
+            </cmdline>
+        </exec_1>
+        <file>
+            ### inputs
+            <cat_finalcut>
+                # how to get file data
+                depends create-finalcut-catalog.file.cat_finalcut
+
+                # where input file lives in jobroot
+                dirpat = se
+                rundir = cat
+            </cat_finalcut>
+
+            ### outputs
+            <hpix>
+                # what metadata to save
+                filetype = coadd_hpix
+
+                # how to name output file
+                filepat = expnoband
+                flabel = hpix
+                fsuffix = fits
+
+                # whether to save or compress
+                savefiles = false
+                compress_files = false
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = se
+                ops_enddir = cat
+                rundir = cat
+            </hpix>
+        </file>
+    </healpix>
+</module>

@@ -1,5 +1,5 @@
 <module> 
-    <create-firstcut-catalog>
+    <create-finalcut-catalog>
         wrappername = genwrap.py 
         wrapperloop = ccdnum
         modnamepat=${modnamepat_ccdnumband}
@@ -123,5 +123,5 @@
                 INTERP_MAXYLAG = 4 
             </cmdline>
         </exec_1>
-    </create-firstcut-catalog>
+    </create-finalcut-catalog>
 </module>
