@@ -32,6 +32,8 @@
 {% endif %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/14-finalcut-assess.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/15-mkpng.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/healpix.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/ingest-healpix.wcl>>
 
 {% if args.inputcals_file %}
 <<include {{args.inputcals_file}}>>
