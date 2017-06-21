@@ -32,6 +32,8 @@
 {% endif %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/14-firstcut-assess.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/15-mkpng.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/healpix.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/ingest-healpix.wcl>>
 
 {% if args.inputcals_file %}
 <<include {{args.inputcals_file}}>>
@@ -75,7 +77,7 @@ blocklist = se
 
 <block>
    <se>
-        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit,skysub,starflat,null-weight-bkg,create-bkg-img,immask,rowinterp-nullweight-immask,create-psfex-catalog,run-psfex,create-firstcut-catalog,ingest-se-objects,firstcut-assess,mkpng
+        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit,skysub,starflat,null-weight-bkg,create-bkg-img,immask,rowinterp-nullweight-immask,create-psfex-catalog,run-psfex,create-firstcut-catalog,ingest-se-objects,firstcut-assess,mkpng,healpix,ingest-healpix
     </se>    
 </block>
 

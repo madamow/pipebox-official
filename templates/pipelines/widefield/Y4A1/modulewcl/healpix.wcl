@@ -1,7 +1,8 @@
 <module>
     <healpix>
-        modnamepat = ${modnamepat_expnoband}
+        modnamepat = ${modnamepat_ccdnumband}
         wrappername = genwrap.py
+        wrapperloop = ccdnum,band 
         <exec_1>
             execname = hpixDB
             cmd_hyphen = mixed_gnu
@@ -23,26 +24,27 @@
                 # where input file lives in jobroot
                 dirpat = se
                 rundir = cat
+                match = ccdnum,band
             </cat_finalcut>
 
             ### outputs
             <hpix>
                 # what metadata to save
-                filetype = coadd_hpix
+                filetype = red_hpix
 
                 # how to name output file
-                filepat = expnoband
+                filepat = ccdnum_band
                 flabel = hpix
                 fsuffix = fits
 
                 # whether to save or compress
-                savefiles = false
+                savefiles = True
                 compress_files = false
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = se
-                ops_enddir = cat
-                rundir = cat
+                ops_enddir = hpix
+                rundir = hpix
             </hpix>
         </file>
     </healpix>
