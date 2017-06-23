@@ -12,6 +12,7 @@
                _02_mofconf = ${file.mofconf.fullname}
                _03_chunklist = ${list.inlist.fullname}
                _04_mof = ${file.mof.fullname}
+               skip-errors = _flag
             </cmdline>
             execname = megamix-meds-collate-desdm
             cmd_hyphen =  mixed_gnu
