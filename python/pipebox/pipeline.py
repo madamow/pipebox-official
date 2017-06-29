@@ -69,7 +69,7 @@ class PipeLine(object):
             else:
                 try: 
                     args.exclude_list = args.exclude_list.split(',')
-                    dig = int(args.exclude_list[0])
+                    dig = args.exclude_list[0]
                 except IOError:
                    print "{0} does not exist!".format(args.exclude_list)
        

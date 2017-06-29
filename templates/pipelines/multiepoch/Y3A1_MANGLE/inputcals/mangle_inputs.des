@@ -15,7 +15,7 @@ zeropoint_table = zeropoint
 zflag = 16
 
 z2source = pyPSM
-z2version = v2.0
+z2version = v1.0
 zpt2 = ZEROPOINT
 z2flag = 1
 

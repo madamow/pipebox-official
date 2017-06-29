@@ -1,8 +1,6 @@
 ### Mostly Constant ###
 camsym = D 
 photflagvar = 1    
-bfreq = 2959
-bfatt = 1
 confignite = 20170531
 xtalkcoefffile = DECam_20130606.xtalk 
 photflatcornite = null

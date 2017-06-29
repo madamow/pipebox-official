@@ -14,8 +14,8 @@
                 molygon_list = ${list.lmolygon.fullname}
                 molygon_ccdgon_list = ${list.lmolyccd.fullname}
                 coadd_object_molygon_list = ${list.lcobjmoly.fullname}
-                alt_section = db-dessci
-                alt_table = Y3A1_COADD_OBJECT_SUMMARY
+                #alt_section = db-dessci
+                #alt_table = Y3A1_COADD_OBJECT_SUMMARY
                 des_services = ${target_des_services}
             </cmdline>
         </exec_1>
