@@ -144,6 +144,7 @@ distortion = ${qa_file_prefix}_distortion
                 POSITION_MAXERR = 10.0
                 ASTREF_CATALOG = GAIA-DR1
                 REF_SERVER = vizier.u-strasbg.fr,vizier.nao.ac.jp,vizier.cfa.harvard.edu
+                REF_TIMEOUT = 60
                 WRITE_XML = Y
                 FULLOUTCAT_TYPE = NONE
                 XML_NAME = ${file.scamp_xml.fullname}

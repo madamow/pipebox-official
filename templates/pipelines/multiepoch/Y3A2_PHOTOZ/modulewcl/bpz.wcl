@@ -1,0 +1,56 @@
+<module>
+    <bpz>
+        max_fwthreads = ${nthreads}
+        modnamepat = ${modnamepat_tile_generic}
+        wrappername = genwrap.py
+        <exec_1>
+            <cmdline>
+                c = ${file.bpz_config.fullname}
+                incat = ${file.coadd_colorcat.fullname}
+                n_jobs = 6
+                outbpz = ${file.coadd_cat_bpz.fullname}
+            </cmdline>
+            execname = bpzv1
+            cmd_hyphen = mixed_gnu
+            used = file.bpz_config,file.coadd_colorcat
+            was_generated_by = file.coadd_cat_bpz
+            ancestry = file.bpz_config:file.coadd_cat_bpz,file.coadd_colorcat:file.coadd_cat_bpz
+        </exec_1>
+        <file>
+            ### input files
+            <bpz_config>
+                # what input file is named
+                filename = ${cfgver}_bpz_config.yaml
+                filetype = config
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = config
+            </bpz_config>
+            <coadd_colorcat>
+                # how to get file data
+                depends create-color-cat.file.coadd_colorcat
+
+                # where it lives in jobroot
+                dirpat = mepoch
+                rundir = bpz
+            </coadd_colorcat>
+            ### output files
+            <coadd_cat_bpz>
+                # what input file is named
+                filetype = coadd_cat_bpz 
+
+                # how to name output file
+                filepat = tile_generic
+                flabel = bpz-cat
+                fsuffix = fits
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                ops_enddir = bpz
+                rundir = bpz
+                savefiles = True
+            </coadd_cat_bpz>
+        </file>
+    </bpz>
+</module>
