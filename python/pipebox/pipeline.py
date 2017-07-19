@@ -722,3 +722,58 @@ class PreBPM(PipeLine):
         self.args.firstexp = self.args.exposure_list[0]
         #self.args.dataframe.insert(len(self.args.dataframe.columns),'firstexp', None) 
         self.args.dataframe['firstexp'] = self.args.firstexp
+
+class PhotoZ(PipeLine):
+
+    def __init__(self):
+        """ Initialize arguments and configure"""
+        # Setting global parameters
+        self.args = pipeargs.PhotoZ().cmdline()
+        self.args.pipeline = self.args.desstat_pipeline = "photoz"
+
+        super(PhotoZ,self).update_args(self.args)
+        self.args.output_name_keys = ['chunk']
+       
+        self.args.cur = pipequery.PhotoZ(self.args.db_section)
+
+        # Checking processing tag and setting default
+        if not self.args.proctag:
+            self.args.proctag = self.args.campaign.upper() + '_COADD'
+            if self.args.cur.check_proctag(self.args.proctag):
+                pass
+            else:
+                print "{tag} does not exist! Please specify proper proctag...".format(tag=self.args.proctag)
+                sys.exit()
+ 
+        # Creating dataframe from tiles
+        if self.args.resubmit_failed:
+            self.args.ignore_processed=False
+            self.args.tile_list = self.args.cur.get_failed_tiles(self.args.reqnum,int(self.args.resubmit_max))
+            if self.args.tile_list:
+                self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
+            else:
+                print 'No tiles left to submit...'
+                sys.exit()
+        elif self.args.num_chunks:
+            self.args.chunks = range(1,int(self.args.num_chunks) + 1)
+        elif self.args.tile:
+            self.args.tile_list = self.args.tile.split(',')
+            self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
+        elif self.args.list:
+            self.args.tile_list = list(pipeutils.read_file(self.args.list))
+            self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
+        elif self.args.csv:
+            self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
+            self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
+            self.args.tile_list = list(self.args.dataframe['tile'].values)
+        elif self.args.RA and self.args.Dec:
+            self.args.tile_list = self.args.cur.get_tiles_from_radec(self.args.RA, self.args.Dec)
+            self.args.dataframe = pd.DataFrame(self.args.tile_list, columns=['tile'])
+
+        # Update dataframe for each exposure and add band,nite if not exists
+        try:
+            self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
+            self.args.dataframe = self.args.dataframe.fillna(False)
+        except: 
+            pass
+
