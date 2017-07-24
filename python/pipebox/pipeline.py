@@ -89,7 +89,7 @@ class PipeLine(object):
             # Setting jira parameters
             self.args.reqnum, self.args.jira_parent= group['reqnum'].unique()[0],group['jira_parent'].unique()[0]
             self.args.unitname = group['unitname'].unique()[0]
-            if self.args.pipeline != 'multiepoch':
+            if self.args.pipeline != 'multiepoch' and  self.args.pipeline != 'photoz':
                 self.args.band = group['band'].unique()[0]
             # Finding epoch of given data
             if self.args.epoch:
@@ -98,7 +98,7 @@ class PipeLine(object):
                 if self.args.pipeline == 'widefield':
                     firstexpnum = group['expnum'].unique()[0]
                     self.args.epoch_name = self.args.cur.find_epoch(firstexpnum)
-                elif self.args.pipeline != 'multiepoch':
+                elif self.args.pipeline != 'multiepoch' and self.args.pipeline != 'photoz':
                     firstexpnum = group['firstexp'].unique()[0]
                     self.args.epoch_name = self.args.cur.find_epoch(firstexpnum)
                 elif self.args.pipeline == 'prebpm':
@@ -756,6 +756,7 @@ class PhotoZ(PipeLine):
                 sys.exit()
         elif self.args.num_chunks:
             self.args.chunks = range(1,int(self.args.num_chunks) + 1)
+            self.args.dataframe = pd.DataFrame(self.args.chunks,columns=['chunk'])    
         elif self.args.tile:
             self.args.tile_list = self.args.tile.split(',')
             self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
@@ -766,11 +767,7 @@ class PhotoZ(PipeLine):
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.tile_list = list(self.args.dataframe['tile'].values)
-        elif self.args.RA and self.args.Dec:
-            self.args.tile_list = self.args.cur.get_tiles_from_radec(self.args.RA, self.args.Dec)
-            self.args.dataframe = pd.DataFrame(self.args.tile_list, columns=['tile'])
 
-        # Update dataframe for each exposure and add band,nite if not exists
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
             self.args.dataframe = self.args.dataframe.fillna(False)

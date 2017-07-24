@@ -58,6 +58,7 @@ class PipeQuery(object):
             cals = cals.append(data[data.filetype=='cal_lintable']) 
             cals = cals.append(data[(data.filetype=='config')])
             cals = cals.append(data[(data.filetype=='None')])
+            cals = cals.append(data[(data.filetype=='cal_bf')])
         else:
             cals = data[(data.uband.isnull())]
         return cals     
@@ -630,7 +631,6 @@ class PreBPM(PipeQuery):
         return tag_list_of_dict
 
 class PhotoZ(PipeQuery):
-    
 
     def check_proctag(self,tag):
         """ Check to see if specified processing tag exists in PROCTAG table"""
@@ -647,10 +647,8 @@ class PhotoZ(PipeQuery):
         except:
             pass
         for index, row in df.iterrows():
-            df.loc[index, 'unitname'] =  str(row['campaign'] + '_' + str(row['chunk'])
-
+            df.loc[index, 'unitname'] =  str(row['campaign']) + '_' + str(row['chunk'])
         return df
-
 
     def check_submitted(self, unitname, reqnum):
         """ Queries database to find number of attempts submitted for
