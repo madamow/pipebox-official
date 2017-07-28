@@ -1,0 +1,41 @@
+<module>
+    <makeStarCat-combined>
+        wrappername = genwrap.py
+        #wrapperloop = expnum,ccdnum
+        wrapperloop = ccdnum, band
+        modnamepat=${modnamepat_combine_ccdnumband}
+        <file>
+            <red_immasked>
+                expnum = ${first_expnum}
+                filetype = snred_immask
+                filepat = sn_ccdnum_band
+                flabel = immasked
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red/immask
+                rundir = red/immask
+            </red_immasked>
+            <starcat>
+                filetype = snlist_starcat
+                filepat = sn_ccdnum_band_combined
+                flabel = StarCat
+                fsuffix = list
+                dirpat = sne_ccd
+                ops_enddir = list
+                rundir = list
+                savefiles = true
+            </starcat>
+        </file>
+        <exec_1>
+            execname = makeStarCat
+            used = file.red_immasked
+            was_generated_by = file.starcat
+            ancestry = file.red_immasked:file.starcat
+            <cmdline>
+                inFile_img = ${file.red_immasked.fullname}
+                outFile_starCat = ${file.starcat.fullname}
+                STARSOURCE_DBCATALOG = CURRENT
+            </cmdline>
+        </exec_1>
+    </makeStarCat-combined>
+</module>

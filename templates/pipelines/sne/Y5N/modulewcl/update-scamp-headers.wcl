@@ -1,0 +1,80 @@
+<module>
+    <update-scamp-headers>
+        <exec_1>
+            <cmdline>
+                input = ${file.red_pixcor.fullname}
+                output = ${file.red_wcs.fullname}
+                headfile = ${file.scamp_head.fullname}
+                hdupcfg = ${file.scamp_update_head.fullname}
+                fwhm = ${file.scamp_cat.fullname}
+                xml = ${file.scamp_xml.fullname}
+                v = _flag
+            </cmdline>
+            execname = updateWCS
+            cmd_hyphen = mixed_gnu
+            ancestry = file.red_pixcor:file.red_wcs,file.scamp_head:file.red_wcs,file.scamp_cat:file.red_wcs
+            used = file.scamp_cat,file.red_pixcor,file.scamp_head,file.scamp_update_head,file.scamp_xml
+            was_generated_by = file.red_wcs
+        </exec_1>
+        <file>
+             <red_pixcor>
+                dirpat = sne
+                filepat = sn_ccdnum_band
+                filetype = snred_pixcor
+                flabel = sn_pixcor
+                fsuffix = fits
+                ops_enddir = red/pixcor
+                rundir = red/pixcor
+            </red_pixcor>
+            <red_wcs>
+                dirpat = sne_ccd
+                filepat = sn_ccdnum_band
+                filetype = snred_wcs
+                flabel = wcs
+                fsuffix = fits
+                ops_enddir = red
+                rundir = red
+                savefiles = False
+                <hdrupd_flag>
+                    scampflg = 1
+                </hdrupd_flag>
+            </red_wcs>
+            <scamp_cat>
+                dirpat = sne
+                filepat = sn_ccdnum_band
+                filetype = sncat_scamp
+                flabel = scampcat
+                fsuffix = fits
+                ops_enddir = cat
+                rundir = cat
+            </scamp_cat>
+            <scamp_head>
+                dirpat = sne
+                filepat = sn_ccdnum_band
+                filetype = snhead_scamp
+                flabel = scamp
+                fsuffix = head
+                ops_enddir = aux
+                rundir = aux
+            </scamp_head>
+            <scamp_update_head>
+                dirpat = se
+                filename = ${scampupdateheadfile}
+                filetype = config
+                ops_enddir = config/scamp
+                rundir = config
+            </scamp_update_head>
+            <scamp_xml>
+                dirpat = sne
+                filepat = sn_exposure
+                filetype = snxml_scamp
+                flabel = scamp
+                fsuffix = xml
+                rundir = qa
+            </scamp_xml>
+        </file>
+        modnamepat = ${modnamepat_field_ccdnumband}
+        wrapperloop = expnum,ccdnum
+        wrappername = genwrap.py
+    </update-scamp-headers>
+</module>

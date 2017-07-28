@@ -1,0 +1,171 @@
+{% extends "supportwcl/generic_submit.des" %}
+{% block content %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/astrom-scamp-list.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/astrom-scamp.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/autoscan-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/autoscan-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/cat-dofake.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/create-astrom-sex-scamp.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/create-diff-cat-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/create-diff-cat-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/create-head-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/create-head-distmpl-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/create-head-fake-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/create-head-nofake-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/create-immask-bkg.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/create-psfex-cat-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/create-psfex-cat-distmpl-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/create-psfex-cat-distmpl.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/create-psfex-cat-dofake.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/create-psfex-cat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/create-scamp-catalog.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/crosstalk-sci.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/distort-template-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/distort-template-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/dofake.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/fakeMatch-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/fakeMatch.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/filterobj-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/filterobj-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/forcePhoto-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/forcePhoto.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/hotpants-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/hotpants-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/immask.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/immerge-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/immerge-diff-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/immerge-diff-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/immerge-distmpl-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/immerge-distmpl-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/immerge-fake-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/ingest-psfex-xml.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/insert_forceImageTable-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/insert_forceImageTable.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/makecand-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/makecand.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/makeForceList_fakesOnly-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/makeForceList_fakesOnly.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/makestamps-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/makestamps-single.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/makeStarCat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/makeweight.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/mkbleedmask.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/monzptemplate.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/null-weight-bkg.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/null-weight-pixcor.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/pixcorrect.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/run-psfex-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/run-psfex-dofake.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/run-psfex.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/run-scamp.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/skycombine-mkbleedmask.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/skycompress-mkbleedmask.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/skyfit.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/skysub.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/split-scamp-ahead.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/starflat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/strip-pv.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/swarp-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/swarp-nofake-combined.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/update-astrom-scamp-header.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/update-scamp-headers.wcl>>
+
+{% if args.inputcals_file %}
+<<include {{args.inputcals_file}}>>
+{% else %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{args.campaign}}/modulewcl/inputs.wcl>>
+{% endif %}
+
+{% if not args.labels %}
+label= ${nite}{% endif %}
+
+expnum = {{ args.expnums }}
+band = {{ args.band }}
+nite = {{ args.nite }}
+field = {{ args.field }}
+first_expnum = {{ args.firstexp }}
+
+basket = ${nite}
+{% if args.ccdnum %}
+ccdnum = {{ args.ccdnum }}
+{% else %}
+ccdnum = {{args.cal_df[(args.cal_df.filetype=='None')].ccdnum.values[0]}}
+{% endif %}
+unitname = {{ args.unitname }}
+{% if args.rundir %}
+ops_run_dir = {{ args.rundir }}
+{% else %}
+ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/${unitname}/p${attnum:2}
+{% endif %}
+submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
+
+save_run_vals = nite, camsym, field, band, first_expnum, seqnum
+
+{% if args.single %}
+{% if args.fringe %}
+blocklist = sne-exp-fringe,sne-ccd-single 
+{% else %}
+blocklist = sne-exp-nofringe,sne-ccd-single 
+{% endif %}
+{% else %}
+{% if args.fringe %}
+blocklist = sne-exp-fringe,sne-ccd-combined
+{% else %}
+blocklist = sne-exp-nofringe,sne-ccd-combined
+{% endif %}
+{% endif %}
+
+
+seqnum = {{ args.seqnum }}
+
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/modnamepat.wcl>>
+pipeline = sne     # used in desstat output, directory structure, etc
+unitname = ${camsym}_${field}_${band}_s${seqnum}   # pipeline specific
+basket = ${nite}
+ops_run_dir = ${project}/${pipeline}/${campaign}/${nite}-r${reqnum}/${unitname}/p${attnum:2}
+autoscan_mltrain_indir=${autoscan_mltrain_version}
+stamps_dir = stamps_${camsym}${first_expnum}_c${ccdnum:2}
+photflagvar = 1    # needed for crosstalk code
+
+<block>
+    <sne-exp-fringe>
+        divide_jobs_by = expnum
+        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit
+    </sne-exp-fringe>
+
+    <sne-exp-nofringe>
+        divide_jobs_by = expnum
+        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit
+    </sne-exp-nofringe>
+
+    <sne-ccd-single>
+        divide_jobs_by = ccdnum
+        modulelist = skysub,starflat,null-weight-bkg,create-bkg-img,immask,makeStarCat,strip-pv,makeweight,create-astrom-sex-scamp,astrom-scamp,update-astrom-scamp-header,create-psfex-cat,run-psfex,dofake,create-psfex-cat-dofake,run-psfex-dofake,create-head-distmpl-single,distort-template-single,create-psfex-cat-distmpl,hotpants-single,create-diff-cat-single,immerge-fake-single,immerge-distmpl-single,immerge-diff-single,filterobj-single,makestamps-single,autoscan-single,makecand,monzptemplate,makeForceList_fakesOnly,forcePhoto,fakeMatch,insert-forceImageTable
+    </sne-ccd-single>
+
+    <sne-ccd-combined>
+        divide_jobs_by = ccdnum
+        modulelist = skysub,starflat,null-weight-bkg,create-bkg-img,immask,makeStarCat,strip-pv,makeweight,create-astrom-sex-scamp,astrom-scamp-list,update-astrom-scamp-header,create-head-nofake-combined,swarp-nofake-combined,create-psfex-cat,run-psfex,dofake,cat-dofake,create-head-fake-combined,swarp-combined,create-psfex-cat-combined,run-psfex-combined,immerge-combined,create-head-distmpl-single,distort-template-single,create-head-combined,distort-template-combined,create-psfex-cat-distmpl,create-psfex-cat-distmpl-combined,hotpants-single,hotpants-combined,create-diff-cat-combined,immerge-distmpl-single,immerge-diff-single,immerge-distmpl-combined,immerge-diff-combined,filterobj-combined,makestamps-combined,autoscan-combined,makecand-combined,monzptemplate,makeForceList_fakesOnly-combined,forcePhoto-combined,fakeMatch-combined,insert-forceImageTable-combined
+    </sne-ccd-combined>
+</block>
+{% endblock %}
+
+hupdatefile = ${confignite}_{{args.cal_df[(args.cal_df.filetype=='config')].filepat.values[0]}}
+lintablefile = {{args.cal_df[(args.cal_df.filetype=='cal_lintable')].filename.values[0]}}
+bffile = {{args.cal_df[(args.cal_df.filetype=='cal_bf')].filename.values[0]}}
+starflatrange = {{args.cal_df[(args.cal_df.filetype=='cal_starflat')].unitname.values[0]}}
+starflatreq = {{args.cal_df[(args.cal_df.filetype=='cal_starflat')].reqnum.values[0]}}
+starflatatt = {{args.cal_df[(args.cal_df.filetype=='cal_starflat')].attnum.values[0]}}
+skypcarange = {{args.cal_df[(args.cal_df.filetype=='cal_skypca*')].unitname.values[0]}}
+skypcareq = {{args.cal_df[(args.cal_df.filetype=='cal_skypca*')].reqnum.values[0]}}
+skypcaatt = {{args.cal_df[(args.cal_df.filetype=='cal_skypca*')].attnum.values[0]}}
+bpmnite = {{args.cal_df[(args.cal_df.filetype=='cal_bpm')].unitname.values[0]}}
+bpmreq = {{args.cal_df[(args.cal_df.filetype=='cal_bpm')].reqnum.values[0]}}
+bpmatt = {{args.cal_df[(args.cal_df.filetype=='cal_bpm')].attnum.values[0]}}
+calnite = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].unitname.values[0]}}
+calreq = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].reqnum.values[0]}}
+calatt = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].attnum.values[0]}}
+
+snfake_version = Y4Fakes_v3
+snrefcatfile = DES-SN_v2.cat
+tmpl_version = V150804Y2+PS1off
