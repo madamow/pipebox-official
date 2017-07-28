@@ -757,6 +757,9 @@ class PhotoZ(PipeLine):
         elif self.args.num_chunks:
             self.args.chunks = range(1,int(self.args.num_chunks) + 1)
             self.args.dataframe = pd.DataFrame(self.args.chunks,columns=['chunk'])    
+            if self.args.list:
+                self.args.tile_list = ','.join(list(pipeutils.read_file(self.args.list)))
+
         elif self.args.tile:
             self.args.tile_list = self.args.tile.split(',')
             self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])

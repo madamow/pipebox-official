@@ -1,0 +1,50 @@
+{% extends "supportwcl/generic_submit.des" %}
+{% block content %}
+
+{% if args.inputcals_file %}
+<<include {{args.inputcals_file}}>>
+{% else %}
+<<include {{args.pipebox_dir}}/templates/pipelines/photoz/{{args.campaign}}/inputcals/inputs.des>>
+{% endif %}
+<<include {{args.pipebox_dir}}/templates/pipelines/photoz/{{args.campaign}}/modulewcl/modnamepat.wcl>>
+
+<<include {{args.pipebox_dir}}/templates/pipelines/photoz/{{args.campaign}}/modulewcl/select-tilename-chunk.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/photoz/{{args.campaign}}/modulewcl/create-color-cat.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/photoz/{{args.campaign}}/modulewcl/bpz.wcl>>
+
+master_use_fwthreads = True
+
+# these 2 are for debugging purposes
+purge_job_dir = never
+compress_cleanup = False
+
+chunk = {{args.chunk}}
+chunk_size = {{args.chunk_size}}
+basket = ${chunk:2}
+unitname = ${campaign}_${chunk:2}
+tilelist = {{args.tile_list}}
+
+bands = {{ args.bands }}
+det_bands = {{args.det_bands}}
+
+{% if args.rundir %}
+ops_run_dir = {{ args.rundir }}
+{% else %}
+ops_run_dir = ${project}/${pipeline}/${campaign}/r${reqnum}/${basket}/p${attnum:2}
+{% endif %}
+submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
+
+nthreads = {{ args.nthreads }}
+
+save_run_vals = unitname, jira_id
+
+######################################################################
+blocklist = bpz
+
+<block>
+    <bpz>
+       modulelist = create-color-cat,bpz
+    </bpz>
+</block>
+
+{% endblock %}
