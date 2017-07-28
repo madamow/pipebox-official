@@ -58,6 +58,7 @@ class PipeQuery(object):
             cals = cals.append(data[data.filetype=='cal_lintable']) 
             cals = cals.append(data[(data.filetype=='config')])
             cals = cals.append(data[(data.filetype=='None')])
+            cals = cals.append(data[(data.filetype=='cal_bf')])
         else:
             cals = data[(data.uband.isnull())]
         return cals     
