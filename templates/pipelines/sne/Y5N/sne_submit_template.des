@@ -127,6 +127,28 @@ autoscan_mltrain_indir=${autoscan_mltrain_version}
 stamps_dir = stamps_${camsym}${first_expnum}_c${ccdnum:2}
 photflagvar = 1    # needed for crosstalk code
 
+hupdatefile = ${confignite}_{{args.cal_df[(args.cal_df.filetype=='config')].filepat.values[0]}}
+lintablefile = {{args.cal_df[(args.cal_df.filetype=='cal_lintable')].filename.values[0]}}
+bffile = {{args.cal_df[(args.cal_df.filetype=='cal_bf')].filename.values[0]}}
+starflatrange = {{args.cal_df[(args.cal_df.filetype=='cal_starflat')].unitname.values[0]}}
+starflatreq = {{args.cal_df[(args.cal_df.filetype=='cal_starflat')].reqnum.values[0]}}
+starflatatt = {{args.cal_df[(args.cal_df.filetype=='cal_starflat')].attnum.values[0]}}
+skypcarange = {{args.cal_df[(args.cal_df.filetype=='cal_skypca*')].unitname.values[0]}}
+skypcareq = {{args.cal_df[(args.cal_df.filetype=='cal_skypca*')].reqnum.values[0]}}
+skypcaatt = {{args.cal_df[(args.cal_df.filetype=='cal_skypca*')].attnum.values[0]}}
+bpmnite = {{args.cal_df[(args.cal_df.filetype=='cal_bpm')].unitname.values[0]}}
+bpmreq = {{args.cal_df[(args.cal_df.filetype=='cal_bpm')].reqnum.values[0]}}
+bpmatt = {{args.cal_df[(args.cal_df.filetype=='cal_bpm')].attnum.values[0]}}
+calnite = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].unitname.values[0]}}
+calreq = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].reqnum.values[0]}}
+calatt = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].attnum.values[0]}}
+
+{% if args.calrun %}
+calrun = {{ args.calrun }} {% endif %}
+
+snfake_version = Y4Fakes_v3
+snrefcatfile = DES-SN_v2.cat
+tmpl_version = V150804Y2+PS1off
 <block>
     <sne-exp-fringe>
         divide_jobs_by = expnum
@@ -149,23 +171,3 @@ photflagvar = 1    # needed for crosstalk code
     </sne-ccd-combined>
 </block>
 {% endblock %}
-
-hupdatefile = ${confignite}_{{args.cal_df[(args.cal_df.filetype=='config')].filepat.values[0]}}
-lintablefile = {{args.cal_df[(args.cal_df.filetype=='cal_lintable')].filename.values[0]}}
-bffile = {{args.cal_df[(args.cal_df.filetype=='cal_bf')].filename.values[0]}}
-starflatrange = {{args.cal_df[(args.cal_df.filetype=='cal_starflat')].unitname.values[0]}}
-starflatreq = {{args.cal_df[(args.cal_df.filetype=='cal_starflat')].reqnum.values[0]}}
-starflatatt = {{args.cal_df[(args.cal_df.filetype=='cal_starflat')].attnum.values[0]}}
-skypcarange = {{args.cal_df[(args.cal_df.filetype=='cal_skypca*')].unitname.values[0]}}
-skypcareq = {{args.cal_df[(args.cal_df.filetype=='cal_skypca*')].reqnum.values[0]}}
-skypcaatt = {{args.cal_df[(args.cal_df.filetype=='cal_skypca*')].attnum.values[0]}}
-bpmnite = {{args.cal_df[(args.cal_df.filetype=='cal_bpm')].unitname.values[0]}}
-bpmreq = {{args.cal_df[(args.cal_df.filetype=='cal_bpm')].reqnum.values[0]}}
-bpmatt = {{args.cal_df[(args.cal_df.filetype=='cal_bpm')].attnum.values[0]}}
-calnite = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].unitname.values[0]}}
-calreq = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].reqnum.values[0]}}
-calatt = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].attnum.values[0]}}
-
-snfake_version = Y4Fakes_v3
-snrefcatfile = DES-SN_v2.cat
-tmpl_version = V150804Y2+PS1off
