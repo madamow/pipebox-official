@@ -1,0 +1,57 @@
+<module>
+    <select-tilename-chunk>
+        modnamepat = ${modnamepat_unitname_generic}
+        wrappername = genwrap.py
+        wrapperloop = chunk
+        <exec_1>
+            <cmdline>
+                outlist = ${file.chunk_out.fullname}
+                chunk_number = ${chunk} 
+                chunk_size = ${chunk_size}
+                release_tilelist = ${file.tilenames_list.fullname}
+                release_blacklist = ${file.tilenames_blacklist.fullname}
+            </cmdline>
+            execname = select_tilenames_chunk
+            cmd_hyphen =  mixed_gnu
+            used = file.tilenames_list, file.tilenames_blacklist
+            was_generated_by = file.chunk_out
+            ancestry = file.tilenames_list:file.chunk_out, file.tilenames_blacklist:file.chunk_out
+        </exec_1>
+        <file>
+            <tilenames_list>
+                # what input file is named
+                filename = ${cfgver}_bpz_tilenames.dat
+                filetype = config
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = config
+            </tilenames_list>
+           <tilenames_blacklist>
+                # what input file is named
+                filename = ${cfgver}_bpz_tilenames_blacklist_v2.dat
+                filetype = config
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = config
+            </tilenames_blacklist> 
+             ## Output files
+             <chunk_out>
+              # what metadata to save
+                filetype = list
+
+                # how to name output file
+                filepat = unitname_generic
+                flabel = bpz-${unitname}
+                fsuffix = dat
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = bpz/chunk
+                rundir = bpz/chunk
+                savefiles = True
+             </chunk_out>
+        </file>
+    </select-tilename-chunk>
+</module>

@@ -89,7 +89,7 @@ class PipeLine(object):
             # Setting jira parameters
             self.args.reqnum, self.args.jira_parent= group['reqnum'].unique()[0],group['jira_parent'].unique()[0]
             self.args.unitname = group['unitname'].unique()[0]
-            if self.args.pipeline != 'multiepoch':
+            if self.args.pipeline != 'multiepoch' and  self.args.pipeline != 'photoz':
                 self.args.band = group['band'].unique()[0]
             # Finding epoch of given data
             if self.args.epoch:
@@ -98,7 +98,7 @@ class PipeLine(object):
                 if self.args.pipeline == 'widefield':
                     firstexpnum = group['expnum'].unique()[0]
                     self.args.epoch_name = self.args.cur.find_epoch(firstexpnum)
-                elif self.args.pipeline != 'multiepoch':
+                elif self.args.pipeline != 'multiepoch' and self.args.pipeline != 'photoz':
                     firstexpnum = group['firstexp'].unique()[0]
                     self.args.epoch_name = self.args.cur.find_epoch(firstexpnum)
                 elif self.args.pipeline == 'prebpm':
@@ -722,3 +722,58 @@ class PreBPM(PipeLine):
         self.args.firstexp = self.args.exposure_list[0]
         #self.args.dataframe.insert(len(self.args.dataframe.columns),'firstexp', None) 
         self.args.dataframe['firstexp'] = self.args.firstexp
+
+class PhotoZ(PipeLine):
+
+    def __init__(self):
+        """ Initialize arguments and configure"""
+        # Setting global parameters
+        self.args = pipeargs.PhotoZ().cmdline()
+        self.args.pipeline = self.args.desstat_pipeline = "photoz"
+
+        super(PhotoZ,self).update_args(self.args)
+        self.args.output_name_keys = ['chunk']
+       
+        self.args.cur = pipequery.PhotoZ(self.args.db_section)
+
+        # Checking processing tag and setting default
+        if not self.args.proctag:
+            self.args.proctag = self.args.campaign.upper() + '_COADD'
+            if self.args.cur.check_proctag(self.args.proctag):
+                pass
+            else:
+                print "{tag} does not exist! Please specify proper proctag...".format(tag=self.args.proctag)
+                sys.exit()
+ 
+        # Creating dataframe from tiles
+        if self.args.resubmit_failed:
+            self.args.ignore_processed=False
+            self.args.tile_list = self.args.cur.get_failed_tiles(self.args.reqnum,int(self.args.resubmit_max))
+            if self.args.tile_list:
+                self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
+            else:
+                print 'No tiles left to submit...'
+                sys.exit()
+        elif self.args.num_chunks:
+            self.args.chunks = range(1,int(self.args.num_chunks) + 1)
+            self.args.dataframe = pd.DataFrame(self.args.chunks,columns=['chunk'])    
+            if self.args.list:
+                self.args.tile_list = ','.join(list(pipeutils.read_file(self.args.list)))
+
+        elif self.args.tile:
+            self.args.tile_list = self.args.tile.split(',')
+            self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
+        elif self.args.list:
+            self.args.tile_list = list(pipeutils.read_file(self.args.list))
+            self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
+        elif self.args.csv:
+            self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
+            self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
+            self.args.tile_list = list(self.args.dataframe['tile'].values)
+
+        try:
+            self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
+            self.args.dataframe = self.args.dataframe.fillna(False)
+        except: 
+            pass
+

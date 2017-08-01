@@ -1,0 +1,45 @@
+<module>
+    <create-color-cat>
+        modnamepat = ${modnamepat_unitname_generic}
+        wrappername = genwrap.py
+        <exec_1>
+            <cmdline>
+                c = ${file.bpz_config.fullname}
+                tilename = ${tilelist}
+                outcat = ${file.coadd_colorcat.fullname}
+            </cmdline>
+            execname = build_colorcat_sql
+            cmd_hyphen =  mixed_gnu
+            used = file.bpz_config
+            was_generated_by = file.coadd_colorcat
+            ancestry = file.bpz_config:file.coadd_colorcat
+        </exec_1>
+        <file>
+            <bpz_config>
+                # what input file is named
+                filename = ${cfgver}_bpz_config-MOFMIX-v2.yaml
+                filetype = config
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = config
+            </bpz_config>
+             ## Output files
+             <coadd_colorcat>
+              # what metadata to save
+                filetype = coadd_cat_bpz_color
+
+                # how to name output file
+                filepat = unitname_generic
+                flabel = bpz-color
+                fsuffix = fits
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = bpz
+                rundir = bpz
+                savefiles = True
+             </coadd_colorcat>
+        </file>
+    </create-color-cat>
+</module>

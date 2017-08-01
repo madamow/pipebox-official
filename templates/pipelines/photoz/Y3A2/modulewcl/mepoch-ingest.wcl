@@ -1,0 +1,173 @@
+<module>
+<mepoch-ingest>
+        modnamepat = ${modnamepat_tile_generic}
+        wrappername = genwrap.py
+        <exec_1>
+            execname = mepoch_ingest.py
+            cmd_hyphen = mixed_gnu
+            used = file.det_cat,list.lccdgon.csv_ccdgon, list.lmolygon.csv_molygon, list.lmolyccd.csv_molyccd, list.lcobjmoly.csv_cobjmoly #,list.lcoadd_cat.coadd_cat
+
+            <cmdline>
+                detcat = ${file.det_cat.fullname}
+                #bandcat_list = ${list.lcoadd_cat.fullname}
+                ccdgon_list = ${list.lccdgon.fullname}
+                molygon_list = ${list.lmolygon.fullname}
+                molygon_ccdgon_list = ${list.lmolyccd.fullname}
+                coadd_object_molygon_list = ${list.lcobjmoly.fullname}
+                #alt_section = db-dessci
+                #alt_table = Y3A1_COADD_OBJECT_SUMMARY
+                des_services = ${target_des_services}
+            </cmdline>
+        </exec_1>
+        <list>
+          #  <lcoadd_cat>
+          #      filetype= coadd_cat
+
+           #     query_table = catalog
+            #    query_fields = filetype,proctag.tag,tilename
+            #    join catalog.pfw_attempt_id = proctag.pfw_attempt_id
+            #    output_fields = tilename,pfw_attempt_id,band
+            #    columns = coadd_cat.fullname,coadd_cat.band
+           #     tag= ${proctag}
+           #     tilename = ${unitname}
+
+                # how to create lists
+            #    columns = coadd_cat.fullname
+             #   sortkey = (band, False, False)
+
+                # what to name the list
+              #  filepat = tile_generic
+              #  flabel = meingest-coadd-cat
+               # fsuffix = list
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                #dirpat = mepoch
+                #ops_enddir = list
+                #rundir = list
+            #</lcoadd_cat>
+            <lccdgon>
+                # how to get list data
+                depends mangle.file.csv_ccdgon
+
+                # how to create lists
+                columns = csv_ccdgon.fullname
+                sortkey = (band, False, False)
+
+                # what to name the list
+                filepat = tile_generic
+                flabel = meingest-ccdgon
+                fsuffix = list
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = list
+                rundir = list
+            </lccdgon>
+            <lmolygon>
+                # how to get list data
+                depends mangle.file.csv_molygon
+
+                # how to create lists
+                columns = csv_molygon.fullname
+                sortkey = (band, False, False)
+
+                # what to name the list
+                filepat = tile_generic
+                flabel = meingest-molygon
+                fsuffix = list
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = list
+                rundir = list
+            </lmolygon>
+            <lmolyccd>
+                # how to get list data
+                depends mangle.file.csv_molyccd
+
+                # how to create lists
+                columns = csv_molyccd.fullname
+                sortkey = (band, False, False)
+
+                # what to name the list
+                filepat = tile_generic
+                flabel = meingest-molyccd
+                fsuffix = list
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = list
+                rundir = list
+            </lmolyccd>
+            <lcobjmoly>
+                # how to get list data
+                depends mangle.file.csv_cobjmoly
+
+                # how to create lists
+                columns = csv_cobjmoly.fullname
+                sortkey = (band, False, False)
+
+                # what to name the list
+                filepat = tile_generic
+                flabel = meingest-cobjmoly
+                fsuffix = list
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = list
+                rundir = list
+            </lcobjmoly>
+        </list>
+        <file>
+            ### inputs
+            <det_cat>
+                filetype = coadd_det_cat
+                query_table = catalog
+                query_fields = filetype,proctag.tag,tilename
+                join catalog.pfw_attempt_id = proctag.pfw_attempt_id
+                output_fields = tilename,pfw_attempt_id
+                columns = det_cat.fullname,det_cat.pfw_attempt_id
+                tag= ${proctag}
+                tilename = ${unitname}
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = cat
+            </det_cat>
+            <csv_ccdgon>
+                listonly = True
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = mangle/csv
+            </csv_ccdgon>
+            <csv_molygon>
+                listonly = True
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = mangle/csv
+            </csv_molygon>
+            <csv_molyccd>
+                listonly = True
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = mangle/csv
+            </csv_molyccd>
+            <csv_cobjmoly>
+                listonly = True
+
+                # where input file lives in jobroot
+                dirpat = mepoch
+                rundir = mangle/csv
+            </csv_cobjmoly>
+            #<coadd_cat>
+            #    listonly = True
+
+                # where input file lives in jobroot
+             #   dirpat = mepoch
+             #   rundir = cat
+            #</coadd_cat>
+        </file>
+    </mepoch-ingest>
+</module>
