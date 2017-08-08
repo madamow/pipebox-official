@@ -92,7 +92,7 @@ distortion = ${qa_file_prefix}_distortion
             </scamp_cat>
             <scamp_config>
                 filetype = config
-                filename = ${scamp_config_file} 
+                filename = ${scampconfigfile} 
                 dirpat = se
                 rundir = config
             </scamp_config>

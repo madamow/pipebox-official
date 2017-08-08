@@ -70,18 +70,13 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/update-astrom-scamp-header.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{ args.campaign }}/modulewcl/update-scamp-headers.wcl>>
 
-{% if args.inputcals_file %}
-<<include {{args.inputcals_file}}>>
-{% else %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{args.campaign}}/modulewcl/inputs.wcl>>
-{% endif %}
-
 {% if not args.labels %}
 label= ${nite}{% endif %}
 
 expnum = {{ args.expnums }}
 band = {{ args.band }}
 nite = {{ args.nite }}
+desepoch = {{args.epoch_name}}
 field = {{ args.field }}
 first_expnum = {{ args.firstexp }}
 
@@ -149,6 +144,13 @@ calrun = {{ args.calrun }} {% endif %}
 snfake_version = Y4Fakes_v3
 snrefcatfile = DES-SN_v2.cat
 tmpl_version = V150804Y2+PS1off
+
+{% if args.inputcals_file %}
+<<include {{args.inputcals_file}}>>
+{% else %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/sne/{{args.campaign}}/modulewcl/inputs.wcl>>
+{% endif %}
+
 <block>
     <sne-exp-fringe>
         divide_jobs_by = expnum

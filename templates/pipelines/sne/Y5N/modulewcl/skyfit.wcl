@@ -35,11 +35,10 @@
                 savefiles = True 
             </skyfit_binned_fp>
             <cal_skypca_binned_fp>
-                filetype = sncal_skypca_binned_fp
+                filetype = cal_skypca_binned_fp
 
                 # how to name the file
-                filename = ${skypcacampaign}_${skypcarange}_${band}_${skypcarun}_skypca-binned-fp.fits
-
+                filename = ${skypcacampaign}_${skypcarange}_${band}_r${skypcareq}p${skypcaatt:2}_skypca-binned-fp.fits
                 # where to put the file
                 dirpat = sne
                 ops_enddir = binned-fp

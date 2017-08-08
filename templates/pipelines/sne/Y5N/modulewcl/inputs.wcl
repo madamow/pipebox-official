@@ -17,3 +17,4 @@ cat_columns = NUMBER,${ra_col},${dec_col}
 snfake_version = Y4Fakes_v3
 snrefcatfile = DES-SN_v2.cat
 tmpl_version = V150804Y2+PS1off
+skypcacampaign = Y2A1

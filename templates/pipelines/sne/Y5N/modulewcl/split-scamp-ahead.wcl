@@ -7,7 +7,7 @@
         <file>
             <ahead_full>
                 filetype = config
-                filename = ${confignite}_decam_pvmodel_${scampaheadnite}_${band}.ahead
+                filename = ${confignite}_decam_pvmodel_${desepoch}_${band}.ahead
                 dirpat = se
        		ops_enddir = aux
                 rundir = config
