@@ -409,6 +409,7 @@ class WideField(PipeLine):
             if self.args.resubmit_failed:
                 self.args.reqnum = jira_utils.get_reqnum_from_nite(self.args.jira_parent,
                                                                    self.args.nite)
+
             """
             if not self.args.calnite:
                 precal = self.args.cur.find_precal(self.args.nite,threshold=7,override=True,
