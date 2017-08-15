@@ -13,7 +13,7 @@
             </sex_config>
             <sex_param>
                 filetype = config 
-                filename = ${confignite}_sex.param.finalcut
+                filename = ${confignite}_sex.param.firstcut
                 dirpat = se
                 rundir = config
             </sex_param>
@@ -82,15 +82,15 @@
                 dirpat = se
                 rundir = psf
             </psfex_model>
-            <cat_finalcut>
-                filetype = cat_finalcut
+            <cat_firstcut>
+                filetype = cat_firstcut
                 filepat = ccdnum_band
                 flabel = red-fullcat
                 fsuffix = fits
                 dirpat = se
                 rundir = cat
                 ops_enddir = cat
-            </cat_finalcut>
+            </cat_firstcut>
         </file>
 
         #<exec_1>
@@ -100,8 +100,8 @@
         <exec_1>
             execname = sex
             used = file.red_nullweight_immask,file.sex_config,file.sex_filter,file.sex_nnw,file.sex_param,file.psfex_model
-            was_generated_by = file.cat_finalcut,file.red_segmap,file.red_bkg
-            ancestry = file.red_nullweight_immask:file.cat_finalcut,file.psfex_model:file.cat_finalcut,file.red_nullweight_immask:file.red_segmap,file.red_nullweight_immask:file.red_bkg
+            was_generated_by = file.cat_firstcut,file.red_segmap,file.red_bkg
+            ancestry = file.red_nullweight_immask:file.cat_firstcut,file.psfex_model:file.cat_firstcut,file.red_nullweight_immask:file.red_segmap,file.red_nullweight_immask:file.red_bkg
             <cmdline>
                 _01_red_nullweight_immask = ${file.red_nullweight_immask.fullname}[0]
                 c = ${file.sex_config.fullname} 
@@ -112,7 +112,7 @@
                 WEIGHT_IMAGE = ${file.red_nullweight_immask.fullname}[2],${file.red_nullweight_immask.fullname}[2]
                 SEEING_FWHM = $FUNC{despymisc.create_special_metadata.fwhm_arcsec,$HEAD{${file.red_nullweight_immask.fullname},FWHM,CD1_1,CD1_2,CD2_1,CD2_2,PIXSCAL1,PIXSCAL2}}
                 FLAG_IMAGE = ${file.red_nullweight_immask.fullname}[1]
-                CATALOG_NAME = ${file.cat_finalcut.fullname}
+                CATALOG_NAME = ${file.cat_firstcut.fullname}
                 SATUR_KEY = SATURATE
                 PARAMETERS_NAME = ${file.sex_param.fullname}
                 PSF_NAME = ${file.psfex_model.fullname}
