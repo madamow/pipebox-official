@@ -76,6 +76,7 @@
                 SATUR_LEVEL = $HEAD{${file.red_nullweight_immask.fullname},SATURATE} 
                 DETECT_MINAREA = 3
                 DETECT_THRESH = 3.0
+                WEIGHT_THRESH = 1e-9
             </cmdline>
         </exec_1>
     </create-psfex-catalog>
