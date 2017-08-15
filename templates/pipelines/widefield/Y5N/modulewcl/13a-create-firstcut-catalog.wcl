@@ -13,7 +13,7 @@
             </sex_config>
             <sex_param>
                 filetype = config 
-                filename = ${confignite}_sex.param.firstcut
+                filename = ${confignite}_sex.param.finalcut
                 dirpat = se
                 rundir = config
             </sex_param>
