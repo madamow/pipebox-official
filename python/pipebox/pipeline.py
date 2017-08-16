@@ -603,7 +603,7 @@ class NitelyCal(PipeLine):
             self.args.dataframe.loc[index,'flat_list'] = self.args.flat_list
             self.args.dataframe.loc[index,'bias_list'] = self.args.bias_list
             self.args.dataframe.loc[index,'firstexp'] = self.args.firstexp
-            self.args.dataframe.loc[index,'unitname'] = niterange
+            self.args.dataframe.loc[index,'unitname'] = self.args.dataframe.loc[index,'niterange']
     
         # Update dataframe
         try:
