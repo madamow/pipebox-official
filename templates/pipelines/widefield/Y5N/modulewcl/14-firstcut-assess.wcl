@@ -87,7 +87,6 @@
                 list = ${list.cat_list.fullname}
                 over_table = FIRSTCUT_EVAL
                 verbose = _flag
-                f = ${file.qa_assess_des.fullname}
             </cmdline>
         </exec_1>
     </firstcut-assess>

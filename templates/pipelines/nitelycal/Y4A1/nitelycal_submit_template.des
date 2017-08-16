@@ -28,7 +28,7 @@
 {% if args.epoch_name %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/nitelycal/{{ args.campaign }}/modulewcl/inputs.wcl>>
 {% endif %}
-
+{% endif %}
 bias_expnum = {{ args.bias_list }}
 dflat_expnum = {{ args.flat_list }}
 
