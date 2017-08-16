@@ -74,7 +74,7 @@
 
         <exec_1>
             execname = assess_SE_products.py
-	 	    cmd_hyphen = alldouble
+	 	    cmd_hyphen = mixed_gnu
             used = list.cat_list.cat_firstcut
             was_generated_by = file.qa_assess_nomad,file.qa_assess_magplot,file.qa_assess_apass,file.qa_assess_des
             ancestry = list.cat_list.cat_firstcut:file.qa_assess_nomad,list.cat_list.cat_firstcut:file.qa_assess_apass,list.cat_list.cat_firstcut:file.qa_assess_magplot, list.cat_list.cat_firstcut:file.qa_assess_des
