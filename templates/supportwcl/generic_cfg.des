@@ -46,6 +46,7 @@ submit_files_mvmt     = filemgmt.job_mvmt_http.JobArchiveHttp
 
     <descampuscluster>
 	    target_des_services = /scratch.local/desdm/ini/.desservices.{{ args['USER'] }}.ini
+        setupeups = /scratch.local/desdm/SNePipeline/eeups/eups/desdm_eups_setup_local.sh
         #jobroot = /home/{{ args['USER'] }}/scratch
     </descampuscluster>
 

@@ -30,7 +30,7 @@
                 filetype = cal_bpm
                 dirpat = se
                 rundir = bpm/${bpmnite}-r${bpmreq}/p${bpmatt:2}
-                filename = D_n${bpmnite}_c${ccdnum:2}_r${bpmreq}p${bpmatt:2}_bpm.fits
+                filename = D_${bpmnite}_c${ccdnum:2}_r${bpmreq}p${bpmatt:2}_bpm.fits
             </bpm>
             <bf>
                 filetype = cal_bf

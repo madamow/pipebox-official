@@ -14,7 +14,11 @@ dec_col = DELTAWIN_J2000
 cat_columns = NUMBER,${ra_col},${dec_col}
 
 ### Supernova Specific ###
-snfake_version = Y4Fakes_v3
+autoscan_mltrain_date = 20150618
+autoscan_mltrain_version = ml3.2
+config_version = 20150715
+snfake_version = Y5Fakes_v3
 snrefcatfile = DES-SN_v2.cat
 tmpl_version = V150804Y2+PS1off
-skypcacampaign = Y2A1
+skypcacampaign = Y4A1
+starflatcampaign = Y4A1
