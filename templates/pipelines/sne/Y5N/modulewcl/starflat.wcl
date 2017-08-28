@@ -26,11 +26,19 @@
                 compress_files = true
             </red_starflat>
             <cal_starflat>
+
                 # metadata info
                 filetype = cal_starflat
 
                 # how to name file
-                filename = ${starflatcampaign}_${starflatrange}_${band}_c${ccdnum:2}_r${starflatreq}p${starflatatt:2}_starflat.fits
+                filename = %${starflatrange}_${band}_c${ccdnum:2}_r${starflatreq}p${starflatatt:2}_starflat.fits
+                # what goes into list?
+                query_table = calibration
+                query_fields = filename, filetype,ccdnum,band
+                output_fields = filename,ccdnum,band
+                match = ccdnum,band
+                # description of list for wrapper
+                columns = cal_starflat.fullname
 
                 # where to store file
                 dirpat = se

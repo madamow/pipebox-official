@@ -35,12 +35,23 @@
                 savefiles = True 
             </skyfit_binned_fp>
             <cal_skypca_binned_fp>
+
+
                 filetype = cal_skypca_binned_fp
 
                 # how to name the file
-                filename = ${skypcacampaign}_${skypcarange}_${band}_r${skypcareq}p${skypcaatt:2}_skypca-binned-fp.fits
+                #filename = ${skypcacampaign}_${skypcarange}_${band}_r${skypcareq}p${skypcaatt:2}_skypca-binned-fp.fits
+                filename = %${skypcarange}_${band}_r${skypcareq}p${skypcaatt:2}_skypca-binned-fp.fits
+                # what goes into list?
+                query_table = calibration
+                query_fields = filename, filetype,band
+                output_fields = filename
+                #divide_by = filename
+                # description of list for wrapper
+                columns = cal_skypca_binned_fp.fullname
+                
                 # where to put the file
-                dirpat = sne
+                dirpat = se
                 ops_enddir = binned-fp
                 rundir = binned-fp
             </cal_skypca_binned_fp>

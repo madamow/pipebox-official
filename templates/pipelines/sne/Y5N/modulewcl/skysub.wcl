@@ -38,6 +38,8 @@
                 rundir = red
                 savefiles = false
             </red_skysub>
+
+
             <cal_norm_dflatcor>
                 # metadata info
                 #filetype = cal_norm_dflatcor
@@ -49,11 +51,22 @@
                 ops_enddir = norm-dflatcor
                 rundir = norm-dflatcor
             </cal_norm_dflatcor>
+
             <cal_skypca_tmpl>
-                 filetype = cal_skypca_tmpl
+                filetype = cal_skypca_tmpl
 
                 # how to name the file
-                filename = ${skypcacampaign}_${skypcarange}_${band}_c${ccdnum:2}_r${skypcareq}p${skypcaatt:2}_skypca-tmpl.fits
+                #filename = ${skypcacampaign}_${skypcarange}_${band}_c${ccdnum:2}_r${skypcareq}p${skypcaatt:2}_skypca-tmpl.fits
+                
+                filename = %${skypcarange}_${band}_c${ccdnum:2}_r${skypcareq}p${skypcaatt:2}_skypca-tmpl.fits
+                # what goes into list?
+                query_table = calibration
+                query_fields = filename, filetype,band,ccdnum
+                output_fields = ccdnum,band,filename
+                match = ccdnum,band
+                # description of list for wrapper
+                columns = cal_skypca_tmpl.fullname
+
                 # where to put the file
                 dirpat = se
                 ops_enddir = tmpl
