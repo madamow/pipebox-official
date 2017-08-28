@@ -106,8 +106,9 @@ class PipeLine(object):
                     self.args.epoch_name = self.args.cur.find_epoch(firstexpnum)
                 else:
                     self.args.epoch_name = firstexpnum = None
-            if self.args.epoch_name:
-                self.args.cal_df = self.args.cur.get_cals_from_epoch(self.args.epoch_name,
+            if not self.args.inputcals_file:
+                if self.args.epoch_name:
+                    self.args.cal_df = self.args.cur.get_cals_from_epoch(self.args.epoch_name,
                                                                          self.args.band,
                                                                          self.args.campaign)
 

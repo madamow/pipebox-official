@@ -135,7 +135,7 @@ def print_submit_info(pipeline,site=None,eups_stack=None,submit_file=None):
 
 def stop_if_already_running(script_name):
     """ Exits program if program is already running """
-    l = getstatusoutput("ps aux | grep -e '%s' | grep -v grep | grep -v vim | awk '{print $2}'| awk '{print $2}' " % script_name)
+    l = getstatusoutput("ps aux | grep -e '%s' | grep -v grep | grep -v vim | awk '{print $2}'| awk '{print $2}' | grep $USER" % script_name)
     if l[1]:
         print "Already running.  Aborting"
         print l[1]
