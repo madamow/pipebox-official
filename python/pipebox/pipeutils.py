@@ -64,8 +64,11 @@ def less_than_queue(pipeline=None,user=None,reqnum=None,queue_size=1000):
     else:
         grep_user_cmd = grep_cmd
     # Grepping for reqnum out of desstat
-    grep_reqnum_cmd = Popen(('grep',reqnum),stdin=grep_user_cmd.stdout,stdout=PIPE)
-    if not user: grep_cmd.stdout.close()
+    if user:
+        grep_reqnum_cmd = Popen(('grep',reqnum),stdin=grep_user_cmd.stdout,stdout=PIPE)
+    else: 
+        grep_reqnum_cmd = grep_user_cmd
+        grep_cmd.stdout.close()
     grep_user_cmd.stdout.close()
     # Counting remaining runs
     count_cmd = Popen(('wc','-l'),stdin=grep_reqnum_cmd.stdout,stdout=PIPE)
