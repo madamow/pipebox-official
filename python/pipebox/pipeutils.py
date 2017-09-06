@@ -69,10 +69,10 @@ def less_than_queue(pipeline=None,user=None,reqnum=None,queue_size=1000):
         grep_user_cmd.stdout.close()
     else: 
         grep_reqnum_cmd = grep_user_cmd
-    grep_cmd.stdout.close()
     # Counting remaining runs
     count_cmd = Popen(('wc','-l'),stdin=grep_reqnum_cmd.stdout,stdout=PIPE)
     grep_reqnum_cmd.stdout.close()
+    grep_cmd.stdout.close()
 
     output,error = count_cmd.communicate()
     if int(output) < int(queue_size):
