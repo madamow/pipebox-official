@@ -404,10 +404,7 @@ class WideField(PipeLine):
             self.args.ignore_processed=True
             pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
             
-            self.args.nite = self.args.cur.get_max_nite(propid=self.args.propid,
-                                                        program=self.args.program,
-                                                        process_all=self.args.process_all)[1]
-            self.args.nitelist = self.args.nite.split(',')
+            self.args.expnum = ','.join([str(e) for e in self.args.cur.get_expnums_from_auto_queue()])
             if self.args.resubmit_failed:
                 self.args.reqnum = jira_utils.get_reqnum_from_nite(self.args.jira_parent,
                                                                    self.args.nite)
@@ -468,6 +465,7 @@ class WideField(PipeLine):
             print grouped
             sys.exit(0)
 
+        print self.args.dataframe
 
 class NitelyCal(PipeLine):
 

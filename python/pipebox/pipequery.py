@@ -10,6 +10,7 @@ class PipeQuery(object):
         dbh = DesDbi(None,section, retry = True)
         cur = dbh.cursor()
         self.section = section
+        self.dbh = dbh
         self.cur = cur 
     
     def find_epoch(self,exposure):
@@ -93,6 +94,43 @@ class PipeQuery(object):
         program = [i[0] for i in program]
         return propid,program
 
+
+    def insert_auto_queue(self,nites=None,process_all=False,program=None,propid=None):
+        """ Get exposures into auto_queue for auto processing"""
+        if not nites:
+            now = datetime.now()
+            nites = [now.strftime('%Y%m%d')]
+        base_query = "select distinct expnum from exposure where obstype in ('object','standard') and \
+                      object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' \
+                      and object not like '%%test%%' and object not like '%%junk%%' and nite in (%s)" % ','.join(nites)
+        if process_all:
+            base_query = base_query
+        else:
+            if program:
+                base_query = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in program)
+            if propid:
+                base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
+        self.cur.execute(base_query)
+        results = [row[0] for row in self.cur.fetchall()]
+        for expnum in results:
+            try:
+                insert_query = "insert into mjohns44.auto_queue (expnum,processed) values ({expnum},0)".format(expnum=expnum)
+                self.cur.execute(insert_query)
+            except:
+                print '%s already in queue! Skipping...' % expnum
+        self.dbh.commit()
+
+    def update_auto_queue(self):
+        query = "select distinct expnum from mjohns44.auto_queue where processed=0 order by expnum"
+        unitnames = ['D00'+ str(e[0]) for e in self.cur.execute(query)]
+       
+        find_processed = "select distinct unitname from pfw_request r,pfw_attempt a,task t where t.id=a.task_id and a.reqnum=r.reqnum and r.project='OPS' and unitname in ('{unitnames}') and status=0".format(unitnames = "','".join(unitnames))
+        self.cur.execute(find_processed)
+        results = [row[0].split('D00')[1] for row in self.cur.fetchall()]
+
+        update_query = "update mjohns44.auto_queue set processed=1 where expnum in ({expnums})".format(expnums=','.join(results))
+        self.cur.execute(update_query)
+        self.dbh.commit()
 
 class SuperNova(PipeQuery):
 # Copied from widefield (unedited)
@@ -416,6 +454,11 @@ class WideField(PipeQuery):
         expnum_list = [u[3:] for u in resubmit_list]
         
         return expnum_list
+
+    def get_expnums_from_auto_queue(self):
+        query = "select distinct expnum from mjohns44.auto_queue where processed=0"
+        self.cur.execute(query)
+        return [exp[0] for exp in self.cur.fetchall()]
 
     def get_expnums_from_nites(self,nites=None,process_all=False,program=None,propid=None):
         """ Get exposure numbers and band for incoming exposures"""
