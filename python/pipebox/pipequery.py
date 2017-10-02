@@ -127,11 +127,11 @@ class PipeQuery(object):
         find_processed = "select distinct unitname from pfw_request r,pfw_attempt a,task t where t.id=a.task_id and a.reqnum=r.reqnum and r.project='OPS' and unitname in ('{unitnames}') and status=0".format(unitnames = "','".join(unitnames))
         self.cur.execute(find_processed)
         results = [row[0].split('D00')[1] for row in self.cur.fetchall()]
-
-        update_query = "update mjohns44.auto_queue set processed=1 where expnum in ({expnums})".format(expnums=','.join(results))
-        self.cur.execute(update_query)
-        self.dbh.commit()
-
+        
+        if results:
+            update_query = "update mjohns44.auto_queue set processed=1 where expnum in ({expnums})".format(expnums=','.join(results))
+            self.cur.execute(update_query)
+            self.dbh.commit()
 
 class SuperNova(PipeQuery):
 # Copied from widefield (unedited)
