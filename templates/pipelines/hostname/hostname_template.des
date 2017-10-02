@@ -13,7 +13,6 @@ basket = ${reqnum}
 
 unitname = hostname
 ops_run_dir = ${project}/${pipeline}/r${reqnum}/p${attnum:2}
-submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
 
 modnamepat_hostname=r${reqnum}p${attnum:2}_${modulename}
 
