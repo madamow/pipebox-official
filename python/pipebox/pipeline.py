@@ -465,8 +465,6 @@ class WideField(PipeLine):
             print grouped
             sys.exit(0)
 
-        print self.args.dataframe
-
 class NitelyCal(PipeLine):
 
     def __init__(self):
