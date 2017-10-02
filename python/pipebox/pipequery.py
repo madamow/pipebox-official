@@ -132,6 +132,7 @@ class PipeQuery(object):
         self.cur.execute(update_query)
         self.dbh.commit()
 
+
 class SuperNova(PipeQuery):
 # Copied from widefield (unedited)
     def get_expnum_info(self,exposure_list):
@@ -455,10 +456,28 @@ class WideField(PipeQuery):
         
         return expnum_list
 
-    def get_expnums_from_auto_queue(self):
+    def get_expnums_from_auto_queue(self,reqnum):
         query = "select distinct expnum from mjohns44.auto_queue where processed=0"
         self.cur.execute(query)
-        return [exp[0] for exp in self.cur.fetchall()]
+        exposures = [exp[0] for exp in self.cur.fetchall()]
+        unitnames = ['D00'+str(e) for e in exposures]
+        submitted = "select distinct unitname,attnum,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s' and unitname in ('%s')" % (reqnum,"','".join(unitnames))
+        self.cur.execute(submitted)
+        failed_query = self.cur.fetchall()
+        df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
+        # Set Null values to -99
+        df = df.fillna(-99)
+
+        null_list = []
+        for u in df['unitname'].unique():
+            count = df[(df.unitname == u) & (df.status == 0)].count()[0]
+            statuses = list(df[(df.unitname == u)]['status'].values)
+            if -99 in statuses:
+                null_list.append(u)
+
+        final_unitnames_set = set(unitnames)-set(null_list)
+        final_exposures = [u.split('D00')[1] for u in final_unitnames_set]
+        return final_exposures
 
     def get_expnums_from_nites(self,nites=None,process_all=False,program=None,propid=None):
         """ Get exposure numbers and band for incoming exposures"""

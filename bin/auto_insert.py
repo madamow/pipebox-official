@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from pipebox import pipequery
 
 # Create db connection
