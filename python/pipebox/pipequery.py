@@ -99,10 +99,13 @@ class PipeQuery(object):
         """ Get exposures into auto_queue for auto processing"""
         if not nites:
             now = datetime.now()
-            nites = [now.strftime('%Y%m%d')]
+            yesterday = now - timedelta(1)
+            print "%s: Inserting into AUTO_QUEUE." % now
+            nites = [yesterday.strftime('%Y%m%d'),now.strftime('%Y%m%d')]
         base_query = "select distinct expnum from exposure where obstype in ('object','standard') and \
-                      object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' \
-                      and object not like '%%test%%' and object not like '%%junk%%' and nite in (%s)" % ','.join(nites)
+                      object not like '%%pointing%%' and object not like '%%focus%%' and object \
+                      not like '%%donut%%' and object not like '%%test%%' and object \
+                      not like '%%junk%%' and nite in (%s)" % ','.join(nites)
         if process_all:
             base_query = base_query
         else:
@@ -112,15 +115,21 @@ class PipeQuery(object):
                 base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
         self.cur.execute(base_query)
         results = [row[0] for row in self.cur.fetchall()]
-        for expnum in results:
-            try:
-                insert_query = "insert into mjohns44.auto_queue (expnum,processed) values ({expnum},0)".format(expnum=expnum)
-                self.cur.execute(insert_query)
-            except:
-                print '%s already in queue! Skipping...' % expnum
-        self.dbh.commit()
+        if results:
+            inserts = []
+            for expnum in results:
+                try:
+                    insert_query = "insert into mjohns44.auto_queue (expnum,created,processed) values ({expnum},CURRENT_TIMESTAMP, 0)".format(expnum=expnum)
+                    self.cur.execute(insert_query)
+                    inserts.append(expnum)
+                except: pass
+            self.dbh.commit()
+            print '%s exposures inserted.' % len(inserts)
+        else:
+            print 'No new exposures to insert.'
 
     def update_auto_queue(self):
+        print '%s: Updating AUTO_QUEUE.' % datetime.now()
         query = "select distinct expnum from mjohns44.auto_queue where processed=0 order by expnum"
         unitnames = ['D00'+ str(e[0]) for e in self.cur.execute(query)]
        
@@ -129,9 +138,12 @@ class PipeQuery(object):
         results = [row[0].split('D00')[1] for row in self.cur.fetchall()]
         
         if results:
-            update_query = "update mjohns44.auto_queue set processed=1 where expnum in ({expnums})".format(expnums=','.join(results))
+            update_query = "update mjohns44.auto_queue set processed=1,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(results))
             self.cur.execute(update_query)
             self.dbh.commit()
+            print 'Updated %s exposures as processed.' % len(results)
+        else:
+            print 'No new exposures to update.'
 
 class SuperNova(PipeQuery):
 # Copied from widefield (unedited)
@@ -473,7 +485,7 @@ class WideField(PipeQuery):
         for u in df['unitname'].unique():
             count = df[(df.unitname == u) & (df.status == 0)].count()[0]
             statuses = list(df[(df.unitname == u)]['status'].values)
-            if -99 in statuses:
+            if -99 in statuses or 0 in statuses:
                 null_list.append(u)
 
         final_unitnames_set = set(unitnames)-set(null_list)
