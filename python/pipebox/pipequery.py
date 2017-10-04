@@ -95,13 +95,15 @@ class PipeQuery(object):
         return propid,program
 
 
-    def insert_auto_queue(self,nites=None,process_all=False,program=None,propid=None):
+    def insert_auto_queue(self,n=3,nites=None,process_all=False,program=None,propid=None):
         """ Get exposures into auto_queue for auto processing"""
         if not nites:
             now = datetime.now()
-            yesterday = now - timedelta(1)
+            nites = [now.strftime('%Y%m%d')]
+            for i in range(1,n+1):
+                date = now - timedelta(i)
+                nites.append(date.strftime('%Y%m%d'))
             print "%s: Inserting into AUTO_QUEUE." % now
-            nites = [yesterday.strftime('%Y%m%d'),now.strftime('%Y%m%d')]
         base_query = "select distinct expnum from exposure where obstype in ('object','standard') and \
                       object not like '%%pointing%%' and object not like '%%focus%%' and object \
                       not like '%%donut%%' and object not like '%%test%%' and object \
