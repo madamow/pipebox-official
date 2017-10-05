@@ -147,9 +147,9 @@ class PipeQuery(object):
         for u in df['unitname'].unique():
             statuses = list(df[(df.unitname == u)]['status'].values)
             failed_atts = [i for i in statuses if i >=1]
-            if  0 in statuses:
+            if 0 in statuses:
                 success_list.append(u)
-            if len(failed_atts) >= n_failed:
+            if 0 not in statuses and -99 not in statuses and len(failed_atts) >= n_failed:
                 fail_list.append(u)
         success_exposures = [u.split('D00')[1] for u in success_list]
         fail_exposures = [u.split('D00')[1] for u in fail_list]
@@ -512,8 +512,9 @@ class WideField(PipeQuery):
             if -99 in statuses or 0 in statuses:
                 null_list.append(u)
             # remove from list any exposures that have failed at least 3 times
-            elif len(failed_atts) >= n_failed:
-                null_list.append(u)
+            else:
+                if len(failed_atts) >= n_failed:
+                    null_list.append(u)
         final_unitnames_set = set(unitnames)-set(null_list)
         final_exposures = [u.split('D00')[1] for u in final_unitnames_set]
         return final_exposures
