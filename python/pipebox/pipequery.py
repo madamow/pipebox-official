@@ -130,22 +130,42 @@ class PipeQuery(object):
         else:
             print 'No new exposures to insert.'
 
-    def update_auto_queue(self):
+    def update_auto_queue(self,n_failed=3):
         print '%s: Updating AUTO_QUEUE.' % datetime.now()
         query = "select distinct expnum from mjohns44.auto_queue where processed=0 order by expnum"
         unitnames = ['D00'+ str(e[0]) for e in self.cur.execute(query)]
-       
-        find_processed = "select distinct unitname from pfw_request r,pfw_attempt a,task t where t.id=a.task_id and a.reqnum=r.reqnum and r.project='OPS' and unitname in ('{unitnames}') and status=0".format(unitnames = "','".join(unitnames))
-        self.cur.execute(find_processed)
-        results = [row[0].split('D00')[1] for row in self.cur.fetchall()]
+      
+        submitted = "select distinct unitname,attnum,status from pfw_attempt a, task t,pfw_request r where r.reqnum=a.reqnum and t.id=a.task_id and r.project='OPS' and unitname in ('%s')" % ("','".join(unitnames))
+        self.cur.execute(submitted)
+        failed_query = self.cur.fetchall()
+        df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
+        # Set Null values to -99
+        df = df.fillna(-99)
+
+        success_list = []
+        fail_list = []
+        for u in df['unitname'].unique():
+            statuses = list(df[(df.unitname == u)]['status'].values)
+            failed_atts = [i for i in statuses if i >=1]
+            if  0 in statuses:
+                success_list.append(u)
+            if len(failed_atts) >= n_failed:
+                fail_list.append(u)
+        success_exposures = [u.split('D00')[1] for u in success_list]
+        fail_exposures = [u.split('D00')[1] for u in fail_list]
         
-        if results:
-            update_query = "update mjohns44.auto_queue set processed=1,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(results))
+        if success_exposures:
+            update_query = "update mjohns44.auto_queue set processed=1,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(success_exposures))
             self.cur.execute(update_query)
             self.dbh.commit()
-            print 'Updated %s exposures as processed.' % len(results)
-        else:
+        if fail_exposures:
+            update_query = "update mjohns44.auto_queue set processed=2,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(fail_exposures))
+            self.cur.execute(update_query)
+            self.dbh.commit()
+        if not success_exposures and not fail_exposures:
             print 'No new exposures to update.'
+        else:
+            print 'Updated %s exposures as processed.' % (len(success_exposures)+len(fail_exposures))
 
 class SuperNova(PipeQuery):
 # Copied from widefield (unedited)
@@ -470,7 +490,7 @@ class WideField(PipeQuery):
         
         return expnum_list
 
-    def get_expnums_from_auto_queue(self):
+    def get_expnums_from_auto_queue(self,n_failed=3):
         query = "select distinct expnum from mjohns44.auto_queue where processed=0"
         self.cur.execute(query)
         exposures = [exp[0] for exp in self.cur.fetchall()]
@@ -487,9 +507,13 @@ class WideField(PipeQuery):
         for u in df['unitname'].unique():
             count = df[(df.unitname == u) & (df.status == 0)].count()[0]
             statuses = list(df[(df.unitname == u)]['status'].values)
+            failed_atts = [i for i in statuses if i >=1]
+            # remove from list any exposures that are currently running or successful
             if -99 in statuses or 0 in statuses:
                 null_list.append(u)
-
+            # remove from list any exposures that have failed at least 3 times
+            elif len(failed_atts) >= n_failed:
+                null_list.append(u)
         final_unitnames_set = set(unitnames)-set(null_list)
         final_exposures = [u.split('D00')[1] for u in final_unitnames_set]
         return final_exposures
