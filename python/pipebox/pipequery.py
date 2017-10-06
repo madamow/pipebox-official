@@ -40,15 +40,15 @@ class PipeQuery(object):
 
     def get_cals_from_epoch(self, epoch,band = None,campaign= None):
         """ Query to return the unitname,reqnum,attnum of epoch-based calibrations."""
-        count_for_campaign = "select count(*) from mjohns44.epoch_inputs where name='{epoch}' \
+        count_for_campaign = "select count(*) from ops_epoch_inputs where name='{epoch}' \
                               and campaign='{c}'".format(epoch=epoch,c=campaign)
         self.cur.execute(count_for_campaign)
         count = self.cur.fetchall()[0][0]
         if int(count) == 0:
-            campaign_query = "select max(campaign) from mjohns44.epoch_inputs where epoch='{epoch}'".format(epoch=epoch)
+            campaign_query = "select max(campaign) from ops_epoch_inputs where epoch='{epoch}'".format(epoch=epoch)
             self.cur.execute(campaign_query)
             campaign = self.cur.fetchall()[0][0]
-        query = "select * from mjohns44.epoch_inputs where name='{epoch}'  \
+        query = "select * from ops_epoch_inputs where name='{epoch}'  \
                  and campaign = '{c}'".format(epoch=epoch,c=campaign)
         self.cur.execute(query) 
         data = pd.DataFrame(self.cur.fetchall(),
@@ -121,7 +121,7 @@ class PipeQuery(object):
             inserts = []
             for expnum in results:
                 try:
-                    insert_query = "insert into mjohns44.auto_queue (expnum,created,processed) values ({expnum},CURRENT_TIMESTAMP, 0)".format(expnum=expnum)
+                    insert_query = "insert into ops_auto_queue (expnum,created,processed) values ({expnum},CURRENT_TIMESTAMP, 0)".format(expnum=expnum)
                     self.cur.execute(insert_query)
                     inserts.append(expnum)
                 except: pass
@@ -132,13 +132,16 @@ class PipeQuery(object):
 
     def update_auto_queue(self,n_failed=3):
         print '%s: Updating AUTO_QUEUE.' % datetime.now()
-        query = "select distinct expnum from mjohns44.auto_queue where processed=0 order by expnum"
+        query = "select distinct expnum from ops_auto_queue where processed=0 order by expnum"
         unitnames = ['D00'+ str(e[0]) for e in self.cur.execute(query)]
       
         submitted = "select distinct unitname,attnum,status from pfw_attempt a, task t,pfw_request r where r.reqnum=a.reqnum and t.id=a.task_id and r.project='OPS' and unitname in ('%s')" % ("','".join(unitnames))
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
-        df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
+        try:
+            df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
+        except:
+            df = pd.DataFrame(columns=['unitname','attnum','status'])
         # Set Null values to -99
         df = df.fillna(-99)
 
@@ -155,11 +158,11 @@ class PipeQuery(object):
         fail_exposures = [u.split('D00')[1] for u in fail_list]
         
         if success_exposures:
-            update_query = "update mjohns44.auto_queue set processed=1,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(success_exposures))
+            update_query = "update ops_auto_queue set processed=1,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(success_exposures))
             self.cur.execute(update_query)
             self.dbh.commit()
         if fail_exposures:
-            update_query = "update mjohns44.auto_queue set processed=2,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(fail_exposures))
+            update_query = "update ops_auto_queue set processed=2,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(fail_exposures))
             self.cur.execute(update_query)
             self.dbh.commit()
         if not success_exposures and not fail_exposures:
@@ -491,7 +494,7 @@ class WideField(PipeQuery):
         return expnum_list
 
     def get_expnums_from_auto_queue(self,n_failed=3):
-        query = "select distinct expnum from mjohns44.auto_queue where processed=0"
+        query = "select distinct expnum from auto_queue where processed=0"
         self.cur.execute(query)
         exposures = [exp[0] for exp in self.cur.fetchall()]
         unitnames = ['D00'+str(e) for e in exposures]
