@@ -502,7 +502,11 @@ class WideField(PipeQuery):
         submitted = "select distinct unitname,attnum,status from pfw_attempt a, task t,pfw_request r where r.reqnum=a.reqnum and t.id=a.task_id and r.project='OPS' and unitname in ('%s')" % ("','".join(unitnames))
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
-        df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
+        try:
+            df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
+        except:
+            df = pd.DataFrame(unitnames,columns=['unitname'])
+            df['status'] = -1 
         # Set Null values to -99
         df = df.fillna(-99)
 
