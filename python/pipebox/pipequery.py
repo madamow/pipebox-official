@@ -494,7 +494,7 @@ class WideField(PipeQuery):
         return expnum_list
 
     def get_expnums_from_auto_queue(self,n_failed=3):
-        query = "select distinct expnum from auto_queue where processed=0"
+        query = "select distinct expnum from ops_auto_queue where processed=0"
         self.cur.execute(query)
         exposures = [exp[0] for exp in self.cur.fetchall()]
         unitnames = ['D00'+str(e) for e in exposures]
