@@ -16,7 +16,10 @@ else:
     if not args.jira_summary:
         args.jira_summary = '_'.join([args.user,args.campaign,
                         args.desstat_pipeline,str(args.submit_time)[:10]])
-    widefield.ticket(args,groupby='user')
+    if not args.ignore_jira:
+        widefield.ticket(args,groupby='user')
+    else:
+        widefield.ticket(args,groupby='nite')
 
 # write submit files and submit if necessary
 # columns should only be values that change per submit (groupby)

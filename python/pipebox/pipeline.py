@@ -196,8 +196,7 @@ class PipeLine(object):
                 jira_parent = None
 
             if args.ignore_jira:
-                new_reqnum = reqnum
-                new_jira_parent = jira_parent
+                new_reqnum,new_jira_parent = (reqnum,jira_parent)
             else:
                 # Create JIRA ticket
                 new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
@@ -205,6 +204,7 @@ class PipeLine(object):
                                               summary=jira_summary,
                                               ticket=reqnum,parent=jira_parent,
                                               use_existing=True)
+            
             # Update dataframe with reqnum, jira_id
             # If row exists replace value, if not insert new column/value
             try:
@@ -218,8 +218,8 @@ class PipeLine(object):
                args.dataframe.insert(len(args.dataframe.columns),'jira_parent',None)
                args.dataframe.loc[index,'jira_parent'] = new_jira_parent
 
-        return args.dataframe
-
+        return args.dataframe        
+    
     def auto(self,args):
         """ Sets up cronfile if necessary and runs auto-submit routine for given pipeline"""
         # Set crontab path
@@ -401,7 +401,7 @@ class WideField(PipeLine):
  
         # If auto-submit mode on
         if self.args.auto:
-            self.args.ignore_processed=True
+            #self.args.ignore_processed=True
             pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
             
             self.args.expnum = ','.join([str(e) for e in self.args.cur.get_expnums_from_auto_queue()])

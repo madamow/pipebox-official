@@ -45,7 +45,7 @@ class PipeQuery(object):
         self.cur.execute(count_for_campaign)
         count = self.cur.fetchall()[0][0]
         if int(count) == 0:
-            campaign_query = "select max(campaign) from ops_epoch_inputs where epoch='{epoch}'".format(epoch=epoch)
+            campaign_query = "select max(campaign) from ops_epoch_inputs where name='{epoch}'".format(epoch=epoch)
             self.cur.execute(campaign_query)
             campaign = self.cur.fetchall()[0][0]
         query = "select * from ops_epoch_inputs where name='{epoch}'  \
