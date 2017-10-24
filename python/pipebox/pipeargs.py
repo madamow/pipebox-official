@@ -229,6 +229,7 @@ class PhotoZ(PipeArgs):
         parser.add('--tile')
         parser.add('--num_chunks',help='Total number of chunks')
         parser.add('--chunk_size',help='Number of tiles per chunk')
+        parser.add('--mof_table',default='nsevilla.y3a2_mof_tmp',help='MOF table to query on')
         parser.add('--list',help='File of line-separated tiles')
         parser.add('--proctag',help='Tag of processed expnums (proctag table) to use for coaddition')
         parser.add('--nthreads',default=8,help='Amount of parallelization')

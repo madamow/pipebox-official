@@ -9,7 +9,7 @@
                 chunk_number = ${chunk} 
                 chunk_size = ${chunk_size}
                 release_tilelist = ${file.tilenames_list.fullname}
-                #release_blacklist = ${file.tilenames_blacklist.fullname}
+                release_blacklist = ${file.tilenames_blacklist.fullname}
             </cmdline>
             execname = select_tilenames_chunk
             cmd_hyphen =  mixed_gnu
@@ -29,7 +29,9 @@
             </tilenames_list>
            <tilenames_blacklist>
                 # what input file is named
-                filename = ${cfgver}_bpz_tilenames_blacklist_v2.dat
+                #filename = ${cfgver}_bpz_tilenames_blacklist_v2.dat
+                filename = ${cfgver}_bpz_tilenames_blacklist_empty.dat
+
                 filetype = config
 
                 # where input file lives in jobroot

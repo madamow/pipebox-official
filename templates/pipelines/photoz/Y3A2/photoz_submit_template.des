@@ -12,8 +12,6 @@
 <<include {{args.pipebox_dir}}/templates/pipelines/photoz/{{args.campaign}}/modulewcl/create-color-cat.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/photoz/{{args.campaign}}/modulewcl/bpz.wcl>>
 
-master_use_fwthreads = True
-
 # these 2 are for debugging purposes
 purge_job_dir = never
 compress_cleanup = False
@@ -23,9 +21,12 @@ chunk_size = {{args.chunk_size}}
 basket = ${chunk:2}
 unitname = ${campaign}_${chunk:2}
 
+master_use_fwthreads = True
 
 bands = {{ args.bands }}
 det_bands = {{args.det_bands}}
+
+mof_table = {{args.mof_table}}
 
 {% if args.rundir %}
 ops_run_dir = {{ args.rundir }}
@@ -33,8 +34,6 @@ ops_run_dir = {{ args.rundir }}
 ops_run_dir = ${project}/${pipeline}/${campaign}/r${reqnum}/${basket}/p${attnum:2}
 {% endif %}
 submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
-
-nthreads = {{ args.nthreads }}
 
 save_run_vals = unitname, jira_id
 
