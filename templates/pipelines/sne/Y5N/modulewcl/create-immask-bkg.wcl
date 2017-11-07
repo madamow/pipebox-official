@@ -62,6 +62,7 @@
             CHECKIMAGE_NAME = ${file.red_immask_bkg.fullname}
             WEIGHT_TYPE = MAP_WEIGHT
             WEIGHT_IMAGE = ${file.red_nullweight_bkg.fullname}[2]
+            WEIGHT_THRESH = 1e-9
         </cmdline>
     </exec_1>
 </module>

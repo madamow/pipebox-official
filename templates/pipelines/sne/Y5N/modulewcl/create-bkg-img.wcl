@@ -52,6 +52,7 @@
             DETECT_THRESH = 1000
             CHECKIMAGE_TYPE = BACKGROUND
             CHECKIMAGE_NAME = ${file.red_bkg.fullname}
+            WEIGHT_THRESH = 1e-9
         </cmdline>
     </exec_1>
 </module>

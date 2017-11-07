@@ -98,3 +98,4 @@ photflagvar = 1    # needed for crosstalk code
 <<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/swarp-nofake-combined.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/update-astrom-scamp-header.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/sne/Y4N/modulewcl/update-scamp-headers.wcl>>
+

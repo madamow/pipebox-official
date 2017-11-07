@@ -5,6 +5,15 @@
         modnamepat=${modnamepat_field_ccdnumband}
 
         <file>
+            <starcat>
+                filetype = snlist_starcat
+                filepat = sn_ccdnum_band
+                flabel = StarCat
+                fsuffix = list
+                dirpat = sne_ccd
+                ops_enddir = list
+                rundir = list
+            </starcat>
             <sex_config>
                 filetype = config
                 filename = ${config_version}_SN_redim_ALL.sex
@@ -12,6 +21,13 @@
                 ops_enddir = config/sex
                 rundir = config 
             </sex_config>
+            <sex_assoc_config>
+                filetype = config
+                filename = ${config_version}_SN_redim_ASSOC.sex
+                dirpat = se
+                ops_enddir = config/sex
+                rundir = config
+            </sex_assoc_config>
             <sex_param>
                 filetype = config
                 filename = ${config_version}_SN_redim_ALL.sex.param
@@ -19,6 +35,13 @@
                 ops_enddir = config/sex
                 rundir = config
             </sex_param>
+            <sex_nnw>
+                filetype = config
+                filename = ${confignite}_sex.nnw
+                dirpat = se
+                ops_enddir = config/sex
+                rundir = config
+            </sex_nnw>
             <sex_filter>
                 filetype = config
                 filename = ${config_version}_SN_redim_ALL.sex.conv
@@ -70,11 +93,18 @@
             ancestry = file.red_sci:file.psfex_cat
             <cmdline>
                 _01_red_sci = ${file.red_sci.fullname}
+                c = ${file.sex_assoc_config.fullname}
+                CATALOG_NAME = ${file.psfex_cat.fullname}
+                WEIGHT_TYPE = MAP_WEIGHT
                 WEIGHT_IMAGE = ${file.red_wgt.fullname}
-                c = ${file.sex_config.fullname}
                 PARAMETERS_NAME = ${file.sex_param.fullname}
                 FILTER_NAME = ${file.sex_filter.fullname}
-                CATALOG_NAME = ${file.psfex_cat.fullname}
+                ASSOC_NAME = ${file.starcat.fullname}
+                STARNNW_NAME = ${file.sex_nnw.fullname}
+#                SATUR_LEVEL = $HEAD{${file.red_nullweight_immask.fullname},SATURATE}
+                DETECT_MINAREA = 3
+                DETECT_THRESH = 3.0
+                WEIGHT_THRESH = 1e-9
             </cmdline>
         </exec_1>
     </create-psfex-catalog>

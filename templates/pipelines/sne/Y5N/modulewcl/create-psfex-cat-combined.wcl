@@ -28,6 +28,13 @@
                 ops_enddir = config/sex
                 rundir = config
             </sex_param>
+            <sex_nnw>
+                filetype = config
+                filename = ${confignite}_sex.nnw
+                dirpat = se
+                ops_enddir = config/sex
+                rundir = config
+            </sex_nnw>
             <sex_filter>
                 filetype = config
                 filename = ${config_version}_SN_redim_ASSOC.sex.conv
@@ -72,12 +79,18 @@
             ancestry = file.starcat:file.psfex_cat,file.sci_combined:file.psfex_cat,file.wgt_combined:file.psfex_cat
             <cmdline>
                 _01_red_sci = ${file.sci_combined.fullname}
-                WEIGHT_IMAGE = ${file.wgt_combined.fullname}
                 c = ${file.sex_assoc_config.fullname}
+                CATALOG_NAME = ${file.psfex_cat.fullname}
+                WEIGHT_TYPE = MAP_WEIGHT
+                WEIGHT_IMAGE = ${file.wgt_combined.fullname}
                 PARAMETERS_NAME = ${file.sex_param.fullname}
                 FILTER_NAME = ${file.sex_filter.fullname}
-                CATALOG_NAME = ${file.psfex_cat.fullname}
                 ASSOC_NAME = ${file.starcat.fullname}
+                STARNNW_NAME = ${file.sex_nnw.fullname}
+#                SATUR_LEVEL = $HEAD{${file.red_nullweight_immask.fullname},SATURATE}
+                DETECT_MINAREA = 3
+                DETECT_THRESH = 3.0
+                WEIGHT_THRESH = 1e-9
             </cmdline>
         </exec_1>
     </create-psfex-cat-combined>
