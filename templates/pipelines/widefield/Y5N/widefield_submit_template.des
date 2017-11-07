@@ -35,11 +35,6 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/healpix.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/ingest-healpix.wcl>>
 
-{% if args.inputcals_file %}
-<<include {{args.inputcals_file}}>>
-{% else %}
-<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{args.campaign}}/modulewcl/inputs.wcl>>
-{% endif %}
 
 {% if not args.labels %}
 label = ${nite} {% endif %}
@@ -67,7 +62,6 @@ ops_run_dir = {{ args.rundir }}
 {% else %}
 ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/${unitname}/p${attnum:2} 
 {% endif %}
-submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
 
 save_run_vals = nite, camsym, band, expnum, jira_id
 
@@ -98,6 +92,11 @@ calnite = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].unitname.values[0]}}
 calreq = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].reqnum.values[0]}}
 calatt = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].attnum.values[0]}}
 
+{% if args.inputcals_file %}
+<<include {{args.inputcals_file}}>>
+{% else %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{args.campaign}}/modulewcl/inputs.wcl>>
+{% endif %}
 
 
 #####

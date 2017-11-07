@@ -100,6 +100,8 @@ home_archive = prodbeta
 des_http_section = file-http-prodbeta
 {% endif %}
 
+submit_run_dir = /des009/prod_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
+
 {% if args.ccdnum %}
 ccdnum = {{ args.ccdnum }}
 {% endif %}

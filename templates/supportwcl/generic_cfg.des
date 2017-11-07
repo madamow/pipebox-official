@@ -27,7 +27,7 @@ submit_files_mvmt     = filemgmt.job_mvmt_http.JobArchiveHttp
 
     # Optional
     <fermigrid>
-        target_des_services = /des/des20.b/data/{{ args['FERMI_ID'] }}/.desservices.ini
+        target_des_services = /data/des20.b/data/{{ args['FERMI_ID'] }}/.desservices.ini
      </fermigrid>
 
     <iforge>

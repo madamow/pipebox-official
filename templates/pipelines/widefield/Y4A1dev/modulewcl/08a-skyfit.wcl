@@ -38,6 +38,7 @@
                 filetype = cal_skypca_binned_fp
 
                 # how to name the file
+                #filename = ${skypcacampaign}_${skypcarange}_${band}_r${skypcareq}p${skypcaatt:2}_skypca-binned-fp.fits
                 filename = %${skypcarange}_${band}_r${skypcareq}p${skypcaatt:2}_skypca-binned-fp.fits
                 # what goes into list?
                 query_table = calibration

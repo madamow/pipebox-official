@@ -54,6 +54,7 @@
                 filetype = cal_skypca_tmpl
 
                 # how to name the file
+                #filename = ${skypcacampaign}_${skypcarange}_${band}_c${ccdnum:2}_r${skypcareq}p${skypcaatt:2}_skypca-tmpl.fits
                 
                 filename = %${skypcarange}_${band}_c${ccdnum:2}_r${skypcareq}p${skypcaatt:2}_skypca-tmpl.fits
                 # what goes into list?

@@ -2,6 +2,7 @@
     <bpz>
         modnamepat = ${modnamepat_unitname_generic}
         wrappername = genwrap.py
+        max_fwthreads = ${request_cpus}
         <exec_1>
             <cmdline>
                 c = ${file.bpz_config.fullname}

@@ -9,6 +9,7 @@
                 c = ${file.bpz_config.fullname}
                 tilename = ${file.chunk_out.fullname}
                 outcat = ${file.coadd_colorcat.fullname}
+                table_MOF = ${mof_table}
             </cmdline>
             execname = build_colorcat_sql
             cmd_hyphen =  mixed_gnu

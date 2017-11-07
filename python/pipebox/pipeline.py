@@ -106,9 +106,8 @@ class PipeLine(object):
                     self.args.epoch_name = self.args.cur.find_epoch(firstexpnum)
                 else:
                     self.args.epoch_name = firstexpnum = None
-            if not self.args.inputcals_file:
-                if self.args.epoch_name:
-                    self.args.cal_df = self.args.cur.get_cals_from_epoch(self.args.epoch_name,
+            if self.args.epoch_name:
+                self.args.cal_df = self.args.cur.get_cals_from_epoch(self.args.epoch_name,
                                                                          self.args.band,
                                                                          self.args.campaign)
 
@@ -197,8 +196,7 @@ class PipeLine(object):
                 jira_parent = None
 
             if args.ignore_jira:
-                new_reqnum = reqnum
-                new_jira_parent = jira_parent
+                new_reqnum,new_jira_parent = (reqnum,jira_parent)
             else:
                 # Create JIRA ticket
                 new_reqnum,new_jira_parent = jira_utils.create_ticket(args.jira_section,args.jira_user,
@@ -206,6 +204,7 @@ class PipeLine(object):
                                               summary=jira_summary,
                                               ticket=reqnum,parent=jira_parent,
                                               use_existing=True)
+            
             # Update dataframe with reqnum, jira_id
             # If row exists replace value, if not insert new column/value
             try:
@@ -219,8 +218,8 @@ class PipeLine(object):
                args.dataframe.insert(len(args.dataframe.columns),'jira_parent',None)
                args.dataframe.loc[index,'jira_parent'] = new_jira_parent
 
-        return args.dataframe
-
+        return args.dataframe        
+    
     def auto(self,args):
         """ Sets up cronfile if necessary and runs auto-submit routine for given pipeline"""
         # Set crontab path
@@ -257,13 +256,15 @@ class PipeLine(object):
         # If less than queue size submit exposure
         if args.total_queue:
             desstat_user = None
+            desstat_reqnum = None
         else:
             desstat_user = args.jira_user
-        if pipeutils.less_than_queue(pipeline=args.desstat_pipeline,reqnum=args.reqnum,
+            desstat_reqnum = args.reqnum
+        if pipeutils.less_than_queue(pipeline=args.desstat_pipeline,reqnum=desstat_reqnum,
                                      user=desstat_user,queue_size=args.queue_size):
             args.unitname,args.attnum = pipeutils.submit_command(args.submitfile,wait=float(args.wait))
         else:
-            while not pipeutils.less_than_queue(pipeline=args.desstat_pipeline, reqnum=args.reqnum,
+            while not pipeutils.less_than_queue(pipeline=args.desstat_pipeline, reqnum=desstat_reqnum,
                                                 user=desstat_user,queue_size=args.queue_size):
                 time.sleep(30)
             else:
@@ -400,13 +401,10 @@ class WideField(PipeLine):
  
         # If auto-submit mode on
         if self.args.auto:
-            self.args.ignore_processed=True
+            #self.args.ignore_processed=True
             pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
             
-            self.args.nite = self.args.cur.get_max_nite(propid=self.args.propid,
-                                                        program=self.args.program,
-                                                        process_all=self.args.process_all)[1]
-            self.args.nitelist = self.args.nite.split(',')
+            self.args.expnum = ','.join([str(e) for e in self.args.cur.get_expnums_from_auto_queue()])
             if self.args.resubmit_failed:
                 self.args.reqnum = jira_utils.get_reqnum_from_nite(self.args.jira_parent,
                                                                    self.args.nite)
@@ -466,7 +464,6 @@ class WideField(PipeLine):
             grouped = self.args.dataframe.groupby(by=['obstype','band']).agg(['count'])['expnum']
             print grouped
             sys.exit(0)
-
 
 class NitelyCal(PipeLine):
 
