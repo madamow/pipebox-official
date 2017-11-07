@@ -1,0 +1,103 @@
+#DIFFIMG-17
+<module> 
+    <create-psfex-cat-distmpl>
+        wrappername = genwrap.py 
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+
+        <file>
+            <starcat>
+                filetype = snlist_starcat
+                filepat = sn_ccdnum_band
+                flabel = StarCat
+                fsuffix = list
+                dirpat = sne_ccd
+                ops_enddir = list
+                rundir = list
+            </starcat>
+            <sex_all_config>
+                filetype = config
+                filename = ${config_version}_SN_redim_ALL.sex
+                dirpat = se
+                ops_enddir = config/sex
+                rundir = config
+            </sex_all_config>
+            <sex_assoc_config>
+                filetype = config
+                filename = ${config_version}_SN_redim_ASSOC.sex
+                dirpat = se
+                ops_enddir = config/sex
+                rundir = config
+            </sex_assoc_config>
+            <sex_param>
+                filetype = config
+                filename = ${config_version}_SN_redim_ALL.sex.param
+                dirpat = se
+                ops_enddir = config/sex
+                rundir = config
+            </sex_param>
+            <sex_nnw>
+                filetype = config
+                filename = ${confignite}_sex.nnw
+                dirpat = se
+                ops_enddir = config/sex
+                rundir = config
+            </sex_nnw>
+            <sex_filter>
+                filetype = config
+                filename = ${config_version}_SN_redim_ALL.sex.conv
+                dirpat = se
+                ops_enddir = config/sex
+                rundir = config
+            </sex_filter>
+            <sci_distmpl>
+                filetype = snsci_distmpl
+                filepat = sn_ccdnum_band
+                flabel = tmpl.sci
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = red
+            </sci_distmpl>
+            <wgt_distmpl>
+                filetype = snwgt_distmpl
+                filepat = sn_ccdnum_band
+                flabel = tmpl.weight
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir =  red
+            </wgt_distmpl>
+            <psfex_distmpl_cat>
+                filetype = sncat_psfex
+                filepat = sn_ccdnum_band
+                flabel = distmpl_psfexcat
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = cat
+                rundir = cat
+                savefiles = false
+            </psfex_distmpl_cat>
+        </file>
+        <exec_1>
+            execname = sex
+            used = file.sci_distmpl,file.wgt_distmpl,file.sex_all_config,file.sex_param,file.sex_filter
+            was_generated_by = file.psfex_distmpl_cat
+            ancestry = file.sci_distmpl:file.psfex_distmpl_cat,file.wgt_distmpl:file.psfex_distmpl_cat
+            <cmdline>
+                _01_red_sci = ${file.sci_distmpl.fullname}
+                c = ${file.sex_assoc_config.fullname}
+                CATALOG_NAME = ${file.psfex_distmpl_cat.fullname}
+                WEIGHT_TYPE = MAP_WEIGHT
+                WEIGHT_IMAGE = ${file.wgt_distmpl.fullname}
+                PARAMETERS_NAME = ${file.sex_param.fullname}
+                FILTER_NAME = ${file.sex_filter.fullname}
+                ASSOC_NAME = ${file.starcat.fullname}
+                STARNNW_NAME = ${file.sex_nnw.fullname}
+#                SATUR_LEVEL = $HEAD{${file.red_nullweight_immask.fullname},SATURATE}
+                DETECT_MINAREA = 3
+                DETECT_THRESH = 3.0
+                WEIGHT_THRESH = 1e-9
+            </cmdline>
+        </exec_1>
+    </create-psfex-cat-distmpl>
+</module>
+
