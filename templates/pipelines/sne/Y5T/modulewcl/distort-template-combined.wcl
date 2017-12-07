@@ -1,0 +1,93 @@
+#DIFFIMG-16
+#swarp 
+# /projects/des/Archive/OPS/cal/SNTemplate//SNTemplate_SN-E2/V130801/SNTemplate_SN-E2_V130801_r_2.fits 
+# -WEIGHT_IMAGE /projects/des/Archive/OPS/cal/SNTemplate//SNTemplate_SN-E2/V130801/SNTemplate_SN-E2_V130801_r_2.weight.fits
+# -XML_NAME SN_253351_SN-E2_tile20_r_02_temp_RUN12_swarp.xml  
+# -c SN_distemp.swarp 
+# -IMAGEOUT_NAME SN_253351_SN-E2_tile20_r_02_temp.fits 
+# -WEIGHTOUT_NAME  SN_253351_SN-E2_tile20_r_02_temp.weight.fits  
+# > WARNING: FITS header data read in SN_253351_SN-E2_tile20_r_02_temp.head
+<module>
+    <distort-template-combined>
+        wrappername = genwrap.py  
+        wrapperloop = ccdnum
+        modnamepat=${modnamepat_combine_ccdnumband}
+    
+        <file>
+            <config_distmpl>
+                filetype = config
+                filename = ${config_version}_SN_distemp.swarp
+                dirpat = se
+                rundir = config
+            </config_distmpl>
+            <head_swarp_combined>
+                filetype = snhead_swarp
+                filepat = sn_ccdnum_band_combined
+                flabel = tmpl.sci
+                fsuffix = head
+                dirpat = sne_ccd
+                rundir = distmpl
+            </head_swarp_combined>
+            <sci_tmpl>
+                filetype = snsci_tmpl
+                filepat = sntmpl
+                fsuffix = fits
+                dirpat = sne
+                rundir = sntemplate
+            </sci_tmpl>
+            <wgt_tmpl>
+                filetype = snwgt_tmpl
+                filepat = sntmpl
+                fsuffix = weight.fits
+                dirpat = sne
+                rundir = sntemplate
+            </wgt_tmpl>
+            <xml_distmpl>
+                filetype = snxml_swarp
+                filepat = sn_ccdnum_band_combined
+                flabel = distmpl
+                fsuffix = xml
+                dirpat = sne_ccd
+                ops_enddir = qa
+                rundir = qa
+                savefiles = false
+            </xml_distmpl>
+            <sci_distmpl>
+                filetype = snsci_distmpl
+                filepat = sn_ccdnum_band_combined
+                flabel = tmpl.sci
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = distmpl
+                rundir = distmpl
+                savefiles = false
+            </sci_distmpl>
+            <wgt_distmpl>
+                filetype = snwgt_distmpl
+                filepat = sn_ccdnum_band_combined
+                flabel = tmpl.weight
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = distmpl 
+                rundir =  distmpl
+                savefiles = false
+            </wgt_distmpl>
+        </file>
+    
+        <exec_1>
+            execname = swarp
+            used = file.sci_tmpl, file.wgt_tmpl,file.config_distmpl,file.head_swarp_combined
+            was_generated_by = file.xml_distmpl,file.sci_distmpl,file.wgt_distmpl
+            ancestry = file.sci_tmpl:file.sci_distmpl,file.sci_tmpl:file.wgt_distmpl,file.wgt_tmpl:file.wgt_distmpl,file.sci_tmpl:file.sci_distmpl
+            <cmdline>
+                _01_sci_tmpl = ${file.sci_tmpl.fullname}
+                WEIGHT_IMAGE = ${file.wgt_tmpl.fullname}
+                XML_NAME = ${file.xml_distmpl.fullname} 
+                IMAGEOUT_NAME = ${file.sci_distmpl.fullname}
+                WEIGHTOUT_NAME = ${file.wgt_distmpl.fullname}
+                c = ${file.config_distmpl.fullname}
+                NTHREADS = 1
+            </cmdline>
+        </exec_1>
+    </distort-template-combined>
+</module>

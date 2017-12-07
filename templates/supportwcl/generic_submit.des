@@ -106,4 +106,9 @@ submit_run_dir = /des009/prod_scratch/desdm_ops/${home_archive}/submit/${ops_run
 ccdnum = {{ args.ccdnum }}
 {% endif %}
 
+{% if args.minsigma %}
+immask_minSigma = {{ args.minsigma }}
+{% else %}
+immask_minSigma = 6.0
+{% endif %}
 {% block content %}{% endblock %}

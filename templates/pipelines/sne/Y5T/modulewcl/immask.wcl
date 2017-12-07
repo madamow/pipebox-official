@@ -1,0 +1,73 @@
+<module>
+    <immask>
+        wrappername = genwrap.py
+        wrapperloop = expnum,ccdnum
+        modnamepat=${modnamepat_field_ccdnumband}
+        <file>
+            <red_starflat>
+                filetype = snred_starflat
+                filepat = sn_ccdnum_band
+                flabel = starflat
+                fsuffix = fits
+                dirpat = sne
+                ops_enddir = red/starflat
+                rundir = red/starflat
+            </red_starflat>
+            <red_immask_bkg>
+                filetype = snred_bkg_immask
+                filepat = sn_ccdnum_band
+                flabel = immask-bkg
+                fsuffix = fits
+                dirpat = sne
+                ops_enddir = bkg/immask
+                rundir = bkg/immask
+            </red_immask_bkg>
+            <red_immasked>
+                filetype = snred_immask
+                filepat = sn_ccdnum_band
+                flabel = immasked
+                fsuffix = fits
+                dirpat = sne_ccd
+                ops_enddir = red/immask
+                rundir = red/immask
+                savefiles = true
+                compress_files = false
+            </red_immasked>
+            <cat_streak>
+                filetype = sncat_streak
+                filename = D${expnum:8}_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}_streak.fits
+                filepat = sn_ccdnum_band
+                dirpat = sne_ccd
+                ops_enddir = aux
+                optional = true
+                rundir = aux
+            </cat_streak>
+        </file>
+
+        <exec_1>
+            execname = immask
+            cmd_hyphen = alldouble
+            used = file.red_starflat,file.red_immask_bkg
+            was_generated_by = file.red_immasked,file.cat_streak
+            ancestry = file.red_starflat:file.red_immasked, file.red_immask_bkg:file.red_immasked, file.red_starflat:file.cat_streak
+            <cmdline>
+                _01_immask_mode = all
+                _02_red_starflat = ${file.red_starflat.fullname}
+                _03_red_immasked = ${file.red_immasked.fullname}
+                streaksfile = ${file.cat_streak.fullname}
+                write_streaks = _flag
+                bkgfile = ${file.red_immask_bkg.fullname}
+                minSigma = 6.0
+                nsig_mask = 12
+                nsig_merge = 12
+                nsig_sky = 1.5
+                max_angle = 75
+                max_width = 300
+                nsig_detect = 18
+                min_fill = 0.33
+                min_DN = 600
+                nGrowCR = 1
+            </cmdline>
+        </exec_1>
+    </immask>
+</module>

@@ -57,7 +57,7 @@
                 streaksfile = ${file.cat_streak.fullname}
                 write_streaks = _flag
                 bkgfile = ${file.red_immask_bkg.fullname}
-                minSigma = 6.0
+                minSigma = ${immask_minSigma}
                 nsig_mask = 12
                 nsig_merge = 12
                 nsig_sky = 1.5

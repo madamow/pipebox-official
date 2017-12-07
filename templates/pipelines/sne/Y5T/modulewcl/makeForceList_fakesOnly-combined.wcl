@@ -1,0 +1,60 @@
+#DIFFIMG-27
+<module>
+    <makeForceList_fakesOnly-combined>
+        wrappername = genwrap.py
+        wrapperloop = ccdnum
+        modnamepat=${modnamepat_combine_ccdnumband}
+        <file>
+            <mef_fakediff>
+                filetype = snred
+                filepat = sn_ccdnum_band_combined
+                flabel = fakeSN_diff_mh
+                fsuffix = fits
+                dirpat = sne_ccd
+                rundir = fakediff
+            </mef_fakediff>
+            <psfex_model>
+                filetype = snpsfex_model
+                filepat = sn_ccdnum_band_combined
+                flabel = psfexcat
+                fsuffix = psf
+                dirpat = sne_ccd
+                ops_enddir = psf
+                rundir = psf
+           </psfex_model>
+           <combined_fake_out>
+                filetype = snlist_fakeobj
+                filepat = sn_ccdnum_band_combined
+                flabel = fakeSN_doFake
+                fsuffix = out
+                dirpat = sne_ccd
+                rundir = red
+                ops_enddir = red
+            </combined_fake_out>
+
+            <forcephoto_input>
+                filetype = snlist_fakeobj
+                filepat = sn_ccdnum_band_combined
+                flabel = forcePhoto_fakeSNonly
+                fsuffix = input
+                dirpat = sne_ccd
+                ops_enddir = red
+                rundir = red
+                savefiles = true
+            </forcephoto_input>
+        </file>
+    
+        <exec_1>
+            execname = makeForceList_fakesOnly
+            used = file.mef_fakediff,file.psfex_model,file.combined_fake_out
+            was_generated_by = file.forcephoto_input
+            ancestry = file.mef_fakediff:file.forcephoto_input,file.psfex_model:file.forcephoto_input,file.combined_fake_out:file.forcephoto_input
+            <cmdline>
+                inFile_diffCoadd =  ${file.mef_fakediff.fullname}
+                inFile_psf = ${file.psfex_model.fullname}
+                inFile_fakeList = ${file.combined_fake_out.fullname}   
+                outFile_forceList = ${file.forcephoto_input.fullname}
+            </cmdline>
+        </exec_1>
+    </makeForceList_fakesOnly-combined>
+</module>
