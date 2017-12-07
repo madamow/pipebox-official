@@ -397,7 +397,7 @@ class WideField(PipeLine):
         super(WideField,self).update_args(self.args)
         self.args.output_name_keys = ['nite','expnum','band']
         self.args.cur = pipequery.WideField(self.args.db_section)
-        self.args.propid,self.args.program = self.args.cur.get_propids_programs()
+        self.args.propid,_ = self.args.cur.get_propids_programs()
  
         # If auto-submit mode on
         if self.args.auto:
@@ -747,7 +747,7 @@ class PhotoZ(PipeLine):
         # Creating dataframe from tiles
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
-            self.args.tile_list = self.args.cur.get_failed_tiles(self.args.reqnum,int(self.args.resubmit_max))
+            self.args.tile_list = self.args.cur.get_failed_chunks(self.args.reqnum,int(self.args.resubmit_max))
             if self.args.tile_list:
                 self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
             else:

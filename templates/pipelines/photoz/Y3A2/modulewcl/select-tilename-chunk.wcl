@@ -13,14 +13,15 @@
             </cmdline>
             execname = select_tilenames_chunk
             cmd_hyphen =  mixed_gnu
-            used = file.tilenames_list #, file.tilenames_blacklist
+            used = file.tilenames_list, file.tilenames_blacklist
             was_generated_by = file.chunk_out
             ancestry = file.tilenames_list:file.chunk_out #, file.tilenames_blacklist:file.chunk_out
         </exec_1>
         <file>
             <tilenames_list>
                 # what input file is named
-                filename = ${cfgver}_bpz_tilenames.dat
+                filename = ${cfgver}_bpz_tilenames_blacklist_v3.dat
+                #filename = ${cfgver}_bpz_tilenames.dat
                 filetype = config
 
                 # where input file lives in jobroot
@@ -29,7 +30,7 @@
             </tilenames_list>
            <tilenames_blacklist>
                 # what input file is named
-                #filename = ${cfgver}_bpz_tilenames_blacklist_v2.dat
+                #filename = ${cfgver}_bpz_tilenames_blacklist_v3.dat
                 filename = ${cfgver}_bpz_tilenames_blacklist_empty.dat
 
                 filetype = config

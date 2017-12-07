@@ -742,6 +742,30 @@ class PreBPM(PipeQuery):
 
 class PhotoZ(PipeQuery):
 
+    def get_failed_chunks(self, reqnum,resubmit_max):
+        """ Queries database to find number of failed attempts without success.
+            Returns expnums for failed, non-null, nonzero attempts."""
+        submitted = "select distinct unitname,attnum,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        self.cur.execute(submitted)
+        failed_query = self.cur.fetchall()
+        df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
+        # Set Null values to -99
+        df = df.fillna(-99)
+
+        resubmit_list = []
+
+        for u in df['unitname'].unique():
+            count = df[(df.unitname == u) & (df.status == 0)].count()[0]
+            statuses = list(df[(df.unitname == u)]['status'].values)
+            if -99 in statuses or 0 in statuses:
+                pass
+            else:
+                if (len(statuses) <= int(resubmit_max)):
+                    resubmit_list.append(u)
+        chunk_list = [u for u in resubmit_list]
+
+        return chunk_list
+
     def check_proctag(self,tag):
         """ Check to see if specified processing tag exists in PROCTAG table"""
         query = "select count(*) from proctag where tag = '{tag}'".format(tag=tag)
