@@ -1,0 +1,14 @@
+<module>
+    <query-for-meds>
+        modnamepat = ${modnamepat_tile_generic}
+        noop = True    # only run query so can use info in other modules
+        <list>
+            <allfiles>
+                exec = query_coadd_meds_standalone.py
+                args = --tile ${tilename} --me_proctag ${proctag} -s ${submit_des_db_section}  -v 2 --zsource ${zsource} --zversion ${zversion} --outfile ${qoutfile} -S prod
+                #columns = red.mag_zero
+            </allfiles>
+        </list>
+    </query-for-meds>
+</module>
+

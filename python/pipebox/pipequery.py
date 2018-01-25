@@ -643,7 +643,7 @@ class NitelyCal(PipeQuery):
         for row in cal_info:
             print "%09s  %09s  %09s" % (row[2], row[1], row[0])
 
-    def udpdate_df(self,df):
+    def update_df(self,df):
         """ Takes a pandas dataframe and for each exposure add column:value
             band, nite, obstype. Returns dataframe"""
 
