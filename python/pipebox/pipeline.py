@@ -557,7 +557,15 @@ class NitelyCal(PipeLine):
 
         if self.args.combine:
             self.args.desstat_pipeline = "supercal"
-            self.args.dataframe['niterange'] = self.args.niterange
+            if self.args.niterange is None:
+                for index,row in self.args.dataframe.iterrows():
+                    try:
+                        self.args.dataframe.loc[index,('niterange')] = str(row['nite'])
+                    except:
+                        self.args.dataframe.insert(len(self.args.dataframe.columns),'niterange',None)
+                        self.args.dataframe.loc[index,('niterange')] = str(row['nite'])
+            else:
+                self.args.dataframe['niterange'] = self.args.niterange
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
         else:
             self.args.desstat_pipeline = "precal"
