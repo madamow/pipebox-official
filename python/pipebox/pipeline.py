@@ -561,9 +561,13 @@ class NitelyCal(PipeLine):
                 for index,row in self.args.dataframe.iterrows():
                     try:
                         self.args.dataframe.loc[index,('niterange')] = str(row['nite'])
+                        self.args.dataframe.loc[index, ('unitname')] = str(row['nite'])
                     except:
                         self.args.dataframe.insert(len(self.args.dataframe.columns),'niterange',None)
                         self.args.dataframe.loc[index,('niterange')] = str(row['nite'])
+                        self.args.dataframe.insert(len(self.args.dataframe.columns), 'unitname', None)
+                        self.args.dataframe.loc[index, ('unitname')] = str(row['nite'])
+
             else:
                 self.args.dataframe['niterange'] = self.args.niterange
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
