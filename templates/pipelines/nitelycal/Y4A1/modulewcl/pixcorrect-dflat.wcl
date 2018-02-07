@@ -31,7 +31,7 @@
                 dirpat = se
                 filename = ${lintablefile}.fits
                 filetype = cal_lintable
-                rundir = lintable/${lintablenite}
+                rundir = lintable
             </lintable>
             <pixcor_dflat>
                 dirpat = precal
