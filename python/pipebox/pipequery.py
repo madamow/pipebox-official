@@ -610,7 +610,7 @@ class NitelyCal(PipeQuery):
             nite_query = "select distinct nite from exposure where expnum in ({explist}) \
                          order by nite".format(explist=explist)
             self.cur.execute(nite_query)
-            nites.append([n[0] for n in self.cur.fetchall()])
+            nites = nites + [n[0] for n in self.cur.fetchall()]
         return nites 
 
     def check_submitted(self,date,reqnum):
