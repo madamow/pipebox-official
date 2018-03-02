@@ -590,10 +590,12 @@ class NitelyCal(PipeLine):
 
             self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
         if self.args.combine: 
-            self.args.dataframe,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,
-                                                                                     self.args.bands,
-                                                                                     k=self.args.max_num,
-                                                                                     verbose= True)
+            if not self.args.flatlist and not self.args.biaslist and not self.args.csv:
+                self.args.dataframe,not_enough_exp = nitelycal_lib.trim_excess_exposures(
+                                                        self.args.dataframe,
+                                                        self.args.bands,
+                                                        k=self.args.max_num,
+                                                        verbose= True)
         # Update dataframe with lists
         try:
             self.args.dataframe.insert(len(self.args.dataframe),'bias_list',None)
