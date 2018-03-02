@@ -599,19 +599,11 @@ class WideField(PipeQuery):
 class NitelyCal(PipeQuery):
 
     def get_nites(self,expnum_list):
-        nites = []
-        def chunks(l,n):
-            for i in range(0,len(l),n):
-                yield l[i:i+n]
-        
-        chunked_list =  list(chunks(expnum_list,50))
-        for c in chunked_list:
-            explist = ','.join(str(n) for n in c)
-            nite_query = "select distinct nite from exposure where expnum in ({explist}) \
-                         order by nite".format(explist=explist)
-            self.cur.execute(nite_query)
-            nites = nites + [n[0] for n in self.cur.fetchall()]
-        return nites 
+        explist = ','.join(str(n) for n in expnum_list)
+        nite_query = "select distinct nite from exposure where expnum in ({explist}) \
+                     order by nite".format(explist=explist)
+        self.cur.execute(nite_query)
+        return [n[0] for n in self.cur.fetchall()]
 
     def check_submitted(self,date,reqnum):
         """Check to see if a nitelycal has been submitted with given date"""
