@@ -599,13 +599,12 @@ class WideField(PipeQuery):
 class NitelyCal(PipeQuery):
 
     def get_nites(self,expnum_list):
-        import pprint
         nites = []
         def chunks(l,n):
-            for in range(0,len(l),n):
+            for i in range(0,len(l),n):
                 yield l[i:i+n]
         
-        chunked_list =  pprint.pprint(list(chunks(explist,50)))
+        chunked_list =  list(chunks(expnum_list,50))
         for c in chunked_list:
             explist = ','.join(str(n) for n in c)
             nite_query = "select distinct nite from exposure where expnum in ({explist}) \
