@@ -1,0 +1,58 @@
+{% extends "supportwcl/generic_submit.des" %}
+{% block content %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/prebpm/{{ args.campaign }}/modulewcl/modnamepat.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/prebpm/{{ args.campaign }}/modulewcl/01-crosstalk-sci.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/prebpm/{{ args.campaign }}/modulewcl/02-pixcorrect.wcl>>
+
+{% if args.inputcals_file %}
+<<include {{args.inputcals_file}}>>
+{% else %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/prebpm/{{args.campaign}}/modulewcl/inputs.wcl>>
+{% endif %}
+
+{% if not args.labels %}
+label = ${nite} {% endif %}
+
+expnum = {{ args.expnum }}
+band = {{ args.band }}
+nite = {{ args.nite }}
+
+basket = ${band}
+
+{% if args.ccdnum %}
+ccdnum = {{ args.ccdnum }}
+{% else %}
+ccdnum = {{args.cal_df[(args.cal_df.filetype=='None')].ccdnum.values[0]}}
+{% endif %}
+unitname = ${camsym}${expnum:8}
+epoch = {{args.epoch_name}}
+{% if args.rundir %}
+ops_run_dir = {{ args.rundir }}
+{% else %}
+ops_run_dir = ${project}/${pipeline}/${campaign}/${epoch}-r${reqnum}/${basket}/${unitname}/p${attnum:2} 
+{% endif %}
+submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
+
+save_run_vals = nite, camsym, band, expnum, jira_id
+
+GROUP_SUBMIT_ID = 1
+
+blocklist = se
+
+<block>
+   <se>
+        modulelist = crosstalk-sci,pixcorrect
+    </se>    
+</block>
+
+### Input Calibrations ###
+hupdatefile = ${confignite}_{{args.cal_df[(args.cal_df.filetype=='config')].filepat.values[0]}}
+lintablefile = {{args.cal_df[(args.cal_df.filetype=='cal_lintable')].filename.values[0]}}
+bpmnite = {{args.cal_df[(args.cal_df.filetype=='cal_bpm')].unitname.values[0]}}
+bpmreq = {{args.cal_df[(args.cal_df.filetype=='cal_bpm')].reqnum.values[0]}}
+bpmatt = {{args.cal_df[(args.cal_df.filetype=='cal_bpm')].attnum.values[0]}}
+calnite = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].unitname.values[0]}}
+calreq = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].reqnum.values[0]}}
+calatt = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].attnum.values[0]}}
+
+{% endblock %}
