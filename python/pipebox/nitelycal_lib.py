@@ -117,44 +117,66 @@ def create_clean_df(query_object):
         
     return final_df
 
-def trim_excess_exposures(df,bands,k=150,verbose=False):
+def trim_excess_exposures(df,bands,k=150,verbose=False,exclude=None):
     # k = maximum number
+    def trim_flats(): 
+        dff = pd.DataFrame()
+        set_warning = False 
+        for i in range(0,len(bands)):
+            length_flat = len(df[df.band.isin([bands[i]])])
+            if length_flat<k:
+                set_warning = True
+                if verbose:
+                    print "Warning: less than {k} found for {obstype} {band} band.".format(k=k,obstype='dome flat',band=bands[i])
 
-    df2 = pd.DataFrame()
-    set_warning = False 
-    for i in range(0,len(bands)):
-        length_flat = len(df[df.band.isin([bands[i]])])
-        if length_flat<k:
+            diff_flat = float(length_flat - k)  
+            if diff_flat > 0:
+                div_flat = int(math.ceil(length_flat/diff_flat))
+                remove_expnums= df[(df.band.isin([bands[i]])) & (~df.obstype.isin(['zero']))].iloc[::div_flat,:]['expnum'].values
+                dff = dff.append(df[(df.band.isin([bands[i]])) & (~df.obstype.isin(['zero'])) & (~df.expnum.isin(remove_expnums))])
+            else:
+                dff = dff.append(df[(df.band.isin([bands[i]])) & (~df.obstype.isin(['zero']))])
+
+        return (dff,set_warning)
+
+    def trim_zeros():
+        # Trimming zeros
+        set_warning = False
+        length_zero = len(df[df.obstype.isin(['zero'])])
+        if length_zero<k:
             set_warning = True
             if verbose:
-                print "Warning: less than {k} found for {obstype} {band} band.".format(k=k,obstype='dome flat',band=bands[i])
+                print "Warning: less than {k} found for {obstype}.".format(k=k,obstype='zero')
 
-        diff_flat = float(length_flat - k)  
-        if diff_flat > 0:
-            div_flat = int(math.ceil(length_flat/diff_flat))
-            #df2 = df2.append(df[df.band.isin([bands[i]])&~df.obstype.isin(['zero'])].head(k))
-            remove_expnums= df[(df.band.isin([bands[i]])) & (~df.obstype.isin(['zero']))].iloc[::div_flat,:]['expnum'].values
-            df2 = df2.append(df[(df.band.isin([bands[i]])) & (~df.obstype.isin(['zero'])) & (~df.expnum.isin(remove_expnums))])
+        diff_zero = float(length_zero - k)
+        if diff_zero >0:
+            div_zero= int(math.ceil(length_zero/diff_zero))
+            remove_zero = df[df.obstype.isin(['zero'])].iloc[::div_zero,:]['expnum'].values
+            df_zero = df[df.obstype.isin(['zero']) & (~df.expnum.isin(remove_zero))]
+        else: 
+            df_zero = df[df.obstype.isin(['zero'])]
+        
+        return (df_zero,set_warning)
+    if exclude == 'FB':
+        df2 = df
+        warning = False
+    elif exclude =='B':
+        df_z = df[(df.obstype.isin(['zero']))]
+        df_f,warning = trim_flats()
+        df2 = pd.concat([df_f,df_z],ignore_index=True)
+    elif exclude == 'F':
+        df_f = df[(~df.obstype.isin(['zero']))]
+        df_z,warning = trim_zeros()
+        df2 = pd.concat([df_f,df_z],ignore_index=True)
+    else:
+        df_z,zwarning = trim_zeros()
+        df_f,fwarning = trim_flats()
+        if zwarning or fwarning:
+            warning = True
         else:
-            df2 = df2.append(df[(df.band.isin([bands[i]])) & (~df.obstype.isin(['zero']))])
-    # Trimming zeros
-    length_zero = len(df[df.obstype.isin(['zero'])])
-    if length_zero<k:
-        set_warning = True
-        if verbose:
-            print "Warning: less than {k} found for {obstype}.".format(k=k,obstype='zero')
-
-    diff_zero = float(length_zero - k)
-    if diff_zero >0:
-        div_zero= int(math.ceil(length_zero/diff_zero))
-        #df_zero = df[df.obstype.isin(['zero'])].head(k)
-        remove_zero = df[df.obstype.isin(['zero'])].iloc[::div_zero,:]['expnum'].values
-        df_zero = df[df.obstype.isin(['zero']) & (~df.expnum.isin(remove_zero))]
-    else: 
-        df_zero = df[df.obstype.isin(['zero'])]
-    df2 = df2.append(df_zero)
-
-    return (df2,set_warning)
+            warning = False
+        df2 = pd.concat([df_f,df_z],ignore_index=True)
+    return (df2,warning)
 
 def find_no_data(df,nitelist):
     df2 = df[df.obstype=='dome flat']

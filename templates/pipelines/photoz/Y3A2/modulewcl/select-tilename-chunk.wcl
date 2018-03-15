@@ -20,8 +20,8 @@
         <file>
             <tilenames_list>
                 # what input file is named
-                filename = ${cfgver}_bpz_tilenames_blacklist_v3.dat
-                #filename = ${cfgver}_bpz_tilenames.dat
+                #filename = ${cfgver}_bpz_tilenames_blacklist_empty.dat
+                filename = ${cfgver}_bpz_tilenames.dat
                 filetype = config
 
                 # where input file lives in jobroot

@@ -7,7 +7,6 @@ from pipebox import pipeline
 print "Collecting data..."
 nitelycal = pipeline.NitelyCal()   
 args = nitelycal.args
-
 if args.combine:
     # create ticket based on date range
     nitelycal.ticket(args,groupby='niterange')

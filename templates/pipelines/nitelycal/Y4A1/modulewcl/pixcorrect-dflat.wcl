@@ -29,7 +29,7 @@
             </biascor>
             <lintable>
                 dirpat = se
-                filename = ${lintablefile}.fits
+                filename = ${lintablefile}
                 filetype = cal_lintable
                 rundir = lintable
             </lintable>

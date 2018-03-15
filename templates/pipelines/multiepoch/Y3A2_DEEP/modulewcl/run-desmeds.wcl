@@ -4,7 +4,7 @@
         wrappername = genwrap.py
         wrapperloop = band
         loopobj = list.nwgint
-        #max_fwthreads = ${nthreads}
+        max_fwthreads = ${nthreads}
 
         <exec_1>
             <cmdline>
@@ -48,9 +48,7 @@
             </nwgint>
             <redbkg>
                 depends bigquery.list.allfiles.bkg
-                #depends null-weight-for-coadd.file.nwgint
                 divide_by = band
-                #sortkey = (expnum, True, False)
                 sortkey = (filename, False, False)
 
                 # what to name list
@@ -97,8 +95,10 @@
                 rundir = coadd
             </coadd>
             <coadd_cat>
+               #depends on band-coadd-catalog.file.coadd_cat
+               #match = band
                filepat = tilename_band
-               filename = ${tilename}_r${reqnum}p${attnum:2}_i_cat.fits 
+               filename = ${tilename}_r${reqnum}p${attnum:2}_${band}_cat.fits 
 
                 # where input file lives in jobroot
                 dirpat = mepoch

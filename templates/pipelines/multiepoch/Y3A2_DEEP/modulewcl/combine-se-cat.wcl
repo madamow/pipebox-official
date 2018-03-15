@@ -19,24 +19,26 @@
         </exec_1>
         <list>
             <se-ccd-cat>
-                # how to get list data
-                exec = query_coadd_astrorefine.py
-                args = --bandlist ${band} --proctag ${proctag} --tile ${tilename} --outfile ${qoutfile} --cattype CAT_FINALCUT --verbose 1
-
-                # how to create lists
+                ccdnum=${ccd}
+                tag = ${proctag}
+                filetype = cat_finalcut
+                query_table = catalog
+                join catalog.pfw_attempt_id = proctag.pfw_attempt_id
+                query_fields = filetype,ccdnum,proctag.tag
+                output_fields = filename,expnum,band
                 divide_by = expnum,band
-                columns = catfile.fullname
-                sortkey = (expnum, True, False)
-
-                # what to name the list
+                
+                # how to create lists
                 filepat = tile_expband
                 flabel = se-ccd-cat
                 fsuffix = list
+                columns = catfile.fullname
+                sortkey = (expnum, True, False)
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
                 ops_enddir = list
-rundir = list
+                rundir = list
             </se-ccd-cat>
         </list>
         <file>

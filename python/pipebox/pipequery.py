@@ -599,11 +599,20 @@ class WideField(PipeQuery):
 class NitelyCal(PipeQuery):
 
     def get_nites(self,expnum_list):
-        explist = ','.join(str(n) for n in expnum_list)
-        nite_query = "select distinct nite from exposure where expnum in ({explist}) \
-                     order by nite".format(explist=explist)
-        self.cur.execute(nite_query)
-        return [n[0] for n in self.cur.fetchall()]
+        def divide_chunks(l,n):
+            '''Split the list into n chunks'''
+            for i in range(0,len(l),n):
+                yield l[i:i+n]
+        explist = list(divide_chunks(expnum_list,1000))
+        master_list = []
+        for l in explist:
+            nite_query = "select distinct nite from exposure where \
+                          expnum in ({explist}) \
+                          order by nite".format(explist=','.join(str(n) for n in l))
+            self.cur.execute(nite_query)
+            each_list = [n[0] for n in self.cur.fetchall()]
+            master_list += each_list
+        return master_list
 
     def check_submitted(self,date,reqnum):
         """Check to see if a nitelycal has been submitted with given date"""
@@ -622,9 +631,18 @@ class NitelyCal(PipeQuery):
         dflat_nite = self.cur.fetchone()[0]
         return max_expnum,dflat_nite   
 
-    def get_cals(self,nites_list):
+    def get_cals(self,nites_list,exclude=None):
         """Return calibration information for each nite found in nites_list"""
-        cal_query = "select nite,date_obs,expnum,band,exptime,obstype,program,propid,object \
+        if exclude == 'B':
+            cal_query = "select nite,date_obs,expnum,band,exptime,obstype,program,propid,object \
+                     from exposure where obstype in ('dome flat') \
+                     and nite in (%s) order by expnum" % ','.join(nites_list)
+        elif exclude == 'F':
+            cal_query = "select nite,date_obs,expnum,band,exptime,obstype,program,propid,object \
+                     from exposure where obstype in ('zero') \
+                     and nite in (%s) order by expnum" % ','.join(nites_list)
+        else:
+            cal_query = "select nite,date_obs,expnum,band,exptime,obstype,program,propid,object \
                      from exposure where obstype in ('zero','dome flat') \
                      and nite in (%s) order by expnum" % ','.join(nites_list)
         self.cur.execute(cal_query)

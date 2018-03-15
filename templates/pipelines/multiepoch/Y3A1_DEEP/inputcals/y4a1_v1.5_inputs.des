@@ -1,9 +1,6 @@
 camsym = D
 cfgver = Y3A2_v3
 meds_config_ver = Y3A2v2
-mof_config_ver = Y3A2-v2
-
-query_campaign = Y3A1
 
 color_r_band = i
 color_g_band = r
@@ -11,18 +8,16 @@ color_b_band = g
 mag_zero = 30
 
 zsource = FGCM
-zversion = v2.0
+zversion = y4a1_v1.5
 zeropoint_table = zeropoint
 zflag = 16
 
 z2source = pyPSM
 z2version = v1.0
 zpt2 = ZEROPOINT
-z2flag = 1
+z2flag = 8
 
-fgcm_gry_table = Y3A1_FGCM_ALL_V2_5
 blacklist_table = Y3A1_BLACKLIST
-se_proctag = Y3A1_FINALCUT
 
 assemble_xblock = 10
 assemble_yblock = 3

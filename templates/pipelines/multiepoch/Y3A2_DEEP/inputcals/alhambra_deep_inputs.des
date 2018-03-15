@@ -1,9 +1,5 @@
 camsym = D
-cfgver = Y3A2_v3
-meds_config_ver = Y3A2v2
-mof_config_ver = Y3A2-v2
-
-query_campaign = Y3A1
+cfgver = Y3A1_v2
 
 color_r_band = i
 color_g_band = r
@@ -15,14 +11,12 @@ zversion = v2.0
 zeropoint_table = zeropoint
 zflag = 16
 
-z2source = pyPSM
+z2source = expCalib
 z2version = v1.0
 zpt2 = ZEROPOINT
 z2flag = 1
 
-fgcm_gry_table = Y3A1_FGCM_ALL_V2_5
 blacklist_table = Y3A1_BLACKLIST
-se_proctag = Y3A1_FINALCUT
 
 assemble_xblock = 10
 assemble_yblock = 3
@@ -51,3 +45,4 @@ sex_cat_conv_file = ${cfgver}_gauss_3.0_7x7.conv
 sex_cat_param_file = ${cfgver}_sex.param_diskonly
 #sex_cat_param_file = ${cfgver}_sex.param_nomodel
 sex_cat_nnw_file = ${cfgver}_sex.nnw
+meds_config_ver = Y3A1v1
