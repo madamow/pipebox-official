@@ -542,13 +542,15 @@ class NitelyCal(PipeLine):
 
             self.args.dataframe = pd.concat([self.args.flat_df,self.args.bias_df],ignore_index=True)
 
+            self.args.cur.update_df(self.args.dataframe)
+
         if self.args.csv:
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.cur.update_df(self.args.dataframe)
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
 
-        if not self.args.biaslist or not self.args.flatlist or not self.args.csv:
+        if not self.args.biaslist and not self.args.flatlist and not self.args.csv:
             cal_query = self.args.cur.get_cals(self.args.nitelist)
             self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
             if self.args.combine:
