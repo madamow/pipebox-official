@@ -19,7 +19,7 @@
             ### input files
             <bpz_config>
                 # what input file is named
-                filename = ${cfgver}_bpz_config-SINGLE-v2.yaml
+                filename = ${cfgver}_bpz_config-SINGLE-v3.yaml
                 filetype = config
 
                 # where input file lives in jobroot

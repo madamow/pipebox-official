@@ -14,7 +14,8 @@
                 c = ${file.swarp_config.fullname}
                 WEIGHTOUT_NAME = ${file.det_wgt.fullname}
                 CENTER = ${ra_cent},${dec_cent}
-                RESAMPLE = N
+                RESAMPLE = Y
+                RESAMPLING_TYPE = NEAREST
                 COPY_KEYWORDS = BUNIT,TILENAME,TILEID
                 PIXEL_SCALE = ${pixelscale}
                 IMAGE_SIZE = ${naxis1},${naxis2}

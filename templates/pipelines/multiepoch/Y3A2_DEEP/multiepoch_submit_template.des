@@ -42,13 +42,20 @@ purge_job_dir = never
 compress_cleanup = False
 
 basket = {{args.tile}} # FIX THIS
-proctag = {{args.proctag}}
+proctag = {{args.tile.split('-')[1].split('_')[0] + '_' + args.proctag}}
 tilename = {{args.tile}}
 unitname = ${tilename}
 
 ccd = {{ args.tile.split('_')[1].split('C')[1] }}
 bands = {{ args.bands }}
 det_bands = {{args.det_bands}}
+
+# Setting PSFex satur levels based on field/band
+{% if '3' in args.tile.split('-')[1].split('_')[0] %}
+depth=deep
+{% else %}
+depth=shallow
+{% endif %}
 
 {% if args.rundir %}
 ops_run_dir = {{ args.rundir }}
@@ -68,8 +75,6 @@ blocklist = me
 <block>
     <me>
       modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, det-swarp-wgt, det-swarp-msk, band-assemble, det-assemble, make-color-img, make-ptif, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, wavg, mepoch-ingest-no-mangle, run-desmeds
-       #modulelist = combine-se-cat,coadd-astrorefine,bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, det-swarp-wgt, det-swarp-msk, band-assemble, det-assemble, make-color-img, make-ptif, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, wavg, mepoch-ingest-no-mangle, run-desmeds
-
     </me>
 </block>
 

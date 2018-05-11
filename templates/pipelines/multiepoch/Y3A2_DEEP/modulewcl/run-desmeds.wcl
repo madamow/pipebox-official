@@ -12,9 +12,9 @@
                 coadd_image = ${file.coadd.fullname}
                 coadd_cat = ${file.coadd_cat.fullname} 
                 coadd_seg = ${file.coadd_segmap.fullname}
-                nwg_flist = ${list.nwgint.fullname}
-                bkg_flist = ${list.redbkg.fullname}
-                seg_flist = ${list.redseg.fullname}
+                #nwg_flist = ${list.nwgint.fullname}
+                #bkg_flist = ${list.redbkg.fullname}
+                #seg_flist = ${list.redseg.fullname}
                 meds_output = ${file.meds.fullname}
                 medsconf = ${file.medsconf.fullname}
                 tileconf = ${file.tileconf.fullname}
@@ -22,7 +22,7 @@
             </cmdline>
             execname = run_desmeds
             cmd_hyphen =  mixed_gnu
-            used = list.nwgint.nwgint,list.redbkg.bkg,list.redseg.seg,file.medsconf,file.coadd,file.coadd_cat,file.coadd_segmap
+            used = file.medsconf,file.coadd,file.coadd_cat,file.coadd_segmap #,list.nwgint.nwgint,list.redbkg.bkg,list.redseg.seg
             was_generated_by = file.tileconf,file.meds,file.objmap
             #ancestry = file.coadd_cat:file.meds,file.,file.coadd:file.meds,file.coadd_cat:file.tileconf,file.coadd:file.tileconf
         </exec_1>
@@ -97,7 +97,7 @@
             <coadd_cat>
                #depends on band-coadd-catalog.file.coadd_cat
                #match = band
-               filepat = tilename_band
+               filepat = tile_band
                filename = ${tilename}_r${reqnum}p${attnum:2}_${band}_cat.fits 
 
                 # where input file lives in jobroot

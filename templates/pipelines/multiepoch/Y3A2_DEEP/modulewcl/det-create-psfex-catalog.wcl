@@ -2,6 +2,7 @@
     <det-create-psfex-catalog>
         modnamepat = ${modnamepat_tile_generic}
         wrappername = genwrap.py
+        req_vals = psfex_satur_level_shallow,psfex_satur_level_deep
         <exec_1>
             execname = sex
             cmd_hyphen = allsingle
@@ -12,8 +13,9 @@
                 INTERP_TYPE = ALL
                 DETECT_MINAREA = 3
                 CATALOG_TYPE = FITS_LDAC
-                SATUR_LEVEL = ${psfex_satur_level}
+                SATUR_LEVEL = ${psfex_satur_level_${depth}}
                 FILTER_NAME = ${file.sex_filter.fullname}
+                FLAG_IMAGE = ${file.coadd_det.fullname}[1]
                 WEIGHT_IMAGE = ${file.coadd_det.fullname}[2]
                 STARNNW_NAME = ${file.sex_nnw.fullname}
                 CATALOG_NAME = ${file.psfex_cat.fullname}

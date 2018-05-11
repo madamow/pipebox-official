@@ -100,6 +100,11 @@ home_archive = prodbeta
 des_http_section = file-http-prodbeta
 {% endif %}
 
+{% if args.db_section == 'db-lsst' %}
+se_object_table = PROD.SE_OBJECT
+home_archive = desar2home
+des_http_section = file-http {% endif %}
+
 submit_run_dir = /des009/prod_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
 
 {% if args.ccdnum %}

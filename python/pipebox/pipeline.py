@@ -397,7 +397,10 @@ class WideField(PipeLine):
         super(WideField,self).update_args(self.args)
         self.args.output_name_keys = ['nite','expnum','band']
         self.args.cur = pipequery.WideField(self.args.db_section)
-        self.args.propid,_ = self.args.cur.get_propids_programs()
+        if not self.args.propid:
+            self.args.propid,_ = self.args.cur.get_propids_programs()
+        else:   
+            self.args.propid = [self.args.propid]
  
         # If auto-submit mode on
         if self.args.auto:
