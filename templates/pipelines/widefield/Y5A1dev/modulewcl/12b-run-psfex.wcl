@@ -1,7 +1,7 @@
 qa_file_prefix = qa/${camsym}${expnum:8}_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}
-astr_selfwhm= ${qa_file_prefix}_astr_selfwhm
-astr_fwhm = ${qa_file_prefix}_astr_fwhm
-astr_resids = ${qa_file_prefix}_astr_resids
+psfex_selfwhm= ${qa_file_prefix}_psfex_selfwhm
+psfex_fwhm = ${qa_file_prefix}_psfex_fwhm
+psfex_resids = ${qa_file_prefix}_psfex_resids
 
 <module run-psfex>
     wrappername = genwrap.py  
@@ -70,7 +70,7 @@ astr_resids = ${qa_file_prefix}_astr_resids
             PSF_DIR = psf
             OUTCAT_NAME = ${file.cat_psfex_starlist.fullname}
             OUTCAT_TYPE = FITS_LDAC 
-            CHECKPLOT_NAME = ${astr_selfwhm},${fwhm},${astr_resids}
+            CHECKPLOT_NAME = ${psfex_selfwhm},${psfex_fwhm},${psfex_resids}
         </cmdline>
     </exec_1>
 </module>

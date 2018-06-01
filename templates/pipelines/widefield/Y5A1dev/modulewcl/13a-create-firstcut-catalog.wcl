@@ -119,7 +119,6 @@
     		    CHECKIMAGE_TYPE = SEGMENTATION,BACKGROUND
 	         	CHECKIMAGE_NAME = ${file.red_segmap.fullname},${file.red_bkg.fullname}
                 DETECT_THRESH = 0.8
-                DETECT_MINAREA = 4
                 INTERP_MAXXLAG = 4 
                 INTERP_MAXYLAG = 4 
                 WEIGHT_THRESH = 1e-9

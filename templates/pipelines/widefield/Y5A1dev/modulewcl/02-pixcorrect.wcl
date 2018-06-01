@@ -107,7 +107,7 @@
                 fixcols = _flag
                 v = _flag
                 out = ${file.red_pixcor.fullname} 
-                lighbulb = _flag
+                lightbulb = _flag
             </cmdline>
         </exec_1>
     </pixcorrect>
