@@ -1,5 +1,5 @@
 camsym = D
-cfgver = Y3A2_v4
+cfgver = Y3A2_v5
 meds_config_ver = Y3A2v2
 
 color_r_band = i
@@ -43,7 +43,7 @@ cat_columns = NUMBER,${ra_col},${dec_col}
 scamp_config_file = ${cfgver}_scamp.config
 swarp_config_file = ${cfgver}_swarp.config
 nwgint_config_file = ${cfgver}_coadd_nwgint.config
-deepstreaks_config_file = Y1234_FINALCUT_streaks_update_v1.fits
+deepstreaks_config_file = Y3A2_v5_streaks_update-Y1234_FINALCUT_v1.fits
 psfex_config_file = ${cfgver}_psfex.config
 stiff_config_file = ${cfgver}_stiff.config
 ptif_config_file = ${cfgver}_ptif.config

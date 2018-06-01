@@ -20,7 +20,7 @@
                 PIXEL_SCALE = ${pixelscale}
                 IMAGE_SIZE = ${naxis1},${naxis2}
                 IMAGEOUT_NAME = ${file.det_tmpsci.fullname}
-                COMBINE_TYPE = CHI-MEAN
+                COMBINE_TYPE = AVERAGE
                 WEIGHT_IMAGE = ${file.band_msk.fullname}
                 NTHREADS = ${nthreads}
                 BLANK_BADPIXELS = Y

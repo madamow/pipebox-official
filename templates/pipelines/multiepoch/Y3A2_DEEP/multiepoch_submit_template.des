@@ -53,6 +53,9 @@ det_bands = {{args.det_bands}}
 # Setting PSFex satur levels based on field/band
 {% if '3' in args.tile.split('-')[1].split('_')[0] %}
 depth=deep
+{% if args.proctag == 'DEEPEST' %}
+det_bands = i,z
+{% endif %}
 {% else %}
 depth=shallow
 {% endif %}
