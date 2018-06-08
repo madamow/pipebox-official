@@ -1,7 +1,7 @@
-qa_file_prefix = qa/${camsym}${expnum:8}_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}
-psfex_selfwhm= ${qa_file_prefix}_psfex_selfwhm
-psfex_fwhm = ${qa_file_prefix}_psfex_fwhm
-psfex_resids = ${qa_file_prefix}_psfex_resids
+qa_psf_prefix = ${camsym}${expnum:8}_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}
+psfex_selfwhm= qa/psfex_selfwhm
+psfex_fwhm = qa/psfex_fwhm
+psfex_resids = qa/psfex_resids
 
 <module run-psfex>
     wrappername = genwrap.py  
@@ -56,11 +56,19 @@ psfex_resids = ${qa_file_prefix}_psfex_resids
             rundir = psf
     	    savefiles = true
         </cat_psfex_starlist>
+        <psfex_qa>
+                filetype = qa_psfex
+                fullname = ${psfex_selfwhm}_${qa_psf_prefix}_psfexcat.ps,${psfex_fwhm}_${qa_psf_prefix}_psfexcat.ps,${psfex_resids}_${qa_psf_prefix}_psfexcat.ps
+                dirpat = se
+                rundir = qa
+                ops_enddir = qa
+                savefiles = true
+         </psfex_qa>
     </file>
     <exec_1>
         execname = psfex
         used = file.psfex_cat,file.psfex_config
-        was_generated_by = file.psfex_xml,file.psfex_model,file.cat_psfex_starlist
+        was_generated_by = file.psfex_xml,file.psfex_model,file.cat_psfex_starlist,file.psfex_qa
         ancestry = file.psfex_cat:file.psfex_model,file.psfex_cat:file.cat_psfex_starlist
         <cmdline>
             _01_psfex_cat = ${file.psfex_cat.fullname}

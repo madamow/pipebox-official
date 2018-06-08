@@ -55,9 +55,9 @@
         <exec_1>
             execname = immask
      	    cmd_hyphen = alldouble
-            used = file.red_starflat,file.red_immask_bkg
+            used = file.red_starflat,file.red_immask_bkg,file.cat_gal
             was_generated_by = file.red_immasked,file.cat_streak
-            ancestry = file.red_starflat:file.red_immasked, file.red_immask_bkg:file.red_immasked, file.red_starflat:file.cat_streak
+            ancestry = file.red_starflat:file.red_immasked, file.red_immask_bkg:file.red_immasked, file.red_starflat:file.cat_streak,file.cat_gal:file.red_immasked
             <cmdline>
                 _01_immask_mode = all
                 _02_red_starflat = ${file.red_starflat.fullname}

@@ -65,6 +65,7 @@
             ancestry = file.red_nullweight_immask:file.psfex_cat
             <cmdline>
                 _01_red_nullweight_immask = ${file.red_nullweight_immask.fullname}[0]
+                FLAG_IMAGE = ${file.red_nullweight_immask.fullname}[1]
                 c = ${file.sex_config.fullname}
                 CATALOG_NAME = ${file.psfex_cat.fullname}
                 CATALOG_TYPE = FITS_LDAC
