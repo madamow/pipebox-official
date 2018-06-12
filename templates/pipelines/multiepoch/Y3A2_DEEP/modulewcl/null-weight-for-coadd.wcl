@@ -79,7 +79,7 @@
                 fsuffix = fits
 
                 # whether to save or compress
-                savefiles = true
+                savefiles = false
                 compress_files = false
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
