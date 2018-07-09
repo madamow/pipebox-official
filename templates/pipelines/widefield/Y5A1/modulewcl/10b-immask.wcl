@@ -2,7 +2,7 @@
     <immask>
         wrappername = genwrap.py
         wrapperloop = expnum
-        modnamepat=${modnamepat_ccdnumband}
+        modnamepat=${modnamepat_expband}
         loopobj = list.in_img_list
         <list>
             <in_img_list>
@@ -18,7 +18,7 @@
 
                 # what goes into list (normally is a query code)
                 divide_by = expnum   # perhaps can default to wrapperloop
-                columns = red_hmmask.fullname
+                columns = red_hmmasked.fullname
                 sortkey = (ccdnum,True,False)
             </in_img_list>
             <in_streak_list>
@@ -46,7 +46,7 @@
                 flabel = hmmasked
                 fsuffix = fits
                 dirpat = se
-                rundir = red/hmmask
+                rundir = red/immask
                 compress_files = true
             </red_hmmasked>
     	    <cat_hstreak>
@@ -77,29 +77,32 @@
                 ops_enddir = aux
                 optional = true
                 rundir = aux
+                savefiles = true
             </cat_streak>
             <immask_plotfile>
-                filetype = immask_qa
+                filetype = qa_immask
                 fullname = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_streak.pdf
                 dirpat = se
                 rundir = qa
                 ops_enddir = qa
+                savefiles=true
             </immask_plotfile>
         </file>
         <exec_1>
-            execname = connect_streaks.py
+            execname = connect_streaks
      	    cmd_hyphen = alldouble
-            used = list.in_img_list.red_hmmask_bkg,list.in_streak_list.cat_hstreak
-            was_generated_by = file.red_immasked,file.cat_streak
-            ancestry = list.in_img_list.red_hmmasked:file.red_immasked,list.in_streak_list.cat_hstreak:file.cat_streak
+            used = list.in_img_list.red_hmmasked,list.in_streak_list.cat_hstreak
+            was_generated_by = file.red_immasked,file.cat_streak,file.immask_plotfile
+            ancestry = list.in_img_list.red_hmmasked:file.red_immasked,list.in_streak_list.cat_hstreak:file.cat_streak,list.in_streak_list.cat_hstreak:file.immask_plotfile
             <cmdline>
-    	        image_file = ${list.file.red_hmmasked.fullname}
-	            streak_file = ${list.file.cat_hstreak.fullname}
+    	        image_file = ${list.in_img_list.fullname}
+	            streak_file = ${list.in_streak_list.fullname}
                 streak_name_in = _hstreak
                 streak_name_out = _streak
                 image_name_in = _hmmasked
                 image_name_out = _immasked
                 plotfile = ${file.immask_plotfile.fullname}
+                verbose = _flag
             </cmdline>
         </exec_1>
     </immask>

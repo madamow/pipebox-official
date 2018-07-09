@@ -17,7 +17,11 @@
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/mepoch-ingest-no-mangle.wcl>>
 #<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/mepoch-ingest.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/coadd-astrorefine.wcl>>
+{% if args.single_chip %}
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/combine-se-cat-single-chip.wcl>>
+{% else %}
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/combine-se-cat.wcl>>
+{% endif %}
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/det-assemble.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/det-catalog.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/det-create-psfex-catalog.wcl>>
@@ -30,8 +34,13 @@
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/make-color-img.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/make-ptif.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/mangle.wcl>>
+{% if args.single_chip %}
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/null-weight-for-coadd-single-chip.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/split-scamp-head-single-chip.wcl>>
+{% else %}
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/null-weight-for-coadd.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/split-scamp-head.wcl>>
+{% endif %}
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/bigquery.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/run-desmeds.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/wavg.wcl>>
@@ -40,25 +49,32 @@ master_use_fwthreads = True
 # these 2 are for debugging purposes
 purge_job_dir = never
 compress_cleanup = False
-
-basket = {{args.tile}} # FIX THIS
-proctag = {{args.tile.split('-')[1].split('_')[0] + '_' + args.proctag}}
-tilename = {{args.tile}}
-unitname = ${tilename}
-
-ccd = {{ args.tile.split('_')[1].split('C')[1] }}
-bands = {{ args.bands }}
 det_bands = {{args.det_bands}}
 
+basket = {{args.tile}} # FIX THIS
+{% if args.single_chip %}
+proctag = {{args.tile.split('-')[1].split('_')[0] + '_' + args.proctag}}
 # Setting PSFex satur levels based on field/band
 {% if '3' in args.tile.split('-')[1].split('_')[0] %}
 depth=deep
+mosaictype= UNCHANGED
 {% if args.proctag == 'DEEPEST' %}
 det_bands = i,z
 {% endif %}
 {% else %}
 depth=shallow
 {% endif %}
+ccd = {{ args.tile.split('_')[1].split('C')[1] }}
+{% else %}
+proctag = {{args.proctag}}
+depth= shallow
+mosaictype = SAME_CRVAL
+{% endif %}
+
+tilename = {{args.tile}}
+unitname = ${tilename}
+
+bands = {{ args.bands }}
 
 {% if args.rundir %}
 ops_run_dir = {{ args.rundir }}
@@ -81,4 +97,7 @@ blocklist = me
     </me>
 </block>
 
+
 {% endblock %}
+
+

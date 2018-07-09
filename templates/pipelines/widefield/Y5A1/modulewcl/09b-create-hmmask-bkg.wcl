@@ -32,24 +32,24 @@
             ops_enddir = red/bkg
             rundir = red/bkg
         </red_nullweight_bkg>
-        <red_immask_bkg>
-            filetype = red_bkg_immask
+        <red_hmmask_bkg>
+            filetype = red_bkg_hmmask
             filepat = ccdnum_band
-            flabel = immask-bkg
+            flabel = hmmask-bkg
             fsuffix = fits
             dirpat = se
-            ops_enddir = bkg/immask
-            rundir = bkg/immask
+            ops_enddir = bkg/hmmask
+            rundir = bkg/hmmask
             savefiles = false
             compress_files = true
-        </red_immask_bkg>
+        </red_hmmask_bkg>
     </file>
 
     <exec_1>
         execname = sex
         used = file.red_nullweight_bkg,file.sex_config,file.sex_param
-        was_generated_by = file.red_immask_bkg
-        ancestry = file.red_nullweight_bkg:file.red_immask_bkg
+        was_generated_by = file.red_hmmask_bkg
+        ancestry = file.red_nullweight_bkg:file.red_hmmask_bkg
         <cmdline>
             _01_red_nullweight_bkg = ${file.red_nullweight_bkg.fullname}[0]
             c = ${file.sex_config.fullname}
@@ -58,7 +58,7 @@
             FILTER = N
             DETECT_THRESH = 1000
             CHECKIMAGE_TYPE = BACKGROUND
-            CHECKIMAGE_NAME = ${file.red_immask_bkg.fullname}
+            CHECKIMAGE_NAME = ${file.red_hmmask_bkg.fullname}
             WEIGHT_TYPE = MAP_WEIGHT
             WEIGHT_IMAGE = ${file.red_nullweight_bkg.fullname}[2]
             WEIGHT_THRESH = 1e-9

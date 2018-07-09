@@ -28,8 +28,8 @@
                 flabel = hmmasked
                 fsuffix = fits
                 dirpat = se
-                ops_enddir = red/hmmask
-                rundir = red/hmmask
+                ops_enddir = red/immask
+                rundir = red/immask
                 savefiles = false
                 compress_files = true
             </red_hmmasked>
@@ -41,6 +41,7 @@
                 ops_enddir = aux
                 optional = true
                 rundir = aux
+                savefiles = false
             </cat_hstreak>
     	    <cat_gal>
                 filetype = config

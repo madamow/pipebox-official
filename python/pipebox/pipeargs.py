@@ -139,6 +139,7 @@ class MultiEpoch(PipeArgs):
         parser.add('--nthreads',default=8,help='Amount of parallelization')
         parser.add('--bands',default='g,r,i,z,Y')
         parser.add('--det_bands',default='r,i,z')
+        parser.add('--single_chip',action='store_true')
         args = parser.parse_args()
 
         return args
