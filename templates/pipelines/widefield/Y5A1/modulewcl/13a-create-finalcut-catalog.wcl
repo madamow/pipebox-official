@@ -109,7 +109,7 @@
                 STARNNW_NAME = ${file.sex_nnw.fullname}
                 INTERP_TYPE = VAR_ONLY
                 WEIGHT_TYPE = MAP_WEIGHT
-                WEIGHT_IMAGE = ${file.red_nullweight_immask.fullname}[2],${file.red_nullweight_immask.fullname}[2]
+                WEIGHT_IMAGE = ${file.red_nullweight_immask.fullname}[2]
                 SEEING_FWHM = $FUNC{despymisc.create_special_metadata.fwhm_arcsec,$HEAD{${file.red_nullweight_immask.fullname},FWHM,CD1_1,CD1_2,CD2_1,CD2_2,PIXSCAL1,PIXSCAL2}}
                 FLAG_IMAGE = ${file.red_nullweight_immask.fullname}[1]
                 CATALOG_NAME = ${file.cat_finalcut.fullname}
