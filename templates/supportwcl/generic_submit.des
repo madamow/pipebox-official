@@ -34,6 +34,7 @@ project = {{ args.project }}
         input_transfer_semname_home = y2a1-desar2-input-40
         output_transfer_semname_home = y2a1-desar2-output
         root_http = http://desar2.cosmology.illinois.edu/desarchive
+        transfer_server = desar2
     </desar2home>
 </archive>
 {% endif %}
@@ -44,6 +45,7 @@ project = {{ args.project }}
         input_transfer_semname_home = y2a1-desar1-input-40
         output_transfer_semname_home = y2a1-desar1-output
         root_http = http://desar1.cosmology.illinois.edu/desarchive
+        transfer_server = desar1
     </desar2home>
 </archive>
 {% endif %}
@@ -54,6 +56,7 @@ project = {{ args.project }}
         input_transfer_semname_home = y2a1-input-40
         output_transfer_semname_home = y2a1-output
         root_http = http://desar0.cosmology.illinois.edu/desarchive
+        transfer_server = desar0
     </desar2home>
 </archive>
 {% endif %}

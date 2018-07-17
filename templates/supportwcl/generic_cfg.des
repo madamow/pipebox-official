@@ -64,3 +64,9 @@ submit_files_mvmt     = filemgmt.job_mvmt_http.JobArchiveHttp
     home = $_CONDOR_SCRATCH_DIR
     python_egg_cache = $_CONDOR_SCRATCH_DIR
 </job_environment>
+
+<archive>
+   <desar2home>
+       transfer_server = desar0,desar1,desar2
+   </desar2home>
+</archive>
