@@ -102,6 +102,7 @@
                 image_name_in = _hmmasked
                 image_name_out = _immasked
                 plotfile = ${file.immask_plotfile.fullname}
+                max_extrapolate = 0.15
                 verbose = _flag
             </cmdline>
         </exec_1>
