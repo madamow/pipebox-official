@@ -28,6 +28,12 @@ project = {{ args.project }}
 </archive>
 {% endif %}
 
+<archive>
+   <desar2home>
+       transfer_server = desar0,desar1,desar2
+   </desar2home>
+</archive>
+
 {% if args.http == 'desar2' %}
 <archive>
     <desar2home>

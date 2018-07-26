@@ -1,7 +1,6 @@
 camsym = D
-cfgver = Y3A2_v5
-meds_config_ver = Y3A2v2
-fiattable= Y3A1_IMAGE_TO_TILE
+cfgver = Y3A2_v6
+meds_config_ver = Y3A2v4
 
 color_r_band = i
 color_g_band = r
@@ -29,8 +28,6 @@ assemble_ydilate = 3
 psfex_satur_level_deep = 2200
 psfex_satur_level_shallow = 4500
 psfex_satur_level_g_shallow = 6000
-psfex_satur_level_u_shallow = 6000
-psfex_satur_level_Y_shallow = 5800
 psfex_satur_level_r_shallow = 5900
 psfex_satur_level_i_shallow = 4500
 psfex_satur_level_z_shallow = 5800

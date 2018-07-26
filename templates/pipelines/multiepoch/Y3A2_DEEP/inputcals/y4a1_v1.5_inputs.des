@@ -1,6 +1,6 @@
 camsym = D
-cfgver = Y3A2_v5
-meds_config_ver = Y3A2v2
+cfgver = Y3A2_v6
+meds_config_ver = Y3A2v4
 
 color_r_band = i
 color_g_band = r
