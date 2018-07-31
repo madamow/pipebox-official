@@ -19,6 +19,7 @@
                 medsconf = ${file.medsconf.fullname}
                 tileconf = ${file.tileconf.fullname}
                 coadd_object_map = ${file.objmap.fullname}
+                have_se_images_False = _flag
             </cmdline>
             execname = run_desmeds
             cmd_hyphen =  mixed_gnu
