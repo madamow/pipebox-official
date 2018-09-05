@@ -45,6 +45,7 @@ basket = {{args.tile}} # FIX THIS
 proctag = {{args.tile.split('-')[1].split('_')[0] + '_' + args.proctag}}
 tilename = {{args.tile}}
 unitname = ${tilename}
+da_tilename = {{args.tile}}
 
 ccd = {{ args.tile.split('_')[1].split('C')[1] }}
 bands = {{ args.bands }}
@@ -66,13 +67,13 @@ ops_run_dir = {{ args.rundir }}
 ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/p${attnum:2}
 {% endif %}
 
-nthreads = {{ args.nthreads }}
-
+#nthreads = {{ args.nthreads }}
+nthreads = 1
 save_run_vals = tilename, jira_id
 
 <<inclfunc mepipelineappintg.mepochmisc.get_tile_info(submit_des_services, submit_des_db_section, tilename)>>
 
-request_cpus = 8
+request_cpus = 1
 ######################################################################
 blocklist = me
 <block>

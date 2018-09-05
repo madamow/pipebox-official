@@ -65,6 +65,7 @@ class PipeArgs(object):
                             connect to JIRA, but must specify reqnum and jira_parent.")
         parser.add('--reqnum',help='Part of processing unique identifier. Tied to JIRA ticket \
                              number')
+        parser.add('--decade', action='store_true', help='Uses the DECADE subsection of WCL')
     
         # EUPS arguments
         parser.add('--eups_stack',action='append',nargs='+', required=True,help='EUPS production stack, \

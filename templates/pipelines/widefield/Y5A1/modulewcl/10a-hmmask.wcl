@@ -45,7 +45,7 @@
             </cat_hstreak>
     	    <cat_gal>
                 filetype = config
-        		filename = ${confignite}_hyperleda-galaxy-mask.csv
+        		filename = ${confignite}_hyperleda-galaxy-mask_v2.csv
                 dirpat = se
                 ops_enddir = config/hmmask
                 rundir = config

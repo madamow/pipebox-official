@@ -50,7 +50,7 @@
             <coadd_head_scamp>
                 # how to get file data
                 depends split-scamp-head.list.coadd_head
-                match expnum, band
+                match expnum, band, ccdnum
 
                 # where input file lives in jobroot
                 dirpat = mepoch

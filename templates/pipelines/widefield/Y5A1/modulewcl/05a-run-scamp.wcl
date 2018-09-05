@@ -143,13 +143,15 @@ distortion = ${qa_file_prefix}_distortion
                 ASTREFMAG_LIMITS = -99,22
                 POSITION_MAXERR = 10.0
                 ASTREF_CATALOG = GAIA-DR2
-                REF_SERVER = vizier.u-strasbg.fr,vizier.nao.ac.jp,vizier.cfa.harvard.edu
+                REF_SERVER = vizier.u-strasbg.fr,vizier.iucaa.in,vizier.nao.ac.jp,vizier.cfa.harvard.edu
                 WRITE_XML = Y
                 FULLOUTCAT_TYPE = NONE
                 XML_NAME = ${file.scamp_xml.fullname}
                 CHECKPLOT_TYPE = astr_pixerror1d,astr_referror1d,fgroups,astr_referror2d,astr_refsysmap,distortion
                 CHECKPLOT_NAME = ${astr_pixerror1d},${astr_referror1d},${fgroups},${astr_referror2d},${astr_refsysmap},${distortion}
                 NTHREADS = 1
+                VERBOSE_TYPE = FULL 
+                REF_TIMEOUT = 60
             </cmdline>
         </exec_1> 
     </se-scamp>

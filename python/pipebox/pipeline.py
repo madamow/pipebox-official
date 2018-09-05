@@ -74,7 +74,11 @@ class PipeLine(object):
                    print "{0} does not exist!".format(args.exclude_list)
        
         # Setting template path(s) 
-        campaign_path = "pipelines/%s/%s" % (args.pipeline,args.campaign)
+        if args.decade:
+            campaign_path = "pipelines/%s/DECADE/%s" % (args.pipeline,args.campaign)
+        else:
+            campaign_path = "pipelines/%s/%s" % (args.pipeline,args.campaign)
+
         if args.template_name:
             args.submit_template_path = os.path.join(campaign_path,args.template_name)
         else:

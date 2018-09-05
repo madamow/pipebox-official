@@ -1,6 +1,7 @@
 camsym = D
-cfgver = Y3A2_v5
+cfgver = Y3A2_v6
 meds_config_ver = Y3A2v2
+
 fiattable=Y5A1_IMAGE_TO_TILE
 
 color_r_band = i

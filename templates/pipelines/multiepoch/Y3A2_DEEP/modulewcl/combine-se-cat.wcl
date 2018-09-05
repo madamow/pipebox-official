@@ -19,13 +19,15 @@
         </exec_1>
         <list>
             <se-ccd-cat>
-                ccdnum=${ccd}
+                #ccdnum=${ccd}
                 tag = ${proctag}
                 filetype = cat_finalcut
+                tilename = ${da_tilename}
                 query_table = catalog
-                join catalog.pfw_attempt_id = proctag.pfw_attempt_id
-                query_fields = filetype,ccdnum,proctag.tag
-                output_fields = filename,expnum,band
+                join catalog.pfw_attempt_id = proctag.pfw_attempt_id and Y3A1_CATALOG_TO_TILE.filename = catalog.filename
+                #query_fields = filetype,ccdnum,proctag.tag
+                query_fields = filetype,proctag.tag,Y3A1_CATALOG_TO_TILE.tilename
+                output_fields = filename,expnum,band,ccdnum
                 divide_by = expnum,band
                 
                 # how to create lists
@@ -33,7 +35,7 @@
                 flabel = se-ccd-cat
                 fsuffix = list
                 columns = catfile.fullname
-                sortkey = (expnum, True, False)
+                sortkey = (ccdnum, True, False)
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch

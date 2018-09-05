@@ -18,7 +18,7 @@ qa_file_prefix = qa/${tilename}_r${reqnum}p${attnum:2}
                 XML_NAME = ${file.scamp_xml.fullname}
                 CHECKPLOT_TYPE = astr_referror1d,astr_referror2d,fgroups
                 CHECKPLOT_NAME = ${astr_referror1d},${astr_referror2d},${fgroups}
-                NTHREADS = ${nthreads}
+                NTHREADS = 6
                 ASTREF_CATALOG = GAIA-DR1
                 MOSAIC_TYPE = UNCHANGED
             </cmdline>
