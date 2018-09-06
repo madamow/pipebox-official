@@ -6,26 +6,26 @@
         <exec_1>
             execname = hpixDB
             cmd_hyphen = mixed_gnu
-            used = file.cat_finalcut
+            used = file.cat_firstcut
             was_generated_by = file.hpix
-            ancestry = file.cat_finalcut:file.hpix
+            ancestry = file.cat_firstcut:file.hpix
             <cmdline>
-                input = ${file.cat_finalcut.fullname}
+                input = ${file.cat_firstcut.fullname}
                 output = ${file.hpix.fullname}
                 c = ${cat_columns}
             </cmdline>
         </exec_1>
         <file>
             ### inputs
-            <cat_finalcut>
+            <cat_firstcut>
                 # how to get file data
-                depends create-finalcut-catalog.file.cat_finalcut
+                depends create-firstcut-catalog.file.cat_firstcut
 
                 # where input file lives in jobroot
                 dirpat = se
                 rundir = cat
                 match = ccdnum,band
-            </cat_finalcut>
+            </cat_firstcut>
 
             ### outputs
             <hpix>
