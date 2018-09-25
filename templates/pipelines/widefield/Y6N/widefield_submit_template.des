@@ -98,7 +98,9 @@ calatt = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].attnum.values[0]}}
 {% else %}
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{args.campaign}}/modulewcl/inputs.wcl>>
 {% endif %}
-
+{% if args.band == 'N964' %}
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{args.campaign}}/modulewcl/inputs_N964.wcl>>
+{% endif %}
 
 #####
 {% if args.band in ['u','VR'] %}
