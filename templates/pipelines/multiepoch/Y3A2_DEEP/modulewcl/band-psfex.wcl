@@ -1,4 +1,4 @@
-qa_psf_prefix = ${tilename}_${band}_c${ccdnum:2}_r${reqnum}p${attnum:2}
+qa_psf_prefix = ${tilename}_${band}_r${reqnum}p${attnum:2}
 psfex_selfwhm= qa/psfex_selfwhm
 psfex_fwhm = qa/psfex_fwhm
 psfex_resids = qa/psfex_resids
