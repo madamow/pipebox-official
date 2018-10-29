@@ -1,5 +1,3 @@
-#chunks = 1:${request_cpus}
-#num_ranges = ${request_cpus}
 num_ranges = ${max_chunk}
 
 <module>
@@ -69,7 +67,7 @@ num_ranges = ${max_chunk}
             </meds>
              <shearconf>
                 # what input file is named
-                filename = run-${mof_config_ver}-mcal.yaml
+                filename = ${mof_config_ver}-mcal.yaml
                 filetype = config
 
                 # where input file lives in jobroot

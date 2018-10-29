@@ -1,6 +1,5 @@
-#chunks = 1:${request_cpus}
-#num_ranges = ${request_cpus}
 num_ranges = ${max_chunk}
+chunks = ${chunks}
 
 <module>
     <mof>
@@ -15,7 +14,7 @@ num_ranges = ${max_chunk}
                 wrange = ${chunks}
                 tilename = ${tilename}
                 meds_list = ${list.meds_list.fullname}
-                bands = g,r,i,z
+                bands = ${band}
                 fof-file = ${file.fof.fullname}
                 psf-map = ${list.psf_list.fullname}
                 nbrs-file = ${file.nbrs.fullname}
@@ -31,8 +30,8 @@ num_ranges = ${max_chunk}
         <list>
             <psf_list>
                 exec = query_coadd_for_mof.py
-                args = --tile ${tilename} --se_proctag ${se_proctag} --me_proctag ${proctag} -s ${submit_des_db_section} -S prod -v 3 -o ${qoutfile} --psfmodel
-                columns = psfmodel.expnum, psfmodel.ccdnum, psfmodel.fullname
+                args = --tile ${tilename} --se_proctag ${se_proctag} --me_proctag ${proctag} -s ${submit_des_db_section} -S prod -v 3 -o ${qoutfile} --psfmodel --coadd_only --bandlist ${band} 
+                columns = psfmodel.expnum, psfmodel.ccdnum, psfmodel.fullname,psfmodel.band
                 filepat = tile_generic
                 flabel = psf
                 fsuffix = list

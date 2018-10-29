@@ -42,14 +42,9 @@ purge_job_dir = never
 compress_cleanup = False
 
 basket = {{args.tile}} # FIX THIS
+{% if args.tile.startswith('SN') %}
 proctag = {{args.tile.split('-')[1].split('_')[0] + '_' + args.proctag}}
-tilename = {{args.tile}}
-unitname = ${tilename}
-da_tilename = {{args.tile}}
-
 ccd = {{ args.tile.split('_')[1].split('C')[1] }}
-bands = {{ args.bands }}
-det_bands = {{args.det_bands}}
 
 # Setting PSFex satur levels based on field/band
 {% if '3' in args.tile.split('-')[1].split('_')[0] %}
@@ -60,6 +55,18 @@ det_bands = i,z
 {% else %}
 depth=shallow
 {% endif %}
+
+{% else %}
+proctag = {{args.proctag}}
+depth = deep
+{% endif %}
+tilename = {{args.tile}}
+unitname = ${tilename}
+da_tilename = {{args.tile}}
+
+bands = {{ args.bands }}
+det_bands = {{args.det_bands}}
+
 
 {% if args.rundir %}
 ops_run_dir = {{ args.rundir }}

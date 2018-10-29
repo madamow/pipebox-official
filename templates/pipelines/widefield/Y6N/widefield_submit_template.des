@@ -103,7 +103,7 @@ calatt = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].attnum.values[0]}}
 {% endif %}
 
 #####
-{% if args.band in ['u','VR'] %}
+{% if args.band in ['u','VR','N964'] %}
 <module>
     <split-scamp-ahead>
         <file>
@@ -113,6 +113,8 @@ calatt = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].attnum.values[0]}}
                 filename = ${confignite}_decam_pvmodel_${desepoch}_g.ahead
                 {% elif args.band in ['VR'] %}
                 filename = ${confignite}_decam_pvmodel_${desepoch}_r.ahead
+                {% elif args.band in ['N964'] %}
+                filename = ${confignite}_decam_pvmodel_20131115.ahead
                 {% endif %}
                 dirpat = se
                 ops_enddir = aux

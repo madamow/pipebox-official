@@ -14,11 +14,11 @@
                 v = _flag
                 interp_mask = TRAIL,BPM
                 invalid_mask = EDGE
-                null_mask = BPM,BADAMP,EDGEBLEED,EDGE,CRAY,SSXTALK,STREAK,TRAIL
+                null_mask = BPM,BADAMP,EDGEBLEED,EDGE,CRAY,SSXTALK,STREAK,TRAIL,SATURATE
                 block_size = 5
                 tilename = ${tilename}
                 tileid = ${tileid}
-                me_wgt_keepmask = STAR
+                me_wgt_keepmask = STAR,SATURATE
                 hdupcfg = ${file.nwgint_config.fullname}
                 streak_file = ${file.deepstreaks.fullname}
             </cmdline>

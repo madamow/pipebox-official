@@ -1,13 +1,18 @@
+qa_psf_prefix = ${tile}_DET_c${ccdnum:2}_r${reqnum}p${attnum:2}
+psfex_selfwhm= qa/psfex_selfwhm
+psfex_fwhm = qa/psfex_fwhm
+psfex_resids = qa/psfex_resids
 <module>
     <det-psfex>
         modnamepat = ${modnamepat_tile_generic}
         wrappername = genwrap.py
         band = det
+        req_vals = psfex_sample_minsn_u,psfex_sample_minsn_g,psfex_sample_minsn_r,psfex_sample_minsn_i,psfex_sample_minsn_z,psfex_sample_minsn_Y
         <exec_1>
             execname = psfex
             cmd_hyphen = allsingle
             used = file.psfex_config, file.psfcat
-            was_generated_by = file.psfex_xml, file.psfex_model, file.cat_psfex_starlist
+            was_generated_by = file.psfex_xml, file.psfex_model, file.cat_psfex_starlist,file.psfex_qa
             ancestry = file.psfcat:file.psfex_model
             <cmdline>
                 _01_psfcat = ${file.psfcat.fullname}
@@ -16,6 +21,8 @@
                 XML_NAME = ${file.psfex_xml.fullname}
                 NTHREADS = ${nthreads}
                 PSF_DIR = psf
+                CHECKPLOT_NAME = ${psfex_selfwhm},${psfex_fwhm},${psfex_resids}
+                SAMPLE_MINSN = ${psfex_sample_minsn_${band}}
             </cmdline>
         </exec_1>
         <file>
@@ -38,6 +45,14 @@
             </psfcat>
 
             ### outputs
+            <psfex_qa>
+                filetype = coadd_qa_psfex
+                fullname = ${psfex_selfwhm}_${qa_psf_prefix}_psfexcat.ps,${psfex_fwhm}_${qa_psf_prefix}_psfexcat.ps,${psfex_resids}_${qa_psf_prefix}_psfexcat.ps
+                dirpat = mepoch
+                rundir = qa
+                ops_enddir = qa
+                savefiles = true
+         </psfex_qa>
             <psfex_xml>
                 # what metadata to save
                 filetype = coadd_xml_psfex

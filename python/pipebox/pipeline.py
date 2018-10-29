@@ -411,7 +411,11 @@ class WideField(PipeLine):
             #self.args.ignore_processed=True
             pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
             
-            self.args.expnum = ','.join([str(e) for e in self.args.cur.get_expnums_from_auto_queue()])
+            try:
+                self.args.expnum = ','.join([str(e) for e in self.args.cur.get_expnums_from_auto_queue()])          
+            except:
+                print "{time}: No exposures found!".format(time=datetime.datetime.now())
+                sys.exit(0)
             if self.args.resubmit_failed:
                 self.args.reqnum = jira_utils.get_reqnum_from_nite(self.args.jira_parent,
                                                                    self.args.nite)
@@ -462,6 +466,14 @@ class WideField(PipeLine):
             self.args.dataframe = self.args.dataframe.fillna(False)
         except: 
             pass
+
+        #try:
+        #    if not self.args.dataframe:
+        #        print "No new exposures found in DB!"
+        #        sys.exit(1)
+        #except:
+        #    print "No exposures found in DB!"
+        #    sys.exit(1)
 
         if self.args.count:
             print "Data found in database:"
