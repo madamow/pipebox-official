@@ -30,7 +30,7 @@ psfex_sample_minsn_u = 70
 psfex_sample_minsn_g = 100
 psfex_sample_minsn_r = 100
 psfex_sample_minsn_i = 100
-psfex_sample minsn_z = 100
+psfex_sample_minsn_z = 100
 psfex_sample_minsn_Y = 100
 
 psfex_satur_level_deep = 2200
