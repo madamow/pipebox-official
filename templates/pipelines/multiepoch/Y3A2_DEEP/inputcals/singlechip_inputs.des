@@ -32,6 +32,7 @@ psfex_sample_minsn_r = 100
 psfex_sample_minsn_i = 100
 psfex_sample_minsn_z = 100
 psfex_sample_minsn_Y = 100
+psfex_sample_minsn_det = 100
 
 psfex_satur_level_deep = 2200
 psfex_satur_level_shallow = 4500
@@ -56,7 +57,7 @@ scamp_config_file = ${cfgver}_scamp.config
 swarp_config_file = ${cfgver}_swarp.config
 nwgint_config_file = ${cfgver}_coadd_nwgint.config
 deepstreaks_config_file = Y3A2_v6_streaks_update-Y1234_FINALCUT_v2.fits
-psfex_config_file = ${cfgver}_psfex_v2.config
+psfex_config_file = ${cfgver}_psfex_v3.config
 stiff_config_file = ${cfgver}_stiff.config
 ptif_config_file = ${cfgver}_ptif.config
 sex_psfex_config_file = ${cfgver}_sex.config
