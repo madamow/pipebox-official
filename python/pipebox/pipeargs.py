@@ -73,7 +73,7 @@ class PipeArgs(object):
         
         # Science arguments
         parser.add('--ccdnum',help='CCDs to be processed.')
-        parser.add('--minsigma',action='append',help='Specify minsigma for immask (defaults to 6.0)')
+        parser.add('--minsigma',help='Specify minsigma for immask (defaults to 6.0)')
         parser.add('--nite',help='For auto mode: if specified will submit all exposures found \
                          from nite')
         parser.add('--niterange',nargs='+',action='append',help='Specify a range of nites')
