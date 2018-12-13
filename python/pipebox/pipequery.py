@@ -599,12 +599,20 @@ class WideField(PipeQuery):
 class NitelyCal(PipeQuery):
 
     def get_nites(self,expnum_list):
-        explist = ','.join(str(n) for n in expnum_list)
-        nite_query = "select distinct nite from exposure where expnum in ({explist}) \
-                     order by nite".format(explist=explist)
-        self.cur.execute(nite_query)
-
-        return [n[0] for n in self.cur.fetchall()]
+        def divide_chunks(l,n):
+            '''Split the list into n chunks'''
+            for i in range(0,len(l),n):
+                yield l[i:i+n]
+        explist = list(divide_chunks(expnum_list,1000))
+        master_list = []
+        for l in explist:
+            nite_query = "select distinct nite from exposure where \
+                          expnum in ({explist}) \
+                          order by nite".format(explist=','.join(str(n) for n in l))
+            self.cur.execute(nite_query)
+            each_list = [n[0] for n in self.cur.fetchall()]
+            master_list += each_list
+        return master_list
 
     def check_submitted(self,date,reqnum):
         """Check to see if a nitelycal has been submitted with given date"""
@@ -623,9 +631,18 @@ class NitelyCal(PipeQuery):
         dflat_nite = self.cur.fetchone()[0]
         return max_expnum,dflat_nite   
 
-    def get_cals(self,nites_list):
+    def get_cals(self,nites_list,exclude=None):
         """Return calibration information for each nite found in nites_list"""
-        cal_query = "select nite,date_obs,expnum,band,exptime,obstype,program,propid,object \
+        if exclude == 'B':
+            cal_query = "select nite,date_obs,expnum,band,exptime,obstype,program,propid,object \
+                     from exposure where obstype in ('dome flat') \
+                     and nite in (%s) order by expnum" % ','.join(nites_list)
+        elif exclude == 'F':
+            cal_query = "select nite,date_obs,expnum,band,exptime,obstype,program,propid,object \
+                     from exposure where obstype in ('zero') \
+                     and nite in (%s) order by expnum" % ','.join(nites_list)
+        else:
+            cal_query = "select nite,date_obs,expnum,band,exptime,obstype,program,propid,object \
                      from exposure where obstype in ('zero','dome flat') \
                      and nite in (%s) order by expnum" % ','.join(nites_list)
         self.cur.execute(cal_query)
@@ -643,7 +660,7 @@ class NitelyCal(PipeQuery):
         for row in cal_info:
             print "%09s  %09s  %09s" % (row[2], row[1], row[0])
 
-    def udpdate_df(self,df):
+    def update_df(self,df):
         """ Takes a pandas dataframe and for each exposure add column:value
             band, nite, obstype. Returns dataframe"""
 
@@ -741,6 +758,30 @@ class PreBPM(PipeQuery):
         return tag_list_of_dict
 
 class PhotoZ(PipeQuery):
+
+    def get_failed_chunks(self, reqnum,resubmit_max):
+        """ Queries database to find number of failed attempts without success.
+            Returns expnums for failed, non-null, nonzero attempts."""
+        submitted = "select distinct unitname,attnum,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        self.cur.execute(submitted)
+        failed_query = self.cur.fetchall()
+        df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
+        # Set Null values to -99
+        df = df.fillna(-99)
+
+        resubmit_list = []
+
+        for u in df['unitname'].unique():
+            count = df[(df.unitname == u) & (df.status == 0)].count()[0]
+            statuses = list(df[(df.unitname == u)]['status'].values)
+            if -99 in statuses or 0 in statuses:
+                pass
+            else:
+                if (len(statuses) <= int(resubmit_max)):
+                    resubmit_list.append(u)
+        chunk_list = [u for u in resubmit_list]
+
+        return chunk_list
 
     def check_proctag(self,tag):
         """ Check to see if specified processing tag exists in PROCTAG table"""

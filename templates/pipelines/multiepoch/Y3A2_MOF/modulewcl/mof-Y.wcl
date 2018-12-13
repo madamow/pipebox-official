@@ -1,5 +1,4 @@
-chunks = 1:20
-num_ranges = 20
+num_ranges = ${max_chunk}
 
 <module>
     <mof-Y>

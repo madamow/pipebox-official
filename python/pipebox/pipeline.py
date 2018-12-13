@@ -74,7 +74,11 @@ class PipeLine(object):
                    print "{0} does not exist!".format(args.exclude_list)
        
         # Setting template path(s) 
-        campaign_path = "pipelines/%s/%s" % (args.pipeline,args.campaign)
+        if args.decade:
+            campaign_path = "pipelines/%s/DECADE/%s" % (args.pipeline,args.campaign)
+        else:
+            campaign_path = "pipelines/%s/%s" % (args.pipeline,args.campaign)
+
         if args.template_name:
             args.submit_template_path = os.path.join(campaign_path,args.template_name)
         else:
@@ -397,14 +401,21 @@ class WideField(PipeLine):
         super(WideField,self).update_args(self.args)
         self.args.output_name_keys = ['nite','expnum','band']
         self.args.cur = pipequery.WideField(self.args.db_section)
-        self.args.propid,self.args.program = self.args.cur.get_propids_programs()
+        if not self.args.propid:
+            self.args.propid,_ = self.args.cur.get_propids_programs()
+        else:   
+            self.args.propid = [self.args.propid]
  
         # If auto-submit mode on
         if self.args.auto:
             #self.args.ignore_processed=True
             pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
             
-            self.args.expnum = ','.join([str(e) for e in self.args.cur.get_expnums_from_auto_queue()])
+            try:
+                self.args.expnum = ','.join([str(e) for e in self.args.cur.get_expnums_from_auto_queue()])          
+            except:
+                print "{time}: No exposures found!".format(time=datetime.datetime.now())
+                sys.exit(0)
             if self.args.resubmit_failed:
                 self.args.reqnum = jira_utils.get_reqnum_from_nite(self.args.jira_parent,
                                                                    self.args.nite)
@@ -456,6 +467,14 @@ class WideField(PipeLine):
         except: 
             pass
 
+        #try:
+        #    if not self.args.dataframe:
+        #        print "No new exposures found in DB!"
+        #        sys.exit(1)
+        #except:
+        #    print "No exposures found in DB!"
+        #    sys.exit(1)
+
         if self.args.count:
             print "Data found in database:"
          
@@ -501,28 +520,56 @@ class NitelyCal(PipeLine):
             self.args.nitelist = pipeutils.create_nitelist(self.args.minnite,self.args.maxnite)
 
         # For each use-case create bias/flat list and dataframe
-        if self.args.biaslist and self.args.flatlist:
+        if self.args.biaslist and not self.args.flatlist:
             # create biaslist from file
             self.args.bias_list = list(pipeutils.read_file(self.args.biaslist))
             self.args.bias_df = pd.DataFrame(self.args.bias_list,columns=['expnum'])
+            self.args.bias_df['obstype'] = 'zero'
+            self.args.nitelist = self.args.cur.get_nites(self.args.bias_list)
 
+            cal_query = self.args.cur.get_cals(self.args.nitelist,exclude='B')
+            self.args.flat_df = nitelycal_lib.create_clean_df(cal_query)
+
+            self.args.dataframe = pd.concat([self.args.flat_df[['expnum','obstype']],self.args.bias_df],ignore_index=True)
+
+            self.args.cur.update_df(self.args.dataframe)
+
+        if self.args.flatlist and not self.args.biaslist:
             # create flatlist from file
             self.args.flat_list = list(pipeutils.read_file(self.args.flatlist))
             self.args.flat_df = pd.DataFrame(self.args.flat_list,columns=['expnum'])
+            self.args.flat_df['obstype'] = 'dome flat'
+            self.args.nitelist = self.args.cur.get_nites(self.args.flat_list)
 
-            self.args.dataframe = pd.concat([self.args.flat_df,self.args.bias_df],ignore_index=True)
+            cal_query = self.args.cur.get_cals(self.args.nitelist,exclude='F')
+            self.args.bias_df = nitelycal_lib.create_clean_df(cal_query)
+
+            self.args.dataframe = pd.concat([self.args.flat_df,self.args.bias_df[['expnum','obstype']]],ignore_index=True)
+
             self.args.cur.update_df(self.args.dataframe)
 
-            # Querying nites available within bias/flat lists
-            expnum_list = self.args.flat_list + self.args.bias_list
-            self.args.nitelist = self.args.cur.get_nites(expnum_list)
+        if self.args.flatlist and self.args.biaslist:
+            self.args.bias_list = list(pipeutils.read_file(self.args.biaslist))
+            self.args.bias_df = pd.DataFrame(self.args.bias_list,columns=['expnum'])
+            self.args.bias_df['obstype'] = 'zero'
 
-        elif self.args.csv:
+            self.args.flat_list = list(pipeutils.read_file(self.args.flatlist))
+            self.args.flat_df = pd.DataFrame(self.args.flat_list,columns=['expnum'])
+            self.args.flat_df['obstype'] = 'dome flat'
+            total_list = self.args.flat_list + self.args.bias_list
+            self.args.nitelist = self.args.cur.get_nites(total_list)
+
+            self.args.dataframe = pd.concat([self.args.flat_df,self.args.bias_df],ignore_index=True)
+
+            self.args.cur.update_df(self.args.dataframe)
+
+        if self.args.csv:
             self.args.dataframe = pd.read_csv(self.args.csv,sep=self.args.delimiter)
             self.args.dataframe.columns = [col.lower() for col in self.args.dataframe.columns]
             self.args.cur.update_df(self.args.dataframe)
             self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
-        else:
+
+        if not self.args.biaslist and not self.args.flatlist and not self.args.csv:
             cal_query = self.args.cur.get_cals(self.args.nitelist)
             self.args.dataframe = nitelycal_lib.create_clean_df(cal_query)
             if self.args.combine:
@@ -557,8 +604,9 @@ class NitelyCal(PipeLine):
 
         if self.args.combine:
             self.args.desstat_pipeline = "supercal"
+            self.args.niterange = str(self.args.nitelist[0]) + 't' + str(self.args.nitelist[-1])[4:]
             self.args.dataframe['niterange'] = self.args.niterange
-            self.args.bias_list,self.args.flat_list = nitelycal_lib.create_lists(self.args.dataframe)
+            self.args.dataframe['unitname'] = self.args.niterange
         else:
             self.args.desstat_pipeline = "precal"
             for index,row in self.args.dataframe.iterrows():
@@ -578,10 +626,21 @@ class NitelyCal(PipeLine):
 
             self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
         if self.args.combine: 
-            self.args.dataframe,not_enough_exp = nitelycal_lib.trim_excess_exposures(self.args.dataframe,
-                                                                                     self.args.bands,
-                                                                                     k=self.args.max_num,
-                                                                                     verbose= True)
+            if not self.args.flatlist and not self.args.biaslist:
+                exclude = None
+            elif self.args.flatlist and not self.args.biaslist:
+                exclude = 'F'
+            elif self.args.biaslist and not self.args.flatlist:
+                exclude = 'B'
+            elif self.args.biaslist and self.args.flatlist:
+                exclude = 'FB'
+            self.args.dataframe,_ = nitelycal_lib.trim_excess_exposures(
+                                                    self.args.dataframe,
+                                                    self.args.bands,
+                                                    k=self.args.max_num,
+                                                    verbose= True,
+                                                    exclude = exclude)
+        
         # Update dataframe with lists
         try:
             self.args.dataframe.insert(len(self.args.dataframe),'bias_list',None)
@@ -608,7 +667,7 @@ class NitelyCal(PipeLine):
             self.args.cur.update_df(self.args.dataframe)
         except:
             pass
-
+        
         # Exit if there are not at least 5 exposures per band
         if self.args.auto:
             nitelycal_lib.is_count_by_band(self.args.dataframe,bands_to_process=self.args.bands,
@@ -616,7 +675,7 @@ class NitelyCal(PipeLine):
         
         
         self.args.dataframe,self.args.nitelist = nitelycal_lib.find_no_data(self.args.dataframe,self.args.nitelist)
-        
+        self.args.dataframe.loc[self.args.dataframe.obstype=='zero','band'] = 'NA'
         if self.args.count:
             print "Data found in database:"
             self.args.cur.count_by_band(self.args.nitelist)
@@ -747,7 +806,7 @@ class PhotoZ(PipeLine):
         # Creating dataframe from tiles
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
-            self.args.tile_list = self.args.cur.get_failed_tiles(self.args.reqnum,int(self.args.resubmit_max))
+            self.args.tile_list = self.args.cur.get_failed_chunks(self.args.reqnum,int(self.args.resubmit_max))
             if self.args.tile_list:
                 self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
             else:

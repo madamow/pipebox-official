@@ -21,12 +21,11 @@ chunk_size = {{args.chunk_size}}
 basket = ${chunk:2}
 unitname = ${campaign}_${chunk:2}
 
-master_use_fwthreads = True
-
 bands = {{ args.bands }}
 det_bands = {{args.det_bands}}
 
 mof_table = {{args.mof_table}}
+n_jobs = {{args.n_jobs}}
 
 {% if args.rundir %}
 ops_run_dir = {{ args.rundir }}

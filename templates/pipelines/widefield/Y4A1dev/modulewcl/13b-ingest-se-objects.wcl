@@ -20,7 +20,7 @@
             execname = catalog_ingest.py
             used = file.cat_finalcut
             <cmdline>
-                section = db-desdb05
+                #section = db-desdb05
                 request = ${reqnum}
                 filename = ${file.cat_finalcut.fullname}
                 filetype = ${file.cat_finalcut.filetype}

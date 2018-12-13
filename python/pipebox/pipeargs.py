@@ -43,13 +43,12 @@ class PipeArgs(object):
         
         # Archive arguments
         parser.add('--target_site',required=True,help='Computing node, i.e., fermigrid-sl6')
-        parser.add('--http_section',help='')
         parser.add('--archive_name',help='Home archive to store products, e.g., \
                              desar2home,prodbeta,...')
         parser.add('--project',default='ACT',help='Archive directory where runs are \
                              stored, e.g., $ARCHIVE/-->ACT<--/finalcut/')
         parser.add('--rundir',help='Archive directory structure')
-        parser.add('--http',default='desar2',help='The machine to copy files through: desar0, desar1,desar2')
+        parser.add('--http',help='The machine to copy files through: desar0, desar1,desar2')
         # JIRA arguments
         parser.add('--jira_parent',help='JIRA parent ticket under which\
                              new ticket will be created.')
@@ -66,6 +65,7 @@ class PipeArgs(object):
                             connect to JIRA, but must specify reqnum and jira_parent.")
         parser.add('--reqnum',help='Part of processing unique identifier. Tied to JIRA ticket \
                              number')
+        parser.add('--decade', action='store_true', help='Uses the DECADE subsection of WCL')
     
         # EUPS arguments
         parser.add('--eups_stack',action='append',nargs='+', required=True,help='EUPS production stack, \
@@ -139,6 +139,7 @@ class MultiEpoch(PipeArgs):
         parser.add('--nthreads',default=8,help='Amount of parallelization')
         parser.add('--bands',default='g,r,i,z,Y')
         parser.add('--det_bands',default='r,i,z')
+        parser.add('--single_chip',action='store_true')
         args = parser.parse_args()
 
         return args
@@ -230,6 +231,7 @@ class PhotoZ(PipeArgs):
         parser.add('--tile')
         parser.add('--num_chunks',help='Total number of chunks')
         parser.add('--chunk_size',help='Number of tiles per chunk')
+        parser.add('--n_jobs',default=8,help='Number of cores to run bpz')
         parser.add('--mof_table',default='nsevilla.y3a2_mof_tmp',help='MOF table to query on')
         parser.add('--list',help='File of line-separated tiles')
         parser.add('--proctag',help='Tag of processed expnums (proctag table) to use for coaddition')

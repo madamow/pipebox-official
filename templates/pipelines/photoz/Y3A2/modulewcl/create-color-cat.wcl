@@ -9,7 +9,8 @@
                 c = ${file.bpz_config.fullname}
                 tilename = ${file.chunk_out.fullname}
                 outcat = ${file.coadd_colorcat.fullname}
-                table_MOF = ${mof_table}
+                #table_MOF = ${mof_table}
+                table_SINGLE = ${mof_table}
             </cmdline>
             execname = build_colorcat_sql
             cmd_hyphen =  mixed_gnu
@@ -20,7 +21,7 @@
         <file>
             <bpz_config>
                 # what input file is named
-                filename = ${cfgver}_bpz_config-SExONLY.yaml
+                filename = ${cfgver}_bpz_config-SINGLE-v3.yaml
                 filetype = config
 
                 # where input file lives in jobroot

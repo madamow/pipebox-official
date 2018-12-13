@@ -1,7 +1,7 @@
 camsym = D
-cfgver = Y3A1_v4
+cfgver = Y3A2_v11
 meds_config_ver = Y3A1v4
-mof_config_ver = Y3A1-v4
+mof_config_ver = Y3A2_v11
 query_campaign = Y3A1
 
 color_r_band = i
@@ -16,7 +16,8 @@ zflag = 16
 
 blacklist_table = Y3A1_BLACKLIST
 
-se_proctag = Y3A1_FINALCUT
+#se_proctag = Y3A1_FINALCUT
+se_proctag = COSMOS_COADD_TRUTH
 
 assemble_xblock = 10
 assemble_yblock = 3

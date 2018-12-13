@@ -1,7 +1,7 @@
 db_section         = db-destest        # Database section in your .desservices.ini file, e.g.,
                                        # db-desoper or db-destest
 target_site        = fermigrid-sl6     # Computing node, i.e., fermigrid-sl6
-http_section       =                   # 
+http               =                   # 
 archive_name       =                   #
 schema             =                   # 
 

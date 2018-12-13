@@ -4,7 +4,7 @@
         wrappername = genwrap.py
         wrapperloop = band
         loopobj = list.nwgint
-        max_fwthreads = ${nthreads}
+        #max_fwthreads = ${nthreads}
 
         <exec_1>
             <cmdline>

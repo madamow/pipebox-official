@@ -9,5 +9,4 @@ pipeline = pipequery.PipeQuery('db-desoper')
 propid,program = pipeline.get_propids_programs()
 
 # Insert exposures into mjohns44.auto_queue
-pipeline.insert_auto_queue(program=program,propid=propid)
-
+pipeline.insert_auto_queue(propid=propid)

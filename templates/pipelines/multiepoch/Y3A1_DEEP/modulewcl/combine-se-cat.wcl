@@ -26,7 +26,7 @@
                 # how to create lists
                 divide_by = expnum,band
                 columns = catfile.fullname
-                sortkey = (ccdnum, True, False)
+                sortkey = (expnum, True, False)
 
                 # what to name the list
                 filepat = tile_expband

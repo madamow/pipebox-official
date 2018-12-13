@@ -28,34 +28,58 @@ project = {{ args.project }}
 </archive>
 {% endif %}
 
-{% if args.http == 'desar2' %}
+{% if args.db_section != 'db-decade' and not args.http%}
+<archive>
+   <desar2home>
+       transfer_server = desar0,desar1,desar2
+   </desar2home>
+</archive>
+{% endif %}
+
+{% if args.http == 'desar2' and args.db_section != 'db-decade'%}
 <archive>
     <desar2home>
         input_transfer_semname_home = y2a1-desar2-input-40
         output_transfer_semname_home = y2a1-desar2-output
         root_http = http://desar2.cosmology.illinois.edu/desarchive
+        transfer_server = desar2
     </desar2home>
 </archive>
 {% endif %}
 
-{% if args.http == 'desar1' %}
+{% if args.http == 'desar1' and args.db_section != 'db-decade'%}
 <archive>
     <desar2home>
         input_transfer_semname_home = y2a1-desar1-input-40
         output_transfer_semname_home = y2a1-desar1-output
         root_http = http://desar1.cosmology.illinois.edu/desarchive
+        transfer_server = desar1
     </desar2home>
 </archive>
 {% endif %}
 
-{%if args.http == 'desar0' %}
+{%if args.http == 'desar0' and args.db_section != 'db-decade'%}
 <archive>
     <desar2home>
         input_transfer_semname_home = y2a1-input-40
         output_transfer_semname_home = y2a1-output
         root_http = http://desar0.cosmology.illinois.edu/desarchive
+        transfer_server = desar0
     </desar2home>
 </archive>
+{% endif %}
+
+{% if args.db_section == 'db-decade' %}
+<archive>
+    <decarchive>
+        input_transfer_semname_home = decade-input
+        output_transfer_semname_home = decade-output
+        root_http = http://decahttp.ncsa.illinois.edu/deca_archive
+        transfer_server = decahttp
+    </decarchive>
+</archive>
+home_archive = decarchive
+glidein_name = bw-decade
 {% endif %}
 
 # Condor processing parameters
@@ -100,7 +124,21 @@ home_archive = prodbeta
 des_http_section = file-http-prodbeta
 {% endif %}
 
-submit_run_dir = /des009/prod_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
+{% if args.db_section == 'db-decade' %}
+se_object_table = DECADE.SE_OBJECT
+home_archive = decarchive
+des_http_section = file-http-decade {% endif %}
+
+{% if args.db_section == 'db-lsst' %}
+se_object_table = PROD.SE_OBJECT
+home_archive = desar2home
+des_http_section = file-http {% endif %}
+
+{% if args.db_section == 'db-decade' %}
+submit_run_dir = /decade/scratch/${home_archive}/submit/${ops_run_dir}
+{% else %}
+submit_run_dir = /local/prod_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
+{%endif%}
 
 {% if args.ccdnum %}
 ccdnum = {{ args.ccdnum }}

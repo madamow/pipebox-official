@@ -2,12 +2,12 @@
     <bpz>
         modnamepat = ${modnamepat_unitname_generic}
         wrappername = genwrap.py
-        max_fwthreads = ${request_cpus}
         <exec_1>
             <cmdline>
                 c = ${file.bpz_config.fullname}
                 incat = ${file.coadd_colorcat.fullname}
                 outbpz = ${file.coadd_cat_bpz.fullname}
+                n_jobs = ${n_jobs}
             </cmdline>
             execname = bpzv1
             cmd_hyphen = mixed_gnu
@@ -19,7 +19,7 @@
             ### input files
             <bpz_config>
                 # what input file is named
-                filename = ${cfgver}_bpz_config-SExONLY.yaml
+                filename = ${cfgver}_bpz_config-SINGLE-v3.yaml
                 filetype = config
 
                 # where input file lives in jobroot

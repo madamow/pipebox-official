@@ -1,0 +1,12 @@
+### Mostly Constant ###
+camsym = D 
+photflagvar = 1    
+bfnite = 20150305
+bfreq = 1428
+bfatt = 1
+confignite = 20151008
+xtalkcoefffile = DECam_20130606.xtalk 
+photflatcornite = null
+scampaheadnite = 20131115
+scampconfigfile = ${confignite}_default.scamp.20140423
+scampupdateheadfile = ${confignite}_updateWCS.config

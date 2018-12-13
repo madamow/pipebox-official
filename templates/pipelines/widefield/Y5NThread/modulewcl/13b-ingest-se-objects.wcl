@@ -1,0 +1,31 @@
+<module> 
+    <ingest-se-objects>
+        wrappername = genwrap.py 
+        wrapperloop = ccdnum
+        max_fwthreads = ${fw_nmaxthread}
+        modnamepat=${modnamepat_ccdnumband}
+
+        <file>
+            <cat_firstcut>
+                filetype = cat_firstcut
+                filepat = ccdnum_band
+                flabel = red-fullcat
+                fsuffix = fits
+                dirpat = se
+                rundir = cat
+                ops_enddir = cat
+            </cat_firstcut>
+        </file>
+
+        <exec_1>
+            execname = catalog_ingest.py
+            used = file.cat_firstcut
+            <cmdline>
+                request = ${reqnum}
+                filename = ${file.cat_firstcut.fullname}
+                filetype = ${file.cat_firstcut.filetype}
+                targettable = ${se_object_table}
+            </cmdline>
+        </exec_1>
+    </ingest-se-objects>
+</module>
