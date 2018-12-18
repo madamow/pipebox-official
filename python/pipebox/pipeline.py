@@ -412,7 +412,7 @@ class WideField(PipeLine):
             pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
             
             try:
-                if args.db_section=='db-decade':
+                if self.args.db_section=='db-decade':
                     self.args.expnum = ','.join([str(e) for e in self.args.cur.get_expnums_from_auto_queue(project='DEC')])          
                 else:
                     self.args.expnum = ','.join([str(e) for e in self.args.cur.get_expnums_from_auto_queue()])          
