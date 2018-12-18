@@ -58,6 +58,11 @@ submit_files_mvmt     = filemgmt.job_mvmt_http.JobArchiveHttp
         target_des_services = /home/{{ args['USER'] }}/.desservices.ini
     </descmp4>
 
+    <decasub>
+        target_des_services = /home/{{ args['USER'] }}/.desservices.ini
+    </decasub>
+
+
 </site>
 
 <job_environment>
