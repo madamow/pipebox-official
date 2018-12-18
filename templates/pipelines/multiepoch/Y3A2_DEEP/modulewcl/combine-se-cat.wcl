@@ -24,9 +24,9 @@
                 filetype = cat_finalcut
                 tilename = ${da_tilename}
                 query_table = catalog
-                join catalog.pfw_attempt_id = proctag.pfw_attempt_id and Y3A1_CATALOG_TO_TILE.filename = catalog.filename
+                join catalog.pfw_attempt_id = proctag.pfw_attempt_id and COSMOS_CATALOG_TO_TILE.filename = catalog.filename
                 #query_fields = filetype,ccdnum,proctag.tag
-                query_fields = filetype,proctag.tag,Y3A1_CATALOG_TO_TILE.tilename
+                query_fields = filetype,proctag.tag,COSMOS_CATALOG_TO_TILE.tilename
                 output_fields = filename,expnum,band,ccdnum
                 divide_by = expnum,band
                 

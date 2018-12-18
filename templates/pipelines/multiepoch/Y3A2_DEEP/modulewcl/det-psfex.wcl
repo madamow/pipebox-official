@@ -23,7 +23,7 @@ psfex_resids = qa/psfex_resids
                 PSF_DIR = psf
                 CHECKPLOT_NAME = ${psfex_selfwhm},${psfex_fwhm},${psfex_resids}
                 CHECKPLOT_DEV = PSC
-                SAMPLE_MINSN = ${psfex_sample_minsn_${band}}
+                SAMPLE_MINSN = ${psfex_sample_minsn}
             </cmdline>
         </exec_1>
         <file>
