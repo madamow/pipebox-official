@@ -69,7 +69,7 @@ project = {{ args.project }}
 </archive>
 {% endif %}
 
-{% if args.db_section == 'db-decade' %}
+{% if args.db_section == 'db-ecade' %}
 <archive>
     <decarchive>
         input_transfer_semname_home = decade-input
