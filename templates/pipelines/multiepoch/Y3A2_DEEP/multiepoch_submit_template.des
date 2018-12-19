@@ -74,13 +74,13 @@ ops_run_dir = {{ args.rundir }}
 ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/p${attnum:2}
 {% endif %}
 
-#nthreads = {{ args.nthreads }}
-nthreads = 1
+nthreads = {{ args.nthreads }}
+#nthreads = 1
 save_run_vals = tilename, jira_id
 
 <<inclfunc mepipelineappintg.mepochmisc.get_tile_info(submit_des_services, submit_des_db_section, tilename)>>
 
-request_cpus = 1
+request_cpus = {{ args.request_cpus }}
 ######################################################################
 blocklist = me
 <block>
