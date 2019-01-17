@@ -135,7 +135,7 @@ home_archive = desar2home
 des_http_section = file-http {% endif %}
 
 {% if args.db_section == 'db-decade' %}
-submit_run_dir = /decade/scratch/${home_archive}/submit/${ops_run_dir}
+submit_run_dir = /local/scratch/${home_archive}/submit/${ops_run_dir}
 {% else %}
 submit_run_dir = /local/prod_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
 {%endif%}
