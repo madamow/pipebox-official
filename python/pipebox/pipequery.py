@@ -498,7 +498,6 @@ class WideField(PipeQuery):
         self.cur.execute(query)
         exposures = [exp[0] for exp in self.cur.fetchall()]
         unitnames = ['D00'+str(e) for e in exposures]
-
         submitted = "select distinct unitname,attnum,status from pfw_attempt a, task t,pfw_request r where r.reqnum=a.reqnum and t.id=a.task_id and r.project='%s' and unitname in ('%s')" % (project,"','".join(unitnames))
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()

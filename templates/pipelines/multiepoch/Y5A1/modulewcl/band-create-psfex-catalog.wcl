@@ -5,7 +5,7 @@
         wrappername = genwrap.py
         wrapperloop = band
         loopobj = file.coadd
-        req_vals = psfex_satur_level_g_shallow,psfex_satur_level_r_shallow,psfex_satur_level_i_shallow,psfex_satur_level_z_shallow,psfex_satur_level_g_deep,psfex_satur_level_r_deep,psfex_satur_level_i_deep,psfex_satur_level_z_deep
+        req_vals = psfex_satur_level_g_shallow,psfex_satur_level_r_shallow,psfex_satur_level_i_shallow,psfex_satur_level_z_shallow,psfex_satur_level_g_deep,psfex_satur_level_r_deep,psfex_satur_level_i_deep,psfex_satur_level_z_deep,psfex_satur_level_u_survey,psfex_satur_level_g_survey,psfex_satur_level_r_survey,psfex_satur_level_i_survey,psfex_satur_level_z_survey, psfex_satur_level_Y_survey
         <exec_1>
             execname = sex
             cmd_hyphen = allsingle

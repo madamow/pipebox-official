@@ -4,7 +4,7 @@
 {% if args.inputcals_file %}
 <<include {{args.inputcals_file}}>>
 {% else %}
-<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/inputcals/inputs.des>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/inputcals/y5a1_v1_inputs.des>>
 {% endif %}
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/modnamepat.wcl>>
 
@@ -17,11 +17,7 @@
 #<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/mepoch-ingest-no-mangle.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/mepoch-ingest.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/coadd-astrorefine.wcl>>
-{% if args.single_chip %}
-<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/combine-se-cat-single-chip.wcl>>
-{% else %}
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/combine-se-cat.wcl>>
-{% endif %}
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/det-assemble.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/det-catalog.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/det-create-psfex-catalog.wcl>>
@@ -34,13 +30,8 @@
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/make-color-img.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/make-ptif.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/mangle.wcl>>
-{% if args.single_chip %}
-<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/null-weight-for-coadd-single-chip.wcl>>
-<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/split-scamp-head-single-chip.wcl>>
-{% else %}
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/null-weight-for-coadd.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/split-scamp-head.wcl>>
-{% endif %}
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/bigquery.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/run-desmeds.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/wavg.wcl>>
@@ -52,24 +43,9 @@ compress_cleanup = False
 det_bands = {{args.det_bands}}
 
 basket = {{args.tile}} # FIX THIS
-{% if args.single_chip %}
-proctag = {{args.tile.split('-')[1].split('_')[0] + '_' + args.proctag}}
-# Setting PSFex satur levels based on field/band
-{% if '3' in args.tile.split('-')[1].split('_')[0] %}
-depth=deep
-mosaictype= UNCHANGED
-{% if args.proctag == 'DEEPEST' %}
-det_bands = i,z
-{% endif %}
-{% else %}
-depth=shallow
-{% endif %}
-ccd = {{ args.tile.split('_')[1].split('C')[1] }}
-{% else %}
 proctag = {{args.proctag}}
-depth= shallow
+depth= survey
 mosaictype = SAME_CRVAL
-{% endif %}
 
 tilename = {{args.tile}}
 unitname = ${tilename}
@@ -79,7 +55,7 @@ bands = {{ args.bands }}
 {% if args.rundir %}
 ops_run_dir = {{ args.rundir }}
 {% else %}
-ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/p${attnum:2}
+ops_run_dir = ${project}/${pipeline}/${campaign}/r${reqnum}/${unitname}/p${attnum:2}
 {% endif %}
 
 nthreads = {{ args.nthreads }}
@@ -90,12 +66,12 @@ save_run_vals = tilename, jira_id
 
 request_cpus = 8
 ######################################################################
-blocklist = me
+blocklist = me 
 <block>
     <me>
       #modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, det-swarp-wgt, det-swarp-msk, band-assemble, det-assemble, make-color-img, make-ptif, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, wavg, mepoch-ingest-no-mangle, run-desmeds
-      modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, det-swarp-wgt, det-swarp-msk, band-assemble, det-assemble, make-color-img, make-ptif, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, wavg, mangle,mepoch-ingest, run-desmeds
-
+     modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, det-swarp-wgt, det-swarp-msk, band-assemble, det-assemble, make-color-img, make-ptif, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, wavg, mangle,mepoch-ingest 
+    #, run-desmeds
     </me>
 </block>
 

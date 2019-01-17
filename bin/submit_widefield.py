@@ -8,6 +8,7 @@ widefield = pipeline.WideField()
 args = widefield.args
 
 # create JIRA ticket per nite found (default)
+print "Creating JIRA ticket..."
 if args.exptag:
     widefield.ticket(args,groupby='tag')
 elif args.auto:

@@ -2,7 +2,7 @@
     <det-create-psfex-catalog>
         modnamepat = ${modnamepat_tile_generic}
         wrappername = genwrap.py
-        req_vals = psfex_satur_level_shallow,psfex_satur_level_deep
+        req_vals = psfex_satur_level_shallow,psfex_satur_level_deep,psfex_satur_level_survey
         <exec_1>
             execname = sex
             cmd_hyphen = allsingle
