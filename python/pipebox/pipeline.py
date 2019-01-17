@@ -271,6 +271,7 @@ class PipeLine(object):
             while not pipeutils.less_than_queue(pipeline=args.desstat_pipeline, reqnum=desstat_reqnum,
                                                 user=desstat_user,queue_size=args.queue_size):
                 if self.args.auto:
+                    print "Queue full. Exiting..."
                     sys.exit(0)    
                 else:
                     time.sleep(30)
