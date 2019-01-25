@@ -494,18 +494,26 @@ class WideField(PipeQuery):
         return expnum_list
 
     def get_expnums_from_auto_queue(self,n_failed=3,project='OPS'):
-        query = "select distinct expnum from ops_auto_queue where processed=0 and rownum < 1000"
-        self.cur.execute(query)
-        exposures = [exp[0] for exp in self.cur.fetchall()]
-        unitnames = ['D00'+str(e) for e in exposures]
-        submitted = "select distinct unitname,attnum,status from pfw_attempt a, task t,pfw_request r where r.reqnum=a.reqnum and t.id=a.task_id and r.project='%s' and unitname in ('%s')" % (project,"','".join(unitnames))
-        self.cur.execute(submitted)
-        failed_query = self.cur.fetchall()
+
+        failed_query=[]
+
+        for i in [0,1]:
+            query = "select distinct expnum from ops_auto_queue where processed=0 offset %i rows fetch next 1000 rows only" % (i*1000)
+            self.cur.execute(query)
+            exposures = [exp[0] for exp in self.cur.fetchall()]
+            unitnames = ['D00'+str(e) for e in exposures]
+            submitted = "select distinct unitname,attnum,status from pfw_attempt a, task t,pfw_request r where r.reqnum=a.reqnum and t.id=a.task_id and r.project='%s' and unitname in ('%s')" % (project,"','".join(unitnames))
+
+            self.cur.execute(submitted)
+            failed_query += self.cur.fetchall()
+
+
         try:
-            df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
+            df = pd.DataFrame(failed_query, columns=['unitname','attnum','status'])
         except:
-            df = pd.DataFrame(unitnames,columns=['unitname'])
+            df = pd.DataFrame(unitnames, columns=['unitname'])
             df['status'] = -1 
+
         # Set Null values to -99
         df = df.fillna(-99)
 
