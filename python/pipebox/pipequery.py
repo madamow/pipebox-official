@@ -497,7 +497,7 @@ class WideField(PipeQuery):
 
         failed_query=[]
 
-        for i in [0,1]:
+        for i in [0,1,2]:
             query = "select distinct expnum from ops_auto_queue where processed=0 offset %i rows fetch next 1000 rows only" % (i*1000)
             self.cur.execute(query)
             exposures = [exp[0] for exp in self.cur.fetchall()]
@@ -515,20 +515,12 @@ class WideField(PipeQuery):
 
         # Set Null values to -99
         df = df.fillna(-99)
-
-        null_list = []
+        final_exposures = []
         for u in df['unitname'].unique():
-            statuses = list(df[(df.unitname == u)]['status'].values)
-            failed_atts = [i for i in statuses if i >=1]
-            # remove from list any exposures that are currently running or successful
-            if -99 in statuses or 0 in statuses:
-                null_list.append(u)
-            # remove from list any exposures that have failed at least 3 times
-            else:
-                if len(failed_atts) >= n_failed:
-                    null_list.append(u)
-        final_unitnames_set = set(unitnames)-set(null_list)
-        final_exposures = [u.split('D00')[1] for u in final_unitnames_set]
+            udf = df[df.unitname == u]
+            # ignore any exposures that are currently running or successful or failed at least three times
+            if not any([-99 in udf.status.values, 0 in udf.status.values]) and (udf.shape[0] < n_failed):
+                final_exposures.append(u.split('D00')[1]) 
         return final_exposures
 
     def get_expnums_from_nites(self,nites=None,process_all=False,program=None,propid=None):
