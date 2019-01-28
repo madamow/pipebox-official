@@ -507,7 +507,6 @@ class WideField(PipeQuery):
             self.cur.execute(submitted)
             failed_query += self.cur.fetchall()
 
-
         try:
             df = pd.DataFrame(failed_query, columns=['unitname','attnum','status'])
         except:
@@ -519,7 +518,6 @@ class WideField(PipeQuery):
 
         null_list = []
         for u in df['unitname'].unique():
-            count = df[(df.unitname == u) & (df.status == 0)].count()[0]
             statuses = list(df[(df.unitname == u)]['status'].values)
             failed_atts = [i for i in statuses if i >=1]
             # remove from list any exposures that are currently running or successful
