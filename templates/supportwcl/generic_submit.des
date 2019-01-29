@@ -75,8 +75,20 @@ project = {{ args.project }}
         transfer_server = decahttp,decahttp2
     </decarchive>
 </archive>
-home_archive = decarchive
-glidein_name = bw-decade
+{% endif %}
+{% if args.db_section == 'db-decade' and args.http == 'decahttp' %}
+<archive>
+    <decarchive>
+        transfer_server = decahttp
+    </decarchive>
+</archive>
+{% endif %}
+{% if args.db_section == 'db-decade' and args.http == 'decahttp2' %}
+<archive>
+    <decarchive>
+        transfer_server = decahttp2
+    </decarchive>
+</archive>
 {% endif %}
 
 # Condor processing parameters
@@ -124,7 +136,10 @@ des_http_section = file-http-prodbeta
 {% if args.db_section == 'db-decade' %}
 se_object_table = DECADE.SE_OBJECT
 home_archive = decarchive
-des_http_section = file-http-decade {% endif %}
+des_http_section = file-http-decade 
+home_archive = decarchive
+glidein_name = bw-decade
+{% endif %}
 
 {% if args.db_section == 'db-lsst' %}
 se_object_table = PROD.SE_OBJECT
