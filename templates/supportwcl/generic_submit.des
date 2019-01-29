@@ -28,7 +28,7 @@ project = {{ args.project }}
 </archive>
 {% endif %}
 
-{% if args.db_section != 'db-decade' and not args.http%}
+{% if args.db_section != 'db-decade' and not args.http %}
 <archive>
    <desar2home>
        transfer_server = desar0,desar1,desar2
@@ -69,13 +69,10 @@ project = {{ args.project }}
 </archive>
 {% endif %}
 
-{% if args.db_section == 'db-decade' %}
+{% if args.db_section == 'db-decade' and not args.http %}
 <archive>
     <decarchive>
-        input_transfer_semname_home = decade-input
-        output_transfer_semname_home = decade-output
-        root_http = http://decahttp.ncsa.illinois.edu/deca_archive
-        transfer_server = decahttp
+        transfer_server = decahttp,decahttp2
     </decarchive>
 </archive>
 home_archive = decarchive

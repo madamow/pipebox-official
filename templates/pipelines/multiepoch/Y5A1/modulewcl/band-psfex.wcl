@@ -17,6 +17,7 @@
                 XML_NAME = ${file.psfex_xml.fullname}
                 NTHREADS = ${nthreads}
                 PSF_DIR = psf
+                CHECKPLOT_NAME = qa/psfex_selfwhm,qa/psfex_fwhm,qa/psfex_resids
             </cmdline>
         </exec_1>
         <file>

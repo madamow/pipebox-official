@@ -24,6 +24,8 @@ png_label = comp1, comp2,Object-not-in-tolygon,Objects-not-in-geometry-masks,Obj
                 mzpglobal = ${mag_zero}
                 tilename = ${tilename}
                 tileid = ${tileid}
+                list_nwgint = ${list.nwgint.fullname}
+                list_redimg = ${list.red.fullname}
                 coadd = ${file.coadd.fullname}
                 coadd_cat = ${file.coadd_cat.fullname}
                 molysprefix = mangle/${band}/${molys_prefix}
@@ -35,7 +37,6 @@ png_label = comp1, comp2,Object-not-in-tolygon,Objects-not-in-geometry-masks,Obj
                 dec_column = ${dec_col}
                 fgcm_gry_tbl = ${fgcm_gry_table}
                 hdr_from_db = true
-                im_to_tile = Y3A1_IMAGE_TO_TILE
                 data_file = ${file.mangledat.fullname}
                 zsource = ${zsource}
                 zversion = ${zversion}
@@ -46,51 +47,51 @@ png_label = comp1, comp2,Object-not-in-tolygon,Objects-not-in-geometry-masks,Obj
             </cmdline>
             execname = mangle_one_tile
             cmd_hyphen = mixed_gnu
-            used = file.poltiles,file.poltolys,file.mangle_config,file.coadd,file.coadd_cat #, list.red.red_immask,list.nwgint.nwgint
+            used = file.poltiles,file.poltolys,file.mangle_config,file.coadd,file.coadd_cat, list.red.red_immask,list.nwgint.nwgint
             was_generated_by = file.polygons, file.molys,file.mangledat, file.png, file.csv_ccdgon, file.csv_molygon, file.csv_molyccd, file.csv_cobjmoly
             #ancestry = file.red_immask:file.nwgint
         </exec_1>
-        #<list>
-        #    <red>
-        #        # how to get list data
-        #        depends null-weight-for-coadd.file.red_immask
-
-                # how to create lists
-        #        divide_by = band
-        #        columns = red_immask.fullname, red_immask.mag_zero
-        #        sortkey = fullname
-        #        format = textcsv
-
-                # what to name the list
-         #       filepat = tile_band
-         #       flabel = mangle-red
-         #       fsuffix = list
-
-                # where to put it (jobroot=rundir, archive=ops_enddir)
-          #      dirpat = mepoch
-           #     ops_enddir = list
-           #     rundir = list
-           # </red>
-           # <nwgint>
+        <list>
+            <red>
                 # how to get list data
-            #    depends null-weight-for-coadd.file.nwgint
+                depends null-weight-for-coadd.file.red_immask
 
                 # how to create lists
-             #   divide_by = band
-              #  columns = nwgint.fullname
-               # sortkey = fullname
+                divide_by = band
+                columns = red_immask.fullname, red_immask.mag_zero
+                sortkey = fullname
+                format = textcsv
 
                 # what to name the list
-               # filepat = tile_band
-              #  flabel = mangle-nwgint
-              #  fsuffix = list
+                filepat = tile_band
+                flabel = mangle-red
+                fsuffix = list
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
-              #  dirpat = mepoch
-              #  ops_enddir = list
-              #  rundir = list
-            #</nwgint>
-        #</list>
+                dirpat = mepoch
+                ops_enddir = list
+                rundir = list
+            </red>
+            <nwgint>
+                # how to get list data
+                depends null-weight-for-coadd.file.nwgint
+
+                # how to create lists
+                divide_by = band
+                columns = nwgint.fullname
+                sortkey = fullname
+
+                # what to name the list
+                filepat = tile_band
+                flabel = mangle-nwgint
+                fsuffix = list
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                ops_enddir = list
+                rundir = list
+            </nwgint>
+        </list>
         <file>
             ### input files
             <mangledat>
@@ -127,67 +128,37 @@ png_label = comp1, comp2,Object-not-in-tolygon,Objects-not-in-geometry-masks,Obj
                 rundir = mangle_tiles
             </poltolys>
             <coadd>
-                filetype = coadd
-                query_table = coadd
-                query_fields = filetype,proctag.tag,tilename
-                join coadd.pfw_attempt_id = proctag.pfw_attempt_id
-                output_fields = filename,band
+                # how to get file data
+                depends band-assemble.file.coadd
                 match = band
-                columns = coadd.fullname
-                dirpat = se
-                tag= ${proctag} 
-                tilename = ${unitname}
+
                 # where input file lives in jobroot
                 dirpat = mepoch
                 rundir = coadd
             </coadd>
-                #<coadd>
+            <coadd_cat>
                 # how to get file data
-             #   depends band-assemble.file.coadd
-             #   match = band
-
-                # where input file lives in jobroot
-              #  dirpat = mepoch
-               # rundir = coadd
-            #</coadd>
-             <coadd_cat>
-                filetype = coadd_cat
-                query_table = catalog
-                query_fields = filetype,proctag.tag,tilename
-                join catalog.pfw_attempt_id = proctag.pfw_attempt_id
-                output_fields = tilename,band
+                depends band-coadd-catalog.file.coadd_cat
                 match = band
-                columns = coadd.fullname
-                dirpat = se
-                tag= ${proctag}
-                tilename = ${unitname}
+
                 # where input file lives in jobroot
                 dirpat = mepoch
                 rundir = cat
             </coadd_cat>
-            #<coadd_cat>
-            #    # how to get file data
-            #    depends band-coadd-catalog.file.coadd_cat
-            #    match = band
+            <red_immask>
+                listonly = True
 
                 # where input file lives in jobroot
-            #    dirpat = mepoch
-            #    rundir = cat
-            #</coadd_cat>
-            #<red_immask>
-            #    listonly = True
+                dirpat = mepoch
+                rundir = red
+            </red_immask>
+            <nwgint>
+                listonly = True
 
                 # where input file lives in jobroot
-             #   dirpat = mepoch
-             #   rundir = red
-            #</red_immask>
-            #<nwgint>
-            #    listonly = True
-
-                # where input file lives in jobroot
-            #    dirpat = mepoch
-            #    rundir = nwgint
-            #</nwgint>
+                dirpat = mepoch
+                rundir = nwgint
+            </nwgint>
 
 
             ### output files

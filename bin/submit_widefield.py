@@ -24,4 +24,5 @@ else:
 
 # write submit files and submit if necessary
 # columns should only be values that change per submit (groupby)
+print "Creating templates and submitting (if specified)..."
 widefield.make_templates(columns=['nite','expnum','band'],groupby='expnum')
