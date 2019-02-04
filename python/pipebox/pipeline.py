@@ -406,7 +406,7 @@ class WideField(PipeLine):
         self.args.output_name_keys = ['nite','expnum','band']
         self.args.cur = pipequery.WideField(self.args.db_section)
         if not self.args.propid:
-            self.args.propid,_ = self.args.cur.get_propids_programs()
+            self.args.propid = self.args.cur.get_propids()
         else:   
             self.args.propid = [self.args.propid]
  
@@ -447,7 +447,7 @@ class WideField(PipeLine):
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
         elif self.args.nite or self.args.niterange:
             exposures = self.args.cur.get_expnums_from_nites(self.args.nitelist,propid=self.args.propid,
-                                program=self.args.program,process_all=self.args.process_all)
+                                process_all=self.args.process_all)
             if not exposures:
                 print "No exposures found for given nite. Please check nite."
                 sys.exit(1)

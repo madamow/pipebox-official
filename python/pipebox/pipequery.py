@@ -82,20 +82,16 @@ class PipeQuery(object):
                 tag_list_of_dict.append(tag_dict)
         return tag_list_of_dict
 
-    def get_propids_programs(self):
-        """ get the accepted propids and programs """
+    def get_propids(self):
+        """ get the accepted propids """
         get_all_propid = "select distinct propid from OPS_PROPID" 
         self.cur.execute(get_all_propid)
         propid = self.cur.fetchall()
         propid = [i[0] for i in propid]
-        get_all_program = "select distinct program from OPS_PROPID"
-        self.cur.execute(get_all_program)
-        program = self.cur.fetchall()
-        program = [i[0] for i in program]
-        return propid,program
+        return propid
 
 
-    def insert_auto_queue(self,n=3,nites=None,process_all=False,program=None,propid=None):
+    def insert_auto_queue(self,n=3,nites=None,process_all=False,propid=None):
         """ Get exposures into auto_queue for auto processing"""
         if not nites:
             now = datetime.now()
@@ -111,8 +107,6 @@ class PipeQuery(object):
         if process_all:
             base_query = base_query
         else:
-            if program:
-                base_query = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in program)
             if propid:
                 base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
         self.cur.execute(base_query)
@@ -210,7 +204,7 @@ class SuperNova(PipeQuery):
         return submitted_or_not       
     
 # Edited from widefield
-    def get_max_nite(self,ignore_propid=False,ignore_program=False,ignore_all=False,**kwargs):
+    def get_max_nite(self):
         """Returns expnum,nite of max(expnum) in the exposure table"""
         query = "select max(nite) from manifest_exposure where exptime > 30"
         self.cur.execute(query)
@@ -452,7 +446,7 @@ class WideField(PipeQuery):
         submitted_or_not = self.cur.fetchone()[0]
         return submitted_or_not       
     
-    def get_max_nite(self,propid=None,program=None,process_all=False):
+    def get_max_nite(self,propid=None,process_all=False):
         """Returns expnum,nite of max(expnum) in the exposure table"""
         base_query = "select max(expnum) from exposure where obstype in ('object','standard')"
         if process_all:
@@ -460,8 +454,6 @@ class WideField(PipeQuery):
         else:
             if propid:
                 base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
-            if program:
-                base_query = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in program)
         self.cur.execute(base_query)
         max_expnum = self.cur.fetchone()[0]
         fetch_nite = "select distinct nite from exposure where expnum=%s" % (max_expnum)
@@ -523,7 +515,7 @@ class WideField(PipeQuery):
                 final_exposures.append(u.split('D00')[1]) 
         return final_exposures
 
-    def get_expnums_from_nites(self,nites=None,process_all=False,program=None,propid=None):
+    def get_expnums_from_nites(self,nites=None,process_all=False,propid=None):
         """ Get exposure numbers and band for incoming exposures"""
         if not nites:
             raise Exception("Must specify nite!")
@@ -534,8 +526,6 @@ class WideField(PipeQuery):
         if process_all:
             base_query = base_query
         else:
-            if program:
-                base_query = base_query + " and program in (%s)" % ','.join("'{0}'".format(k) for k in program)
             if propid:
                 base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
         self.cur.execute(base_query)
