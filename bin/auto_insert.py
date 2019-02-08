@@ -6,7 +6,7 @@ from pipebox import pipequery
 pipeline = pipequery.PipeQuery('db-desoper')
 
 # Get operations propids and programs for query 
-propid,program = pipeline.get_propids_programs()
+propid = pipeline.get_propids()
 
 # Insert exposures into mjohns44.auto_queue
 pipeline.insert_auto_queue(propid=propid)

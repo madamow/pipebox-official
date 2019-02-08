@@ -30,32 +30,14 @@
             #ancestry = file.coadd_cat:file.meds,file.,file.coadd:file.meds,file.coadd_cat:file.tileconf,file.coadd:file.tileconf
         </exec_1>
         <list>
-           # <nwgint>
-           #     # how to get list data
-           #     depends null-weight-for-coadd.file.nwgint
-
-                # how to create lists
-            #    divide_by = band
-            #    columns = nwgint.fullname, nwgint.mag_zero
-              #  sortkey = fullname
-
-                # what to name the list
-              #  filepat = tile_band
-              #  flabel = meds-nwgint
-              #  fsuffix = list
-
-                # where to put it (jobroot=rundir, archive=ops_enddir)
-              #  dirpat = mepoch
-             #   ops_enddir = list
-            #    rundir = list
-            #</nwgint>
             <nwgint>
                 # how to get list data
-                depends null-weight-for-coadd.file.nwgint
+                exec = query_coadd_for_meds.py 
+                args = -A ${pfw_attempt_id} -v 2 --outfile ${qoutfile} --zeropoint NONE
 
                 # how to create lists
                 divide_by = band
-                columns = nwgint.fullname, nwgint.mag_zero
+                columns = red.fullname, head.fullname, red.mag_zero
                 sortkey = fullname
 
                 # what to name the list

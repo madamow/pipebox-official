@@ -91,7 +91,7 @@ class PipeQuery(object):
         return propid
 
 
-    def insert_auto_queue(self,n=3,nites=None,process_all=False,propid=None):
+    def insert_auto_queue(self,n=3,nites=None,propid=None):
         """ Get exposures into auto_queue for auto processing"""
         if not nites:
             now = datetime.now()
@@ -100,22 +100,19 @@ class PipeQuery(object):
                 date = now - timedelta(i)
                 nites.append(date.strftime('%Y%m%d'))
             print "%s: Inserting into AUTO_QUEUE." % now
-        base_query = "select distinct expnum from exposure where obstype in ('object','standard') and \
+        base_query = "select distinct expnum,propid from exposure where obstype in ('object','standard') and \
                       object not like '%%pointing%%' and object not like '%%focus%%' and object \
                       not like '%%donut%%' and object not like '%%test%%' and object \
                       not like '%%junk%%' and nite in (%s)" % ','.join(nites)
-        if process_all:
-            base_query = base_query
-        else:
-            if propid:
-                base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
+        if propid:
+            base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
         self.cur.execute(base_query)
-        results = [row[0] for row in self.cur.fetchall()]
+        results = [(row[0],row[1]) for row in self.cur.fetchall()]
         if results:
             inserts = []
-            for expnum in results:
+            for (expnum,propid) in results:
                 try:
-                    insert_query = "insert into ops_auto_queue (expnum,created,processed) values ({expnum},CURRENT_TIMESTAMP, 0)".format(expnum=expnum)
+                    insert_query = "insert into ops_auto_queue (expnum,propid,created,processed) values ({expnum},{propid},CURRENT_TIMESTAMP, 0)".format(expnum=expnum,propid=propid)
                     self.cur.execute(insert_query)
                     inserts.append(expnum)
                 except: pass
