@@ -93,6 +93,10 @@ class PipeQuery(object):
 
     def insert_auto_queue(self,n=3,nites=None,propid=None):
         """ Get exposures into auto_queue for auto processing"""
+        if isinstance(nites, list):
+            pass
+        else:
+            nites = str(nites).split(',')
         if not nites:
             now = datetime.now()
             nites = [now.strftime('%Y%m%d')]
@@ -112,7 +116,7 @@ class PipeQuery(object):
             inserts = []
             for (expnum,propid) in results:
                 try:
-                    insert_query = "insert into ops_auto_queue (expnum,propid,created,processed) values ({expnum},{propid},CURRENT_TIMESTAMP, 0)".format(expnum=expnum,propid=propid)
+                    insert_query = "insert into ops_auto_queue (expnum,propid,created,processed) values ({expnum},'{propid}',CURRENT_TIMESTAMP, 0)".format(expnum=expnum,propid=propid)
                     self.cur.execute(insert_query)
                     inserts.append(expnum)
                 except: pass
