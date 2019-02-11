@@ -73,8 +73,7 @@ blocklist = me
 <block>
     <me>
       #modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, det-swarp-wgt, det-swarp-msk, band-assemble, det-assemble, make-color-img, make-ptif, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, wavg, mepoch-ingest-no-mangle, run-desmeds
-     modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, band-swarp-wgt-nobkg,band-swarp-msk-nobkg, band-assemble, band-assemble-nobkg, det-swarp-wgt, det-swarp-msk, det-assemble, make-color-img, make-ptif, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, wavg, mangle,mepoch-ingest 
-    #, run-desmeds
+     modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, band-swarp-wgt-nobkg,band-swarp-msk-nobkg, band-assemble, band-assemble-nobkg, det-swarp-wgt, det-swarp-msk, det-assemble, make-color-img, make-ptif, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, wavg, mangle,mepoch-ingest, run-desmeds
     </me>
 </block>
 

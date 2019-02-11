@@ -9,4 +9,4 @@ pipeline = pipequery.PipeQuery('db-decade')
 propid = pipeline.get_propids()
 
 # Insert exposures into mjohns44.auto_queue
-pipeline.insert_auto_queue(propid=propid,nites='20190207')
+pipeline.insert_auto_queue(propid=propid)
