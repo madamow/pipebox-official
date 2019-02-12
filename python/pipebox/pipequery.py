@@ -487,34 +487,62 @@ class WideField(PipeQuery):
         return expnum_list
 
     def get_expnums_from_auto_queue(self,n_failed=3,project='OPS'):
-
-        failed_query=[]
-
-        for i in [0,1,2]:
-            query = "select distinct expnum from ops_auto_queue where processed=0 offset %i rows fetch next 1000 rows only" % (i*1000)
+        query_db = True
+        i = 0
+        column = ['expnum','propid','created','attnum']
+        df = pd.DataFrame(columns=column)
+        print "Querying database...."
+        while query_db:
+            # Get a set of exposures
+            query = "select expnum, propid, created from ops_auto_queue where processed=0 offset %i rows  fetch next 1000 rows only" % (i*1000)
             self.cur.execute(query)
-            exposures = [exp[0] for exp in self.cur.fetchall()]
-            unitnames = ['D00'+str(e) for e in exposures]
-            submitted = "select distinct unitname,attnum,status from pfw_attempt a, task t,pfw_request r where r.reqnum=a.reqnum and t.id=a.task_id and r.project='%s' and unitname in ('%s')" % (project,"','".join(unitnames))
 
+            temp_df = pd.DataFrame(self.cur.fetchall(), columns=['expnum','propid','created'])
+            temp_df['attnum'] = 0
+
+            if temp_df.shape[0] < 1000:
+                query_db = False
+
+            unitnames = ['D00'+str(e) for e  in temp_df.expnum.values]
+
+            submitted = "select distinct unitname,status from pfw_attempt a, task t,pfw_request r where r.reqnum=a.reqnum "
+            submitted += "and t.id=a.task_id and r.project='%s' and unitname in ('%s')" % (project,"','".join(unitnames))
             self.cur.execute(submitted)
-            failed_query += self.cur.fetchall()
+            failed_query = self.cur.fetchall()
 
-        try:
-            df = pd.DataFrame(failed_query, columns=['unitname','attnum','status'])
-        except:
-            df = pd.DataFrame(unitnames, columns=['unitname'])
-            df['status'] = -1 
+            if len(failed_query) > 0:
+                df_fails = pd.DataFrame(failed_query, columns=['unitname','status'])
+                df_fails = df_fails.fillna(-99)
+                for u in df_fails['unitname'].unique():
+                    udf = df_fails[df_fails.unitname == u]
+                    e_no = int(u.split('D00')[1])
+                    # ignore any exposures that are currently running or successful or failed at least three times
+                    if any([-99 in udf.status.values, 0 in udf.status.values, udf.shape[0] >= n_failed]):
+                        temp_df = temp_df[temp_df['expnum'] != e_no]
+                    else:
+                        ind = temp_df.index[temp_df['expnum'] == e_no].tolist()[0]
+                        temp_df.loc[ind, 'attnum'] = udf.shape[0]
+            df = df.append(temp_df)
+            i += 1
+        print "%i exposures on to-do list" % (df.shape[0])
 
-        # Set Null values to -99
-        df = df.fillna(-99)
-        final_exposures = []
-        for u in df['unitname'].unique():
-            udf = df[df.unitname == u]
-            # ignore any exposures that are currently running or successful or failed at least three times
-            if not any([-99 in udf.status.values, 0 in udf.status.values]) and (udf.shape[0] < n_failed):
-                final_exposures.append(u.split('D00')[1]) 
-        return final_exposures
+        print "Getting priority table"
+        query = "select propid, priority from ops_propid"
+        self.cur.execute(query)
+        p_df = pd.DataFrame(self.cur.fetchall(), columns=['propid', 'priority'])
+
+        df = pd.merge(df, p_df, on=['propid'], how='inner')
+        df = df.fillna(3)
+
+        print "Sorting..."
+
+        df = df.sort(['priority', 'attnum', 'expnum'])
+        df.expnum = df.expnum.apply(int)
+        df.expnum = df.expnum.apply(str)
+        final_exposures = df['expnum'].values.tolist()
+        print "...done."
+
+        return final_exposures[:1000]
 
     def get_expnums_from_nites(self,nites=None,process_all=False,propid=None):
         """ Get exposure numbers and band for incoming exposures"""
