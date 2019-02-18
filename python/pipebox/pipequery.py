@@ -93,11 +93,12 @@ class PipeQuery(object):
 
     def insert_auto_queue(self,n=3,nites=None,propid=None):
         """ Get exposures into auto_queue for auto processing"""
-        if isinstance(nites, list):
-            pass
-        else:
-            nites = str(nites).split(',')
-        if not nites:
+        if nites:
+            if isinstance(nites, list):
+                pass
+            else:
+                nites = str(nites).split(',')
+        elif not nites:
             now = datetime.now()
             nites = [now.strftime('%Y%m%d')]
             for i in range(1,n+1):

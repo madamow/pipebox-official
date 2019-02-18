@@ -7,7 +7,6 @@ pipeline = pipequery.PipeQuery('db-decade')
 
 # Get operations propids and programs for query 
 propid = pipeline.get_propids()
-print propid
 
 # Insert exposures into mjohns44.auto_queue
 pipeline.insert_auto_queue(propid=propid)
