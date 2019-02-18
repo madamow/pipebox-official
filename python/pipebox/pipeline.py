@@ -89,7 +89,7 @@ class PipeLine(object):
     def make_templates(self,columns=[],groupby=None):
         """ Loop through dataframe and write submitfile for each exposures"""
         # Updating args for each row
-        for name, group in self.args.dataframe.groupby(by=groupby):
+        for name, group in self.args.dataframe.groupby(by=groupby, sort=False):
             # Setting jira parameters
             self.args.reqnum, self.args.jira_parent= group['reqnum'].unique()[0],group['jira_parent'].unique()[0]
             self.args.unitname = group['unitname'].unique()[0]
@@ -433,7 +433,8 @@ class WideField(PipeLine):
                                                    tag=self.args.caltag)
                 self.args.calnite,self.args.calrun = precal[0],precal[1]
             """
-        
+
+
         # Creating dataframe from exposures 
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
@@ -466,6 +467,7 @@ class WideField(PipeLine):
         # Remove unwanted exposures 
         if self.args.exclude_list:
             self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
+
 
         # Update dataframe for each exposure and add band,nite if not exists
         try:
