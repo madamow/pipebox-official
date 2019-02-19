@@ -503,7 +503,6 @@ class WideField(PipeLine):
 
         if self.args.auto:
             self.args.dataframe = pd.merge(self.args.dataframe, p_tab, on=['expnum'], how='inner')
-        self.args.dataframe.loc[0, 'priority']=1
 
 
 class NitelyCal(PipeLine):
