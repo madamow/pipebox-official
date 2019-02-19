@@ -417,12 +417,14 @@ class WideField(PipeLine):
             
             try:
                 if self.args.db_section=='db-decade':
-                    self.args.expnum = ','.join([str(e) for e in self.args.cur.get_expnums_from_auto_queue(project='DEC')])          
+                    p_tab = self.args.cur.get_expnums_from_auto_queue(project='DEC')
                 else:
-                    self.args.expnum = ','.join([str(e) for e in self.args.cur.get_expnums_from_auto_queue()])          
+                    p_tab = self.args.cur.get_expnums_from_auto_queue(project='DEC')
+                self.args.expnum = ','.join([str(e) for e in p_tab['expnum'].values.tolist()])
             except:
                 print "{time}: No exposures found!".format(time=datetime.datetime.now())
                 sys.exit(0)
+
             if self.args.resubmit_failed:
                 self.args.reqnum = jira_utils.get_reqnum_from_nite(self.args.jira_parent,
                                                                    self.args.nite)
@@ -492,6 +494,10 @@ class WideField(PipeLine):
             grouped = self.args.dataframe.groupby(by=['obstype','band']).agg(['count'])['expnum']
             print grouped
             sys.exit(0)
+
+        if self.args.auto:
+            self.args.dataframe = pd.merge(self.args.dataframe, p_tab, on=['expnum'], how='inner')
+
 
 class NitelyCal(PipeLine):
 
