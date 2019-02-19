@@ -89,9 +89,15 @@ class PipeLine(object):
     def make_templates(self,columns=[],groupby=None):
         """ Loop through dataframe and write submitfile for each exposures"""
         # Updating args for each row
+        default_submit_site = self.args.target_site
         for name, group in self.args.dataframe.groupby(by=groupby, sort=False):
             # Setting jira parameters
             self.args.reqnum, self.args.jira_parent= group['reqnum'].unique()[0],group['jira_parent'].unique()[0]
+            if self.args.priority_site is not None and group['priority'].unique()[0]==1:
+                self.args.target_site = self.args.priority_site
+            else:
+                self.args.target_site = default_submit_site
+            
             self.args.unitname = group['unitname'].unique()[0]
             if self.args.pipeline != 'multiepoch' and  self.args.pipeline != 'photoz':
                 self.args.band = group['band'].unique()[0]
@@ -131,7 +137,7 @@ class PipeLine(object):
             # Creating output name
             output_name_suffix = "r%s_%s_%s_rendered_template.des" % \
                                 (self.args.reqnum,self.args.target_site,self.args.pipeline)
-            
+
             str_base = []
             for i,k in enumerate(self.args.output_name_keys):
                 st = "%s" % getattr(self.args,k)
@@ -497,6 +503,7 @@ class WideField(PipeLine):
 
         if self.args.auto:
             self.args.dataframe = pd.merge(self.args.dataframe, p_tab, on=['expnum'], how='inner')
+        self.args.dataframe.loc[0, 'priority']=1
 
 
 class NitelyCal(PipeLine):
