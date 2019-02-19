@@ -525,6 +525,7 @@ class WideField(PipeQuery):
                         temp_df.loc[ind, 'attnum'] = udf.shape[0]
             df = df.append(temp_df)
             i += 1
+
         print "%i exposures on to-do list" % (df.shape[0])
 
         print "Getting priority table"
@@ -540,10 +541,14 @@ class WideField(PipeQuery):
         df = df.sort(['priority', 'attnum', 'expnum'])
         df.expnum = df.expnum.apply(int)
         df.expnum = df.expnum.apply(str)
-        final_exposures = df['expnum'].values.tolist()
-        print "...done."
 
-        return final_exposures[:1000]
+        return df[['expnum', 'priority']].head(1000)
+        
+
+      #  final_exposures = df['expnum'].values.tolist()
+      #  print "...done."
+
+      #  return final_exposures[:1000]
 
     def get_expnums_from_nites(self,nites=None,process_all=False,propid=None):
         """ Get exposure numbers and band for incoming exposures"""
