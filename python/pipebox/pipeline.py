@@ -425,7 +425,7 @@ class WideField(PipeLine):
                 if self.args.db_section=='db-decade':
                     p_tab = self.args.cur.get_expnums_from_auto_queue(project='DEC')
                 else:
-                    p_tab = self.args.cur.get_expnums_from_auto_queue(project='DEC')
+                    p_tab = self.args.cur.get_expnums_from_auto_queue()
                 self.args.expnum = ','.join([str(e) for e in p_tab['expnum'].values.tolist()])
             except:
                 print "{time}: No exposures found!".format(time=datetime.datetime.now())
