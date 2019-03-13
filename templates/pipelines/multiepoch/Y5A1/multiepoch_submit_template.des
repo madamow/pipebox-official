@@ -32,6 +32,8 @@
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/ingest-scamp-xml-exp.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/make-color-img.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/make-ptif.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/make-color-img-nobkg.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/make-ptif-nobkg.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/mangle.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/null-weight-for-coadd.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/split-scamp-head.wcl>>
@@ -75,7 +77,7 @@ blocklist = me,meds
 <block>
     <me>
      #modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, band-swarp-wgt-nobkg,band-swarp-msk-nobkg, band-assemble, band-assemble-nobkg, det-swarp-wgt, det-swarp-msk, det-assemble, make-color-img, make-ptif, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, wavg, mepoch-ingest-no-mangle
-    modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, band-swarp-wgt-nobkg,band-swarp-msk-nobkg, band-assemble, band-assemble-nobkg, det-swarp-wgt, det-swarp-msk, det-assemble, make-color-img, make-ptif, band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, wavg, mangle,mepoch-ingest
+    modulelist = combine-se-cat, coadd-astrorefine, split-scamp-head, bigquery, null-weight-for-coadd, band-swarp-wgt, band-swarp-msk, band-swarp-wgt-nobkg,band-swarp-msk-nobkg, band-assemble, band-assemble-nobkg, det-swarp-wgt, det-swarp-msk, det-assemble, make-color-img, make-ptif, make-color-img-nobkg,make-ptif-nobkg,band-create-psfex-catalog, det-create-psfex-catalog, band-psfex, det-psfex, band-coadd-catalog, det-catalog, extinction, healpix, wavg, mangle,mepoch-ingest
     </me>
     <meds>
         modulelist = medsquery,run-desmeds

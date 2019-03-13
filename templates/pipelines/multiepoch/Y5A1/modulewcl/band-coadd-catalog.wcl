@@ -24,7 +24,7 @@
                 PSF_NAME = ${file.det_psfex_model.fullname},${file.coadd_psfex_model.fullname}
                 STARNNW_NAME = ${file.sex_nnw.fullname}
                 WEIGHT_IMAGE = ${file.coadd_det.fullname}[2],${file.coadd.fullname}[2]
-                DEBLEND_MINCONT = 0.00001
+                DEBLEND_MINCONT = 0.001
                 DEBLEND_NTHRESH = 64
                 DETECT_THRESH = 0.8
                 ANALYSIS_THRESH = 0.8

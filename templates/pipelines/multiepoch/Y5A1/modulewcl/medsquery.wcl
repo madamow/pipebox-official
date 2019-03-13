@@ -5,7 +5,8 @@
         <list>
             <medsfiles>
                 exec = query_coadd_for_meds.py
-                args = -A ${pfw_attempt_id} -v 2 --outfile ${qoutfile} --zeropoint NONE --bkgimg --segmap
+                args = -A ${pfw_attempt_id} -v 2 --outfile ${qoutfile} --zeropoint NONE --bkgimg --segmap --psfmodel
+
                 columns = red.mag_zero
             </medsfiles>
         </list>
