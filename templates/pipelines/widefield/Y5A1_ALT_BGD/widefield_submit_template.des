@@ -72,7 +72,8 @@ blocklist = se
 
 <block>
    <se>
-        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit,skysub,starflat,null-weight-bkg,create-bkg-img,hmmask,immask,rowinterp-nullweight-immask,create-psfex-catalog,run-psfex,create-finalcut-catalog,ingest-se-objects,finalcut-assess,mkpng,healpix,ingest-healpix
+%        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,update-scamp-headers,mkbleedmask,skycompress-mkbleedmask,skycombine-mkbleedmask,skyfit,skysub,starflat,null-weight-bkg,create-bkg-img,hmmask,immask,rowinterp-nullweight-immask,create-psfex-catalog,run-psfex,create-finalcut-catalog,ingest-se-objects,finalcut-assess,mkpng,healpix,ingest-healpix
+        modulelist = crosstalk-sci,pixcorrect,null-weight-pixcor,create-scamp-catalog,split-scamp-ahead,combine-scamp-cats,se-scamp,split-scamp-head,update-scamp-headers,mkbleedmask,starflat,null-weight-bkg,create-bkg-img,hmmask,immask,rowinterp-nullweight-immask,create-psfex-catalog,run-psfex,create-finalcut-catalog,ingest-se-objects,finalcut-assess,mkpng,healpix,ingest-healpix
     </se>    
 </block>
 
