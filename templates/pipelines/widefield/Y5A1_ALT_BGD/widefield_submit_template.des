@@ -84,15 +84,15 @@ bffile = {{args.cal_df[(args.cal_df.filetype=='cal_bf')].filename.values[0]}}
 starflatrange = {{args.cal_df[(args.cal_df.filetype=='cal_starflat')].unitname.values[0]}}
 starflatreq = {{args.cal_df[(args.cal_df.filetype=='cal_starflat')].reqnum.values[0]}}
 starflatatt = {{args.cal_df[(args.cal_df.filetype=='cal_starflat')].attnum.values[0]}}
-skypcarange = {{args.cal_df[(args.cal_df.filetype=='cal_skypca*')].unitname.values[0]}}
-skypcareq = {{args.cal_df[(args.cal_df.filetype=='cal_skypca*')].reqnum.values[0]}}
-skypcaatt = {{args.cal_df[(args.cal_df.filetype=='cal_skypca*')].attnum.values[0]}} 
+skypcarange = {{args.cal_df[(args.cal_df.filetype=='cal_skypca_tmpl')].unitname.values[0]}}
+skypcareq = {{args.cal_df[(args.cal_df.filetype=='cal_skypca_tmpl')].reqnum.values[0]}}
+skypcaatt = {{args.cal_df[(args.cal_df.filetype=='cal_skypca_tmpl')].attnum.values[0]}} 
 bpmnite = {{args.cal_df[(args.cal_df.filetype=='cal_bpm')].unitname.values[0]}}
 bpmreq = {{args.cal_df[(args.cal_df.filetype=='cal_bpm')].reqnum.values[0]}}
 bpmatt = {{args.cal_df[(args.cal_df.filetype=='cal_bpm')].attnum.values[0]}}
-calnite = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].unitname.values[0]}}
-calreq = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].reqnum.values[0]}}
-calatt = {{args.cal_df[(args.cal_df.filetype=='cal_*cor')].attnum.values[0]}}
+calnite = {{args.cal_df[(args.cal_df.filetype=='cal_biascor')].unitname.values[0]}}
+calreq = {{args.cal_df[(args.cal_df.filetype=='cal_biascor')].reqnum.values[0]}}
+calatt = {{args.cal_df[(args.cal_df.filetype=='cal_biascor')].attnum.values[0]}}
 
 {% if args.inputcals_file %}
 <<include {{args.inputcals_file}}>>
