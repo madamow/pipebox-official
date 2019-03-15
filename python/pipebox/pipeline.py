@@ -111,10 +111,18 @@ class PipeLine(object):
                 else:
                     self.args.epoch_name = firstexpnum = None
             if self.args.epoch_name:
-                self.args.cal_df = self.args.cur.get_cals_from_epoch(self.args.epoch_name,
+                try:
+                    self.args.cal_df = self.args.cur.get_cals_from_epoch(self.args.epoch_name,
                                                                       band = self.args.band,
                                                                       campaign = self.args.campaign)
-
+                except:
+                    if not self.args.inputcals_file:
+                        print "Must specfy input cals for {b} band!".format(b=self.args.band)
+                        sys.exit()
+                    else:
+                        self.args.cal_df = pd.DataFrame(columns=['name','filetype','reqnum',
+                                                         'unitname','attnum','band','campaign',
+                                                         'filename','filepat','ccdnum'])
             # Adding column values to args
             for c in columns:
                 setattr(self.args,c, group[c].unique()[0])
