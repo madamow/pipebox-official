@@ -37,33 +37,28 @@ class PipeQuery(object):
             min_of_min_diff = min([diff for name,diff in diff_list])
             name = [name for name,diff in diff_list if diff == min_of_min_diff][0]
             return name
-
     def get_cals_from_epoch(self, epoch,band = None,campaign= None):
         """ Query to return the unitname,reqnum,attnum of epoch-based calibrations."""
-        count_for_campaign = "select count(*) from ops_epoch_inputs where name='{epoch}' \
-                              and campaign='{c}'".format(epoch=epoch,c=campaign)
+        count_for_campaign = "select count(*) from ops_epoch_inputs_per_band where name='{epoch}' \
+                              and campaign='{c}' and band='{band}'".format(epoch=epoch,c=campaign, band=band)
         self.cur.execute(count_for_campaign)
         count = self.cur.fetchall()[0][0]
         if int(count) == 0:
-            campaign_query = "select max(campaign) from ops_epoch_inputs where name='{epoch}'".format(epoch=epoch)
+            campaign_query = "select max(campaign) from ops_epoch_inputs_per_band where name='{epoch}' and band='{band}'".format(epoch=epoch,band=band)
             self.cur.execute(campaign_query)
             campaign = self.cur.fetchall()[0][0]
-        query = "select * from ops_epoch_inputs where name='{epoch}'  \
-                 and campaign = '{c}'".format(epoch=epoch,c=campaign)
-        self.cur.execute(query) 
+        query = "select * from ops_epoch_inputs_per_band where name='{epoch}'  \
+                 and campaign = '{c}' and (band = '{band}' or band is null)".format(epoch=epoch,c=campaign,band = band)
+        self.cur.execute(query)
         data = pd.DataFrame(self.cur.fetchall(),
-               columns=['name','filetype','reqnum','unitname','attnum','uband','campaign','filename',
+               columns=['name','filetype','reqnum','unitname','attnum','band','campaign','filename',
                         'filepat','ccdnum'])
-       
-        if band in ['u','VR']:
-            cals = data[(data.uband == 1)]
-            cals = cals.append(data[data.filetype=='cal_lintable']) 
-            cals = cals.append(data[(data.filetype=='config')])
-            cals = cals.append(data[(data.filetype=='None')])
-            cals = cals.append(data[(data.filetype=='cal_bf')])
-        else:
-            cals = data[(data.uband.isnull())]
-        return cals     
+                
+        cals = data
+        cals = cals.append(data[data.filetype=='cal_lintable'])
+        cals = cals.append(data[(data.filetype=='config')])
+        cals = cals.append(data[(data.filetype=='cal_bf')])
+        return cals
     
     def get_expnums_from_tag(self,tag):
         """ Query database for each exposure with a given exposure tag.
