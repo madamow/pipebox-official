@@ -37,14 +37,15 @@ class PipeQuery(object):
             min_of_min_diff = min([diff for name,diff in diff_list])
             name = [name for name,diff in diff_list if diff == min_of_min_diff][0]
             return name
+
     def get_cals_from_epoch(self, epoch,band = None,campaign= None):
         """ Query to return the unitname,reqnum,attnum of epoch-based calibrations."""
         count_for_campaign = "select count(*) from ops_epoch_inputs_per_band where name='{epoch}' \
-                              and campaign='{c}' and band='{band}'".format(epoch=epoch,c=campaign, band=band)
+                              and campaign='{c}'".format(epoch=epoch,c=campaign)
         self.cur.execute(count_for_campaign)
         count = self.cur.fetchall()[0][0]
         if int(count) == 0:
-            campaign_query = "select max(campaign) from ops_epoch_inputs_per_band where name='{epoch}' and band='{band}'".format(epoch=epoch,band=band)
+            campaign_query = "select max(campaign) from ops_epoch_inputs_per_band where name='{epoch}'".format(epoch=epoch)
             self.cur.execute(campaign_query)
             campaign = self.cur.fetchall()[0][0]
         query = "select * from ops_epoch_inputs_per_band where name='{epoch}'  \
