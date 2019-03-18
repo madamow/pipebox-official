@@ -490,23 +490,24 @@ class WideField(PipeQuery):
     def get_expnums_from_auto_queue(self,n_failed=3,project='OPS'):
         query_db = True
         i = 0
-        column = ['expnum','propid','created','attnum']
+        column = ['expnum', 'propid', 'attnum', 'err1', 'err2']
         df = pd.DataFrame(columns=column)
-        print "Querying database...."
         while query_db:
             # Get a set of exposures
-            query = "select expnum, propid, created from ops_auto_queue where processed=0 offset %i rows  fetch next 1000 rows only" % (i*1000)
+            query = "select expnum, propid from ops_auto_queue where processed=0 offset %i rows  fetch next 1000 rows only" % (i*1000)
             self.cur.execute(query)
 
-            temp_df = pd.DataFrame(self.cur.fetchall(), columns=['expnum','propid','created'])
+            temp_df = pd.DataFrame(self.cur.fetchall(), columns=['expnum','propid'])
             temp_df['attnum'] = 0
-
+            temp_df['err1'] = np.nan
+            temp_df['err2'] = np.nan
+            
             if temp_df.shape[0] < 1000:
                 query_db = False
 
             unitnames = ['D00'+str(e) for e  in temp_df.expnum.values]
 
-            submitted = "select distinct unitname,status from pfw_attempt a, task t,pfw_request r where r.reqnum=a.reqnum "
+            submitted = "select unitname,status from pfw_attempt a, task t,pfw_request r where r.reqnum=a.reqnum "
             submitted += "and t.id=a.task_id and r.project='%s' and unitname in ('%s')" % (project,"','".join(unitnames))
             self.cur.execute(submitted)
             failed_query = self.cur.fetchall()
@@ -523,32 +524,40 @@ class WideField(PipeQuery):
                     else:
                         ind = temp_df.index[temp_df['expnum'] == e_no].tolist()[0]
                         temp_df.loc[ind, 'attnum'] = udf.shape[0]
+                        for j, s in enumerate(udf.status.values):
+                            lbl = 'err'+str(j+1)
+                            temp_df.loc[ind, lbl]= s
+
             df = df.append(temp_df)
             i += 1
 
         print "%i exposures on to-do list" % (df.shape[0])
 
-        print "Getting priority table"
         query = "select propid, priority from ops_propid"
         self.cur.execute(query)
         p_df = pd.DataFrame(self.cur.fetchall(), columns=['propid', 'priority'])
 
         df = pd.merge(df, p_df, on=['propid'], how='inner')
-        df = df.fillna(3)
+        df['priority'].fillna(3, inplace=True)
+        
+        df.loc[((df['err1'] == 10) & (df['attnum'] == 1)), 'priority'] = 2
 
-        print "Sorting..."
+        #print df[df['attnum']==2].head(100)
+        # exit()
 
-        df = df.sort(['priority', 'attnum', 'expnum'])
+        print "Never:", df[df['attnum']==0].shape[0], "Once", df[df['attnum']==1].shape[0], "Twice:", df[df['attnum']==2].shape[0]
+        #exit()
+        
         df.expnum = df.expnum.apply(int)
         df.expnum = df.expnum.apply(str)
+        df = df.sort(['priority', 'attnum', 'expnum'])
+        #print df.head(50)
+        #exit()
 
-        return df[['expnum', 'priority']].head(1000)
-        
+        return df[['expnum', 'priority']].head(1000) 
+        # 90 works better for delve processing and crontab
+        # it allows to refresh a list of exposures every one hour - about 90-95 exposures can be rendered and submited in 1 hr time span
 
-      #  final_exposures = df['expnum'].values.tolist()
-      #  print "...done."
-
-      #  return final_exposures[:1000]
 
     def get_expnums_from_nites(self,nites=None,process_all=False,propid=None):
         """ Get exposure numbers and band for incoming exposures"""
