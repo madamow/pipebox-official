@@ -539,20 +539,14 @@ class WideField(PipeQuery):
 
         df = pd.merge(df, p_df, on=['propid'], how='inner')
         df['priority'].fillna(3, inplace=True)
-        
-        df.loc[((df['err1'] == 10) & (df['attnum'] == 1)), 'priority'] = 2
-
         #print df[df['attnum']==2].head(100)
         # exit()
 
         print "Never:", df[df['attnum']==0].shape[0], "Once", df[df['attnum']==1].shape[0], "Twice:", df[df['attnum']==2].shape[0]
-        #exit()
         
         df.expnum = df.expnum.apply(int)
         df.expnum = df.expnum.apply(str)
         df = df.sort(['priority', 'attnum', 'expnum'])
-        #print df.head(50)
-        #exit()
 
         return df[['expnum', 'priority']].head(1000) 
         # 90 works better for delve processing and crontab
