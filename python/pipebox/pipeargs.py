@@ -43,6 +43,7 @@ class PipeArgs(object):
         
         # Archive arguments
         parser.add('--target_site',required=True,help='Computing node, i.e., fermigrid-sl6')
+        parser.add('--priority_site', help='Computing node for high priority exposures')
         parser.add('--archive_name',help='Home archive to store products, e.g., \
                              desar2home,prodbeta,...')
         parser.add('--project',default='ACT',help='Archive directory where runs are \
