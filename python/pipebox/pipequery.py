@@ -66,7 +66,7 @@ class PipeQuery(object):
         Returns a list of expnums."""
         taglist = tag.split(',')
         tag_list_of_dict = []
-        for t in taglist:
+        for t in taglist13:
             expnum_query = "select distinct expnum from exposuretag where tag='%s'" % t
             self.cur.execute(expnum_query)
             results = self.cur.fetchall()
@@ -89,6 +89,7 @@ class PipeQuery(object):
 
     def insert_auto_queue(self,n=3,nites=None,propid=None):
         """ Get exposures into auto_queue for auto processing"""
+
         if nites:
             if isinstance(nites, list):
                 pass
@@ -101,12 +102,13 @@ class PipeQuery(object):
                 date = now - timedelta(i)
                 nites.append(date.strftime('%Y%m%d'))
             print "%s: Inserting into AUTO_QUEUE." % now
-        base_query = "select distinct expnum,propid from exposure where obstype in ('object','standard') and \
-                      object not like '%%pointing%%' and object not like '%%focus%%' and object \
-                      not like '%%donut%%' and object not like '%%test%%' and object \
-                      not like '%%junk%%' and nite in (%s)" % ','.join(nites)
+        base_query = "select distinct expnum,propid from exposure where obstype in ('object','standard') and "
+        base_query+= "object not like '%%pointing%%' and object not like '%%focus%%' and " 
+        base_query+= "object not like '%%donut%%' and object not like '%%test%%' and "
+        base_query+= "object not like '%%junk%%' and nite in (%s)" % ','.join(nites)
         if propid:
             base_query = base_query + " and propid in (%s)" % ','.join("'{0}'".format(k) for k in propid)
+
         self.cur.execute(base_query)
         results = [(row[0],row[1]) for row in self.cur.fetchall()]
         if results:
@@ -116,7 +118,8 @@ class PipeQuery(object):
                     insert_query = "insert into ops_auto_queue (expnum,propid,created,processed) values ({expnum},'{propid}',CURRENT_TIMESTAMP, 0)".format(expnum=expnum,propid=propid)
                     self.cur.execute(insert_query)
                     inserts.append(expnum)
-                except: pass
+                except:
+                    pass
             self.dbh.commit()
             print '%s exposures inserted.' % len(inserts)
         else:
@@ -124,43 +127,52 @@ class PipeQuery(object):
 
     def update_auto_queue(self,n_failed=3,project='OPS'):
         print '%s: Updating AUTO_QUEUE.' % datetime.now()
-        query = "select distinct expnum from ops_auto_queue where processed=0 and rownum < 1000 order by expnum"
-        unitnames = ['D00'+ str(e[0]) for e in self.cur.execute(query)]
-      
-        submitted = "select distinct unitname,attnum,status from pfw_attempt a, task t,pfw_request r where r.reqnum=a.reqnum and t.id=a.task_id and r.project='%s' and unitname in ('%s')" % (project,"','".join(unitnames))
-        self.cur.execute(submitted)
-        failed_query = self.cur.fetchall()
-        try:
-            df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
-        except:
-            df = pd.DataFrame(columns=['unitname','attnum','status'])
-        # Set Null values to -99
-        df = df.fillna(-99)
-
-        success_list = []
-        fail_list = []
-        for u in df['unitname'].unique():
-            statuses = list(df[(df.unitname == u)]['status'].values)
-            failed_atts = [i for i in statuses if i >=1]
-            if 0 in statuses:
-                success_list.append(u)
-            if 0 not in statuses and -99 not in statuses and len(failed_atts) >= n_failed:
-                fail_list.append(u)
-        success_exposures = [u.split('D00')[1] for u in success_list]
-        fail_exposures = [u.split('D00')[1] for u in fail_list]
+        query_db = True
+        iter = 0
+        while query_db:
+            query = "select distinct expnum from ops_auto_queue where processed!=1 offset %i rows  fetch next 1000 rows only" % (iter*1000)
+            unitnames = ['D00'+ str(e[0]) for e in self.cur.execute(query)]
+            if len(unitnames) < 1000:
+                query_db = False
+    
+            submitted = "select distinct unitname,attnum,status from pfw_attempt a, task t,pfw_request r where r.reqnum=a.reqnum and t.id=a.task_id and r.project='%s' and unitname in ('%s')" % (project,"','".join(unitnames))
+            self.cur.execute(submitted)
+            failed_query = self.cur.fetchall()
         
-        if success_exposures:
-            update_query = "update ops_auto_queue set processed=1,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(success_exposures))
-            self.cur.execute(update_query)
-            self.dbh.commit()
-        if fail_exposures:
-            update_query = "update ops_auto_queue set processed=2,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(fail_exposures))
-            self.cur.execute(update_query)
-            self.dbh.commit()
-        if not success_exposures and not fail_exposures:
-            print 'No new exposures to update.'
-        else:
-            print 'Updated %s exposures as processed.' % (len(success_exposures)+len(fail_exposures))
+            try:
+                df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
+            except ValueError:
+                df = pd.DataFrame(columns=['unitname','attnum','status'])
+            if df.shape[0] > 0:
+                # Set Null values to -99
+                df = df.fillna(-99)
+
+                success_list = []
+                fail_list = []
+                for u in df['unitname'].unique():
+                    statuses = list(df[(df.unitname == u)]['status'].values)
+                    failed_atts = [i for i in statuses if i >=1]
+                    if 0 in statuses:
+                        success_list.append(u)
+                    if 0 not in statuses and -99 not in statuses and len(failed_atts) >= n_failed:
+                        fail_list.append(u)
+                success_exposures = [u.split('D00')[1] for u in success_list]
+                fail_exposures = [u.split('D00')[1] for u in fail_list]
+        
+                if success_exposures:
+                    update_query = "update ops_auto_queue set processed=1,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(success_exposures))
+                    self.cur.execute(update_query)
+                    self.dbh.commit()
+                if fail_exposures:
+                    update_query = "update ops_auto_queue set processed=2,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(fail_exposures))
+                    self.cur.execute(update_query)
+                    self.dbh.commit()
+                if not success_exposures and not fail_exposures:
+                    print 'No new exposures to update.'
+                else:
+                    print 'Updated %s exposures as processed.' % (len(success_exposures)+len(fail_exposures))
+            iter += 1
+
 
 class SuperNova(PipeQuery):
 # Copied from widefield (unedited)
@@ -500,7 +512,7 @@ class WideField(PipeQuery):
             
             if temp_df.shape[0] < 1000:
                 query_db = False
-
+ 
             unitnames = ['D00'+str(e) for e  in temp_df.expnum.values]
 
             submitted = "select unitname,status from pfw_attempt a, task t,pfw_request r where r.reqnum=a.reqnum "
@@ -528,15 +540,13 @@ class WideField(PipeQuery):
             i += 1
 
         print "%i exposures on to-do list" % (df.shape[0])
-
         query = "select propid, priority from ops_propid"
         self.cur.execute(query)
         p_df = pd.DataFrame(self.cur.fetchall(), columns=['propid', 'priority'])
 
         df = pd.merge(df, p_df, on=['propid'], how='inner')
         df['priority'].fillna(3, inplace=True)
-        #print df[df['attnum']==2].head(100)
-        # exit()
+        
 
         print "Never:", df[df['attnum']==0].shape[0], "Once", df[df['attnum']==1].shape[0], "Twice:", df[df['attnum']==2].shape[0]
         
@@ -544,9 +554,13 @@ class WideField(PipeQuery):
         df.expnum = df.expnum.apply(str)
         df = df.sort(['priority', 'attnum', 'expnum'])
 
+        if df.shape[0]==0:
+            print "List of exposures is empty.Nothing to do"
+            exit()
+
         return df[['expnum', 'priority']].head(1000) 
         # 90 works better for delve processing and crontab
-        # it allows to refresh a list of exposures every one hour - about 90-95 exposures can be rendered and submited in 1 hr time span
+        # it allows to rfresh a list of exposures every one hour - about 90-95 exposures can be rendered and submited in 1 hr time span
 
 
     def get_expnums_from_nites(self,nites=None,process_all=False,propid=None):
