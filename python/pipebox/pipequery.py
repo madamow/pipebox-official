@@ -130,8 +130,11 @@ class PipeQuery(object):
         query_db = True
         iter = 0
         while query_db:
-            query = "select distinct expnum from ops_auto_queue where processed!=1 offset %i rows  fetch next 1000 rows only" % (iter*1000)
-            unitnames = ['D00'+ str(e[0]) for e in self.cur.execute(query)]
+            query = "select distinct expnum, processed from ops_auto_queue where processed!=1 offset %i rows  fetch next 1000 rows only" % (iter*1000)
+            self.cur.execute(query)
+            ops_auto = pd.DataFrame(self.cur.fetchall(), columns=['expnum','processed'])
+            unitnames = ['D00'+ str(e) for e in ops_auto['expnum'].values]
+            
             if len(unitnames) < 1000:
                 query_db = False
     
@@ -147,17 +150,16 @@ class PipeQuery(object):
                 # Set Null values to -99
                 df = df.fillna(-99)
 
-                success_list = []
-                fail_list = []
+                success_exposures = []
+                fail_exposures = []
                 for u in df['unitname'].unique():
+                    expnum = u.split('D00')[1]
                     statuses = list(df[(df.unitname == u)]['status'].values)
                     failed_atts = [i for i in statuses if i >=1]
                     if 0 in statuses:
-                        success_list.append(u)
-                    if 0 not in statuses and -99 not in statuses and len(failed_atts) >= n_failed:
-                        fail_list.append(u)
-                success_exposures = [u.split('D00')[1] for u in success_list]
-                fail_exposures = [u.split('D00')[1] for u in fail_list]
+                        success_exposures.append(expnum)
+                    if 0 not in statuses and -99 not in statuses and len(failed_atts) >= n_failed and any(ops_auto[ops_auto['expnum']==int(expnum)]['processed'] !=2):
+                        fail_exposures.append(expnum)
         
                 if success_exposures:
                     update_query = "update ops_auto_queue set processed=1,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(success_exposures))
@@ -547,6 +549,7 @@ class WideField(PipeQuery):
         df = pd.merge(df, p_df, on=['propid'], how='inner')
         df['priority'].fillna(3, inplace=True)
         
+
 
         print "Never:", df[df['attnum']==0].shape[0], "Once", df[df['attnum']==1].shape[0], "Twice:", df[df['attnum']==2].shape[0]
         
