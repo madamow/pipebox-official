@@ -129,6 +129,7 @@ class PipeQuery(object):
         print '%s: Updating AUTO_QUEUE.' % datetime.now()
         query_db = True
         iter = 0
+        updated_total = 0
         while query_db:
             query = "select distinct expnum, processed from ops_auto_queue where processed!=1 offset %i rows  fetch next 1000 rows only" % (iter*1000)
             self.cur.execute(query)
@@ -173,7 +174,9 @@ class PipeQuery(object):
                     print 'No new exposures to update.'
                 else:
                     print 'Updated %s exposures as processed.' % (len(success_exposures)+len(fail_exposures))
+                    updated_total = updated_total + len(success_exposures) + len(fail_exposures)
             iter += 1
+        print "Total number of updated exposures = %i" % updated_total
 
 
 class SuperNova(PipeQuery):
@@ -550,9 +553,8 @@ class WideField(PipeQuery):
         df['priority'].fillna(3, inplace=True)
         
 
-
         print "Never:", df[df['attnum']==0].shape[0], "Once", df[df['attnum']==1].shape[0], "Twice:", df[df['attnum']==2].shape[0]
-        
+             
         df.expnum = df.expnum.apply(int)
         df.expnum = df.expnum.apply(str)
         df = df.sort(['priority', 'attnum', 'expnum'])
@@ -560,7 +562,6 @@ class WideField(PipeQuery):
         if df.shape[0]==0:
             print "List of exposures is empty.Nothing to do"
             exit()
-
         return df[['expnum', 'priority']].head(1000) 
         # 90 works better for delve processing and crontab
         # it allows to rfresh a list of exposures every one hour - about 90-95 exposures can be rendered and submited in 1 hr time span
