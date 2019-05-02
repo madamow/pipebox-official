@@ -129,9 +129,7 @@ class PipeQuery(object):
         print '%s: Updating AUTO_QUEUE.' % datetime.now()
         query_db = True
         iter = 0
-        success_exposures = []
-        fail_exposures = []
-
+        updated_total = 0
         while query_db:
             query = "select distinct expnum, processed from ops_auto_queue where processed!=1 offset %i rows  fetch next 1000 rows only" % (iter*1000)
             self.cur.execute(query)
@@ -153,6 +151,8 @@ class PipeQuery(object):
                 # Set Null values to -99
                 df = df.fillna(-99)
 
+                success_exposures = []
+                fail_exposures = []
                 for u in df['unitname'].unique():
                     expnum = u.split('D00')[1]
                     statuses = list(df[(df.unitname == u)]['status'].values)
@@ -161,20 +161,22 @@ class PipeQuery(object):
                         success_exposures.append(expnum)
                     if 0 not in statuses and -99 not in statuses and len(failed_atts) >= n_failed and any(ops_auto[ops_auto['expnum']==int(expnum)]['processed'] !=2):
                         fail_exposures.append(expnum)
-            iter += 1
         
-        if success_exposures:
-            update_query = "update ops_auto_queue set processed=1,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(success_exposures))
-            self.cur.execute(update_query)
-            self.dbh.commit()
-        if fail_exposures:
-            update_query = "update ops_auto_queue set processed=2,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(fail_exposures))
-            self.cur.execute(update_query)
-            self.dbh.commit()
-        if not success_exposures and not fail_exposures:
-            print 'No new exposures to update.'
-        else:
-            print 'Updated %i exposures as processed: success = %i, fail = %i' % (len(success_exposures)+len(fail_exposures), len(success_exposures),len(fail_exposures))
+                if success_exposures:
+                    update_query = "update ops_auto_queue set processed=1,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(success_exposures))
+                    self.cur.execute(update_query)
+                    self.dbh.commit()
+                if fail_exposures:
+                    update_query = "update ops_auto_queue set processed=2,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(fail_exposures))
+                    self.cur.execute(update_query)
+                    self.dbh.commit()
+                if not success_exposures and not fail_exposures:
+                    print 'No new exposures to update.'
+                else:
+                    print 'Updated %s exposures as processed.' % (len(success_exposures)+len(fail_exposures))
+                    updated_total = updated_total + len(success_exposures) + len(fail_exposures)
+            iter += 1
+        print "Total number of updated exposures = %i" % updated_total
 
 
 class SuperNova(PipeQuery):
@@ -549,10 +551,10 @@ class WideField(PipeQuery):
 
         df = pd.merge(df, p_df, on=['propid'], how='inner')
         df['priority'].fillna(3, inplace=True)
+        
 
         print "Never:", df[df['attnum']==0].shape[0], "Once", df[df['attnum']==1].shape[0], "Twice:", df[df['attnum']==2].shape[0]
-
-        print "Priority 1:", df[df['priority']==1].shape[0], "2:", df[df['priority']==2].shape[0], "3:", df[df['priority']==3].shape[0]
+             
         df.expnum = df.expnum.apply(int)
         df.expnum = df.expnum.apply(str)
         df = df.sort(['priority', 'attnum', 'expnum'])
@@ -562,7 +564,7 @@ class WideField(PipeQuery):
             exit()
         return df[['expnum', 'priority']].head(1000) 
         # 90 works better for delve processing and crontab
-        # it allows to rfresh a list of exposures every one hour - about 90-95 exposures can be rendered and submitted in 1 hr time span
+        # it allows to rfresh a list of exposures every one hour - about 90-95 exposures can be rendered and submited in 1 hr time span
 
 
     def get_expnums_from_nites(self,nites=None,process_all=False,propid=None):
@@ -632,119 +634,6 @@ class WideField(PipeQuery):
         precal_nite = precal_unitname
         precal_run = 'r%sp0%s' % (precal_reqnum,precal_attnum)
         return precal_nite, precal_run
-
-            
-    def check_log_files(self, expnum_df, interactive=False):
-        import collections
-        import os
-        import time
-        import subprocess as sp
-        # Find log files in /deca_archive and try to locate error
-        dict = {}
-        unitnames = ['D00'+str(e) for e in expnum_df['expnum'].values]
-
-        print "Querying database..."
-        query = "select unitname,a.archive_path,status from pfw_attempt a,"
-        query += " task t,pfw_request r where r.reqnum=a.reqnum  and t.id=a.task_id and unitname in ('%s') " % ("','".join(unitnames))
-        self.cur.execute(query)
-        print "...done"
-
-        # Create a dictionary with some info about exposures from list
-        for unit, path, sts in self.cur.fetchall():
-            if path != None:
-                fp = '/deca_archive/'+path  # full physical path to output dir. Submit dir is ignored here.
-                out_log = os.path.join(fp, 'log')
-            else:
-                out_log = ''
-
-            try:
-                os.listdir(out_log)
-                out_in = True
-            except OSError:
-                out_in = False
-
-            att = {'path':fp, 'status' :sts, 'loglist':[], 'in_arch': out_in, 'logs_no':0}
-            if unit in dict:
-                dict[unit].append(att)
-            else:
-                dict[unit]=[att]
-
-        # Sort dictionary
-        info = collections.OrderedDict(sorted(dict.items()))
-
-        no_of_exps = len(info)
-        for nb, unitname in enumerate(info):
-            os.system('clear')
-            expnum = unitname.split("D00")[1]
-            print "\n ##########\n %i/%i  %s \n ##########\n" % (nb+1, no_of_exps, unitname)
-            
-    
-            if not interactive: # Check statuses and catalogs in /deca_archive
-                for i, row in enumerate(info[unitname]):
-                    print "[%2i] %s STATUS: %3s  IN: %s" % (i, row['path'], row['status'], row['in_arch'])
-                in_arch = []
-                statuses = []
-                logs_no = []
-                for i, row in enumerate(info[unitname]):
-                    in_arch.append(info[unitname][i]['in_arch'])
-                    statuses.append(info[unitname][i]['status'])
-                if (all(in_arch) and all(item == 1 for item in statuses)) or \
-                   (all(in_arch) and any(item in 245 for item in statuses)) or \
-                    any(item == 0 for item in statuses) or \
-                    any(item == None for item in statuses):
-                    print "Consider it done"
-                    time.sleep(1)
-                    # Remove exp number from the input dataframe
-                    expnum_df = expnum_df[expnum_df['expnum'] != expnum]
-                else:
-                    print "Will be submitted to queue"
-            else: # Interactive mode
-                # Look for logfiles in /deca_archives
-                # ask what to do
-                iterate_logs = True
-                for i, row in enumerate(info[unitname]):
-                    if row['in_arch']:
-                        dir_path = log_dir = os.path.join(row['path'], 'log')
-                        cmd = 'grep -l -s -E "Error|ERROR|No valid source|No source with appropriate FWHM|'
-                        cmd += 'Masking CR failed|'
-                        cmd += '0 output files in exlist for filespecs.psfex_xml|'
-                        cmd += 'Input vector must contain at least" '+dir_path+'/*/*'
-                    
-                        # executes a grep command and grabs whatever it prints
-                        a = sp.Popen(cmd, stdout=sp.PIPE, shell=True)
-                        log_list = a.communicate()[0]
-                        log_list = log_list.strip().split("\n")
-                        if len(log_list)==1 and log_list[0]=='':
-                            log_list=[]
-                        info[unitname][i]['loglist'] = log_list
-                        info[unitname][i]['logs_no'] = len(log_list)
-                        print "[%2i] %s STATUS: %3s  IN: %s N(Logs): %i " % (i, row['path'], row['status'], row['in_arch'], len(log_list))
-                    else:
-                        print "[%2i] %s STATUS: %3s  IN: %s N(Logs): %i " % (i, row['path'], row['status'], row['in_arch'], 0)
-               
-                while iterate_logs:
-                    print "Submit? [y]es/[n]o, [a] to print last 10 lines of logfiles, or [q]uit!"
-                    prc = raw_input()
-                    if prc == 'q':
-                        print "Quit!"
-                        exit()
-                    elif prc == 'n':
-                        expnum_df = expnum_df[expnum_df['expnum'] != expnum]
-                        iterate_logs = False
-                    elif prc == 'y':
-                        iterate_logs = False
-                    elif prc == 'a':
-                        for lf in info[unitname][i]['loglist']:
-                            print "\n Printing..."
-                            print "\n ****** %s" %  lf
-                            cmd = 'tail -n 10 %s' % lf
-                            a = sp.Popen(cmd, stdout=sp.PIPE, shell=True)
-                            print '\n', a.communicate()[0]
-                    else:
-                        pass
-        os.system('clear')
-        return expnum_df
-
 
 class NitelyCal(PipeQuery):
 
