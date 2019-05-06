@@ -171,6 +171,9 @@ class WideField(PipeArgs):
                         exposure table to filter expnums on by nite")
         parser.add('--process_all',action='store_true',help="Ignore propid and program when processing \
                         by nite.")
+        parser.add('--check_logs',action='store_true', help="Check log files for failed exposures")
+        parser.add('--interactive', action='store_true', help="Check logs with interactive interface")
+
         args = parser.parse_args()
 
         return args
