@@ -129,7 +129,9 @@ class PipeQuery(object):
         print '%s: Updating AUTO_QUEUE.' % datetime.now()
         query_db = True
         iter = 0
-        updated_total = 0
+        success_exposures = []
+        fail_exposures = []       
+ 
         while query_db:
             query = "select distinct expnum, processed from ops_auto_queue where processed!=1 offset %i rows  fetch next 1000 rows only" % (iter*1000)
             self.cur.execute(query)
@@ -151,8 +153,6 @@ class PipeQuery(object):
                 # Set Null values to -99
                 df = df.fillna(-99)
 
-                success_exposures = []
-                fail_exposures = []
                 for u in df['unitname'].unique():
                     expnum = u.split('D00')[1]
                     statuses = list(df[(df.unitname == u)]['status'].values)
@@ -161,22 +161,20 @@ class PipeQuery(object):
                         success_exposures.append(expnum)
                     if 0 not in statuses and -99 not in statuses and len(failed_atts) >= n_failed and any(ops_auto[ops_auto['expnum']==int(expnum)]['processed'] !=2):
                         fail_exposures.append(expnum)
-        
-                if success_exposures:
-                    update_query = "update ops_auto_queue set processed=1,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(success_exposures))
-                    self.cur.execute(update_query)
-                    self.dbh.commit()
-                if fail_exposures:
-                    update_query = "update ops_auto_queue set processed=2,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(fail_exposures))
-                    self.cur.execute(update_query)
-                    self.dbh.commit()
-                if not success_exposures and not fail_exposures:
-                    print 'No new exposures to update.'
-                else:
-                    print 'Updated %s exposures as processed.' % (len(success_exposures)+len(fail_exposures))
-                    updated_total = updated_total + len(success_exposures) + len(fail_exposures)
-            iter += 1
-        print "Total number of updated exposures = %i" % updated_total
+            iter += 1       
+ 
+        if success_exposures:
+            update_query = "update ops_auto_queue set processed=1,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(success_exposures))
+            self.cur.execute(update_query)
+            self.dbh.commit()
+        if fail_exposures:
+            update_query = "update ops_auto_queue set processed=2,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(fail_exposures))
+            self.cur.execute(update_query)
+            self.dbh.commit()
+        if not success_exposures and not fail_exposures:
+            print 'No new exposures to update.'
+        else:
+            print 'Updated %i exposures as processed: success = %i, fail = %i' % (len(success_exposures)+len(fail_exposures), len(success_exposures),len(fail_exposures))
 
 
 class SuperNova(PipeQuery):
