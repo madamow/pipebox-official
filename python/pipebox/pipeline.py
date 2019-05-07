@@ -442,7 +442,7 @@ class WideField(PipeLine):
             """
 
 
-        # Creating dataframe from exposures 
+        # Creating dataframe from exposures - this dataframe will have one columns with number of exposures
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
             self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum,int(self.args.resubmit_max))
@@ -471,11 +471,15 @@ class WideField(PipeLine):
         elif self.args.RA and self.args.Dec:
             self.args.exposure_list = self.args.cur.get_expnums_from_radec(self.args.RA, self.args.Dec)
             self.args.dataframe = pd.DataFrame(self.args.exposure_list, columns=['expnum'])
+        
+        if self.args.check_logs:
+            interactive = self.args.interactive
+            self.args.dataframe = self.args.cur.check_log_files(self.args.dataframe, interactive=interactive)
+    
         # Remove unwanted exposures 
         if self.args.exclude_list:
             self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
-
-
+        
         # Update dataframe for each exposure and add band,nite if not exists
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)

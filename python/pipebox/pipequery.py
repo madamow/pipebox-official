@@ -741,6 +741,7 @@ class WideField(PipeQuery):
                             print '\n', a.communicate()[0]
                     else:
                         pass
+
         os.system('clear')
         return expnum_df
 
