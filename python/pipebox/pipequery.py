@@ -552,7 +552,8 @@ class WideField(PipeQuery):
         
 
         print "Never:", df[df['attnum']==0].shape[0], "Once", df[df['attnum']==1].shape[0], "Twice:", df[df['attnum']==2].shape[0]
-             
+        print "Priority 1:", df[df['priority']==1].shape[0], "2:", df[df['priority']==2].shape[0], "3:", df[df['priority']==3].shape[0]
+        
         df.expnum = df.expnum.apply(int)
         df.expnum = df.expnum.apply(str)
         df = df.sort(['priority', 'attnum', 'expnum'])
