@@ -152,6 +152,7 @@ distortion = ${qa_file_prefix}_distortion
                 NTHREADS = 1
                 VERBOSE_TYPE = FULL 
                 REF_TIMEOUT = 60
+                FLAGS_MASK = 0x00fc
             </cmdline>
         </exec_1> 
     </se-scamp>

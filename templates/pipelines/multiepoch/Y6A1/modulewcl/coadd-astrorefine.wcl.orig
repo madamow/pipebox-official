@@ -21,9 +21,8 @@ qa_file_prefix = qa/${tilename}_r${reqnum}p${attnum:2}
                 NTHREADS = ${nthreads}
                 ASTREF_CATALOG = GAIA-DR2
                 MOSAIC_TYPE = ${mosaictype}
-                ASTR_FLAGSMASK = 0x0000
+                ASTR_FLAGSMASK = 0x00fc
                 FLAGS_MASK = 0x00fc
-                ASTRINSTRU_KEY = FILTER,DESEPOCH
             </cmdline>
             execname = scamp
             used = list.coadd_fullcat.coadd_scamp_fullcat, file.scamp_config

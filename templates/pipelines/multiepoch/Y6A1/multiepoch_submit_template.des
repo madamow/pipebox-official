@@ -4,7 +4,7 @@
 {% if args.inputcals_file %}
 <<include {{args.inputcals_file}}>>
 {% else %}
-<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/inputcals/y5a1_v1_inputs.des>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/inputcals/y6a1_v1_inputs.des>>
 {% endif %}
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/modnamepat.wcl>>
 
