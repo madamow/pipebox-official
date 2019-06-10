@@ -89,9 +89,15 @@ class PipeLine(object):
     def make_templates(self,columns=[],groupby=None):
         """ Loop through dataframe and write submitfile for each exposures"""
         # Updating args for each row
+        default_submit_site = self.args.target_site
         for name, group in self.args.dataframe.groupby(by=groupby, sort=False):
             # Setting jira parameters
             self.args.reqnum, self.args.jira_parent= group['reqnum'].unique()[0],group['jira_parent'].unique()[0]
+            if self.args.priority_site is not None and group['priority'].unique()[0]==1:
+                self.args.target_site = self.args.priority_site
+            else:
+                self.args.target_site = default_submit_site
+            
             self.args.unitname = group['unitname'].unique()[0]
             if self.args.pipeline != 'multiepoch' and  self.args.pipeline != 'photoz':
                 self.args.band = group['band'].unique()[0]
@@ -130,7 +136,7 @@ class PipeLine(object):
             # Creating output name
             output_name_suffix = "r%s_%s_%s_rendered_template.des" % \
                                 (self.args.reqnum,self.args.target_site,self.args.pipeline)
-            
+
             str_base = []
             for i,k in enumerate(self.args.output_name_keys):
                 st = "%s" % getattr(self.args,k)
@@ -416,12 +422,14 @@ class WideField(PipeLine):
             
             try:
                 if self.args.db_section=='db-decade':
-                    self.args.expnum = ','.join([str(e) for e in self.args.cur.get_expnums_from_auto_queue(project='DEC')])          
+                    p_tab = self.args.cur.get_expnums_from_auto_queue(project='DEC')
                 else:
-                    self.args.expnum = ','.join([str(e) for e in self.args.cur.get_expnums_from_auto_queue()])          
+                    p_tab = self.args.cur.get_expnums_from_auto_queue()
+                self.args.expnum = ','.join([str(e) for e in p_tab['expnum'].values.tolist()])
             except:
                 print "{time}: No exposures found!".format(time=datetime.datetime.now())
                 sys.exit(0)
+
             if self.args.resubmit_failed:
                 self.args.reqnum = jira_utils.get_reqnum_from_nite(self.args.jira_parent,
                                                                    self.args.nite)
@@ -434,7 +442,7 @@ class WideField(PipeLine):
             """
 
 
-        # Creating dataframe from exposures 
+        # Creating dataframe from exposures - this dataframe will have one columns with number of exposures
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
             self.args.exposure_list = self.args.cur.get_failed_expnums(self.args.reqnum,int(self.args.resubmit_max))
@@ -463,11 +471,15 @@ class WideField(PipeLine):
         elif self.args.RA and self.args.Dec:
             self.args.exposure_list = self.args.cur.get_expnums_from_radec(self.args.RA, self.args.Dec)
             self.args.dataframe = pd.DataFrame(self.args.exposure_list, columns=['expnum'])
+        
+        if self.args.check_logs:
+            interactive = self.args.interactive
+            self.args.dataframe = self.args.cur.check_log_files(self.args.dataframe, interactive=interactive)
+    
         # Remove unwanted exposures 
         if self.args.exclude_list:
             self.args.dataframe = self.args.dataframe[~self.args.dataframe.expnum.isin(self.args.exclude_list)]
-
-
+        
         # Update dataframe for each exposure and add band,nite if not exists
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
@@ -491,6 +503,10 @@ class WideField(PipeLine):
             grouped = self.args.dataframe.groupby(by=['obstype','band']).agg(['count'])['expnum']
             print grouped
             sys.exit(0)
+
+        if self.args.auto:
+            self.args.dataframe = pd.merge(self.args.dataframe, p_tab, on=['expnum'], how='inner')
+
 
 class NitelyCal(PipeLine):
 

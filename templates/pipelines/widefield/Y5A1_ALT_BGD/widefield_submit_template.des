@@ -110,8 +110,8 @@ calatt = {{args.cal_df[(args.cal_df.filetype=='cal_biascor')].attnum.values[0]}}
                 filetype = config
                 {% if args.band in ['u'] %}
                 filename = ${confignite}_decam_pvmodel_${desepoch}_g.ahead
-                {% elif args.band in ['VR'] %}
-                filename = ${confignite}_decam_pvmodel_${desepoch}_r.ahead
+                #{% elif args.band in ['VR'] %}
+                #filename = ${confignite}_decam_pvmodel_${desepoch}_r.ahead
                 {% endif %}
                 dirpat = se
                 ops_enddir = aux
