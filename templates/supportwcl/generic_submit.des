@@ -31,18 +31,18 @@ project = {{ args.project }}
 {% if args.db_section != 'db-decade' and not args.http %}
 <archive>
    <desar2home>
-       transfer_server = desar0,desar1,desar2
+       transfer_server = desar0,desar1,desar4
    </desar2home>
 </archive>
 {% endif %}
 
-{% if args.http == 'desar2' and args.db_section != 'db-decade'%}
+{% if args.http == 'desar4' and args.db_section != 'db-decade'%}
 <archive>
     <desar2home>
-        input_transfer_semname_home = y2a1-desar2-input-40
-        output_transfer_semname_home = y2a1-desar2-output
-        root_http = http://desar2.cosmology.illinois.edu/desarchive
-        transfer_server = desar2
+        input_transfer_semname_home = desar4-input-40
+        output_transfer_semname_home = desar4-output
+        root_http = http://desar4.cosmology.illinois.edu/desarchive
+        transfer_server = desar4
     </desar2home>
 </archive>
 {% endif %}
@@ -72,7 +72,7 @@ project = {{ args.project }}
 {% if args.db_section == 'db-decade' and not args.http %}
 <archive>
     <decarchive>
-        transfer_server = decahttp,decahttp2
+        transfer_server = decahttp,decahttp2,decahttp3
     </decarchive>
 </archive>
 {% endif %}
@@ -80,6 +80,9 @@ project = {{ args.project }}
 <archive>
     <decarchive>
         transfer_server = decahttp
+        input_transfer_semname_home = decade-input
+        output_transfer_semname_home = decade-output
+        root_http = http://decahttp.ncsa.illinois.edu/deca_archive
     </decarchive>
 </archive>
 {% endif %}
@@ -87,6 +90,19 @@ project = {{ args.project }}
 <archive>
     <decarchive>
         transfer_server = decahttp2
+        input_transfer_semname_home = decade-input2
+        output_transfer_semname_home = decade-output2
+        root_http = http://decahttp2.ncsa.illinois.edu/deca_archive
+    </decarchive>
+</archive>
+{% endif %}
+{% if args.db_section == 'db-decade' and args.http == 'decahttp3' %}
+<archive>
+    <decarchive>
+        transfer_server = decahttp3
+        input_transfer_semname_home = decade-input3
+        output_transfer_semname_home = decade-output3
+        root_http = http://decahttp3.ncsa.illinois.edu/deca_archive
     </decarchive>
 </archive>
 {% endif %}
