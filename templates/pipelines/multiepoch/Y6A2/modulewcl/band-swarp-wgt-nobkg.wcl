@@ -1,0 +1,156 @@
+<module>
+    <band-swarp-wgt-nobkg>
+        <exec_1>
+            <cmdline>
+                _01_sci = @${list.sci_nobkg.fullname}
+                c = ${file.swarp_config.fullname}
+                WEIGHTOUT_NAME = ${file.coadd_wgt_nobkg.fullname}
+                CENTER = ${ra_cent},${dec_cent}
+                PIXEL_SCALE = ${pixelscale}
+                FSCALE_DEFAULT = @${list.flux_nobkg.fullname}
+                IMAGE_SIZE = ${naxis1},${naxis2}
+                IMAGEOUT_NAME = ${file.coadd_sci_nobkg.fullname}
+                COMBINE_TYPE = CLIPPED
+                WEIGHT_IMAGE = @${list.wgt_nobkg.fullname}
+                NTHREADS = ${nthreads}
+                BLANK_BADPIXELS = Y
+                SUBTRACT_BACK = N
+            </cmdline>
+            execname = swarp
+            cmd_hyphen = allsingle
+            used = list.sci_nobkg.nwgint, list.wgt_nobkg.nwgint, list.flux_nobkg.nwgint, file.swarp_config
+            was_generated_by = file.coadd_sci_nobkg, file.coadd_wgt_nobkg
+            ancestry = list.sci_nobkg.nwgint:file.coadd_sci_nobkg
+        </exec_1>
+        modnamepat = ${modnamepat_tile_band}
+        wrappername = genwrap.py
+        wrapperloop = band
+        loopobj = list.imgme_nobkg
+       <list>
+            <imgme_nobkg>
+                # how to get file data
+                depends null-weight-for-coadd.file.nwgint
+                divide_by = band
+                #sortkey = (expnum, True, False)
+                sortkey = (filename, False, False)
+                <div_list_by_col>
+                    <sci_nobkg>
+                        filepat = tile_band
+                        flabel = swarp-band-wgt-sci-nobkg
+                        fsuffix = list
+
+                        dirpat = mepoch
+                        ops_enddir = list
+                        rundir = list
+
+                        columns = $FMT{%s[0], nwgint.fullname}
+                    </sci_nobkg>
+                    <wgt_nobkg>
+                        filepat = tile_band
+                        flabel = swarp-band-wgt-wgt-nobkg
+                        fsuffix = list
+
+                        dirpat = mepoch
+                        ops_enddir = list
+                        rundir = list
+
+                        columns = $FMT{%s[2], nwgint.fullname}
+                    </wgt_nobkg>
+                    <flux_nobkg>
+                        filepat = tile_band
+                        flabel = swarp-band-wgt-flx-nobkg
+                        fsuffix = list
+
+                        dirpat = mepoch
+                        ops_enddir = list
+                        rundir = list
+
+                        columns = nwgint.fluxscale
+                    </flux_nobkg>
+                </div_list_by_col>
+            </imgme_nobkg>
+            <head_nobkg>
+                # how to get file data
+                depends-newname = band-swarp-wgt.list.imgme
+                divide_by = band
+                #sortkey = (expnum, True, False)
+                sortkey = (filename, False, False)
+
+                filepat = tile_band
+                flabel = swarp-band-wgt-head-nobkg
+                fsuffix = list
+
+                dirpat = mepoch
+                ops_enddir = list
+                rundir = list
+
+                columns = head.fullname
+            </head_nobkg>
+        </list>
+        <file>
+            <swarp_config>
+                # what the input files are named
+                filename = ${swarp_config_file}
+
+                # where the input files go in jobroot
+                dirpat = mepoch
+                rundir = config
+            </swarp_config>
+            <nwgint>
+                listonly = True
+                filepat = tile_expbandccd
+                flabel = nwgint
+                fsuffix = fits
+
+                dirpat = mepoch
+                rundir = nwgint
+                ops_enddir = nwgint
+            </nwgint>
+            <head>
+                listonly = True
+                filepat = tile_expbandccd
+                flabel = scamp
+                fsuffix = head
+
+                dirpat = mepoch
+                rundir = aux
+            </head>
+            <coadd_sci_nobkg>
+                # what metadata to save
+                filetype = coadd_sci_nobkg
+
+                # how to name output file
+                filepat = tile_band
+                flabel = sci_nobkg
+                fsuffix = fits
+
+                # whether to save or compress
+                savefiles = false
+                compress_files = false
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                rundir = coadd
+                ops_enddir = coadd
+            </coadd_sci_nobkg>
+            <coadd_wgt_nobkg>
+                # what metadata to save
+                filetype = coadd_wgt_nobkg
+
+                # how to name output file
+                filepat = tile_band
+                flabel = wgt_nobkg
+                fsuffix = fits
+
+                # whether to save or compress
+                savefiles = false
+                compress_files = false
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                rundir = coadd
+                ops_enddir = coadd
+            </coadd_wgt_nobkg>
+        </file>
+    </band-swarp-wgt-nobkg>
+</module>

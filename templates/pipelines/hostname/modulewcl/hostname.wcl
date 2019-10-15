@@ -4,8 +4,8 @@
         xml = generic.xml
         modnamepat=${modnamepat_hostname}
         <exec_1>
-	    execname = /bin/hostname
-	    #execname = /bin/env
+    	 execname=/bin/hostname
         </exec_1>
+
     </hostname>
 </module>

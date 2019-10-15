@@ -141,6 +141,7 @@ class MultiEpoch(PipeArgs):
         parser.add('--bands',default='g,r,i,z,Y')
         parser.add('--det_bands',default='r,i,z')
         parser.add('--single_chip',action='store_true')
+        parser.add('--coadd_id',help='pfw_attempt_id of coadd for meds stand-alone')
         args = parser.parse_args()
 
         return args

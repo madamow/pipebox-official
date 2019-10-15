@@ -24,7 +24,6 @@ qa_file_prefix = qa/${tilename}_r${reqnum}p${attnum:2}
                 ASTR_FLAGSMASK = 0x0000
                 FLAGS_MASK = 0x00fc
                 ASTRINSTRU_KEY = FILTER,DESEPOCH
-                REF_TIMEOUT = 120
             </cmdline>
             execname = scamp
             used = list.coadd_fullcat.coadd_scamp_fullcat, file.scamp_config
