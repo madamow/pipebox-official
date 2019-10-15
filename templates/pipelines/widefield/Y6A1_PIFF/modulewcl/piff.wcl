@@ -55,11 +55,11 @@
                 ops_enddir = piff
             </piff_model>
             <piff_config>
-                filetype = qa_piff
-                filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_piff_select.png
+                filetype = config
+                filename = ${confignite}_piff.yaml
                 dirpat = se
-                rundir = qa
-                ops_enddir = qa
+                rundir = config
+                ops_enddir = config
             </piff_config>
         </file>
         <exec_1>
