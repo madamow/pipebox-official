@@ -1,0 +1,82 @@
+<module>
+    <piff>
+        wrappername = genwrap.py
+        wrapperloop = expnum
+        modnamepat=${modnamepat_expband}
+        loopobj = list.in_red_list
+	
+	    <list>
+            <in_red_list>
+                filetype = red_immask
+                filepat = exposure
+                flabel = red-immask
+                fsuffix = list
+
+                # where to store list
+                dirpat = se
+                ops_enddir = list
+                rundir = list
+
+                # what goes into list (normally is a query code)
+                query_table = image
+                join proctag.pfw_attempt_id = image.pfw_attempt_id
+                output_fields = filename
+                query_fields = filetype,tag,expnum
+                tag = ${proctag}
+                filetype=red_immask
+
+                columns = red_immask.fullname
+                sortkey = (ccdnum,True,False)
+            </in_red_list>
+        </list>
+	    <file>
+            <red_immask>
+                listonly = true
+                filetype = red_immask
+                filepat = ccdnum_band
+                flabel = piff
+                fsuffix = fits
+                dirpat = se
+                rundir = cat
+            </red_immask>
+            <cat_piff>
+                depends subselect.file.cat_piff
+                dirpat = se
+                rundir = cat
+                match = ccdnum,band
+            </cat_piff>
+            <piff_model>
+                filetype = piff_model
+                filepat = ccdnum_band
+                flabel = piff
+                fsuffix = fits
+                dirpat = se
+                rundir = piff
+                ops_enddir = piff
+            </piff_model>
+            <piff_config>
+                filetype = qa_piff
+                filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_piff_select.png
+                dirpat = se
+                rundir = qa
+                ops_enddir = qa
+            </piff_config>
+        </file>
+        <exec_1>
+            execname = subselect_DEScat.py
+            cmd_hyphen = mixed_gnu
+            used = file.cat_piff,file.red_immask
+            was_generated_by = file.piff_model
+            ancestry=file.cat_piff:file.piff_model,file.red_immask:file.piff_model
+            <cmdline>
+                _01_config = ${file.piff_config.fullname}
+                _02 = input.image_file_name=${file.red_immask.fullname}
+                _03 = input.cat_file_name=${file.cat_piff.fullname}
+                _04 = output.file_name=${file.piff_model.fullname}
+                _05 = input.wcs.exp=${expnum}
+                _06 = input.wcs.ccdnum=${ccdnum}
+                v = 2
+            </cmdline>
+        </exec_1>
+    </piff>
+</module>
