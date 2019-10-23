@@ -61,9 +61,30 @@
                 rundir = config
                 ops_enddir = config
             </piff_config>
+
+            <cal_pixmappy_affine>
+                filename = cal_pixmappy_affine
+                rundir = pixmappy
+            </cal_pixmappy_affine>
+
+            <cal_pixmappy_astresid>
+                filename = cal_pixmappy_astresid
+                rundir = pixmappy
+            </cal_pixmappy_astresid>
+
+            <cal_pixmappy_exposure>
+                filename = cal_pixmappy_exposure
+                rundir = pixmappy
+            </cal_pixmappy_exposure>
+
+            <cal_pixmappy_guts>
+                filename = cal_pixmappy_guts
+                rundir = pixmappy
+            </cal_pixmappy_guts>
+
         </file>
         <exec_1>
-            execname = subselect_DEScat.py
+            execname = $PIFF_DIR/bin/piffify
             cmd_hyphen = mixed_gnu
             used = file.cat_piff,file.red_immask
             was_generated_by = file.piff_model

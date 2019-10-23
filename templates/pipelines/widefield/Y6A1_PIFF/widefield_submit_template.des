@@ -39,7 +39,7 @@ blocklist = se
 
 <block>
    <se>
-        modulelist = subselect #,piff
+        modulelist = subselect,piff
     </se>    
 </block>
 
