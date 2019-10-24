@@ -84,7 +84,7 @@
 
         </file>
         <exec_1>
-            execname = $PIFF_DIR/bin/piffify
+            execname = piffify
             cmd_hyphen = mixed_gnu
             used = file.cat_piff,file.red_immask
             was_generated_by = file.piff_model
