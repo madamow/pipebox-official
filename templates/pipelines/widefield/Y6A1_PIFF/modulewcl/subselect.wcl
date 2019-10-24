@@ -16,13 +16,13 @@
                 dirpat = se
                 ops_enddir = list
                 rundir = list
-
+                tag = Y6A1_PIFF_TEST0 #${proctag}
                 # what goes into list (normally is a query code)
                 query_table = catalog
-                join proctag.pfw_attempt_id = catalog.pfw_attempt_id
+                join catalog.pfw_attempt_id=proctag.pfw_attempt_id
+                #join proctag.tag = 'Y6A1_PIFF_TEST0'
                 output_fields = filename
-                query_fields = filetype,tag,expnum
-                tag = ${proctag}
+                query_fields = filetype,expnum, proctag.tag
                 filetype=cat_finalcut
                 
 		        columns = cat_finalcut.fullname
