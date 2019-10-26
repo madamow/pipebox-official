@@ -20,9 +20,9 @@
                 # what goes into list (normally is a query code)
                 query_table = image
                 join proctag.pfw_attempt_id = image.pfw_attempt_id
-                output_fields = filename
-                query_fields = filetype,tag,expnum
-                tag = ${proctag}
+                output_fields = filename, expnum, band, ccdnum
+                query_fields = filetype,proctag.tag,expnum
+                tag = Y6A1_PIFF_TEST0
                 filetype=red_immask
 
                 columns = red_immask.fullname
