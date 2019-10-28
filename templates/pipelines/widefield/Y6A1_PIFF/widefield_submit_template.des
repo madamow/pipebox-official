@@ -35,12 +35,12 @@ save_run_vals = nite, camsym, band, expnum, jira_id
 
 GROUP_SUBMIT_ID = 1
 
-blocklist = se
+blocklist = piff
 
 <block>
-   <se>
+   <piff>
         modulelist = subselect,piff
-    </se>    
+    </piff>    
 </block>
 
 ### Input Calibrations ###
