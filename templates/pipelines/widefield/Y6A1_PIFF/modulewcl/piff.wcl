@@ -1,46 +1,28 @@
 <module>
     <piff>
         wrappername = genwrap.py
-        wrapperloop = expnum
-        modnamepat=${modnamepat_expband}
-        loopobj = list.in_red_list
+        wrapperloop = ccdnum,band
+        modnamepat=${modnamepat_ccdnumband}
 	
-	    <list>
-            <in_red_list>
+	    <file>
+            <red_immasked>
                 filetype = red_immask
-                filepat = exposure
-                flabel = red-immask
-                fsuffix = list
+                tag = Y6A1_PIFF_TEST0
 
-                # where to store list
-                dirpat = se
-                ops_enddir = list
-                rundir = list
-
-                # what goes into list (normally is a query code)
                 query_table = image
                 join proctag.pfw_attempt_id = image.pfw_attempt_id
-                output_fields = filename, expnum, band, ccdnum
                 query_fields = filetype,proctag.tag,expnum
-                tag = Y6A1_PIFF_TEST0
-                filetype=red_immask
+                output_fields = filename, ccdnum,band,expnum
+                match = ccdnum,band
 
-                columns = red_immask.fullname
-                sortkey = (ccdnum,True,False)
-            </in_red_list>
-        </list>
-	    <file>
-            <red_immask>
-                listonly = true
-                filetype = red_immask
-                filepat = ccdnum_band
-                flabel = piff
-                fsuffix = fits
                 dirpat = se
-                rundir = cat
-            </red_immask>
+                ops_enddir = red
+                rundir = red
+            </red_immasked>
             <cat_piff>
                 depends subselect.file.cat_piff
+                
+                # where input file lives in jobroot
                 dirpat = se
                 rundir = cat
                 match = ccdnum,band
@@ -48,7 +30,7 @@
             <piff_model>
                 filetype = piff_model
                 filepat = ccdnum_band
-                flabel = piff
+                flabel = piff-model
                 fsuffix = fits
                 dirpat = se
                 rundir = piff
@@ -61,37 +43,48 @@
                 rundir = config
                 ops_enddir = config
             </piff_config>
-
             <cal_pixmappy_affine>
-                filename = cal_pixmappy_affine
+                flabel = cal-pixmappy-affine
+                filepat = ccdnum_band
+                fsuffix = png
                 rundir = pixmappy
+                dirpat = se
+                ops_enddir = qa
             </cal_pixmappy_affine>
-
             <cal_pixmappy_astresid>
-                filename = cal_pixmappy_astresid
+                flabel = cal-pixmappy-astresid
+                filepat = ccdnum_band
+                fsuffix = png
                 rundir = pixmappy
+                dirpat = se
+                ops_enddir = qa
             </cal_pixmappy_astresid>
-
             <cal_pixmappy_exposure>
-                filename = cal_pixmappy_exposure
+                flabel = cal-pixmappy-exposure
+                filepat = ccdnum_band
+                fsuffix = png
                 rundir = pixmappy
+                dirpat = se
+                ops_enddir = qa
             </cal_pixmappy_exposure>
-
             <cal_pixmappy_guts>
-                filename = cal_pixmappy_guts
+                flabel = cal-pixmappy-guts
+                filepat = ccdnum_band
+                fsuffix = png
                 rundir = pixmappy
+                dirpat = se
+                ops_enddir = qa
             </cal_pixmappy_guts>
-
         </file>
         <exec_1>
             execname = piffify
             cmd_hyphen = mixed_gnu
-            used = file.cat_piff,file.red_immask
+            used = file.cat_piff,file.red_immasked
             was_generated_by = file.piff_model
-            ancestry=file.cat_piff:file.piff_model,file.red_immask:file.piff_model
+            ancestry=file.cat_piff:file.piff_model,file.red_immasked:file.piff_model
             <cmdline>
                 _01_config = ${file.piff_config.fullname}
-                _02 = input.image_file_name=${file.red_immask.fullname}
+                _02 = input.image_file_name=${file.red_immasked.fullname}
                 _03 = input.cat_file_name=${file.cat_piff.fullname}
                 _04 = output.file_name=${file.piff_model.fullname}
                 _05 = input.wcs.exp=${expnum}

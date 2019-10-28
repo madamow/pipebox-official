@@ -24,7 +24,7 @@
                 query_fields = filetype,expnum, proctag.tag
                 filetype=cat_finalcut
                 
-		    columns = cat_finalcut.fullname
+    		    columns = cat_finalcut.fullname
 	    	    sortkey = (ccdnum,True,False)
             </in_cat_list>
         </list>
@@ -41,7 +41,7 @@
             <cat_piff>
                 filetype = cat_piff
                 filepat = ccdnum_band
-                flabel = piff
+                flabel = piff-cat
                 fsuffix = fits
                 dirpat = se
                 rundir = cat
@@ -49,14 +49,14 @@
             </cat_piff>
             <qa_select>
                 filetype = qa_piff
-                filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_piff_select.png
+                filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_piff-select.png
                 dirpat = se
                 rundir = qa
                 ops_enddir = qa
             </qa_select>
  	        <qa_dist>
 		        filetype = qa_piff
-                filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_piff_dist.png
+                filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_piff-dist.png
                 dirpat = se
                 rundir = qa
 		        ops_enddir = qa
