@@ -33,8 +33,8 @@
                 flabel = piff-model
                 fsuffix = fits
                 dirpat = se
-                rundir = piff
-                ops_enddir = piff
+                rundir = psf
+                ops_enddir = psf
             </piff_model>
             <piff_config>
                 filetype = config
@@ -44,42 +44,34 @@
                 ops_enddir = config
             </piff_config>
             <cal_pixmappy_affine>
-                flabel = cal-pixmappy-affine
-                filepat = ccdnum_band
-                fsuffix = png
+                filetype = cal_pixmappy_affine
+                filename = y6a1.affine.fits
                 rundir = pixmappy
                 dirpat = se
-                ops_enddir = qa
             </cal_pixmappy_affine>
             <cal_pixmappy_astresid>
-                flabel = cal-pixmappy-astresid
-                filepat = ccdnum_band
-                fsuffix = png
+                filetype=cal_pixmappy_astresid
+                filename = y6a1.astroresids.fits
                 rundir = pixmappy
                 dirpat = se
-                ops_enddir = qa
             </cal_pixmappy_astresid>
             <cal_pixmappy_exposure>
-                flabel = cal-pixmappy-exposure
-                filepat = ccdnum_band
-                fsuffix = png
+                filetype = cal_pixmappy_exposure
+                filename = y6a1.exposureinfo.fits
                 rundir = pixmappy
                 dirpat = se
-                ops_enddir = qa
             </cal_pixmappy_exposure>
             <cal_pixmappy_guts>
-                flabel = cal-pixmappy-guts
-                filepat = ccdnum_band
-                fsuffix = png
+                filetype = cal_pixmappy_guts
+                filename = y6a1.guts.astro
                 rundir = pixmappy
                 dirpat = se
-                ops_enddir = qa
             </cal_pixmappy_guts>
         </file>
         <exec_1>
             execname = piffify
             cmd_hyphen = mixed_gnu
-            used = file.cat_piff,file.red_immasked
+            used = file.cat_piff,file.red_immasked,file.piff_config, file.cal_pixmappy_guts, file.cal_pixmappy_exposure, file.cal_pixmappy_astresid, file.cal_pixmappy_affine
             was_generated_by = file.piff_model
             ancestry=file.cat_piff:file.piff_model,file.red_immasked:file.piff_model
             <cmdline>
@@ -89,7 +81,8 @@
                 _04 = output.file_name=${file.piff_model.fullname}
                 _05 = input.wcs.exp=${expnum}
                 _06 = input.wcs.ccdnum=${ccdnum}
-                v = 2
+                _07 = output.dir="."
+                v = 3
             </cmdline>
         </exec_1>
     </piff>

@@ -38,7 +38,7 @@
             <cat_piff>
                 filetype = cat_piff
                 filepat = ccdnum_band
-                flabel = piff-cat
+                flabel = piff
                 fsuffix = fits
                 dirpat = se
                 rundir = cat
@@ -65,7 +65,7 @@
             cmd_hyphen = mixed_gnu 
             used = list.in_cat_list.cat_finalcut
             was_generated_by = file.cat_piff, file.qa_dist, file.qa_select
-            ancestry=file.cat_finalcut:file.cat_piff,file.cat_finalcut:file.qa_select, file.cat_finalcut:file.qa_dist
+            #ancestry=list.in_cat_list.cat_finalcut:file.cat_piff,list.in_cat_list.cat_finalcut:file.qa_select, list.in_cat_list.cat_finalcut:file.qa_dist
             <cmdline>
                 useDB = _flag
                 checkVHS = _flag
