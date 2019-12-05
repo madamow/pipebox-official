@@ -66,7 +66,7 @@ class PipeQuery(object):
         Returns a list of expnums."""
         taglist = tag.split(',')
         tag_list_of_dict = []
-        for t in taglist13:
+        for t in taglist:
             expnum_query = "select distinct expnum from exposuretag where tag='%s'" % t
             self.cur.execute(expnum_query)
             results = self.cur.fetchall()

@@ -7,7 +7,7 @@
 	    <file>
             <red_immasked>
                 filetype = red_immask
-                tag = Y6A1_PIFF_TEST0
+                tag = Y6A1_FINALCUT
 
                 query_table = image
                 join proctag.pfw_attempt_id = image.pfw_attempt_id

@@ -1,0 +1,99 @@
+<module>
+    <piff-qa>
+        wrappername = genwrap.py
+        wrapperloop = expnum
+        modnamepat=${modnamepat_expband}
+        loopobj = list.in_piff_list	
+        <list>
+            <in_piff_list>
+                depends piff.file.piff_model
+                filepat = exposure
+                flabel = piff-model
+                fsuffix = list
+
+                # where to store list
+                dirpat = se
+                ops_enddir = list
+                rundir = list
+
+                # what goes into list (normally is a query code)
+                divide_by=expnum
+                columns = piff_model.fullname
+                sortkey = (ccdnum,True,False)
+            </in_piff_list>
+            <in_red_list>
+                filetype = red_immask
+                filepat = exposure
+                flabel = red-immask
+                fsuffix = list
+
+                dirpat = se
+                ops_enddir = list
+                rundir = list
+
+                tag = Y6A1_FINALCUT
+                query_table = image
+                join proctag.pfw_attempt_id = image.pfw_attempt_id
+                query_fields = filetype,proctag.tag,expnum
+                output_fields = filename, ccdnum,band,expnum
+                match = expnum
+
+                # what goes into list (normally is a query code)
+                columns = red_immask.fullname
+                sortkey = (ccdnum,True,False)
+            </in_red_list>
+        </list>
+	    <file>
+            <red_immask>
+                # what metadata to get
+                filetype = red_immask
+
+                # how to name the file
+                filepat = ccdnum_band
+                flabel = immask
+                fsuffix = fits
+
+                # where to put the file
+                dirpat = se
+                rundir = red/immask
+                listonly = True
+            </red_immask>
+            <piff_model>
+                # what metadata to get
+                filetype = piff_model
+
+                # how to name the file
+                filepat = ccdnum_band
+                flabel = piff-model
+                fsuffix = fits
+
+                # where to put the file
+                dirpat = se
+                rundir = psf
+                listonly = True
+            </piff_model>
+            <piff_qa>
+                filetype = qa_piff
+                filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_piff-FP-qa.png
+                dirpat = se
+                rundir = qa
+                ops_enddir = qa
+            </piff_qa>
+        </file>
+        <exec_1>
+            execname = piff_PSF_qa.py
+            cmd_hyphen = mixed_gnu
+            used = list.in_piff_list.piff_model,list.in_red_list.red_immask
+            was_generated_by = file.piff_qa
+            ancestry= list.in_piff_list.piff_model:file.piff_qa, list.in_red_list.red_immask:file.piff_qa
+            <cmdline>
+                cat = ${list.in_piff_list.fullname}
+                img = ${list.in_red_list.fullname}
+                qa_plot = ${file.piff_qa.fullname}
+                updateDB = _flag
+                seed = ${campaign_seed}
+                v = 1
+            </cmdline>
+        </exec_1>
+    </piff-qa>
+</module>

@@ -17,7 +17,7 @@
                 ops_enddir = list
                 rundir = list
 
-                tag = Y6A1_PIFF_TEST0
+                tag = Y6A1_FINALCUT
                 # what goes into list (normally is a query code)
                 query_table = catalog
                 join catalog.pfw_attempt_id=proctag.pfw_attempt_id

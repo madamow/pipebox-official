@@ -3,6 +3,9 @@
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/modnamepat.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/subselect.wcl>>
 <<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/piff.wcl>>
+<<include {{ args.pipebox_dir }}/templates/pipelines/widefield/{{ args.campaign }}/modulewcl/piff-qa.wcl>>
+
+campaign_seed = 20191205
 
 {% if not args.labels %}
 label = ${nite} {% endif %}
@@ -39,7 +42,7 @@ blocklist = piff
 
 <block>
    <piff>
-        modulelist = subselect,piff
+        modulelist = subselect,piff,piff-qa
     </piff>    
 </block>
 
