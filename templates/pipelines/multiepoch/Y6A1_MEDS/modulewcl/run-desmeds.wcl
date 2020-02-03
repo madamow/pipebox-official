@@ -24,6 +24,7 @@
                 tileconf = ${file.tileconf.fullname}
                 coadd_object_map = ${file.objmap.fullname}
                 source_type = finalcut
+                coadd_object_tablename = Y6A1_COADD_OBJECT_SAVE
             </cmdline>
             execname = run_desmeds
             cmd_hyphen =  mixed_gnu

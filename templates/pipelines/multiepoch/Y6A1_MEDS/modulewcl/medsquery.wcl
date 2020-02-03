@@ -5,7 +5,8 @@
         <list>
             <medsfiles>
                 exec = query_coadd_for_meds.py
-                args = -A ${coadd_id} -v 2 --outfile ${qoutfile} --bkgimg --segmap --psfmodel --zsource FGCM --zversion y4a1_v1.5 --zflag 16 --z2source PGCM_FORCED --z2version Y3A2_MISC --z2flag 16 --zpt2 ZEROPOINT --bandlist ${bands}
+                #args = -A ${coadd_id} -v 2 --outfile ${qoutfile} --bkgimg --segmap --psfmodel --zsource FGCM --zversion y5a1_v1.5 --zflag 16 --z2source PGCM_FORCED --z2version Y3A2_MISC --z2flag 16 --zpt2 ZEROPOINT --bandlist ${bands}
+                args = -A ${coadd_id} -v 2 --outfile ${qoutfile} --zeropoint NONE --bkgimg --segmap --psfmodel --usepiff --pifftag Y6A1_PIFF --bandlist ${bands}
 
                 columns = red.mag_zero
             </medsfiles>

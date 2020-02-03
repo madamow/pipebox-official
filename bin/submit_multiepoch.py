@@ -15,4 +15,7 @@ multiepoch.ticket(args,groupby='user')
 
 # write submit files and submit if necessary
 # columns should only be values that change per submit (groupby)
-multiepoch.make_templates(columns=['tile'],groupby='tile')
+if args.csv:
+    multiepoch.make_templates(columns=args.dataframe.columns,groupby='tile')
+else:
+    multiepoch.make_templates(columns=['tile'],groupby='tile')
