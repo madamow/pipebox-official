@@ -161,17 +161,26 @@ class PipeLine(object):
                     super(self.__class__,self).submit(self.args)
                  
                     # Make comment in JIRA
-                    num_retry = 0
-                    while num_retry <= 3:
-                        try:
-                            if not self.args.ignore_jira:
+                    if not self.args.ignore_jira:
+                        connected = False
+                        while not connected:
+                            num_retry = 1
+                            try:
                                 con=jira_utils.get_con(self.args.jira_section)
-                                if not jira_utils.does_comment_exist(con,reqnum=self.args.reqnum):
-                                    jira_utils.make_comment(con,datetime=datetime.datetime.now(),reqnum=self.args.reqnum)
-                        except:
-                            num_retry += 1
-                            time.sleep(10)
-                            print "JIRA Connection Error...Retry #{num}".format(num=num_retries)
+                                connected = True
+                            except:
+                                print "JIRA Connection Error...Retry #{num}".format(num=num_retry)
+                                time.sleep(10)
+                                connected = False
+                                if num_retry == 4:
+                                    print "Reached 4 JIRA connection attempts. Quitting..."
+                                    break
+                                num_retry += 1
+                                
+
+                        if not jira_utils.does_comment_exist(con,reqnum=self.args.reqnum):
+                            jira_utils.make_comment(con,datetime=datetime.datetime.now(),
+                                                        reqnum=self.args.reqnum)
 
         if self.args.auto:
             if not self.args.rendered_template_path: 
