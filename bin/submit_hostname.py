@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import os,sys
 from pipebox import pipeline
 
 # initialize and get options
