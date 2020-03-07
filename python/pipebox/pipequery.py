@@ -101,7 +101,7 @@ class PipeQuery(object):
             for i in range(1,n+1):
                 date = now - timedelta(i)
                 nites.append(date.strftime('%Y%m%d'))
-            print "%s: Inserting into AUTO_QUEUE." % now
+            print("%s: Inserting into AUTO_QUEUE." % now)
         base_query = "select distinct expnum,propid from exposure where obstype in ('object','standard') and "
         base_query+= "object not like '%%pointing%%' and object not like '%%focus%%' and " 
         base_query+= "object not like '%%donut%%' and object not like '%%test%%' and "
@@ -121,12 +121,12 @@ class PipeQuery(object):
                 except:
                     pass
             self.dbh.commit()
-            print '%s exposures inserted.' % len(inserts)
+            print('%s exposures inserted.' % len(inserts))
         else:
-            print 'No new exposures to insert.'
+            print('No new exposures to insert.')
 
     def update_auto_queue(self,n_failed=3,project='OPS'):
-        print '%s: Updating AUTO_QUEUE.' % datetime.now()
+        print('%s: Updating AUTO_QUEUE.' % datetime.now())
         query_db = True
         iter = 0
         success_exposures = []
@@ -172,9 +172,9 @@ class PipeQuery(object):
             self.cur.execute(update_query)
             self.dbh.commit()
         if not success_exposures and not fail_exposures:
-            print 'No new exposures to update.'
+            print('No new exposures to update.')
         else:
-            print 'Updated %i exposures as processed: success = %i, fail = %i' % (len(success_exposures)+len(fail_exposures), len(success_exposures),len(fail_exposures))
+            print('Updated %i exposures as processed: success = %i, fail = %i' % (len(success_exposures)+len(fail_exposures), len(success_exposures),len(fail_exposures)))
 
 
 class SuperNova(PipeQuery):
@@ -195,7 +195,7 @@ class SuperNova(PipeQuery):
         for index,row in df.iterrows():
             expnums=self.get_expnums(row['nite'],row['field'],row['band'])
             df.loc[index,'expnums'] = expnums
-            print expnums
+            print(expnums)
             firstexp = expnums.split(',')[0]
             df.loc[index,'firstexp'] = firstexp
             df.loc[index,'ccdnum'] = '1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,62'
@@ -228,7 +228,7 @@ class SuperNova(PipeQuery):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
         submitted = "select distinct s.nite, s.field, s.band, p.unitname, p.attnum, t.status from pfw_attempt p, task t, snsubmit s where t.id=p.task_id and s.nite in (%s) and p.task_id = s.task_id  and p.unitname like 'D_SN-%%'" % (','.join(map(str,nitelist)))
-        print submitted
+        print(submitted)
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
         df = pd.DataFrame(failed_query,columns=['nite','field','band','unitname','attnum','status'])
@@ -238,22 +238,22 @@ class SuperNova(PipeQuery):
         for u in df['unitname'].unique():
             nattempts = df[(df.unitname==u)].count()[0]
             count = df[(df.unitname==u) & (df.status==0)].count()[0]
-            print str(u)+' has '+str(count)+' good processings. '+str(nattempts)+' total processings. Max is '+str(resubmit_max)
+            print(str(u)+' has '+str(count)+' good processings. '+str(nattempts)+' total processings. Max is '+str(resubmit_max))
             if (count >= 1) or (nattempts >= int(resubmit_max)):
                 passed_unitnames.append(u)
         try:
             failed_list = df[(~df.unitname.isin(passed_unitnames)) & (~df.status.isin([0,-99]))][['nite','field','band']]
         except:
-            print 'No new failed exposures found!'
+            print('No new failed exposures found!')
             exit()
         try: 
-            print failed_list
+            print(failed_list)
             resubmit_list = (failed_list.drop_duplicates(subset=['nite','field','band'])).values
-            print resubmit_list
+            print(resubmit_list)
         except:
-            print 'No new failed exposures found!'
+            print('No new failed exposures found!')
             exit()
- #       print 'get_failed_triplets disabled'
+ #       print('get_failed_triplets disabled')
  #       exit()
         return resubmit_list
 
@@ -262,10 +262,10 @@ class SuperNova(PipeQuery):
         """ Get exposure numbers and band for a SN nite field band triplet"""
         if not nite:
             raise Exception("Must specify nite!")
-        print "selecting exposures to submit..."
+        print("selecting exposures to submit...")
         query = "select distinct nite, field, band from manifest_exposure where exptime > 30 \
                 and nite in (%s) " % (','.join(nite))
-        print query
+        print(query)
         self.cur.execute(query)
 #        triplets = np.ravel(np.array(self.cur.fetchall()))
 #        return string.join(map(str,triplets),',').reshape[-1:3]
@@ -284,7 +284,7 @@ class SuperNova(PipeQuery):
             raise Exception("Must specify field!")
         if not band:
             raise Exception("Must specify nite!")
-        print "selecting exposures to submit..."
+        print("selecting exposures to submit...")
         query = "select distinct expnum from manifest_exposure where exptime > 30  and nite = '%s' and field = 'SN-%s' and band = '%s' " % (str(nite), field[-2:], band)
         self.cur.execute(query)
         exps = np.ravel(np.array(self.cur.fetchall()))
@@ -314,7 +314,7 @@ class SuperNova(PipeQuery):
         if days > threshold:
             if override is True:
                 if tag is None:
-                    print "Must specify tag if override is True!"
+                    print("Must specify tag if override is True!")
                     exit(0)
                 else:
                     max_tagged = "select distinct unitname,reqnum, attnum from ops_proctag where tag = '%s' and unitname in (select max(unitname) from ops_proctag where tag = '%s')" % (tag,tag)
@@ -323,11 +323,11 @@ class SuperNova(PipeQuery):
                     try:
                         precal_unitname,precal_reqnum,precal_attnum = last_results[0][0],last_results[0][1],last_results[0][2]
                     except:
-                        print "No tagged precals found. Please check tag or database section used..."
+                        print("No tagged precals found. Please check tag or database section used...")
                         exit(0)
             elif override is False or override is None:
                 if results is None:
-                    print "No precals found. Please manually select input precal..."
+                    print("No precals found. Please manually select input precal...")
                     exit(0)
         precal_nite = precal_unitname
         precal_run = 'r%sp0%s' % (precal_reqnum,precal_attnum)
@@ -409,9 +409,9 @@ class WideField(PipeQuery):
         count_query="select obstype,band,count(expnum) from exposure where nite in ({nites}) and obstype not in ('dome flat', 'zero','dark') group by obstype,band".format(nites=','.join(niteslist))
         self.cur.execute(count_query)
         count_info = self.cur.fetchall()
-        print " Obstype         Band      Count"
+        print(" Obstype         Band      Count")
         for row in count_info:
-            print "%09s  %09s  %09s" % (row[0], row[1], row[2])
+            print("%09s  %09s  %09s" % (row[0], row[1], row[2]))
     def get_expnums_from_radec(self, RA, Dec,radius=None):
         RA = [float(r) for r in RA[0]]
         Dec = [float(d) for d in Dec[0]]
@@ -542,7 +542,7 @@ class WideField(PipeQuery):
             df = df.append(temp_df)
             i += 1
 
-        print "%i exposures on to-do list" % (df.shape[0])
+        print("%i exposures on to-do list" % (df.shape[0]))
         query = "select propid, priority from ops_propid"
         self.cur.execute(query)
         p_df = pd.DataFrame(self.cur.fetchall(), columns=['propid', 'priority'])
@@ -551,15 +551,15 @@ class WideField(PipeQuery):
         df['priority'].fillna(3, inplace=True)
         
 
-        print "Never:", df[df['attnum']==0].shape[0], "Once", df[df['attnum']==1].shape[0], "Twice:", df[df['attnum']==2].shape[0]
-        print "Priority 1:", df[df['priority']==1].shape[0], "2:", df[df['priority']==2].shape[0], "3:", df[df['priority']==3].shape[0]
+        print("Never:", df[df['attnum']==0].shape[0], "Once", df[df['attnum']==1].shape[0], "Twice:", df[df['attnum']==2].shape[0])
+        print("Priority 1:", df[df['priority']==1].shape[0], "2:", df[df['priority']==2].shape[0], "3:", df[df['priority']==3].shape[0])
         
         df.expnum = df.expnum.apply(int)
         df.expnum = df.expnum.apply(str)
         df = df.sort(['priority', 'attnum', 'expnum'])
 
         if df.shape[0]==0:
-            print "List of exposures is empty.Nothing to do"
+            print("List of exposures is empty.Nothing to do")
             exit()
         return df[['expnum', 'priority']].head(1000) 
         # 90 works better for delve processing and crontab
@@ -570,7 +570,7 @@ class WideField(PipeQuery):
         """ Get exposure numbers and band for incoming exposures"""
         if not nites:
             raise Exception("Must specify nite!")
-        print "selecting exposures to submit..."
+        print("selecting exposures to submit...")
         base_query = "select distinct expnum,nite from exposure where obstype in ('object','standard') and \
                       object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' \
                       and object not like '%%test%%' and object not like '%%junk%%' and nite in (%s)" % ','.join(nites)
@@ -584,12 +584,12 @@ class WideField(PipeQuery):
         try:
             [expnums,nites_from_query] = map(list, zip(*results))
         except:
-            print "Warning: No expnums found for nites {}.".format(','.join(nites))
+            print("Warning: No expnums found for nites {}.".format(','.join(nites)))
             exit(0)
         diff = list(set(nites)-set(nites_from_query))
         diff.sort(key=str.lower)
         if diff:
-            print "Warning: No expnums found for nites {}.".format(','.join(diff))    
+            print("Warning: No expnums found for nites {}.".format(','.join(diff)))    
         return expnums
 
     def find_precal(self,date,threshold,override=True,tag=None):
@@ -615,7 +615,7 @@ class WideField(PipeQuery):
         if days > threshold:
             if override is True:
                 if tag is None:
-                    print "Must specify tag if override is True!"
+                    print("Must specify tag if override is True!")
                     exit(0)
                 else:
                     max_tagged = "select distinct unitname,reqnum, attnum from ops_proctag where tag = '%s' and unitname in (select max(unitname) from ops_proctag where tag = '%s')" % (tag,tag)
@@ -624,11 +624,11 @@ class WideField(PipeQuery):
                     try:
                         precal_unitname,precal_reqnum,precal_attnum = last_results[0][0],last_results[0][1],last_results[0][2]
                     except:
-                        print "No tagged precals found. Please check tag or database section used..."
+                        print("No tagged precals found. Please check tag or database section used...")
                         exit(0)
             elif override is False or override is None:
                 if results is None:
-                    print "No precals found. Please manually select input precal..."
+                    print("No precals found. Please manually select input precal...")
                     exit(0)
         precal_nite = precal_unitname
         precal_run = 'r%sp0%s' % (precal_reqnum,precal_attnum)
@@ -644,11 +644,11 @@ class WideField(PipeQuery):
         dict = {}
         unitnames = ['D00'+str(e) for e in expnum_df['expnum'].values]
 
-        print "Querying database..."
+        print("Querying database...")
         query = "select unitname,a.archive_path,status from pfw_attempt a,"
         query += " task t,pfw_request r where r.reqnum=a.reqnum  and t.id=a.task_id and unitname in ('%s') " % ("','".join(unitnames))
         self.cur.execute(query)
-        print "...done"
+        print("...done")
 
         # Create a dictionary with some info about exposures from list
         for unit, path, sts in self.cur.fetchall():
@@ -677,11 +677,11 @@ class WideField(PipeQuery):
         for nb, unitname in enumerate(info):
             os.system('clear')
             expnum = unitname.split("D00")[1]
-            print "\n ##########\n %i/%i  %s \n ##########\n" % (nb+1, no_of_exps, unitname)
+            print("\n ##########\n %i/%i  %s \n ##########\n" % (nb+1, no_of_exps, unitname))
                 
             if not interactive: # Check statuses and catalogs in /deca_archive
                 for i, row in enumerate(info[unitname]):
-                    print "[%2i] %s STATUS: %3s  IN: %s" % (i, row['path'], row['status'], row['in_arch'])
+                    print("[%2i] %s STATUS: %3s  IN: %s" % (i, row['path'], row['status'], row['in_arch']))
                 in_arch = []
                 statuses = []
                 logs_no = []
@@ -692,12 +692,12 @@ class WideField(PipeQuery):
                    (all(in_arch) and any(item in 245 for item in statuses)) or \
                     any(item == 0 for item in statuses) or \
                     any(item == None for item in statuses):
-                    print "Consider it done"
+                    print("Consider it done")
                     time.sleep(1)
                     # Remove exp number from the input dataframe
                     expnum_df = expnum_df[expnum_df['expnum'] != expnum]
                 else:
-                    print "Will be submitted to queue"
+                    print("Will be submitted to queue")
             else: # Interactive mode
                 # Look for logfiles in /deca_archives
                 # ask what to do
@@ -718,15 +718,15 @@ class WideField(PipeQuery):
                             log_list=[]
                         info[unitname][i]['loglist'] = log_list
                         info[unitname][i]['logs_no'] = len(log_list)
-                        print "[%2i] %s STATUS: %3s  IN: %s N(Logs): %i " % (i, row['path'], row['status'], row['in_arch'], len(log_list))
+                        print("[%2i] %s STATUS: %3s  IN: %s N(Logs): %i " % (i, row['path'], row['status'], row['in_arch'], len(log_list)))
                     else:
-                        print "[%2i] %s STATUS: %3s  IN: %s N(Logs): %i " % (i, row['path'], row['status'], row['in_arch'], 0)
+                        print("[%2i] %s STATUS: %3s  IN: %s N(Logs): %i " % (i, row['path'], row['status'], row['in_arch'], 0))
                
                 while iterate_logs:
-                    print "Submit? [y]es/[n]o, [a] to print last 10 lines of logfiles, or [q]uit!"
+                    print("Submit? [y]es/[n]o, [a] to print last 10 lines of logfiles, or [q]uit!")
                     prc = raw_input()
                     if prc == 'q':
-                        print "Quit!"
+                        print("Quit!")
                         exit()
                     elif prc == 'n':
                         expnum_df = expnum_df[expnum_df['expnum'] != expnum]
@@ -735,11 +735,11 @@ class WideField(PipeQuery):
                         iterate_logs = False
                     elif prc == 'a':
                         for lf in info[unitname][i]['loglist']:
-                            print "\n Printing..."
-                            print "\n ****** %s" %  lf
+                            print("\n Printing...")
+                            print("\n ****** %s" %  lf)
                             cmd = 'tail -n 10 %s' % lf
                             a = sp.Popen(cmd, stdout=sp.PIPE, shell=True)
-                            print '\n', a.communicate()[0]
+                            print('\n', a.communicate()[0])
                     else:
                         pass
 
@@ -807,9 +807,9 @@ class NitelyCal(PipeQuery):
                      and nite in (%s) group by band,obstype order by obstype" % ','.join(nites_list)
         self.cur.execute(cal_query)
         cal_info = self.cur.fetchall()
-        print " Obstype         Band      Count"
+        print(" Obstype         Band      Count")
         for row in cal_info:
-            print "%09s  %09s  %09s" % (row[2], row[1], row[0])
+            print("%09s  %09s  %09s" % (row[2], row[1], row[0]))
 
     def update_df(self,df):
         """ Takes a pandas dataframe and for each exposure add column:value
