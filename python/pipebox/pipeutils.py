@@ -11,7 +11,7 @@ from pipebox import env
 def write_template(template,outfile,args):
     """ Takes template (relative to jinja2 template dir), output name of 
         rendered template, and args namespace and writes rendered template"""
-    print "Rendering template: {ofile}".format(ofile = outfile)
+    print("Rendering template: {ofile}".format(ofile = outfile))
     config_template = env.get_template(template)
 
     try: args.submittime = datetime.now()
@@ -29,12 +29,12 @@ def submit_command(submitfile,wait=30,logfile=None):
     commandline = ['dessubmit',submitfile]
     command = Popen(commandline,stdout = PIPE, stderr = STDOUT, shell = False)
     output,error = output,error = command.communicate()
-    print "Submitting {sfile}".format(sfile = submitfile)
+    print("Submitting {sfile}".format(sfile = submitfile))
 
     if logfile:
         for line in output: logfile.write(line)
 
-    print "Sleeping for {sleep} seconds...".format(sleep=wait)
+    print("Sleeping for {sleep} seconds...".format(sleep=wait))
     time.sleep(wait)
 
     try:
@@ -43,15 +43,15 @@ def submit_command(submitfile,wait=30,logfile=None):
         attempt = run.split('p')[1]
         return (unitname,attempt)
     except:
-        print output
-        print 'Error in submission!'
+        print(output)
+        print('Error in submission!')
         pass
 
 def less_than_queue(pipeline=None,user=None,reqnum=None,queue_size=1000):
     """ Returns True if desstat count is less than specified queue_size,
         false if not"""
     if not pipeline:
-        print "Must specify pipeline!"
+        print("Must specify pipeline!")
         sys.exit(1)
     # Grepping pipeline out of desstat
     desstat_cmd = Popen(('desstat'),stdout=PIPE)
@@ -82,7 +82,7 @@ def less_than_queue(pipeline=None,user=None,reqnum=None,queue_size=1000):
 """
 def less_than_queue(pipeline=None,user=None,queue_size=1000):
     if not pipeline:
-        print "Must specify pipeline!"
+        print("Must specify pipeline!")
         sys.exit(1)
     desstat_cmd = Popen(('desstat'),stdout=PIPE)
     grep_cmd = Popen(('grep',pipeline),stdin=desstat_cmd.stdout,stdout=PIPE)
@@ -110,38 +110,38 @@ def read_file(file):
                     yield line.strip()
 
 def print_cron_info(pipeline,site=None,pipebox_work=None,cron_path='.'):
-    print "\n"
-    print "# To submit files (from dessub/descmp1):\n"
-    print "\t ssh dessub/descmp1"
-    print "\t crontab -e"
-    print "\t add the following to your crontab:"
-    print"\t 0,30 * * * * %s >> %s/%s_autosubmit.log 2>&1 \n" % (cron_path,pipebox_work,pipeline)
+    print("\n")
+    print("# To submit files (from dessub/descmp1):\n")
+    print("\t ssh dessub/descmp1")
+    print("\t crontab -e")
+    print("\t add the following to your crontab:")
+    print("\t 0,30 * * * * %s >> %s/%s_autosubmit.log 2>&1 \n" % (cron_path,pipebox_work,pipeline))
 
     # Print warning of Fermigrid credentials
     if 'fermi' in site:
-        print "# For FermiGrid please make sure your credentials are valid"
-        print "\t setenv X509_USER_PROXY $HOME/.globus/osg/user.proxy"
-        print "\t voms-proxy-info --all"
+        print("# For FermiGrid please make sure your credentials are valid")
+        print("\t setenv X509_USER_PROXY $HOME/.globus/osg/user.proxy")
+        print("\t voms-proxy-info --all")
 
 def print_submit_info(pipeline,site=None,eups_stack=None,submit_file=None):
-    print "\n"
-    print "# To submit files (from dessub/descmp1):\n"
-    print "\t ssh dessub/descmp1"
-    print "\t setup -v %s %s" % (eups_stack[0],eups_stack[1])
-    print "\t %s\n" % submit_file 
+    print("\n")
+    print("# To submit files (from dessub/descmp1):\n")
+    print("\t ssh dessub/descmp1")
+    print("\t setup -v %s %s" % (eups_stack[0],eups_stack[1]))
+    print("\t %s\n" % submit_file)
 
     # Print warning of Fermigrid credentials
     if 'fermi' in site:
-        print "# For FermiGrid please make sure your credentials are valid"
-        print "\t setenv X509_USER_PROXY $HOME/.globus/osg/user.proxy"
-        print "\t voms-proxy-info --all"
+        print("# For FermiGrid please make sure your credentials are valid")
+        print("\t setenv X509_USER_PROXY $HOME/.globus/osg/user.proxy")
+        print("\t voms-proxy-info --all")
 
 def stop_if_already_running(script_name):
     """ Exits program if program is already running """
     l = getstatusoutput("ps aux | grep -e '%s' | grep -v grep | grep -v vim | awk '{print $2}'| awk '{print $2}' | grep $USER" % script_name)
     if l[1]:
-        print "Already running.  Aborting"
-        print l[1]
+        print("Already running.  Aborting")
+        print(l[1])
         sys.exit(0)
 
 def rename_file(args):
