@@ -1,7 +1,7 @@
 import os
 import time
 import ConfigParser
-from opstoolkit import jiracmd
+import jiracmd
 
 def get_con(jira_section, retry = 3,sleep = 15):
     num_retries = 0
