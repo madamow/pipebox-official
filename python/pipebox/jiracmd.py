@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 import sys
-from jira.client import JIRA
+from jira import JIRA
 from despyserviceaccess.serviceaccess import parse
 
 class Jira:
@@ -61,3 +61,4 @@ class Jira:
 
     def add_jira_comment(self,issue,comment):
         self.jira.add_comment(issue,comment)
+

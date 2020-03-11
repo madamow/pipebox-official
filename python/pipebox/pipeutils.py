@@ -3,9 +3,8 @@ import sys
 import re
 import time
 import pandas
-from subprocess import Popen,PIPE,STDOUT
-from commands import getstatusoutput
-from datetime import datetime,timedelta
+from subprocess import Popen, PIPE, STDOUT
+from datetime import datetime, timedelta
 from pipebox import env
 
 def write_template(template,outfile,args):
@@ -25,10 +24,11 @@ def submit_command(submitfile,wait=30,logfile=None):
     """ Takes des submit file and executes dessubmit. Default sleep after
         sleep is 30 seconds. If provided a logfile will write stdout,stderr
         to specified logfile"""
-
     commandline = ['dessubmit',submitfile]
     command = Popen(commandline,stdout = PIPE, stderr = STDOUT, shell = False)
-    output,error = output,error = command.communicate()
+    output,error =  command.communicate()
+    output = output.decode('ascii')
+  
     print("Submitting {sfile}".format(sfile = submitfile))
 
     if logfile:
@@ -138,7 +138,10 @@ def print_submit_info(pipeline,site=None,eups_stack=None,submit_file=None):
 
 def stop_if_already_running(script_name):
     """ Exits program if program is already running """
-    l = getstatusoutput("ps aux | grep -e '%s' | grep -v grep | grep -v vim | awk '{print $2}'| awk '{print $2}' | grep $USER" % script_name)
+    ps_out = Popen("ps aux | grep -e '%s' | grep -v grep | grep -v vim | grep $USER | awk '{print $2}'" % script_name)
+    l = ps_out.communicate()[0]
+    print(l)
+    exit()
     if l[1]:
         print("Already running.  Aborting")
         print(l[1])
