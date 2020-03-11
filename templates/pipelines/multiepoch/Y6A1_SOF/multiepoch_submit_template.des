@@ -7,10 +7,7 @@
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/inputcals/inputs.des>>
 {% endif %}
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/modnamepat.wcl>>
-
-<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/query-coadd-for-mof.wcl>>
-<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/sof.wcl>>
-<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/collate-sof.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/shredx-make-fofs.wcl>>
 
 master_use_fwthreads = True
 
@@ -44,7 +41,7 @@ blocklist = me
 
 <block>
     <me>
-       modulelist = query-coadd-for-mof,sof,collate-sof
+       modulelist = shredx-make-fofs
     </me>
 </block>
 
