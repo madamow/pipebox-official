@@ -10,7 +10,7 @@ from pipebox import pipequery,pipeargs,pipeutils,jira_utils,nitelycal_lib
 class PipeLine(object):
     # Setup key arguments and environment here instead of write_*.sh
     if not os.getenv('PIPEBOX_WORK') or not os.getenv('PIPEBOX_DIR'):
-        print("Please set $PIPEBOX_DIR & $PIPEBOX_WORK in your environment!)"
+        print("Please set $PIPEBOX_DIR & $PIPEBOX_WORK in your environment!")
         sys.exit(1)
     else:
         pipebox_work = os.environ['PIPEBOX_WORK']
