@@ -10,7 +10,7 @@ from pipebox import pipequery,pipeargs,pipeutils,jira_utils,nitelycal_lib
 class PipeLine(object):
     # Setup key arguments and environment here instead of write_*.sh
     if not os.getenv('PIPEBOX_WORK') or not os.getenv('PIPEBOX_DIR'):
-        print("Please set $PIPEBOX_DIR & $PIPEBOX_WORK in your environment!)"
+        print("Please set $PIPEBOX_DIR & $PIPEBOX_WORK in your environment!")
         sys.exit(1)
     else:
         pipebox_work = os.environ['PIPEBOX_WORK']
@@ -255,7 +255,7 @@ class PipeLine(object):
         if args.savefiles:
             # Writing template
             pipeutils.write_template(cron_template_path,cron_submit_path,args)
-            os.chmod(cron_submit_path, 0755)
+            os.chmod(cron_submit_path, 0o755)
             pipeutils.print_cron_info(args.pipeline,site=args.target_site,
                                                    pipebox_work=args.pipebox_work,
                                                    cron_path=cron_submit_path)
@@ -272,7 +272,7 @@ class PipeLine(object):
         bash_script_path= os.path.join(args.output_dir,bash_script_name)
 
         pipeutils.write_template(bash_template_path,bash_script_path,args)
-        os.chmod(bash_script_path, 0755)
+        os.chmod(bash_script_path, 0o755)
         pipeutils.print_submit_info(args.pipeline,site=args.target_site,
                                                eups_stack=args.eups_stack,
                                                submit_file=bash_script_path) 
@@ -762,7 +762,7 @@ class HostName(PipeLine):
             bash_script_path= os.path.join(self.args.output_dir,bash_script_name)
             # Write bash script
             pipeutils.write_template(bash_template_path,bash_script_path,self.args)
-            os.chmod(bash_script_path, 0755)
+            os.chmod(bash_script_path, 0o755)
             pipeutils.print_submit_info(self.args.pipeline,site=self.args.target_site,
                                         eups_stack=self.args.eups_stack,
                                         submit_file=bash_script_path)
