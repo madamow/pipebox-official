@@ -1,7 +1,7 @@
 SetupRequired(pandas 1.0.1+2)
-SetupRequired(jinja2 2.6+10)
-SetupRequired(jirapython 0.16+7)
-SetupRequired(configargparse,0.10.0+1)
+SetupRequired(jinja2 2.11.1+0)
+SetupRequired(jirapython 2.0.0+0)
+SetupRequired(configargparse,1.0+0)
 SetupRequired(despydb 3.0.0+0)
 
 envAppend(PYTHONPATH, ${PRODUCT_DIR}/python)
