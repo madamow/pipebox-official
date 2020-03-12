@@ -1,8 +1,7 @@
 <module>
     <shredx-make-fofs>
-        modnamepat = ${modnamepat_tile_band}
+        modnamepat = ${modnamepat_tile_generic}
         wrappername = genwrap.py
-        wrapperloop = band
         <exec_1>
             <cmdline>
                 output = ${file.fof.fullname}
@@ -17,15 +16,15 @@
         <file>
              <coadd_segmap>
                dirpat = mepoch
+               band = r
                filetype = coadd_segmap
                query_table = miscfile
                join miscfile.pfw_attempt_id = proctag.pfw_attempt_id
-               proctag.tag = ${proctag}
+               tag = ${proctag}
                output_fields = filename,band
-               query_fields = filetype,proctag.tag,tilename
+               query_fields = filetype,proctag.tag,tilename,band
                tilename = ${unitname}
                columns = coadd_segmap.fullname,coadd_segmap.band
-               match = band
                rundir = seg
              </coadd_segmap>
 
@@ -35,7 +34,7 @@
                 filetype = coadd_shredx_fof
 
                 # how to name output file
-                filepat = tile_band
+                filepat = tile_generic
                 flabel = fofslist
                 fsuffix = fits
 
