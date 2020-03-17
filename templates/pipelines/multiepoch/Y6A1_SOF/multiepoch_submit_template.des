@@ -8,7 +8,7 @@
 {% endif %}
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/modnamepat.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/shredx-make-fofs.wcl>>
-
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/shredx.wcl>>
 master_use_fwthreads = True
 
 # these 2 are for debugging purposes
@@ -42,7 +42,7 @@ blocklist = me
 
 <block>
     <me>
-       modulelist = shredx-make-fofs
+       modulelist = shredx-make-fofs,shredx
     </me>
 </block>
 
