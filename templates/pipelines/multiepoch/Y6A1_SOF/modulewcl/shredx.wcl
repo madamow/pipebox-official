@@ -57,7 +57,7 @@ max_chunk = 500
           <coadd_psf_list>
                 filetype = coadd_psfex_model
                 query_table = miscfile 
-                join catalog.pfw_attempt_id = proctag.pfw_attempt_id
+                join miscfile.pfw_attempt_id = proctag.pfw_attempt_id
                 tag = ${proctag}
                 output_fields = filename,band
                 query_fields = filetype,proctag.tag,tilename
