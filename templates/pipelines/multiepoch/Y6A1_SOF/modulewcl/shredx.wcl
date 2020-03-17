@@ -21,7 +21,7 @@ max_chunk = 500
                 coadd_ima_list = ${list.coadd_image_list.fullname}
                 coadd_psf_list = ${list.coadd_psf_list.fullname}
                 ids = ${file.coadd_obj_map.fullname} #output
-                db_section = ${submit_des_db_section}
+                db_section = ${target_des_db_section}
             </cmdline>
             execname = run_shredx
             cmd_hyphen =  alldouble
