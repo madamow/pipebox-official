@@ -1,6 +1,6 @@
 chunks = 1:500
-max_chunk = 500
-
+#max_chunk = 500
+max_chunk = 1000
 <module>
     <shredx>
         modnamepat = ${modnamepat_tile_chunk}
@@ -27,7 +27,9 @@ max_chunk = 500
             cmd_hyphen =  alldouble
             used = file.fof,file.shredxconf,file.coadd_segmap,file.coadd_cat,list.coadd_image_list.coadd,list.coadd_psf_list.coadd_psfex_model 
             was_generated_by = file.shredxchunk, file.coadd_obj_map
-            ancestry = file.fof:file.shredxchunk,list.coadd_image_list.:file.shredxchunk,file.fof:file.shredxchunk,list.coadd_psf_list.:file.shredxchunk
+            ancestry = file.fof:file.shredxchunk,list.coadd_image_list.coadd:file.shredxchunk,file.fof:file.shredxchunk,list.coadd_psf_list.coadd_psfex_model:file.shredxchunk
+
+
         </exec_1>
         <list>
             <coadd_image_list>
