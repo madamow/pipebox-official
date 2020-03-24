@@ -1,6 +1,5 @@
 chunks = 1:500
-#max_chunk = 500
-max_chunk = 1000
+max_chunk = 500
 <module>
     <shredx>
         modnamepat = ${modnamepat_tile_chunk}
