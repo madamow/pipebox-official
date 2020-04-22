@@ -19,16 +19,23 @@
         </exec_1>
         <list>
             <meds_list>
-                exec = query_coadd_for_mof.py
-                args = --tile ${tilename} --me_proctag ${proctag} -s ${submit_des_db_section} -S prod -v 3 -o ${qoutfile} --meds --bandlist ${bands}
-                columns = meds.fullname, band
-                filepat = tile_generic
-                flabel = meds-list
-                fsuffix = list
-                dirpat = mepoch
-                rundir = list/mof
-                ops_enddir = list/mof
-            </meds_list>
+               dirpat = mepoch
+               filetype = coadd_meds
+               query_table = miscfile
+               join miscfile.pfw_attempt_id = proctag.pfw_attempt_id
+               tag = ${meds_proctag}
+               output_fields = filename,band
+               query_fields = filetype,proctag.tag,tilename,band
+               tilename = ${unitname}
+               columns = meds.fullname, meds.band
+               rundir = meds
+               filepat = tile_generic
+               filetype = list
+               flabel = meds
+               fsuffix = list
+               ops_enddir = list/meds
+               rundir = list/meds
+            </meds_list>         
         </list>
         <file>
             <mofconf>
