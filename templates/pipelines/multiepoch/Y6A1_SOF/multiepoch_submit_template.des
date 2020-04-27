@@ -26,6 +26,7 @@ compress_cleanup = False
 
 basket = {{args.tile}} # FIX THIS
 proctag = {{args.proctag}}
+meds_proctag = Y6A1_MEDS
 tilename = {{args.tile}}
 unitname = ${tilename}
 
