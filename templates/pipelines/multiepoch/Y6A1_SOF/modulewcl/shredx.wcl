@@ -161,7 +161,7 @@ max_chunk = 500
                 dirpat = mepoch
                 ops_enddir = shredx
                 rundir = shredx
-                savefiles = False
+                savefiles = True
             </shredxchunk>
 
              <coadd_obj_map>
