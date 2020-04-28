@@ -10,12 +10,16 @@
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/shredx-make-fofs.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/shredx.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/collate-shredx.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/sof-make-fofs.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/sof.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/collate-sof.wcl>>
+
 master_use_fwthreads = True
 
 blocklist = me
 <block>
     <me>
-       modulelist = shredx-make-fofs,shredx,collate-shredx
+       modulelist = shredx-make-fofs,shredx,collate-shredx,sof-make-fofs, sof, collate-sof
     </me>
 </block>
 
@@ -26,7 +30,7 @@ compress_cleanup = False
 
 basket = {{args.tile}} # FIX THIS
 proctag = {{args.proctag}}
-meds_proctag = Y6A1_MEDS
+meds_proctag = Y6A1_MEDS_V2
 tilename = {{args.tile}}
 unitname = ${tilename}
 
