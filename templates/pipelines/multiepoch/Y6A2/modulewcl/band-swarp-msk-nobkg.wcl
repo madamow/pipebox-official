@@ -10,7 +10,7 @@
                 FSCALE_DEFAULT = @${list.flux_nobkg.fullname}
                 IMAGE_SIZE = ${naxis1},${naxis2}
                 IMAGEOUT_NAME = ${file.coadd_tmp_sci_nobkg.fullname}
-                COMBINE_TYPE = CLIPPED
+                COMBINE_TYPE = WEIGHTED
                 WEIGHT_IMAGE = @${list.msk_nobkg.fullname}
                 NTHREADS = ${nthreads}
                 BLANK_BADPIXELS = Y

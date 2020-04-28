@@ -35,7 +35,7 @@
 
                 # how to name output file
                 filepat = tile_generic
-                flabel = fofslist
+                flabel = shredx-fofslist
                 fsuffix = fits
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)

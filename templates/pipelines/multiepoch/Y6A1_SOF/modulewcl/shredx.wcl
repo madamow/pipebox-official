@@ -32,7 +32,7 @@ max_chunk = 500
         </exec_1>
         <list>
             <coadd_image_list>
-                 filetype = coadd
+                filetype = coadd
                 query_table = coadd
                 join coadd.pfw_attempt_id = proctag.pfw_attempt_id
                 tag = ${proctag}
