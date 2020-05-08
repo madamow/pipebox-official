@@ -7,7 +7,7 @@ png_label = comp1, comp2,Object-not-in-tolygon,Objects-not-in-geometry-masks,Obj
 
 <module>
     <mangle>
-        max_fwthreads = ${nthreads}
+        max_fwthreads = 1 #${nthreads}
         modnamepat = ${modnamepat_tile_band}
         wrappername = genwrap.py
         wrapperloop = band

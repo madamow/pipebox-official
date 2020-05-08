@@ -21,12 +21,11 @@
             <meds_list>
                dirpat = mepoch
                filetype = coadd_meds
-               band = i
                query_table = miscfile
                join miscfile.pfw_attempt_id = proctag.pfw_attempt_id
                tag = ${meds_proctag}
                output_fields = filename,band
-               query_fields = filetype,proctag.tag,tilename,band
+               query_fields = filetype,proctag.tag,tilename
                tilename = ${unitname}
                columns = meds.fullname, meds.band
                rundir = meds

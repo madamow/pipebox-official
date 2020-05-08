@@ -1,5 +1,5 @@
-chunks = 1:500
-max_chunk = 500
+chunks = 1:50
+max_chunk = 50
 
 <module>
     <sof>
@@ -56,7 +56,7 @@ max_chunk = 500
             </meds>
              <sofconf>
                 # what input file is named
-                filename = ${cfgver}_fitvd-sof-${mof_config_ver}.yaml
+                filename = ${cfgver}_fitvd-${mof_config_ver}.yaml
                 filetype = config
 
                 # where input file lives in jobroot
