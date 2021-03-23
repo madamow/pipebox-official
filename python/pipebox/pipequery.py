@@ -10,6 +10,10 @@ class PipeQuery(object):
         dbh = DesDbi(None,section, retry = True)
         cur = dbh.cursor()
         self.section = section
+        if self.section == 'db-decade':
+            self.schema = 'DECADE'
+        else:
+            self.schema = 'PROD'
         self.dbh = dbh
         self.cur = cur 
     
@@ -757,9 +761,9 @@ class NitelyCal(PipeQuery):
         explist = list(divide_chunks(expnum_list,1000))
         master_list = []
         for l in explist:
-            nite_query = "select distinct nite from PROD.exposure where \
+            nite_query = "select distinct nite from {schema}.exposure where \
                           expnum in ({explist}) \
-                          order by nite".format(explist=','.join(str(n) for n in l))
+                          order by nite".format(schema = self.schema,explist=','.join(str(n) for n in l))
             self.cur.execute(nite_query)
             each_list = [n[0] for n in self.cur.fetchall()]
             master_list += each_list
@@ -774,10 +778,10 @@ class NitelyCal(PipeQuery):
 
     def get_max_nite(self):
         """Get nite of max dflat"""
-        max_dflat = "select max(expnum) from exposure where obstype='dome flat'"
+        max_dflat = "select max(expnum) from {schema}.exposure where obstype='dome flat'".format(schema=self.schema)
         self.cur.execute(max_dflat)
         max_expnum = self.cur.fetchone()[0]
-        fetch_nite = "select distinct nite from exposure where expnum=%s" % (max_expnum)
+        fetch_nite = "select distinct nite from {schema}.exposure where expnum={expnum}".format(schema=self.schema,expnum=max_expnum)
         self.cur.execute(fetch_nite)
         dflat_nite = self.cur.fetchone()[0]
         return max_expnum,dflat_nite   
@@ -786,16 +790,16 @@ class NitelyCal(PipeQuery):
         """Return calibration information for each nite found in nites_list"""
         if exclude == 'B':
             cal_query = "select nite,date_obs,expnum,band,exptime,obstype,program,propid,object \
-                     from PROD.exposure where obstype in ('dome flat') \
-                     and nite in (%s) order by expnum" % ','.join(nites_list)
+                     from {schema}.exposure where obstype in ('dome flat') \
+                     and nite in ({nites}) order by expnum".format(schema = self.schema,nites = ','.join(nites_list))
         elif exclude == 'F':
             cal_query = "select nite,date_obs,expnum,band,exptime,obstype,program,propid,object \
-                     from PROD.exposure where obstype in ('zero') \
-                     and nite in (%s) order by expnum" % ','.join(nites_list)
+                     from {schema}.exposure where obstype in ('zero') \
+                     and nite in ({nites}) order by expnum".format(schema=self.schema,nites= ','.join(nites_list))
         else:
             cal_query = "select nite,date_obs,expnum,band,exptime,obstype,program,propid,object \
-                     from PROD.exposure where obstype in ('zero','dome flat') \
-                     and nite in (%s) order by expnum" % ','.join(nites_list)
+                     from {schema}.exposure where obstype in ('zero','dome flat') \
+                     and nite in ({nites}) order by expnum".format(schema=self.schema,nites= ','.join(nites_list))
         self.cur.execute(cal_query)
         cal_info = self.cur.fetchall()
         return cal_info
@@ -803,7 +807,7 @@ class NitelyCal(PipeQuery):
     def count_by_band(self,nites_list):
         """Return count per band of each obstype/band pair for nites in nites_list"""
         cal_query = "select count(expnum),band,obstype \
-                     from PROD.exposure where obstype in ('zero','dome flat') \
+                     from exposure where obstype in ('zero','dome flat') \
                      and nite in (%s) group by band,obstype order by obstype" % ','.join(nites_list)
         self.cur.execute(cal_query)
         cal_info = self.cur.fetchall()

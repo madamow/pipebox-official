@@ -16,7 +16,7 @@ def fillna(dataframe):
     return df
     
 def replace_bias_band(dataframe):
-    dataframe[(dataframe.obstype =='zero') & (dataframe.band != 'NA')]['band'] = 'NA'
+    dataframe.loc[(dataframe.obstype =='zero') & (dataframe.band != 'NA'),'band'] = 'NA'
     return dataframe
 
 def remove_junk(dataframe):
