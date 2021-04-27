@@ -10,12 +10,13 @@
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/query-for-pizza-cutter.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/query-for-pizza-cutter-list.wcl>>
 <<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/pizza-cutter.wcl>>
+<<include {{args.pipebox_dir}}/templates/pipelines/multiepoch/{{args.campaign}}/modulewcl/metadetect.wcl>>
 master_use_fwthreads = True
 
 blocklist = me
 <block>
     <me>
-       modulelist = query-for-pizza-cutter,query-for-pizza-cutter-list, pizza-cutter
+       modulelist = query-for-pizza-cutter,query-for-pizza-cutter-list, pizza-cutter #,metadetect
     </me>
 </block>
 

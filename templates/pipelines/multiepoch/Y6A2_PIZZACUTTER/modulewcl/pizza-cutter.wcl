@@ -158,7 +158,7 @@
             </pizza_cutter_yaml>
             <pizza_cutter_config>
                 filetype = config
-                filename = ${cfgver}_pizza-cutter-Y6A1v2.yaml
+                filename = ${cfgver}_pizza-cutter-Y6A1v3.yaml
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
