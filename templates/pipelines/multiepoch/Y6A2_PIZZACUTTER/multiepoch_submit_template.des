@@ -16,7 +16,7 @@ master_use_fwthreads = True
 blocklist = me
 <block>
     <me>
-       modulelist = query-for-pizza-cutter,query-for-pizza-cutter-list, pizza-cutter #,metadetect
+       modulelist = query-for-pizza-cutter,query-for-pizza-cutter-list, pizza-cutter,metadetect
     </me>
 </block>
 

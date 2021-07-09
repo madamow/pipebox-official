@@ -4,7 +4,7 @@
         wrappername = genwrap.py
         wrapperloop = band
         loopobj = file.pizza_cutter_yaml
-        max_fwthreads = 1
+        max_fwthreads = 3
         <exec_1>
             <cmdline>
                 config = ${file.pizza_cutter_config.fullname}
@@ -16,7 +16,7 @@
             </cmdline>
             execname = des-pizza-cutter
             cmd_hyphen =  alldouble
-            used = file.pizza_cutter_config, file.pizza_cutter_yaml, list.red.red,list.redbkg.bkg,list.redseg.seg,list.hdr.head,list.psfmod.psf
+            used = file.pizza_cutter_config, file.pizza_cutter_yaml, list.red.red,list.redbkg.bkg,list.redseg.seg,list.hdr.head,list.psfmod.psf,file.coadd,file.cat_gaia
             was_generated_by = file.pizza_cutter
             ancestry = file.pizza_cutter_config:file.pizza_cutter,file.pizza_cutter_yaml:file.pizza_cutter
         </exec_1>
@@ -113,6 +113,21 @@
             </redseg>
         </list>
         <file>
+            <cat_gaia>
+                filetype = cat_tile_gaia
+                filename = ${tilename}_GAIA_DR2_v1.fits
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                rundir = cat_gaia
+            </cat_gaia>
+            <coadd>
+                depends query-for-pizza-cutter-list.list.coadd
+                match = band
+    
+                dirpat = mepoch
+                rundir = coadd
+            </coadd>
             <psf>
                 listonly = True
 
