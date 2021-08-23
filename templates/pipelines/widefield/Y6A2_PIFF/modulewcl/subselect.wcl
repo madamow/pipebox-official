@@ -1,0 +1,86 @@
+<module>
+    <subselect>
+        wrappername = genwrap.py
+        wrapperloop = expnum
+        modnamepat=${modnamepat_expband}
+        loopobj = list.in_cat_list
+	
+	    <list>
+            <in_cat_list>
+                filetype = cat_finalcut
+                filepat = exposure
+                flabel = red-fullcat
+                fsuffix = list
+
+                # where to store list
+                dirpat = se
+                ops_enddir = list
+                rundir = list
+
+                tag = ${finalcut_tag}
+                # what goes into list (normally is a query code)
+                query_table = catalog
+                join catalog.pfw_attempt_id=proctag.pfw_attempt_id
+                output_fields = filename, expnum, band, ccdnum
+                query_fields = filetype,expnum, proctag.tag
+                
+    		    columns = cat_finalcut.fullname
+	    	    sortkey = (ccdnum,True,False)
+            </in_cat_list>
+        </list>
+	    <file>
+            <cat_finalcut>
+		        listonly = True
+                dirpat = se
+                rundir = cat
+                ops_enddir = cat
+            </cat_finalcut>
+            <cat_piff>
+                filetype = cat_piff
+                filepat = ccdnum_band
+                flabel = piff
+                fsuffix = fits
+                dirpat = se
+                rundir = cat
+                ops_enddir = cat
+            </cat_piff>
+            <qa_select>
+                filetype = qa_piff
+                filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_piff-select.png
+                dirpat = se
+                rundir = qa
+                ops_enddir = qa
+            </qa_select>
+ 	        <qa_dist>
+		        filetype = qa_piff
+                filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_piff-dist.png
+                dirpat = se
+                rundir = qa
+		        ops_enddir = qa
+                optional = true
+	        </qa_dist>
+        </file>
+        <exec_1>
+            execname = subselect_DEScat.py
+            cmd_hyphen = mixed_gnu 
+            used = list.in_cat_list.cat_finalcut
+            was_generated_by = file.cat_piff, file.qa_dist, file.qa_select
+            #ancestry=list.in_cat_list.cat_finalcut:file.cat_piff,list.in_cat_list.cat_finalcut:file.qa_select, list.in_cat_list.cat_finalcut:file.qa_dist
+            <cmdline>
+                useDB = _flag
+                checkVHS = _flag
+                cat = ${list.in_cat_list.fullname}
+                v = 1
+                T = _flag
+                s = db-dessci
+                S = des_admin
+                odir = cat
+                reqnum = ${reqnum}
+                attnum = ${attnum}
+                suffix = piff
+                qa_select = ${file.qa_select.fullname} 
+                qa_dist = ${file.qa_dist.fullname}
+            </cmdline>
+        </exec_1>
+    </subselect>
+</module>
