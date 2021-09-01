@@ -16,7 +16,7 @@ submit_files_mvmt     = filemgmt.job_mvmt_http.JobArchiveHttp
 #use_home_archive_output   = job #wrapper, job, block, run, never
 #master_savefiles = file #never,file,always,failure,rand_XX
 
-#use_qcf    = True
+use_qcf    = False
 #use_db_out = True
 #use_db_in  = True
 
