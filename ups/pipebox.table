@@ -1,6 +1,6 @@
-SetupRequired(pandas 1.0.1+2)
+SetupRequired(pandas 1.1.1+1)
 SetupRequired(jinja2 2.11.1+0)
-SetupRequired(jirapython 2.0.0+0)
+SetupRequired(jirapython 2.0.0+1)
 SetupRequired(configargparse 1.0+0)
 SetupRequired(despydb 3.0.0+0)
 

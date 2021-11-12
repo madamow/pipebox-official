@@ -4,7 +4,7 @@
         wrappername = genwrap.py
         wrapperloop = band
         loopobj = file.pizza_cutter_yaml
-        max_fwthreads = 3
+        max_fwthreads = 4
         <exec_1>
             <cmdline>
                 config = ${file.pizza_cutter_config.fullname}
@@ -173,7 +173,7 @@
             </pizza_cutter_yaml>
             <pizza_cutter_config>
                 filetype = config
-                filename = ${cfgver}_pizza-cutter-Y6A1v3.yaml
+                filename = ${cfgver}_pizza-cutter-Y6A1v6.yaml
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
@@ -193,7 +193,7 @@
                 ops_enddir = pizza-cutter
                 rundir = pizza-cutter
                 savefiles = true
-                compress_files = true
+                compress_files = false
             </pizza_cutter>
         </file>
     </pizza-cutter>

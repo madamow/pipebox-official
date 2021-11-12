@@ -13,5 +13,5 @@ ra_col = ALPHAWIN_J2000
 dec_col = DELTAWIN_J2000
 cat_columns = NUMBER,${ra_col},${dec_col}
 
-piff_config = ${confignite}_piff_v2.yaml
+piff_config = ${confignite}_piff_v3.yaml
 finalcut_tag = Y6A1_FINALCUT

@@ -99,7 +99,7 @@
                 _06 = input.wcs.ccdnum=${ccdnum}
                 _07 = output.dir="."
                 _08 = output.stats.file_name=${file.piff_model_stats.fullname}
-                v = 3
+                v = 2
             </cmdline>
         </exec_1>
     </piff>
