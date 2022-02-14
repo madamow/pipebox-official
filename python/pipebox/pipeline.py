@@ -199,9 +199,11 @@ class PipeLine(object):
         except:
             print("Must specify input data!")
             sys.exit(1)
-        
-        args.dataframe['user'] = args.jira_user
-        
+      
+        if args.ignore_jira:
+            args.dataframe['user'] = args.user 
+        else:
+            args.dataframe['user'] = args.jira_user
         group = args.dataframe.groupby(by=[groupby])
         for name,vals in group:
             # create JIRA ticket per nite and add jira_id,reqnum to dataframe
@@ -219,7 +221,6 @@ class PipeLine(object):
                 jira_parent = args.jira_parent
             else:
                 jira_parent = None
-
             if args.ignore_jira:
                 new_reqnum,new_jira_parent = (reqnum,jira_parent)
             else:
