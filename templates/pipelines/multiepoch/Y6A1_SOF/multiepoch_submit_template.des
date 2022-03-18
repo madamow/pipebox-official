@@ -30,7 +30,7 @@ compress_cleanup = False
 
 basket = {{args.tile}} # FIX THIS
 proctag = {{args.proctag}}
-meds_proctag = Y6A1_MEDS_V2
+meds_proctag = {{args.proctag}} 
 tilename = {{args.tile}}
 unitname = ${tilename}
 
@@ -41,6 +41,7 @@ det_bands = {{args.det_bands}}
 ops_run_dir = {{ args.rundir }}
 {% else %}
 ops_run_dir = ${project}/${pipeline}/${campaign}/${basket}-r${reqnum}/p${attnum:2}
+#ops_run_dir = ${project}/${pipeline}/${campaign}/r${reqnum}/${basket}/p${attnum:2}
 {% endif %}
 #submit_run_dir = /cluster_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}
 submit_run_dir = /local/prod_scratch/desdm_ops/${home_archive}/submit/${ops_run_dir}

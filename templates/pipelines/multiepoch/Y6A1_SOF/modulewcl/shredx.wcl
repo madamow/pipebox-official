@@ -169,13 +169,15 @@ max_chunk = 500
 
                 # how to name output file
                 filepat = tile_generic
-                flabel = idmap
+                flabel = idmap-${chunks:02}
                 fsuffix = fits
+                match = chunks
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
                 ops_enddir = shredx
                 rundir = shredx
+                savefiles = false
             </coadd_obj_map>
         </file>
     </shredx>
