@@ -20,7 +20,7 @@ class PipeQuery(object):
     def find_epoch(self,exposure):
         """ Return correct epoch name for exposure in order to use
             appropriate calibrations file"""
-        epoch_query = "select name,minexpnum,maxexpnum from PROD.ops_epoch"
+        epoch_query = "select name,minexpnum,maxexpnum from ops_epoch"
         self.cur.execute(epoch_query)
         epochs = self.cur.fetchall()
 
@@ -44,15 +44,15 @@ class PipeQuery(object):
 
     def get_cals_from_epoch(self, epoch,band = None,campaign= None):
         """ Query to return the unitname,reqnum,attnum of epoch-based calibrations."""
-        count_for_campaign = "select count(*) from PROD.ops_epoch_inputs_per_band where name='{epoch}' \
+        count_for_campaign = "select count(*) from ops_epoch_inputs_per_band where name='{epoch}' \
                               and campaign='{c}'".format(epoch=epoch,c=campaign)
         self.cur.execute(count_for_campaign)
         count = self.cur.fetchall()[0][0]
         if int(count) == 0:
-            campaign_query = "select max(campaign) from PROD.ops_epoch_inputs_per_band where name='{epoch}'".format(epoch=epoch)
+            campaign_query = "select max(campaign) from ops_epoch_inputs_per_band where name='{epoch}'".format(epoch=epoch)
             self.cur.execute(campaign_query)
             campaign = self.cur.fetchall()[0][0]
-        query = "select * from PROD.ops_epoch_inputs_per_band where name='{epoch}'  \
+        query = "select * from ops_epoch_inputs_per_band where name='{epoch}'  \
                  and campaign = '{c}' and (band = '{band}' or band is null)".format(epoch=epoch,c=campaign,band = band)
         self.cur.execute(query)
         data = pd.DataFrame(self.cur.fetchall(),
@@ -71,7 +71,7 @@ class PipeQuery(object):
         taglist = tag.split(',')
         tag_list_of_dict = []
         for t in taglist:
-            expnum_query = "select distinct expnum from PROD.exposuretag where tag='%s'" % t
+            expnum_query = "select distinct expnum from exposuretag where tag='%s'" % t
             self.cur.execute(expnum_query)
             results = self.cur.fetchall()
             expnum_list = [exp[0] for exp in results]
@@ -84,7 +84,7 @@ class PipeQuery(object):
 
     def get_propids(self):
         """ get the accepted propids """
-        get_all_propid = "select distinct propid from PROD.OPS_PROPID" 
+        get_all_propid = "select distinct propid from OPS_PROPID" 
         self.cur.execute(get_all_propid)
         propid = self.cur.fetchall()
         propid = [i[0] for i in propid]
@@ -106,7 +106,7 @@ class PipeQuery(object):
                 date = now - timedelta(i)
                 nites.append(date.strftime('%Y%m%d'))
             print("%s: Inserting into AUTO_QUEUE." % now)
-        base_query = "select distinct expnum,propid from PROD.exposure where obstype in ('object','standard') and "
+        base_query = "select distinct expnum,propid from exposure where obstype in ('object','standard') and "
         base_query+= "object not like '%%pointing%%' and object not like '%%focus%%' and " 
         base_query+= "object not like '%%donut%%' and object not like '%%test%%' and "
         base_query+= "object not like '%%junk%%' and nite in (%s)" % ','.join(nites)
@@ -119,7 +119,7 @@ class PipeQuery(object):
             inserts = []
             for (expnum,propid) in results:
                 try:
-                    insert_query = "insert into PROD.ops_auto_queue (expnum,propid,created,processed) values ({expnum},'{propid}',CURRENT_TIMESTAMP, 0)".format(expnum=expnum,propid=propid)
+                    insert_query = "insert into ops_auto_queue (expnum,propid,created,processed) values ({expnum},'{propid}',CURRENT_TIMESTAMP, 0)".format(expnum=expnum,propid=propid)
                     self.cur.execute(insert_query)
                     inserts.append(expnum)
                 except:
@@ -137,7 +137,7 @@ class PipeQuery(object):
         fail_exposures = []       
  
         while query_db:
-            query = "select distinct expnum, processed from PROD.ops_auto_queue where processed!=1 offset %i rows  fetch next 1000 rows only" % (iter*1000)
+            query = "select distinct expnum, processed from ops_auto_queue where processed!=1 offset %i rows  fetch next 1000 rows only" % (iter*1000)
             self.cur.execute(query)
             ops_auto = pd.DataFrame(self.cur.fetchall(), columns=['expnum','processed'])
             unitnames = ['D00'+ str(e) for e in ops_auto['expnum'].values]
@@ -145,7 +145,7 @@ class PipeQuery(object):
             if len(unitnames) < 1000:
                 query_db = False
     
-            submitted = "select distinct unitname,attnum,status from PROD.pfw_attempt a, PROD.task t, PROD.pfw_request r where r.reqnum=a.reqnum and t.id=a.task_id and r.project='%s' and unitname in ('%s')" % (project,"','".join(unitnames))
+            submitted = "select distinct unitname,attnum,status from pfw_attempt a, task t, pfw_request r where r.reqnum=a.reqnum and t.id=a.task_id and r.project='%s' and unitname in ('%s')" % (project,"','".join(unitnames))
             self.cur.execute(submitted)
             failed_query = self.cur.fetchall()
         
@@ -168,11 +168,11 @@ class PipeQuery(object):
             iter += 1       
  
         if success_exposures:
-            update_query = "update PROD.ops_auto_queue set processed=1,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(success_exposures))
+            update_query = "update ops_auto_queue set processed=1,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(success_exposures))
             self.cur.execute(update_query)
             self.dbh.commit()
         if fail_exposures:
-            update_query = "update PROD.ops_auto_queue set processed=2,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(fail_exposures))
+            update_query = "update ops_auto_queue set processed=2,updated=CURRENT_TIMESTAMP where expnum in ({expnums})".format(expnums=','.join(fail_exposures))
             self.cur.execute(update_query)
             self.dbh.commit()
         if not success_exposures and not fail_exposures:
@@ -215,7 +215,7 @@ class SuperNova(PipeQuery):
     def check_submitted(self,unitname,reqnum):
         """ Queries database to find number of attempts submitted for
             given exposure. Returns count"""
-        was_submitted = "select count(*) from PROD.pfw_attempt where unitname= '%s' and reqnum = '%s'" % (unitname,reqnum)
+        was_submitted = "select count(*) from pfw_attempt where unitname= '%s' and reqnum = '%s'" % (unitname,reqnum)
         self.cur.execute(was_submitted)
         submitted_or_not = self.cur.fetchone()[0]
         return submitted_or_not       
@@ -223,7 +223,7 @@ class SuperNova(PipeQuery):
 # Edited from widefield
     def get_max_nite(self):
         """Returns expnum,nite of max(expnum) in the exposure table"""
-        query = "select max(nite) from PROD.manifest_exposure where exptime > 30"
+        query = "select max(nite) from manifest_exposure where exptime > 30"
         self.cur.execute(query)
         return self.cur.fetchone()[0]
 
@@ -231,7 +231,7 @@ class SuperNova(PipeQuery):
     def get_failed_triplets(self,nitelist,resubmit_max):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
-        submitted = "select distinct s.nite, s.field, s.band, p.unitname, p.attnum, t.status from PROD.pfw_attempt p, PROD.task t, PROD.snsubmit s where t.id=p.task_id and s.nite in (%s) and p.task_id = s.task_id  and p.unitname like 'D_SN-%%'" % (','.join(map(str,nitelist)))
+        submitted = "select distinct s.nite, s.field, s.band, p.unitname, p.attnum, t.status from pfw_attempt p, task t, snsubmit s where t.id=p.task_id and s.nite in (%s) and p.task_id = s.task_id  and p.unitname like 'D_SN-%%'" % (','.join(map(str,nitelist)))
         print(submitted)
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
@@ -267,7 +267,7 @@ class SuperNova(PipeQuery):
         if not nite:
             raise Exception("Must specify nite!")
         print("selecting exposures to submit...")
-        query = "select distinct nite, field, band from PROD.manifest_exposure where exptime > 30 \
+        query = "select distinct nite, field, band from manifest_exposure where exptime > 30 \
                 and nite in (%s) " % (','.join(nite))
         print(query)
         self.cur.execute(query)
@@ -289,7 +289,7 @@ class SuperNova(PipeQuery):
         if not band:
             raise Exception("Must specify nite!")
         print("selecting exposures to submit...")
-        query = "select distinct expnum from PROD.manifest_exposure where exptime > 30  and nite = '%s' and field = 'SN-%s' and band = '%s' " % (str(nite), field[-2:], band)
+        query = "select distinct expnum from manifest_exposure where exptime > 30  and nite = '%s' and field = 'SN-%s' and band = '%s' " % (str(nite), field[-2:], band)
         self.cur.execute(query)
         exps = np.ravel(np.array(self.cur.fetchall()))
         return string.join(map(str,exps),',')
@@ -342,7 +342,7 @@ class MultiEpoch(PipeQuery):
 
     def check_proctag(self,tag):
         """ Check to see if specified processing tag exists in PROCTAG table"""
-        query = "select count(*) from PROD.proctag where tag = '{tag}'".format(tag=tag)
+        query = "select count(*) from proctag where tag = '{tag}'".format(tag=tag)
         self.cur.execute(query)
         count = self.cur.fetchone()[0]
         return count
@@ -372,16 +372,16 @@ class MultiEpoch(PipeQuery):
         RA = [float(r) for r in RA[0]]
         Dec = [float(d) for d in Dec[0]]
         if RA[0]==min(RA):
-            query = "select tilename from PROD.coadd where RA_CENT >{minRA} and RA_CENT <{maxRA} and DEC_CENT >{minDec} and DEC_CENT <{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
+            query = "select tilename from coadd where RA_CENT >{minRA} and RA_CENT <{maxRA} and DEC_CENT >{minDec} and DEC_CENT <{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
         else:
-            query = "select tilename from PROD.coadd where (RA_CENT>{minRA} or RA_CENT<{maxRA}) and DEC_CENT>{minDec} and DEC_CENT<{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
+            query = "select tilename from coadd where (RA_CENT>{minRA} or RA_CENT<{maxRA}) and DEC_CENT>{minDec} and DEC_CENT<{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
         self.cur.execute(query)
         return self.cur.fetchall() 
 
     def get_failed_tiles(self, reqnum,resubmit_max):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
-        submitted = "select distinct unitname,attnum,status from PROD.pfw_attempt p, PROD.task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        submitted = "select distinct unitname,attnum,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
         df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
@@ -402,6 +402,21 @@ class MultiEpoch(PipeQuery):
 
         return tile_list
 
+    def get_pfw_ids_from_tag(self,df,tag):
+        try:
+            df.insert(len(df.columns), 'coadd_id', None)
+        except:
+            pass
+        distinct_unitnames = df['tile'].unique()
+        id_query ="select distinct a.unitname, a.id from pfw_attempt a JOIN proctag t ON a.id=t.pfw_attempt_id AND tag='{tag}' AND a.unitname in ({u})".format(tag=tag,u=', '.join(f"'{u}'" for u in distinct_unitnames))
+        self.cur.execute(id_query)
+        id_results = self.cur.fetchall()
+
+        for (unitname,pfw_id) in id_results:
+            df.loc[df['tile']==unitname,['coadd_id']] = pfw_id
+
+        return df
+
     def get_tiles_from_tag(self,tag):
         pass
 
@@ -410,7 +425,7 @@ class WideField(PipeQuery):
   
     def count_by_obstype(self,niteslist):
         """  return count per obstype, band """
-        count_query="select obstype,band,count(expnum) from PROD.exposure where nite in ({nites}) and obstype not in ('dome flat', 'zero','dark') group by obstype,band".format(nites=','.join(niteslist))
+        count_query="select obstype,band,count(expnum) from exposure where nite in ({nites}) and obstype not in ('dome flat', 'zero','dark') group by obstype,band".format(nites=','.join(niteslist))
         self.cur.execute(count_query)
         count_info = self.cur.fetchall()
         print(" Obstype         Band      Count")
@@ -420,9 +435,9 @@ class WideField(PipeQuery):
         RA = [float(r) for r in RA[0]]
         Dec = [float(d) for d in Dec[0]]
         if RA[0]==min(RA):
-            query = "select expnum from PROD.exposure where radeg>{minRA} and radeg<{maxRA} and decdeg>{minDec} and decdeg<{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
+            query = "select expnum from exposure where radeg>{minRA} and radeg<{maxRA} and decdeg>{minDec} and decdeg<{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
         else:
-            query = "select expnum from PROD.exposure where (radeg>{minRA} or radeg<{maxRA}) and decdeg>{minDec} and decdeg<{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
+            query = "select expnum from exposure where (radeg>{minRA} or radeg<{maxRA}) and decdeg>{minDec} and decdeg<{maxDec}".format(minRA=RA[0], maxRA=RA[1], minDec=min(Dec), maxDec=max(Dec))
         self.cur.execute(query)
         return self.cur.fetchall()
 
@@ -439,7 +454,7 @@ class WideField(PipeQuery):
         """ Takes a pandas dataframe and for each exposure add column:value
             band and nite. Returns dataframe"""
         for index,row in df.iterrows():
-            expnum_info = "select distinct expnum, band, nite, obstype from PROD.exposure where expnum='%s'" % row['expnum']
+            expnum_info = "select distinct expnum, band, nite, obstype from exposure where expnum='%s'" % row['expnum']
             self.cur.execute(expnum_info)
             expnum,band,nite,obstype = self.cur.fetchall()[0]
             try:
@@ -465,7 +480,7 @@ class WideField(PipeQuery):
     
     def get_max_nite(self,propid=None,process_all=False):
         """Returns expnum,nite of max(expnum) in the exposure table"""
-        base_query = "select max(expnum) from PROD.exposure where obstype in ('object','standard')"
+        base_query = "select max(expnum) from exposure where obstype in ('object','standard')"
         if process_all:
             base_query = base_query
         else:
@@ -481,7 +496,7 @@ class WideField(PipeQuery):
     def get_failed_expnums(self,reqnum,resubmit_max):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
-        submitted = "select distinct unitname,attnum,status from PROD.pfw_attempt p, PROD.task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        submitted = "select distinct unitname,attnum,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
         df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
@@ -509,7 +524,7 @@ class WideField(PipeQuery):
         df = pd.DataFrame(columns=column)
         while query_db:
             # Get a set of exposures
-            query = "select expnum, propid from PROD.ops_auto_queue where processed=0 offset %i rows  fetch next 1000 rows only" % (i*1000)
+            query = "select expnum, propid from ops_auto_queue where processed=0 offset %i rows  fetch next 1000 rows only" % (i*1000)
             self.cur.execute(query)
 
             temp_df = pd.DataFrame(self.cur.fetchall(), columns=['expnum','propid'])
@@ -522,7 +537,7 @@ class WideField(PipeQuery):
  
             unitnames = ['D00'+str(e) for e  in temp_df.expnum.values]
 
-            submitted = "select unitname,status from PROD.pfw_attempt a, PROD.task t, PROD.pfw_request r where r.reqnum=a.reqnum "
+            submitted = "select unitname,status from pfw_attempt a, task t, pfw_request r where r.reqnum=a.reqnum "
             submitted += "and t.id=a.task_id and r.project='%s' and unitname in ('%s')" % (project,"','".join(unitnames))
             self.cur.execute(submitted)
             failed_query = self.cur.fetchall()
@@ -547,7 +562,7 @@ class WideField(PipeQuery):
             i += 1
 
         print("%i exposures on to-do list" % (df.shape[0]))
-        query = "select propid, priority from PROD.ops_propid"
+        query = "select propid, priority from ops_propid"
         self.cur.execute(query)
         p_df = pd.DataFrame(self.cur.fetchall(), columns=['propid', 'priority'])
 
@@ -575,7 +590,7 @@ class WideField(PipeQuery):
         if not nites:
             raise Exception("Must specify nite!")
         print("selecting exposures to submit...")
-        base_query = "select distinct expnum,nite from PROD.exposure where obstype in ('object','standard') and \
+        base_query = "select distinct expnum,nite from exposure where obstype in ('object','standard') and \
                       object not like '%%pointing%%' and object not like '%%focus%%' and object not like '%%donut%%' \
                       and object not like '%%test%%' and object not like '%%junk%%' and nite in (%s)" % ','.join(nites)
         if process_all:
@@ -649,8 +664,8 @@ class WideField(PipeQuery):
         unitnames = ['D00'+str(e) for e in expnum_df['expnum'].values]
 
         print("Querying database...")
-        query = "select unitname,a.archive_path,status from PROD.pfw_attempt a,"
-        query += " PROD.task t, PROD.pfw_request r where r.reqnum=a.reqnum  and t.id=a.task_id and unitname in ('%s') " % ("','".join(unitnames))
+        query = "select unitname,a.archive_path,status from pfw_attempt a,"
+        query += " task t, pfw_request r where r.reqnum=a.reqnum  and t.id=a.task_id and unitname in ('%s') " % ("','".join(unitnames))
         self.cur.execute(query)
         print("...done")
 
@@ -875,7 +890,7 @@ class PreBPM(PipeQuery):
     def get_failed_expnums(self,reqnum,resubmit_max):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
-        submitted = "select distinct unitname,attnum,status from PROD.pfw_attempt p, PROD.task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        submitted = "select distinct unitname,attnum,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
         df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
@@ -901,7 +916,7 @@ class PreBPM(PipeQuery):
         taglist = tag.split(',')
         tag_list_of_dict = []
         for t in taglist:
-            expnum_query = "select distinct expnum from PROD.exposuretag where tag='%s'" % t
+            expnum_query = "select distinct expnum from exposuretag where tag='%s'" % t
             self.cur.execute(expnum_query)
             results = self.cur.fetchall()
             expnum_list = [exp[0] for exp in results]
@@ -917,7 +932,7 @@ class PhotoZ(PipeQuery):
     def get_failed_chunks(self, reqnum,resubmit_max):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
-        submitted = "select distinct unitname,attnum,status from PROD.pfw_attempt p, PROD.task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        submitted = "select distinct unitname,attnum,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
         df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])
@@ -940,7 +955,7 @@ class PhotoZ(PipeQuery):
 
     def check_proctag(self,tag):
         """ Check to see if specified processing tag exists in PROCTAG table"""
-        query = "select count(*) from PROD.proctag where tag = '{tag}'".format(tag=tag)
+        query = "select count(*) from proctag where tag = '{tag}'".format(tag=tag)
         self.cur.execute(query)
         count = self.cur.fetchone()[0]
         return count
@@ -967,7 +982,7 @@ class PhotoZ(PipeQuery):
     def get_failed_chunks(self, reqnum,resubmit_max):
         """ Queries database to find number of failed attempts without success.
             Returns expnums for failed, non-null, nonzero attempts."""
-        submitted = "select distinct unitname,attnum,status from PROD.pfw_attempt p, PROD.task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
+        submitted = "select distinct unitname,attnum,status from pfw_attempt p, task t where t.id=p.task_id and reqnum = '%s'" % (reqnum)
         self.cur.execute(submitted)
         failed_query = self.cur.fetchall()
         df = pd.DataFrame(failed_query,columns=['unitname','attnum','status'])

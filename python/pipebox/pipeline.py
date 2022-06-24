@@ -120,6 +120,10 @@ class PipeLine(object):
                 self.args.cal_df = self.args.cur.get_cals_from_epoch(self.args.epoch_name,
                                                                       band = self.args.band,
                                                                       campaign = self.args.campaign)
+            try:
+                self.coadd_id = self.args.dataframe["coadd_id"].unique()[0]
+            else:
+                self.coadd_id = None
             # Adding column values to args
             for c in columns:
                 setattr(self.args,c, group[c].unique()[0])
@@ -408,6 +412,8 @@ class MultiEpoch(PipeLine):
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
             self.args.dataframe = self.args.dataframe.fillna(False)
+            self.args.dataframe = self.args.cur.get_pfw_ids_from_tag(self.args.dataframe,
+                                                                     self.args.proctag)
         except: 
             pass
 
