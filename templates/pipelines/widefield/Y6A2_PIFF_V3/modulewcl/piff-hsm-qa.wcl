@@ -1,0 +1,90 @@
+<module>
+    <piff-hsm-qa>
+        wrappername = genwrap.py
+        wrapperloop = expnum
+        modnamepat=${modnamepat_expband}
+        loopobj = list.in_piff_list	
+        <list>
+            <in_piff_list>
+                depends piff.file.piff_model
+                filepat = exposure
+                flabel = piff-model
+                fsuffix = list
+
+                # where to store list
+                dirpat = se
+                ops_enddir = list
+                rundir = list
+
+                # what goes into list (normally is a query code)
+                divide_by=expnum
+                columns = piff_model.fullname
+                sortkey = (ccdnum,True,False)
+            </in_piff_list>
+            <in_hsm_list>
+                depends piff.file.piff_model_stats
+                filepat = exposure
+                flabel = piff-model-stats
+                fsuffix = list
+
+                # where to store list
+                dirpat = se
+                ops_enddir = list
+                rundir = list
+
+                # what goes into list (normally is a query code)
+                divide_by=expnum
+                columns = piff_model_stats.fullname
+                sortkey = (ccdnum,True,False)
+            </in_piff_list>
+        </list>
+	    <file>
+            <red_immask>
+                # what metadata to get
+                filetype = red_immask
+
+                # how to name the file
+                filepat = ccdnum_band
+                flabel = immask
+                fsuffix = fits
+
+                # where to put the file
+                dirpat = se
+                rundir = red/immask
+                listonly = True
+            </red_immask>
+            <piff_model>
+                # what metadata to get
+                filetype = piff_model
+
+                # how to name the file
+                filepat = ccdnum_band
+                flabel = piff-model
+                fsuffix = fits
+
+                # where to put the file
+                dirpat = se
+                rundir = psf
+                listonly = True
+            </piff_model>
+            <piff_qa>
+                filetype = qa_piff
+                filename = D${expnum:8}_${band}_r${reqnum}p${attnum:2}_piff-FP-qa.png
+                dirpat = se
+                rundir = qa
+                ops_enddir = qa
+            </piff_qa>
+        </file>
+        <exec_1>
+            execname = piff_HSM_qa.py
+            cmd_hyphen = mixed_gnu
+            used = list.in_piff_list.piff_model,list.in_hsm_list.piff_model_stats
+            <cmdline>
+                cat = ${list.in_piff_list.fullname}
+                stat = ${list.in_hsm_list.fullname}
+                v = 2
+                updateDB = _flag
+            </cmdline>
+        </exec_1>
+    </piff-hsm-qa>
+</module>

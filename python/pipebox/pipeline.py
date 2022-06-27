@@ -10,7 +10,7 @@ from pipebox import pipequery,pipeargs,pipeutils,jira_utils,nitelycal_lib
 class PipeLine(object):
     # Setup key arguments and environment here instead of write_*.sh
     if not os.getenv('PIPEBOX_WORK') or not os.getenv('PIPEBOX_DIR'):
-        print "Please set $PIPEBOX_DIR & $PIPEBOX_WORK in your environment!"
+        print("Please set $PIPEBOX_DIR & $PIPEBOX_WORK in your environment!")
         sys.exit(1)
     else:
         pipebox_work = os.environ['PIPEBOX_WORK']
@@ -24,7 +24,7 @@ class PipeLine(object):
         
         if self.args.ignore_jira:
             if not self.args.reqnum or not self.args.jira_parent:
-                print "Must specify both --reqnum and --jira_parent to avoid using JIRA!"
+                print("Must specify both --reqnum and --jira_parent to avoid using JIRA!")
                 sys.exit(1)
         else:
             if not self.args.jira_user:
@@ -33,7 +33,7 @@ class PipeLine(object):
         # Format RA and Dec if given
         if self.args.RA or self.args.Dec:
             if not (self.args.RA and self.args.Dec):
-                print "Must specify both RA and Dec."
+                print("Must specify both RA and Dec.")
                 sys.exit(1)
 
         for a in ['RA','Dec','niterange','eups_stack']:
@@ -45,7 +45,7 @@ class PipeLine(object):
         
         # Setting niterange
         if self.args.nite and self.args.niterange:
-            print "Warning: Both nite and niterange are specified. Only nite will be used."
+            print("Warning: Both nite and niterange are specified. Only nite will be used.")
         if self.args.nite:
             self.args.nitelist = self.args.nite.strip().split(',')
         if self.args.niterange:
@@ -71,7 +71,7 @@ class PipeLine(object):
                     args.exclude_list = args.exclude_list.split(',')
                     dig = args.exclude_list[0]
                 except IOError:
-                   print "{0} does not exist!".format(args.exclude_list)
+                   print("{0} does not exist!".format(args.exclude_list))
        
         # Setting template path(s) 
         if args.decade:
@@ -120,6 +120,10 @@ class PipeLine(object):
                 self.args.cal_df = self.args.cur.get_cals_from_epoch(self.args.epoch_name,
                                                                       band = self.args.band,
                                                                       campaign = self.args.campaign)
+            try:
+                self.coadd_id = self.args.dataframe["coadd_id"].unique()[0]
+            else:
+                self.coadd_id = None
             # Adding column values to args
             for c in columns:
                 setattr(self.args,c, group[c].unique()[0])
@@ -169,11 +173,11 @@ class PipeLine(object):
                                 con=jira_utils.get_con(self.args.jira_section)
                                 connected = True
                             except:
-                                print "JIRA Connection Error...Retry #{num}".format(num=num_retry)
+                                print("JIRA Connection Error...Retry #{num}".format(num=num_retry))
                                 time.sleep(10)
                                 connected = False
                                 if num_retry == 4:
-                                    print "Reached 4 JIRA connection attempts. Quitting..."
+                                    print("Reached 4 JIRA connection attempts. Quitting...")
                                     break
                                 num_retry += 1
                                 
@@ -184,9 +188,9 @@ class PipeLine(object):
 
         if self.args.auto:
             if not self.args.rendered_template_path: 
-                print "No new data found on %s..." % datetime.datetime.now()
-            else: print "%s data found on %s..." % (len(self.args.rendered_template_path),
-                                                         datetime.datetime.now())
+                print("No new data found on %s..." % datetime.datetime.now())
+            else: print("%s data found on %s..." % (len(self.args.rendered_template_path),
+                                                         datetime.datetime.now()))
 
         if self.args.savefiles:
             super(self.__class__,self).save(self.args)
@@ -197,11 +201,13 @@ class PipeLine(object):
         try:
             args.dataframe
         except:
-            print "Must specify input data!"
+            print("Must specify input data!")
             sys.exit(1)
-        
-        args.dataframe['user'] = args.jira_user
-        
+      
+        if args.ignore_jira:
+            args.dataframe['user'] = args.user 
+        else:
+            args.dataframe['user'] = args.jira_user
         group = args.dataframe.groupby(by=[groupby])
         for name,vals in group:
             # create JIRA ticket per nite and add jira_id,reqnum to dataframe
@@ -219,7 +225,6 @@ class PipeLine(object):
                 jira_parent = args.jira_parent
             else:
                 jira_parent = None
-
             if args.ignore_jira:
                 new_reqnum,new_jira_parent = (reqnum,jira_parent)
             else:
@@ -255,7 +260,7 @@ class PipeLine(object):
         if args.savefiles:
             # Writing template
             pipeutils.write_template(cron_template_path,cron_submit_path,args)
-            os.chmod(cron_submit_path, 0755)
+            os.chmod(cron_submit_path, 0o755)
             pipeutils.print_cron_info(args.pipeline,site=args.target_site,
                                                    pipebox_work=args.pipebox_work,
                                                    cron_path=cron_submit_path)
@@ -272,7 +277,7 @@ class PipeLine(object):
         bash_script_path= os.path.join(args.output_dir,bash_script_name)
 
         pipeutils.write_template(bash_template_path,bash_script_path,args)
-        os.chmod(bash_script_path, 0755)
+        os.chmod(bash_script_path, 0o755)
         pipeutils.print_submit_info(args.pipeline,site=args.target_site,
                                                eups_stack=args.eups_stack,
                                                submit_file=bash_script_path) 
@@ -292,7 +297,7 @@ class PipeLine(object):
             while not pipeutils.less_than_queue(pipeline=args.desstat_pipeline, reqnum=desstat_reqnum,
                                                 user=desstat_user,queue_size=args.queue_size):
                 if self.args.auto:
-                    print "Queue full. Exiting..."
+                    print("Queue full. Exiting...")
                     sys.exit(0)    
                 else:
                     time.sleep(30)
@@ -321,7 +326,7 @@ class SuperNova(PipeLine):
             self.args.ignore_processed=True
             pipeutils.stop_if_already_running('submit_{0}.py'.format(self.args.pipeline))
             self.args.nite = self.args.cur.get_max_nite()
-            print self.args.nite
+            print(self.args.nite)
             self.args.nitelist = self.args.nite.split(',')
         if self.args.resubmit_failed:
             self.args.ignore_processed=False
@@ -377,7 +382,7 @@ class MultiEpoch(PipeLine):
             if self.args.cur.check_proctag(self.args.proctag):
                 pass
             else:
-                print "{tag} does not exist! Please specify proper proctag...".format(tag=self.args.proctag)
+                print("{tag} does not exist! Please specify proper proctag...".format(tag=self.args.proctag))
                 sys.exit()
  
         # Creating dataframe from tiles
@@ -387,7 +392,7 @@ class MultiEpoch(PipeLine):
             if self.args.tile_list:
                 self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
             else:
-                print 'No tiles left to submit...'
+                print('No tiles left to submit...')
                 sys.exit()
         elif self.args.tile:
             self.args.tile_list = self.args.tile.split(',')
@@ -407,6 +412,8 @@ class MultiEpoch(PipeLine):
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
             self.args.dataframe = self.args.dataframe.fillna(False)
+            self.args.dataframe = self.args.cur.get_pfw_ids_from_tag(self.args.dataframe,
+                                                                     self.args.proctag)
         except: 
             pass
 
@@ -443,7 +450,7 @@ class WideField(PipeLine):
                     p_tab = self.args.cur.get_expnums_from_auto_queue()
                 self.args.expnum = ','.join([str(e) for e in p_tab['expnum'].values.tolist()])
             except:
-                print "{time}: No exposures found!".format(time=datetime.datetime.now())
+                print("{time}: No exposures found!".format(time=datetime.datetime.now()))
                 sys.exit(0)
 
             if self.args.resubmit_failed:
@@ -473,7 +480,7 @@ class WideField(PipeLine):
             exposures = self.args.cur.get_expnums_from_nites(self.args.nitelist,propid=self.args.propid,
                                 process_all=self.args.process_all)
             if not exposures:
-                print "No exposures found for given nite. Please check nite."
+                print("No exposures found for given nite. Please check nite.")
                 sys.exit(1)
             self.args.exposure_list = [expnum for expnum in exposures]
             self.args.dataframe = pd.DataFrame(self.args.exposure_list,columns=['expnum'])
@@ -505,19 +512,19 @@ class WideField(PipeLine):
 
         #try:
         #    if not self.args.dataframe:
-        #        print "No new exposures found in DB!"
+        #        print( "No new exposures found in DB!")
         #        sys.exit(1)
         #except:
-        #    print "No exposures found in DB!"
+        #    print( "No exposures found in DB!")
         #    sys.exit(1)
 
         if self.args.count:
-            print "Data found in database:"
+            print("Data found in database:")
          
             self.args.cur.count_by_obstype(self.args.nitelist)
-            print "\nData to be processed: %s" % ','.join(self.args.nitelist)
+            print("\nData to be processed: %s" % ','.join(self.args.nitelist))
             grouped = self.args.dataframe.groupby(by=['obstype','band']).agg(['count'])['expnum']
-            print grouped
+            print(grouped)
             sys.exit(0)
 
         if self.args.auto:
@@ -542,7 +549,7 @@ class NitelyCal(PipeLine):
             self.args.nite = self.args.cur.get_max_nite()[1] 
 
         if (self.args.maxnite or self.args.minnite) and self.args.niterange:
-            print 'Warning: if specifying minnite and/or maxnite, do not use niterange' 
+            print('Warning: if specifying minnite and/or maxnite, do not use niterange') 
             sys.exit()
 
         # Create remaining list of nites if necessary
@@ -717,9 +724,9 @@ class NitelyCal(PipeLine):
         self.args.dataframe,self.args.nitelist = nitelycal_lib.find_no_data(self.args.dataframe,self.args.nitelist)
         self.args.dataframe.loc[self.args.dataframe.obstype=='zero','band'] = 'NA'
         if self.args.count:
-            print "Data found in database:"
+            print("Data found in database:")
             self.args.cur.count_by_band(self.args.nitelist)
-            print "\nData to be processed: %s" % ','.join(self.args.nitelist)
+            print("\nData to be processed: %s" % ','.join(self.args.nitelist))
             nitelycal_lib.final_count_by_band(self.args.dataframe)
             sys.exit(0)
 
@@ -762,7 +769,7 @@ class HostName(PipeLine):
             bash_script_path= os.path.join(self.args.output_dir,bash_script_name)
             # Write bash script
             pipeutils.write_template(bash_template_path,bash_script_path,self.args)
-            os.chmod(bash_script_path, 0755)
+            os.chmod(bash_script_path, 0o755)
             pipeutils.print_submit_info(self.args.pipeline,site=self.args.target_site,
                                         eups_stack=self.args.eups_stack,
                                         submit_file=bash_script_path)
@@ -840,7 +847,7 @@ class PhotoZ(PipeLine):
             if self.args.cur.check_proctag(self.args.proctag):
                 pass
             else:
-                print "{tag} does not exist! Please specify proper proctag...".format(tag=self.args.proctag)
+                print("{tag} does not exist! Please specify proper proctag...".format(tag=self.args.proctag))
                 sys.exit()
  
         # Creating dataframe from tiles
@@ -850,7 +857,7 @@ class PhotoZ(PipeLine):
             if self.args.tile_list:
                 self.args.dataframe = pd.DataFrame(self.args.tile_list,columns=['tile'])
             else:
-                print 'No tiles left to submit...'
+                print('No tiles left to submit...')
                 sys.exit()
         elif self.args.num_chunks:
             self.args.chunks = range(1,int(self.args.num_chunks) + 1)

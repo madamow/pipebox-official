@@ -1,5 +1,5 @@
-chunks = 1:500
-max_chunk = 500
+chunks = 1:50
+max_chunk = 50
 
 <module>
     <sof>
@@ -16,19 +16,20 @@ max_chunk = 500
                 bands = ${bands}
                 fofs = ${file.fof.fullname}
                 config = ${file.sofconf.fullname}
+                model-pars = ${file.shredx.fullname}
                 output = ${file.sofchunk.fullname}
                 dynamic = _flag
             </cmdline>
             execname = run_fitvd
             cmd_hyphen =  alldouble
-            used = file.fof,file.sofconf, list.meds_list.meds
+            used = file.fof,file.sofconf, list.meds_list.meds,file.shredx
             was_generated_by = file.sofchunk
-            ancestry = file.fof:file.sofchunk,list.meds_list.meds:file.sofchunk
+            ancestry = file.fof:file.sofchunk,list.meds_list.meds:file.sofchunk, file.shredx: file.sofchunk
         </exec_1>
         <list>
             <meds_list>
                 # how to get list data
-                depends query-coadd-for-mof.list.meds_list
+                depends sof-make-fofs.list.meds_list
 
                 # how to create lists
                 columns = meds.fullname, band
@@ -55,7 +56,7 @@ max_chunk = 500
             </meds>
              <sofconf>
                 # what input file is named
-                filename = ${cfgver}_fitvd-sof-${mof_config_ver}.yaml
+                filename = ${cfgver}_fitvd-${mof_config_ver}.yaml
                 filetype = config
 
                 # where input file lives in jobroot
@@ -63,15 +64,25 @@ max_chunk = 500
                 rundir = config
              </sofconf>
              <fof>
-                depends query-coadd-for-mof.file.fof
+                depends sof-make-fofs.file.fof
                 # what metadata to save
-                filetype = coadd_mof_fof
+                filetype = coadd_sof_fof
                 filepat = tile_generic
 
                 # where to put it (jobroot=rundir, archive=ops_enddir)
                 dirpat = mepoch
-                rundir = mof
+                rundir = sof
              </fof>
+            <shredx>
+                depends collate-shredx.file.shredx
+                # what metadata to save
+                filetype = coadd_shredx
+                filepat = tile_generic
+
+                # where to put it (jobroot=rundir, archive=ops_enddir)
+                dirpat = mepoch
+                rundir = shredx
+            </shredx>
             ### output files
 
              <sofchunk>
