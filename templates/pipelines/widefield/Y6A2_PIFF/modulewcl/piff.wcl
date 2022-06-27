@@ -48,7 +48,7 @@
 
             <piff_config>
                 filetype = config
-                filename = ${piff_config}
+                filename = ${confignite}_piff_v4_${band}.yaml
                 dirpat = se
                 rundir = config
                 ops_enddir = config
