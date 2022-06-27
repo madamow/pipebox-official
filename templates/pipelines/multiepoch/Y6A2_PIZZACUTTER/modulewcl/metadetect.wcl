@@ -6,7 +6,7 @@
         #max_fwthreads = 1
         <exec_1>
             <cmdline>
-                _01_g_band = pizza-cutter/${tilename}_r${reqnum}p${attnum:2}_r_pizza-cutter-slices.fits.fz
+                _01_g_band = pizza-cutter/${tilename}_r${reqnum}p${attnum:2}_g_pizza-cutter-slices.fits.fz
                 _02_r_band = pizza-cutter/${tilename}_r${reqnum}p${attnum:2}_r_pizza-cutter-slices.fits.fz
                 _03_i_band = pizza-cutter/${tilename}_r${reqnum}p${attnum:2}_i_pizza-cutter-slices.fits.fz
                 _04_z_band = pizza-cutter/${tilename}_r${reqnum}p${attnum:2}_z_pizza-cutter-slices.fits.fz
