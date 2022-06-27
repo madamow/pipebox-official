@@ -118,11 +118,11 @@ class PipeLine(object):
                     self.args.epoch_name = firstexpnum = None
             if self.args.epoch_name:
                 self.args.cal_df = self.args.cur.get_cals_from_epoch(self.args.epoch_name,
-                                                                      band = self.args.band,
-                                                                      campaign = self.args.campaign)
+                                                                     band = self.args.band,
+                                                                     campaign = self.args.campaign)
             try:
                 self.coadd_id = self.args.dataframe["coadd_id"].unique()[0]
-            else:
+            except:
                 self.coadd_id = None
             # Adding column values to args
             for c in columns:
