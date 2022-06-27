@@ -83,6 +83,7 @@
                 cat = ${list.in_piff_list.fullname}
                 stat = ${list.in_hsm_list.fullname}
                 v = 2
+                updateDB = _flag
             </cmdline>
         </exec_1>
     </piff-hsm-qa>
