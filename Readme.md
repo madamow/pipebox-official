@@ -2,7 +2,7 @@
 
 # Installation
 
-- git clone https://github.com/Michael-D-Johnson/pipebox.git
+- git clone git@github.com:DarkEnergySurvey/pipebox.git
 - cd pipebox
 - setenv PIPEBOX_DIR `pwd` (tcsh)
 - export PIPEBOX_DIR=`pwd` (bash)
