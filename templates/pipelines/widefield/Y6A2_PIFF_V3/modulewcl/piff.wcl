@@ -102,7 +102,7 @@
                 _01_config = ${file.piff_config.fullname}
                 _02 = input.image_file_name=${file.red_immasked.fullname}
                 _03 = input.cat_file_name=${file.cat_piff.fullname}
-                _04_selectseed = $expnum
+                _04_selectseed = select.seed=${expnum}
                 _05 = output.file_name=${file.piff_model.fullname}
                 _06 = input.wcs.exp=${expnum}
                 _07 = input.wcs.ccdnum=${ccdnum}

@@ -94,7 +94,7 @@
             cmd_hyphen = mixed_gnu
             used = list.in_piff_list.piff_model,list.in_hsm_list.piff_model_stats
             <cmdline>
-                cat = ${list.in_piff_list.fullname}
+                model = ${list.in_piff_list.fullname}
                 stat = ${list.in_hsm_list.fullname}
                 v = 2
                 updateDB = _flag
