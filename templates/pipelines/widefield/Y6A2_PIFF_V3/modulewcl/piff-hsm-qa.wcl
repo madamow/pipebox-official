@@ -36,7 +36,7 @@
                 divide_by=expnum
                 columns = piff_model_stats.fullname
                 sortkey = (ccdnum,True,False)
-            </in_piff_list>
+            </in_hsm_list>
         </list>
 	    <file>
             <red_immask>
@@ -53,6 +53,20 @@
                 rundir = red/immask
                 listonly = True
             </red_immask>
+            <piff_model_stats>
+                # what metadata to get
+                filetype = piff_model_stats
+
+                # how to name the file
+                filepat = ccdnum_band
+                flabel = piff-hsmcat
+                fsuffix = fits
+
+                # where to put the file
+                dirpat = se
+                rundir = psf
+                listonly = True
+            </piff_model_stats>
             <piff_model>
                 # what metadata to get
                 filetype = piff_model
