@@ -98,6 +98,7 @@
                 stat = ${list.in_hsm_list.fullname}
                 v = 2
                 updateDB = _flag
+                pfw_attempt_id = ${pfw_attempt_id}
             </cmdline>
         </exec_1>
     </piff-hsm-qa>

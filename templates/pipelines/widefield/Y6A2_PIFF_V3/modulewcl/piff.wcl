@@ -56,7 +56,7 @@
             </piff_star_select>
             <piff_config>
                 filetype = config
-                filename = ${confignite}_piff_v5_${band}.yaml
+                filename = ${confignite}_piff_v6_${band}.yaml
                 dirpat = se
                 rundir = config
                 ops_enddir = config
