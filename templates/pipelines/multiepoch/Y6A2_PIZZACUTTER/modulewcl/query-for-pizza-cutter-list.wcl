@@ -17,7 +17,7 @@
                 segmap = _flag
                 psfmodel = _flag
                 usepiff = _flag
-                pifftag = Y6A2_PIFF_TEST_V3
+                pifftag = ${piff_tag}
                 bandlist = ${band}
                 me_proctag = ${proctag}
                 pizza-cutter-yaml = pizza-cutter/${tilename}_r${reqnum}p${attnum:2}_pizza-cutter-info
