@@ -23,6 +23,7 @@ blacklist_table = Y6A1_BLACKLIST
 se_proctag = Y6A1_FINALCUT
 
 piff_tag = Y6A2_PIFF_V3_TEST_01
+pizza_cutter_config=${cfgver}_pizza-cutter-Y6A1v6.yaml
 
 shredx_config_ver = Y6A1v1
 
