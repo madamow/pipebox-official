@@ -407,10 +407,19 @@ class MultiEpoch(PipeQuery):
             df.insert(len(df.columns), 'coadd_id', None)
         except:
             pass
+
         distinct_unitnames = df['tile'].unique()
-        id_query ="select distinct a.unitname, a.id from pfw_attempt a JOIN proctag t ON a.id=t.pfw_attempt_id AND tag='{tag}' AND a.unitname in ({u})".format(tag=tag,u=', '.join(f"'{u}'" for u in distinct_unitnames))
-        self.cur.execute(id_query)
-        id_results = self.cur.fetchall()
+        def divide_chunks(l,n):
+            '''Split the list into n chunks'''
+            for i in range(0,len(l),n):
+                yield l[i:i+n]
+        list_unitnames = list(divide_chunks(distinct_unitnames,1000))
+        id_results = []
+        for l in list_unitnames:
+            id_query ="select distinct a.unitname, a.id from pfw_attempt a JOIN proctag t ON a.id=t.pfw_attempt_id AND tag='{tag}' AND a.unitname in ({u})".format(tag=tag,u=', '.join(f"'{u}'" for u in l))
+            self.cur.execute(id_query)
+            each_list = [n for n in self.cur.fetchall()]
+            id_results += each_list
 
         for (unitname,pfw_id) in id_results:
             df.loc[df['tile']==unitname,['coadd_id']] = pfw_id
