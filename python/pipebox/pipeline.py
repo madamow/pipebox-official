@@ -90,6 +90,7 @@ class PipeLine(object):
         """ Loop through dataframe and write submitfile for each exposures"""
         # Updating args for each row
         default_submit_site = self.args.target_site
+        
         for name, group in self.args.dataframe.groupby(by=groupby, sort=False):
             # Setting jira parameters
             self.args.reqnum, self.args.jira_parent= group['reqnum'].unique()[0],group['jira_parent'].unique()[0]
@@ -118,15 +119,16 @@ class PipeLine(object):
                     self.args.epoch_name = firstexpnum = None
             if self.args.epoch_name:
                 self.args.cal_df = self.args.cur.get_cals_from_epoch(self.args.epoch_name,
-                                                                     band = self.args.band,
-                                                                     campaign = self.args.campaign)
-            try:
-                self.coadd_id = self.args.dataframe["coadd_id"].unique()[0]
-            except:
-                self.coadd_id = None
+                                                                      band = self.args.band,
+                                                                      campaign = self.args.campaign)
             # Adding column values to args
             for c in columns:
                 setattr(self.args,c, group[c].unique()[0])
+            
+            #Add filename base, useful for NIR campaign, for which filename does not correspond to expnum
+            if self.args.campaign=='NIR':
+                self.args.nirfilename = group.filename.unique()[0].split("_st.")[0]
+            
             # Making output directories and filenames
             if self.args.out:
                 if not os.path.isdir(self.args.out):
@@ -140,8 +142,8 @@ class PipeLine(object):
             # Creating output name
             output_name_suffix = "r%s_%s_%s_rendered_template.des" % \
                                 (self.args.reqnum,self.args.target_site,self.args.pipeline)
-
             str_base = []
+            
             for i,k in enumerate(self.args.output_name_keys):
                 st = "%s" % getattr(self.args,k)
                 str_base.append(st)
@@ -149,6 +151,7 @@ class PipeLine(object):
             output_name = output_name_base + '_' + output_name_suffix
             output_path = os.path.join(self.args.output_dir,output_name)
             self.args.submitfile = output_path 
+           
             # Writing template
             if self.args.ignore_processed:
                 if self.args.cur.check_submitted(self.args.unitname,self.args.reqnum):
@@ -203,11 +206,9 @@ class PipeLine(object):
         except:
             print("Must specify input data!")
             sys.exit(1)
-      
-        if args.ignore_jira:
-            args.dataframe['user'] = args.user 
-        else:
-            args.dataframe['user'] = args.jira_user
+        
+        args.dataframe['user'] = args.jira_user
+        
         group = args.dataframe.groupby(by=[groupby])
         for name,vals in group:
             # create JIRA ticket per nite and add jira_id,reqnum to dataframe
@@ -225,6 +226,7 @@ class PipeLine(object):
                 jira_parent = args.jira_parent
             else:
                 jira_parent = None
+
             if args.ignore_jira:
                 new_reqnum,new_jira_parent = (reqnum,jira_parent)
             else:
@@ -412,8 +414,6 @@ class MultiEpoch(PipeLine):
         try:
             self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
             self.args.dataframe = self.args.dataframe.fillna(False)
-            self.args.dataframe = self.args.cur.get_pfw_ids_from_tag(self.args.dataframe,
-                                                                     self.args.proctag)
         except: 
             pass
 
@@ -425,13 +425,13 @@ class WideField(PipeLine):
         # Setting global parameters
         self.args = pipeargs.WideField().cmdline()
         self.args.pipeline = "widefield"
-        if 'N' in self.args.campaign:
+        if 'N' in self.args.campaign and self.args.campaign != 'NIR':
             self.args.desstat_pipeline = "firstcut"
         else:
             self.args.desstat_pipeline = "finalcut" 
 
         super(WideField,self).update_args(self.args)
-        self.args.output_name_keys = ['nite','expnum','band']
+        self.args.output_name_keys = ['nite','expnum','band']#,'filename']
         self.args.cur = pipequery.WideField(self.args.db_section)
         if not self.args.propid:
             self.args.propid = self.args.cur.get_propids()
@@ -452,7 +452,7 @@ class WideField(PipeLine):
             except:
                 print("{time}: No exposures found!".format(time=datetime.datetime.now()))
                 sys.exit(0)
-
+            
             if self.args.resubmit_failed:
                 self.args.reqnum = jira_utils.get_reqnum_from_nite(self.args.jira_parent,
                                                                    self.args.nite)
@@ -505,11 +505,10 @@ class WideField(PipeLine):
         
         # Update dataframe for each exposure and add band,nite if not exists
         try:
-            self.args.dataframe = self.args.cur.update_df(self.args.dataframe)
+            self.args.dataframe = self.args.cur.update_df(self.args)
             self.args.dataframe = self.args.dataframe.fillna(False)
         except: 
             pass
-
         #try:
         #    if not self.args.dataframe:
         #        print( "No new exposures found in DB!")
@@ -517,7 +516,8 @@ class WideField(PipeLine):
         #except:
         #    print( "No exposures found in DB!")
         #    sys.exit(1)
-
+        print(self.args.dataframe)
+        
         if self.args.count:
             print("Data found in database:")
          
